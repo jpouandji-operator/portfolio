@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Growth Operator Notes — Jean-Philippe Ouandji</title>
+  
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CWB7VQ56XE');
+    
+    // Scroll depth tracking
+    let scrollDepths = [25, 50, 75, 100];
+    let firedDepths = [];
+    
+    window.addEventListener('scroll', function() {
+      let scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+      
+      scrollDepths.forEach(function(depth) {
+        if (scrollPercent >= depth && !firedDepths.includes(depth)) {
+          gtag('event', 'scroll', {
+            'event_category': 'Engagement',
+            'event_label': depth + '% scrolled'
+          });
+          firedDepths.push(depth);
+        }
+      });
+    });
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0f0e0c;
+      --paper: #f5f0e8;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --highlight: #e8e0cc;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── MASTHEAD ── */
+    .masthead {
+      border-bottom: 3px double var(--ink);
+      padding: 0 0 0.5rem 0;
+      text-align: center;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .masthead-top {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .masthead-title {
+      padding: 2.5rem 2rem 1rem;
+    }
+
+    .masthead-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .masthead-title h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .masthead-tagline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 0.5rem 0;
+      display: inline-block;
+    }
+
+    /* ── BYLINE STRIP ── */
+    .byline-strip {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeDown 0.9s 0.1s ease both;
+    }
+
+    .byline-strip .rule-line {
+      height: 1px;
+      background: var(--ink);
+    }
+
+    .byline-center {
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .byline-center strong {
+      color: var(--ink);
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── INTRO SECTION ── */
+    .intro-section {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 3rem;
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .intro-section .divider {
+      background: var(--rule);
+      width: 1px;
+    }
+
+    .intro-left {
+      padding-right: 1rem;
+    }
+
+    .intro-left .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .intro-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+
+    .intro-left h2 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .intro-left p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .intro-right {
+      padding-left: 1rem;
+    }
+
+    .expertise-list {
+      list-style: none;
+    }
+
+    .expertise-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.88rem;
+    }
+
+    .expertise-list li:last-child { border-bottom: none; }
+
+    .expertise-list .num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      min-width: 2rem;
+    }
+
+    .expertise-list .topic {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .expertise-list .sub {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem 0 1.5rem;
+    }
+
+    .section-header .label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .section-header .rule {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ── ARTICLE CARDS ── */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--ink);
+      margin-bottom: 3rem;
+    }
+
+    .article-card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--ink);
+      position: relative;
+      transition: background 0.2s ease;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .article-card:last-child { border-right: none; }
+
+    .article-card:hover {
+      background: var(--highlight);
+    }
+
+    .article-card .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .article-card .card-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.2rem 0.6rem;
+    }
+
+    .article-card .card-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .article-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .article-card .deck {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-card .key-insights {
+      border-top: 1px solid var(--rule);
+      padding-top: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-card .insights-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .article-card .insight-item {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+      color: var(--ink);
+    }
+
+    .article-card .insight-item::before {
+      content: "→";
+      color: var(--accent);
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .article-card .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 0.1rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .article-card .read-more:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ── PULLQUOTE ── */
+    .pullquote-section {
+      border-top: 3px double var(--ink);
+      border-bottom: 3px double var(--ink);
+      padding: 2.5rem 4rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .pullquote-section blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.5;
+      max-width: 780px;
+      margin: 0 auto 1rem;
+    }
+
+    .pullquote-section blockquote em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .pullquote-attr {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── WRITING SAMPLE FULL ── */
+    .writing-sample {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .writing-sidebar {
+      padding-top: 0.3rem;
+    }
+
+    .writing-sidebar .sidebar-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .writing-sidebar .sidebar-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 2;
+    }
+
+    .writing-sidebar .sidebar-meta strong {
+      color: var(--ink);
+      display: block;
+    }
+
+    .writing-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .writing-body .article-deck {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .writing-body p {
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: #2a2820;
+      margin-bottom: 1rem;
+    }
+
+    .writing-body .operator-insight {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    .writing-body .operator-insight::before {
+      content: "Operator Insight";
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .writing-body .operator-insight p {
+      color: var(--paper);
+      font-size: 0.88rem;
+      margin: 0;
+    }
+
+    /* ── PROFILE STRIP ── */
+    .profile-strip {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 3px double var(--ink);
+      margin-bottom: 3rem;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .profile-strip .divider {
+      background: var(--rule);
+    }
+
+    .profile-col {
+      text-align: center;
+    }
+
+    .profile-col .col-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .profile-col .col-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .profile-col .col-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      text-align: center;
+      padding: 3rem 0 4rem;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+
+    .contact-section .contact-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .contact-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-section h2 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      padding: 0.6rem 1.2rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .contact-link:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .contact-link.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .contact-link.primary:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      
+      .masthead-title h1 { font-size: clamp(2.5rem, 10vw, 4rem); }
+      .masthead-top { flex-direction: column; gap: 0.5rem; text-align: center; }
+      
+      .byline-strip { grid-template-columns: 1fr; gap: 1rem; padding: 1rem 1.5rem; }
+      .byline-strip .rule-line { display: none; }
+      
+      .intro-section { 
+        grid-template-columns: 1fr; 
+        gap: 2rem;
+        padding: 2rem 0;
+      }
+      .intro-section .divider { display: none; }
+      .intro-left { padding-right: 0; }
+      .intro-right { padding-left: 0; }
+      
+      .articles-grid { 
+        grid-template-columns: 1fr; 
+        gap: 0;
+      }
+      .article-card { 
+        border-right: none; 
+        border-bottom: 1px solid var(--ink);
+        padding: 2rem 1.5rem;
+      }
+      .article-card:last-child { border-bottom: none; }
+      
+      .pullquote-section { 
+        padding: 2rem 1.5rem; 
+      }
+      .pullquote-section blockquote {
+        font-size: 1.3rem;
+      }
+      
+      .writing-sample { 
+        grid-template-columns: 1fr; 
+        gap: 1.5rem;
+        padding: 2rem 0;
+      }
+      .writing-sidebar {
+        padding-top: 0;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--rule);
+      }
+      
+      .profile-strip { 
+        grid-template-columns: 1fr; 
+        gap: 1.5rem;
+        padding: 2rem 0;
+      }
+      .profile-strip .divider { display: none; }
+      
+      .contact-section h2 {
+        font-size: 2rem;
+      }
+      
+      .contact-links {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+      
+      .contact-link {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      
+      .page-wrapper {
+        padding: 0 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body { font-size: 15px; }
+      .masthead-title h1 { font-size: 2.5rem; }
+      .article-card { padding: 1.5rem 1rem; }
+      .pullquote-section blockquote { font-size: 1.1rem; }
+      .writing-body h3 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-top">
+      <span>Est. 2025 · Emerging Markets & Digital Strategy</span>
+      <span>Vol. I — Portfolio</span>
+      <span>English & French</span>
+    </div>
+    <div class="masthead-title">
+      <h1>Growth <em>Operator</em><br>Notes</h1>
+      <div class="masthead-tagline">Editorial intelligence for operators building in complex markets</div>
+    </div>
+  </header>
+
+  <!-- BYLINE STRIP -->
+  <div class="byline-strip">
+    <div class="rule-line"></div>
+    <div class="byline-center">
+      Written & edited by <strong>Jean-Philippe Ouandji</strong> &nbsp;·&nbsp; 
+      Native English · Fluent French &nbsp;·&nbsp; 
+      HEC Paris · Monash University · CIM UK
+    </div>
+    <div class="rule-line"></div>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- INTRO -->
+    <section class="intro-section">
+      <div class="intro-left">
+        <span class="section-label">About this publication</span>
+        <h2>Strategy, told with<br><em>operator precision</em></h2>
+        <p>Growth Operator Notes covers the real mechanics of digital businesses in emerging markets — e-commerce, telecom infrastructure, platform economics, and the strategic decisions operators make under resource constraints. Every piece is written from 12 years of hands-on experience building and scaling digital products across Africa.</p>
+      </div>
+      <div class="divider"></div>
+      <div class="intro-right">
+        <ul class="expertise-list">
+          <li>
+            <span class="num">01</span>
+            <span class="topic">Future of Work & Digital Transformation</span>
+            <span class="sub">12 yrs</span>
+          </li>
+          <li>
+            <span class="num">02</span>
+            <span class="topic">Platform Economics & Business Models</span>
+            <span class="sub">Deep focus</span>
+          </li>
+          <li>
+            <span class="num">03</span>
+            <span class="topic">Emerging Markets E-commerce</span>
+            <span class="sub">Africa</span>
+          </li>
+          <li>
+            <span class="num">04</span>
+            <span class="topic">Telecom & VAS Strategy</span>
+            <span class="sub">Orange, MTN</span>
+          </li>
+          <li>
+            <span class="num">05</span>
+            <span class="topic">Growth Operations & Unit Economics</span>
+            <span class="sub">Practitioner</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ARTICLES HEADER -->
+    <div class="section-header">
+      <span class="label">Featured Writing</span>
+      <div class="rule"></div>
+      <span class="label">2025 — 2026</span>
+    </div>
+
+    <!-- ARTICLES GRID -->
+    <div class="articles-grid">
+
+      <div class="article-card">
+        <div class="card-meta">
+          <span class="card-tag">E-commerce · Africa</span>
+          <span class="card-date">February 9, 2026</span>
+        </div>
+        <h3>The Death of the "Amazon of Africa" Label</h3>
+        <p class="deck">How Jumia's "Shrink-to-Grow" pivot, the cross-border blitz of Temu and Shein, and the rise of Pickup Stations as trust infrastructure are redrawing the map of African commerce.</p>
+        <div class="key-insights">
+          <span class="insights-label">Key Arguments</span>
+          <div class="insight-item">Fulfillment cost reduction of 22% through PUDO network as strategic moat, not just logistics play</div>
+          <div class="insight-item">Why the "Trust Gap" defeats price subsidies — and how Jumia is weaponizing local presence against Temu</div>
+          <div class="insight-item">The shift from Retailer to "Operating System of African Commerce"</div>
+        </div>
+        <a href="#jumia-article" class="read-more">Read full piece →</a>
+      </div>
+
+      <div class="article-card" style="animation-delay: 0.15s">
+        <div class="card-meta">
+          <span class="card-tag">Telecom · Platform Strategy</span>
+          <span class="card-date">January 13, 2026</span>
+        </div>
+        <h3>VAS & Telcos: What We Got Wrong — And Why It Matters Now</h3>
+        <p class="deck">A structural analysis of why Value-Added Services were misunderstood for a decade, what broke the investment-delegation model, and why the "premium content" answer misses the real question.</p>
+        <div class="key-insights">
+          <span class="insights-label">Key Arguments</span>
+          <div class="insight-item">VAS as investment-delegation model — why high margins made sense, and why they no longer do</div>
+          <div class="insight-item">The hollowing out of the ecosystem: stability masking structural fragility</div>
+          <div class="insight-item">Super apps change the economics — if we choose to use them</div>
+        </div>
+        <a href="#vas-article" class="read-more">Read full piece →</a>
+      </div>
+
+    </div>
+
+    <!-- PULLQUOTE -->
+    <div class="pullquote-section">
+      <blockquote>
+        "The 'Amazon of Africa' was a 2016 dream.<br>
+        The <em>'Operating System of African Commerce'</em><br>
+        is the 2026 reality."
+      </blockquote>
+      <div class="pullquote-attr">— Growth Operator Notes, February 2026</div>
+    </div>
+
+    <!-- FULL ARTICLE 1 -->
+    <div id="jumia-article" class="section-header">
+      <span class="label">Full Article · 01</span>
+      <div class="rule"></div>
+      <span class="label">E-commerce · Emerging Markets</span>
+    </div>
+
+    <div class="writing-sample">
+      <div class="writing-sidebar">
+        <span class="sidebar-label">Article Details</span>
+        <div class="sidebar-meta">
+          <strong>Published</strong>
+          February 9, 2026
+          <strong>Topic</strong>
+          African E-commerce
+          <strong>Subjects</strong>
+          Jumia · Temu · Shein<br>Takealot · Amazon Africa
+          <strong>Format</strong>
+          Long-form Analysis
+          <strong>Word Count</strong>
+          ~1,100 words
+          <strong>Sources</strong>
+          SEC 6-K Filings<br>Investor Day 2025<br>TechCabal / Techpoint
+        </div>
+      </div>
+      <div class="writing-body">
+        <h3>The Death of the "Amazon of Africa" Label: Lessons from the Jumia 2.0 Pivot</h3>
+        <p class="article-deck">For a decade, Jumia was the poster child for "Burning Cash in Africa." As we hit early 2026, the data tells a different story.</p>
+
+        <p>Between 2012 and 2022, the narrative was a cycle of high-level management in Dubai, massive marketing spends, and unsustainable "Last Mile" logistics costs. But under CEO Francis Dufay, Jumia executed a "Shrink-to-Grow" strategy that many VCs once thought impossible for a pan-African giant. By exiting unprofitable markets like South Africa and Tunisia in late 2024 and relocating the corporate "brain" from Dubai to Lagos and Cairo, Jumia did more than cut costs — they localized their operational DNA.</p>
+
+        <p><strong>The 2026 Performance Benchmarks.</strong> The results of this "Hard Ops" pivot are visible in Q3 2025 and Q1 2026 metrics: fulfillment expense per order has plummeted 22%, reaching approximately $1.86. Revenue surged 25% year-over-year despite a leaner footprint, driven primarily by the Nigerian market. By automating 60% of customer queries via AI and slashing headcount to 2,000, Jumia has finally decoupled volume growth from overhead growth.</p>
+
+        <p><strong>Why "Pickup" is the new "Moat."</strong> Perhaps the most significant shift is Jumia's move away from expensive home delivery. By scaling its network of Pickup Stations (PUDOs) to over 1,500 locations, Jumia solved two problems at once: slashed delivery costs and bridged the "Trust Gap." In 2026, the pickup station isn't just a logistics hub — it's a physical touchpoint where customers inspect goods before committing their cash.</p>
+
+        <div class="operator-insight">
+          <p>Jumia isn't trying to be the "Amazon of Africa" anymore. They are becoming the Logistics Backbone of the continent. By opening their delivery network to third-party social commerce sellers (Jumia Delivery), they've turned their biggest cost center into a new revenue stream.</p>
+        </div>
+
+        <p><strong>The Algorithm vs. The Warehouse.</strong> While Jumia cleaned up its balance sheet, a new threat landed: the "Cross-Border Blitz" of Temu and Shein. By early 2026, these platforms are the most downloaded apps in Nigeria and South Africa, using a playbook that Jumia — and even Amazon — struggle to match. Deep subsidies. App virality that captures Gen Z through gamified impulse commerce. Direct-from-factory pricing that breaks the unit economics of any local player.</p>
+
+        <p>But Temu wins on price; Jumia wins on Trust and Time. A major friction point for Temu in Africa: "Product Disparity" — customers ordering a couch and receiving a dollhouse-sized model. Jumia countered by onboarding 70 Shenzhen-based specialists to vet Chinese vendors. If a Shein dress doesn't fit in Lagos, the cross-border return process is a nightmare. Jumia's 1,500 Pickup Stations act as instant return hubs. Temu requires upfront digital payment — a hurdle where Cash-on-Delivery still accounts for a significant transaction share.</p>
+
+        <div class="operator-insight">
+          <p>The "Cross-Border" model is a price play; the "Local-Presence" model is a logistics play. In 2026, we are seeing Jumia move from being a store to being a Customs & Fulfillment Partner for the very international sellers that once threatened them.</p>
+        </div>
+
+        <p><strong>The End of "Vanity Growth."</strong> The 2026 e-commerce landscape is defined by three Hard Ops realities: profitability over perimeter, the rise of Agentic Commerce (AI-powered search and WhatsApp-based checkouts replacing the "Big Blue Website"), and Logistics as a Service. The real winners aren't the companies selling the most shirts — they are the companies moving the most parcels.</p>
+
+        <p>For growth operators in emerging markets, the lesson is clear: asset-light infrastructure is the only path to sustainable unit economics in fragmented regions. The "Amazon of Africa" was a 2016 dream. The "Operating System of African Commerce" is the 2026 reality.</p>
+      </div>
+    </div>
+
+    <!-- FULL ARTICLE 2 -->
+    <div id="vas-article" class="section-header">
+      <span class="label">Full Article · 02</span>
+      <div class="rule"></div>
+      <span class="label">Telecom · Platform Economics</span>
+    </div>
+
+    <div class="writing-sample">
+      <div class="writing-sidebar">
+        <span class="sidebar-label">Article Details</span>
+        <div class="sidebar-meta">
+          <strong>Published</strong>
+          January 13, 2026
+          <strong>Topic</strong>
+          Telecom Strategy
+          <strong>Subjects</strong>
+          VAS · Telco Platforms<br>Super Apps · ARPU
+          <strong>Format</strong>
+          Structural Analysis
+          <strong>Word Count</strong>
+          ~1,000 words
+          <strong>Perspective</strong>
+          12 yrs practitioner<br>(Orange, MTN)
+        </div>
+      </div>
+      <div class="writing-body">
+        <h3>VAS & Telcos: What We Got Wrong — And Why It Matters Now</h3>
+        <p class="article-deck">If you have ever worked in or around a telecom operator, you have probably heard some version of this sentence: "VAS are just extra services." That perception is widespread — and it is precisely why VAS have been so poorly understood for years.</p>
+
+        <p>This article is not about defending VAS out of nostalgia. It is about explaining what they really were, why they worked, what broke, and why the way we think about them today needs to change.</p>
+
+        <p><strong>What VAS really were.</strong> Before app stores. Before widespread card payments. Before subscriptions became the default. VAS enabled telecom operators to monetise non-banked users, expand ARPU beyond connectivity, distribute digital products at massive scale, and turn trust and billing into a platform. In many emerging markets, VAS were the first large-scale digital economy people ever interacted with. They were not elegant. They were not always premium. But they worked — because the operator sat at the intersection of distribution, trust, and payment.</p>
+
+        <p><strong>The original business model.</strong> VAS did not scale because the content was exceptional. They scaled because of how value creation was structured. Operators provided access to millions of users, billing, distribution, and trust. Partners provided content, marketing, innovation — and crucially, investment and financial risk. VAS were, in practice, an investment-delegation model. High margins made sense in that context. Operators were not funding growth. Partners were.</p>
+
+        <p><strong>The shift that broke the model.</strong> Over time, several forces reshaped the landscape: customer experience became a priority, regulation increased scrutiny, OTT platforms raised expectations, usage shifted from SMS to data and apps. The shift itself was necessary. But it was also largely unilateral. Operators rightly focused on reducing friction, improving quality, protecting trust. What did not happen at the same pace was a redefinition of the partner model. Margins stayed high. Expectations increased. Investment quietly disappeared. The ecosystem did not collapse overnight — it slowly hollowed out.</p>
+
+        <p><strong>Why "premium" is not a strategy by itself.</strong> Netflix, founded in 1997, only became profitable years later, after iterating on its model and investing heavily before scale kicked in. Amazon famously prioritised growth over profit for more than a decade. These were not accidents. They were deliberate investment strategies. Expecting premium outcomes without explicitly deciding who invests — and for how long — is unrealistic.</p>
+
+        <p><strong>The real question.</strong> The debate around VAS is often framed as: "Are VAS still relevant?" That is the wrong question. The real question is: <em>Who funds value creation in telco digital services going forward?</em> Until that question is answered explicitly, VAS — whatever name they go by — will remain structurally constrained.</p>
+
+        <p>VAS were never just "extra services." They were platforms built on incentives. And incentives, when misaligned, always show up eventually.</p>
+      </div>
+    </div>
+
+    <!-- PROFILE STRIP -->
+    <div class="profile-strip">
+      <div class="profile-col">
+        <span class="col-label">Languages</span>
+        <div class="col-value">English · French</div>
+        <div class="col-sub">Native · Fluent — all academic work in English</div>
+      </div>
+      <div class="divider"></div>
+      <div class="profile-col">
+        <span class="col-label">Education</span>
+        <div class="col-value">HEC Paris · Monash · CIM UK</div>
+        <div class="col-sub">MSc Innovation & Entrepreneurship · BSc Marketing</div>
+      </div>
+      <div class="divider"></div>
+      <div class="profile-col">
+        <span class="col-label">Experience</span>
+        <div class="col-value">12+ Years</div>
+        <div class="col-sub">Orange Group · MTN · Banque Atlantique</div>
+      </div>
+    </div>
+
+    <!-- SERVICES SECTION -->
+    <div style="max-width: 800px; margin: 3rem auto; padding: 0 2rem;">
+      <div class="section-header">
+        <span class="label">Strategic Services</span>
+        <div class="rule"></div>
+      </div>
+      
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem;">
+          Bridge the Gap Between<br><em style="color: var(--accent);">Strategy and Scale</em>
+        </h2>
+        <p style="font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 680px; margin: 0 auto;">
+          I help VCs, boards, and digital platforms navigate emerging market complexities — not from theory, but from 12+ years scaling products to 3.5M users across regulated environments in Africa.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2.5rem;">
+        
+        <div style="border: 1px solid var(--rule); padding: 2rem 1.5rem; background: white;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem;">
+            01 · Due Diligence
+          </div>
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.8rem;">
+            Emerging Market<br>Validation
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.7;">
+            Validate unit economics, decode regulatory landscapes, and assess operational feasibility for Africa and emerging market investments.
+          </p>
+        </div>
+
+        <div style="border: 1px solid var(--rule); padding: 2rem 1.5rem; background: white;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem;">
+            02 · Advisory
+          </div>
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.8rem;">
+            Portfolio Company<br>Support
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.7;">
+            Fractional operator support for go-to-market strategy, growth operations, and product-market fit optimization in complex markets.
+          </p>
+        </div>
+
+        <div style="border: 1px solid var(--rule); padding: 2rem 1.5rem; background: white;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem;">
+            03 · Scale-Up
+          </div>
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.8rem;">
+            Platform<br>Industrialization
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.7;">
+            Build operational infrastructure to scale digital platforms from early traction to millions of users while maintaining unit economics.
+          </p>
+        </div>
+
+      </div>
+
+      <div style="text-align: center; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--rule);">
+        <p style="font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem;">
+          Current Focus
+        </p>
+        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--ink); max-width: 600px; margin: 0 auto;">
+          Open to <strong>strategic advisory</strong>, <strong>operating partner</strong> roles, and senior leadership opportunities with VCs and digital platforms scaling into emerging markets.
+        </p>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-section">
+      <span class="contact-label">Get in touch</span>
+      <h2>Let's build something<br><em>worth reading.</em></h2>
+      <div class="contact-links">
+        <a href="mailto:jpouandji@gmail.com" class="contact-link primary" onclick="gtag('event', 'click', {'event_category': 'Contact', 'event_label': 'Email'});">✉ jpouandji@gmail.com</a>
+        <a href="https://linkedin.com/in/jean-philippe-ouandji" class="contact-link" target="_blank" onclick="gtag('event', 'click', {'event_category': 'Contact', 'event_label': 'LinkedIn Profile'});">LinkedIn Profile</a>
+        <a href="https://www.linkedin.com/company/growth-operator-notes/" class="contact-link" target="_blank" onclick="gtag('event', 'click', {'event_category': 'Contact', 'event_label': 'Growth Operator Notes'});">Growth Operator Notes</a>
+      </div>
