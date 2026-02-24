@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- SEO Meta Tags -->
+  <title>Jean-Philippe Ouandji - Digital Marketing & Product Strategy Expert | Scaling Apps in Emerging Markets</title>
+  <meta name="description" content="Digital Marketing Director & Product Marketing Manager with 12+ years scaling apps and digital products in Africa. 3.5M users, €2.9M revenue. Expert in fintech, SaaS, e-commerce. HEC Paris." />
+  <meta name="keywords" content="digital marketing manager Africa, product marketing manager emerging markets, marketing director fintech, business development SaaS, head of growth Africa, app scaling Africa, fintech marketing, e-commerce Africa, HEC Paris" />
+  <meta name="author" content="Jean-Philippe Ouandji" />
+  <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/" />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Jean-Philippe Ouandji - Digital Marketing & Product Strategy Expert" />
+  <meta property="og:description" content="Scaling apps and digital products in emerging markets. 12+ years, 3.5M users, €2.9M revenue." />
+  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/" />
+  
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jean-Philippe Ouandji",
+    "jobTitle": "Digital Marketing Director & Product Marketing Manager",
+    "description": "Expert in scaling apps and digital products in emerging markets, with 12+ years experience in fintech, SaaS, and e-commerce across Africa",
+    "url": "https://jpouandji-operator.github.io/portfolio/",
+    "sameAs": [
+      "https://linkedin.com/in/jean-philippe-ouandji",
+      "https://www.linkedin.com/company/growth-operator-notes/"
+    ],
+    "alumniOf": [
+      {"@type": "EducationalOrganization", "name": "HEC Paris"},
+      {"@type": "EducationalOrganization", "name": "Monash University"}
+    ],
+    "knowsAbout": [
+      "Digital Marketing", "Product Marketing", "Business Development", "App Scaling", 
+      "SaaS", "Fintech", "E-commerce", "Emerging Markets", "Africa Digital Strategy"
+    ]
+  }
+  </script>
+  
+  <!-- Google Analytics 4 -->
+  <script src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CWB7VQ56XE');
+    
+    window.addEventListener('load', function() {
+      let scrollDepths = [25, 50, 75, 100];
+      let firedDepths = [];
+      window.addEventListener('scroll', function() {
+        let scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+        scrollDepths.forEach(function(depth) {
+          if (scrollPercent >= depth && !firedDepths.includes(depth)) {
+            gtag('event', 'scroll', {'event_category': 'Engagement', 'event_label': depth + '% scrolled'});
+            firedDepths.push(depth);
+          }
+        });
+      });
+    });
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  
+  <style>
+    /* ═══ VARIABLES ═══ */
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+    }
+    
+    /* ═══ BASE ═══ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html {
+      background: var(--paper);
+    }
+    
+    body {
+      font-family: 'Georgia', serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--paper);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+    }
+    
+    a:hover { opacity: 0.7; }
+    
+    img { max-width: 100%; height: auto; display: block; }
+    
+    /* ═══ HEADER ═══ */
+    .header {
+      padding: 1.5rem 1rem;
+      border-bottom: 2px solid var(--ink);
+    }
+    
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+    }
+    
+    .header .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    
+    /* ═══ AUTHOR ═══ */
+    .author {
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    
+    .author-photo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid var(--ink);
+    }
+    
+    .author-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    
+    .author-info p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    
+    .author-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+    
+    /* ═══ ARTICLES ═══ */
+    .article-card {
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    
+    .article-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    .article-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+    
+    .article-card h3 a {
+      color: var(--ink);
+      border: none;
+    }
+    
+    .article-card h3 a:hover {
+      color: var(--accent);
+    }
+    
+    .article-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    
+    .read-more {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-block;
+      padding: 0.5rem 0;
+    }
+    
+    /* ═══ FULL ARTICLE ═══ */
+    .article-full {
+      padding: 1.5rem 1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .article-full-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    
+    .article-full h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+    
+    .article-deck {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    
+    .article-image {
+      width: calc(100% + 2rem);
+      margin-left: -1rem;
+      margin-right: -1rem;
+      margin-bottom: 1.5rem;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+    
+    .article-full h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.75rem 0;
+    }
+    
+    .article-full p {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    
+    .article-full strong {
+      font-weight: 700;
+      color: var(--ink);
+    }
+    
+    .insight-box {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 1rem;
+      margin: 1.5rem -1rem;
+      border-left: 3px solid var(--accent);
+    }
+    
+    .insight-box::before {
+      content: "OPERATOR INSIGHT";
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .insight-box p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+      color: var(--paper);
+    }
+    
+    .insight-box strong {
+      color: var(--paper);
+      font-weight: 700;
+    }
+    
+    .sources {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule);
+      font-size: 0.85rem;
+    }
+    
+    /* ═══ CONTACT ═══ */
+    .contact {
+      padding: 2rem 1rem;
+      text-align: center;
+      border-top: 2px solid var(--ink);
+    }
+    
+    .contact h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .contact-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .btn {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      background: var(--ink);
+      color: var(--paper);
+      border: 2px solid var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--ink);
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      background: var(--paper);
+      color: var(--ink);
+      opacity: 1;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    
+    .btn-primary:hover {
+      background: var(--paper);
+      color: var(--accent);
+    }
+    
+    /* ═══ FOOTER ═══ */
+    footer {
+      padding: 1rem;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      border-top: 1px solid var(--rule);
+    }
+    
+    /* ═══ DESKTOP ═══ */
+    @media (min-width: 768px) {
+      .header {
+        padding: 2rem;
+        text-align: center;
+      }
+      
+      .header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .header .subtitle {
+        font-size: 1rem;
+      }
+      
+      .author {
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .author-photo {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .author-info h2 {
+        font-size: 1.5rem;
+      }
+      
+      .author-info p {
+        font-size: 0.95rem;
+      }
+      
+      .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 0;
+        max-width: 1200px;
+        margin: 0 auto;
+        border-top: 1px solid var(--ink);
+      }
+      
+      .article-card {
+        border-right: 1px solid var(--rule);
+        border-bottom: 1px solid var(--ink);
+        padding: 2rem;
+      }
+      
+      .article-card:last-child {
+        border-right: none;
+      }
+      
+      .article-card h3 {
+        font-size: 1.5rem;
+      }
+      
+      .article-full {
+        padding: 3rem 2rem;
+      }
+      
+      .article-full h2 {
+        font-size: 2rem;
+      }
+      
+      .article-image {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      .insight-box {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      .contact {
+        padding: 3rem 2rem;
+      }
+      
+      .contact-buttons {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <h1>Digital Marketing & Product Strategy</h1>
+    <p class="subtitle">Scaling Apps in Emerging Markets</p>
+  </header>
+
+  <!-- AUTHOR -->
+  <section class="author">
+    <img src="author-photo.png" alt="Jean-Philippe Ouandji" class="author-photo" />
+    <div class="author-info">
+      <h2>Jean-Philippe Ouandji</h2>
+      <p>Digital Marketing Director & Product Marketing Manager with 12+ years scaling apps and digital products across Africa. 3.5M users, €2.9M revenue generated. Former roles at leading telecom operators and financial services platforms.</p>
+      <div class="author-meta">HEC Paris · Monash · Native English · Fluent French</div>
+    </div>
+  </section>
+
+  <!-- ARTICLES GRID -->
+  <section class="articles-grid">
+    
+    <!-- Article 1: Airtel -->
+    <article class="article-card">
+      <div class="article-meta">Telecom · Platform Strategy · 23 Feb 2026</div>
+      <h3><a href="#airtel">Beyond the Map: What Airtel's Pivot Tells Us About the New Rules of Growth</a></h3>
+      <p class="article-desc">Airtel Africa is no longer chasing new countries. They're becoming an infrastructure company that happens to have a mobile network.</p>
+      <a href="#airtel" class="read-more">Read Analysis →</a>
+    </article>
+
+    <!-- Article 2: Jumia -->
+    <article class="article-card">
+      <div class="article-meta">E-commerce · Africa · 9 Feb 2026</div>
+      <h3><a href="#jumia">The Death of the "Amazon of Africa" Label</a></h3>
+      <p class="article-desc">How Jumia's "Shrink-to-Grow" pivot and the rise of Pickup Stations are redrawing the map of African commerce.</p>
+      <a href="#jumia" class="read-more">Read Analysis →</a>
+    </article>
+
+    <!-- Article 3: VAS -->
+    <article class="article-card">
+      <div class="article-meta">Telecom · Platform Strategy · 13 Jan 2026</div>
+      <h3><a href="#vas">VAS & Telcos: What We Got Wrong</a></h3>
+      <p class="article-desc">Why Value-Added Services were misunderstood for a decade, and what broke the investment-delegation model.</p>
+      <a href="#vas" class="read-more">Read Analysis →</a>
+    </article>
+
+  </section>
+
+  <!-- FULL ARTICLE: AIRTEL -->
+  <article id="airtel" class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Telecom · Infrastructure · Platform Strategy · 23 February 2026</div>
+      <h2>Beyond the Map: What Airtel's Pivot Tells Us About the New Rules of Growth</h2>
+      <p class="article-deck">Airtel Africa is no longer chasing new countries. They're becoming an infrastructure company that happens to have a mobile network.</p>
+    </div>
+
+    <img src="airtel-header.png" alt="Airtel Africa telecommunications infrastructure network" class="article-image" />
+
+    <p>I've been watching the headlines about Airtel Africa's recent restructuring, and it feels like a full-circle moment. For years, the narrative in the "Real Economy" was about the land grab—adding countries, chasing subscriber counts, and showing a map covered in red.</p>
+
+    <p>But Airtel just flipped the script. They aren't chasing new flags anymore. They're becoming an infrastructure company that happens to have a mobile network.</p>
+
+    <h3>The "Plumbing" is the Product</h3>
+
+    <p>Most people see "Data Centers" or "Fiber Networks" as boring back-end costs. But as a Growth Operator, I see them as the ultimate Platform Economics play. By spinning off Nxtra and Telesonic, Airtel is moving from the volatile world of B2C "prepaid" users to the stable, high-margin world of B2B infrastructure.</p>
+
+    <img src="airtel-diagram.png" alt="Breadth vs Depth strategy comparison" class="article-image" />
+
+    <div class="insight-box">
+      <p><strong>The Lesson for Scale-ups:</strong> Stop obsessing over your total user count if your "plumbing" is leaky. If you've built a tool to manage your logistics or data that is better than the product you're selling—that might be your real business.</p>
+    </div>
+
+    <h3>Leapfrogging isn't just for Startups</h3>
+
+    <p>Airtel's partnership with Starlink is the ultimate Market Entry "hack". Instead of the grueling process of burying fiber in remote regions, they are "renting" the sky. It's a reminder that being an Operator isn't about owning every part of the chain; it's about orchestrating the most efficient one.</p>
+
+    <h3>The Bottom Line</h3>
+
+    <p>We are entering the era of Unit Economics Validation. The "Coordination Tax" of managing 14 different regulatory environments is too high if you aren't monetizing the core infrastructure. Airtel is choosing depth over breadth. In 2026, the winners in the African tech space won't be the ones with the biggest map, but the ones with the most "indispensable" pipes.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      • <a href="https://www.theafricareport.com" target="_blank" rel="noopener">The Africa Report</a> - Airtel Africa restructuring analysis<br>
+      • <a href="https://www.hec.edu/en/knowledge" target="_blank" rel="noopener">HEC Paris Knowledge</a> - Seven Lessons on Platform Strategy
+    </div>
+  </article>
+
+  <!-- FULL ARTICLE: JUMIA -->
+  <article id="jumia" class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">E-commerce · Africa · 9 February 2026</div>
+      <h2>The Death of the "Amazon of Africa" Label</h2>
+      <p class="article-deck">For a decade, Jumia was the poster child for "Burning Cash in Africa." As we hit early 2026, the data tells a different story.</p>
+    </div>
+
+    <img src="jumia-diagram.png" alt="Jumia PUDO pickup station network across Africa" class="article-image" />
+
+    <p>Between 2012 and 2022, the narrative was a cycle of high-level management in Dubai, massive marketing spends, and unsustainable "Last Mile" logistics costs. But under CEO Francis Dufay, Jumia executed a "Shrink-to-Grow" strategy that many VCs once thought impossible for a pan-African giant.</p>
+
+    <p><strong>The 2026 Performance Benchmarks.</strong> The results of this "Hard Ops" pivot are visible in Q3 2025 and Q1 2026 metrics: fulfillment expense per order has plummeted 22%, reaching approximately $1.86. Revenue surged 25% year-over-year despite a leaner footprint, driven primarily by the Nigerian market.</p>
+
+    <img src="jumia-chart.png" alt="Fulfillment cost reduction: Traditional delivery vs PUDO network" class="article-image" />
+
+    <p><strong>Why "Pickup" is the new "Moat."</strong> Perhaps the most significant shift is Jumia's move away from expensive home delivery. By scaling its network of Pickup Stations (PUDOs) to over 1,500 locations, Jumia solved two problems at once: slashed delivery costs and bridged the "Trust Gap."</p>
+
+    <div class="insight-box">
+      <p>Jumia isn't trying to be the "Amazon of Africa" anymore. They are becoming the Logistics Backbone of the continent. By opening their delivery network to third-party social commerce sellers (Jumia Delivery), they've turned their biggest cost center into a new revenue stream.</p>
+    </div>
+
+    <p><strong>The End of "Vanity Growth."</strong> The 2026 e-commerce landscape is defined by three Hard Ops realities: profitability over perimeter, the rise of Agentic Commerce, and Logistics as a Service. The real winners aren't the companies selling the most shirts — they are the companies moving the most parcels.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      • <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001781256" target="_blank" rel="noopener">SEC 6-K Filings</a><br>
+      • <a href="https://techcabal.com" target="_blank" rel="noopener">TechCabal</a> / <a href="https://techpoint.africa" target="_blank" rel="noopener">Techpoint</a>
+    </div>
+  </article>
+
+  <!-- FULL ARTICLE: VAS -->
+  <article id="vas" class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Telecom · Platform Strategy · 13 January 2026</div>
+      <h2>VAS & Telcos: What We Got Wrong — And Why It Matters Now</h2>
+      <p class="article-deck">A structural analysis of why Value-Added Services were misunderstood for a decade, what broke the investment-delegation model, and why the "premium content" answer misses the real question.</p>
+    </div>
+
+    <img src="vas-header.png" alt="VAS Investment-Delegation Model timeline 2014-2024" class="article-image" />
+
+    <p>If you have ever worked in or around a telecom operator, you have probably heard some version of this sentence: "VAS are just extra services." That perception is widespread — and it is precisely why VAS have been so poorly understood for years.</p>
+
+    <p><strong>What VAS really were.</strong> Before app stores. Before widespread card payments. Before subscriptions became the default. VAS enabled telecom operators to monetise non-banked users, expand ARPU beyond connectivity, distribute digital products at massive scale, and turn trust and billing into a platform. In many emerging markets, VAS were the first large-scale digital economy people ever interacted with. They were not elegant. They were effective.</p>
+
+    <img src="vas-diagram.png" alt="Investment-Delegation Model Before and After comparison" class="article-image" />
+
+    <div class="insight-box">
+      <p><strong>The Investment-Delegation Model:</strong> Operators didn't build content; they delegated it to aggregators and studios. The operator provided the infrastructure (billing, distribution, trust), the aggregator managed content and customer experience. This worked because margins were high enough to split three ways: content creator, aggregator, operator.</p>
+    </div>
+
+    <p><strong>What broke it.</strong> The model worked until it didn't. Margin compression from data bundles, rise of app stores as the default distribution, regulatory pressure on auto-renewals, and WhatsApp/YouTube replacing carrier portals all contributed to its decline.</p>
+
+    <p><strong>The Bottom Line.</strong> VAS is not about "premium content" — it's about distribution infrastructure. The question isn't "what content should we offer" but "how do we become indispensable pipes for digital services in markets where traditional payment rails are weak?" That's the question that matters in 2026.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      • <a href="https://www.hec.edu/en/knowledge" target="_blank" rel="noopener">HEC Paris Knowledge</a> - Platform Strategy Research<br>
+      • Industry analysis and operational experience
+    </div>
+  </article>
+
+  <!-- CONTACT -->
+  <section class="contact">
+    <h2>Let's Connect</h2>
+    <div class="contact-buttons">
+      <a href="#" class="btn btn-primary" onclick="window.location.href='mailto:jpouandji@gmail.com'; gtag('event', 'email_click'); return false;">✉ Email</a>
+      <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" onclick="gtag('event', 'linkedin_click');">LinkedIn Profile</a>
+      <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" onclick="gtag('event', 'growth_operator_click');">Growth Operator Notes</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Jean-Philippe Ouandji · Digital Marketing & Product Strategy · Paris, France · 2026</p>
+  </footer>
+
+  <script>
+    // Build email button dynamically
+    (function() {
+      var emailBtn = document.querySelector('.btn-primary');
+      if (emailBtn) {
+        emailBtn.onclick = function(e) {
+          e.preventDefault();
+          window.location.href = 'mailto:' + 'jpouandji' + '@' + 'gmail.com';
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'email_click');
+          }
+          return false;
+        };
+      }
+    })();
+  </script>
+
+</body>
+</html>
