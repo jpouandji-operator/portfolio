@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GON — UTM Link Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=Georgia&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --success: #2a6e3f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .masthead {
+      border-top: 3px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .masthead h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .masthead .kicker {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      background: white;
+      border: 1px solid var(--rule);
+      border-bottom: 2px solid var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230f0e0c' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 1.75rem 0;
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .generate-btn:hover {
+      background: var(--accent);
+    }
+
+    .output-panel {
+      margin-top: 1.75rem;
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--accent);
+      background: white;
+      display: none;
+    }
+
+    .output-panel.visible {
+      display: block;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.85rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--ink);
+    }
+
+    .output-header span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--paper);
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .copy-btn:hover { opacity: 0.8; }
+    .copy-btn.copied { background: var(--success); }
+
+    .output-url {
+      padding: 0.85rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--ink);
+      word-break: break-all;
+      line-height: 1.6;
+    }
+
+    .output-breakdown {
+      border-top: 1px solid var(--rule);
+      padding: 0.75rem 0.85rem;
+    }
+
+    .param-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: baseline;
+      margin-bottom: 0.3rem;
+    }
+
+    .param-key {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+
+    .param-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .history-section {
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .history-section.visible {
+      display: block;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .history-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .clear-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .history-item {
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .history-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .history-url {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--ink);
+      word-break: break-all;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .history-copy {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.5rem 1rem;
+      opacity: 0;
+      transition: all 0.2s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="masthead">
+      <h1>Growth Operator Notes</h1>
+      <p class="kicker">UTM Link Generator — Portfolio Tracking Tool</p>
+    </div>
+
+    <!-- BASE URL -->
+    <div class="field-group">
+      <div class="section-label">Destination</div>
+      <label for="base-url">Base URL</label>
+      <select id="base-url">
+        <option value="https://jpouandji-operator.github.io/portfolio/">Portfolio — Homepage</option>
+        <option value="https://jpouandji-operator.github.io/portfolio/#airtel">Article — Airtel Infrastructure Pivot</option>
+        <option value="https://jpouandji-operator.github.io/portfolio/#jumia">Article — Jumia / PUDO Network</option>
+        <option value="https://jpouandji-operator.github.io/portfolio/#vas">Article — VAS & Telcos</option>
+        <option value="https://jpouandji-operator.github.io/portfolio/#mtn">Article — MTN / IHS Towers</option>
+        <option value="custom">Custom URL...</option>
+      </select>
+    </div>
+
+    <div class="field-group" id="custom-url-group" style="display:none;">
+      <label for="custom-url">Custom URL</label>
+      <input type="text" id="custom-url" placeholder="https://jpouandji-operator.github.io/portfolio/#article" />
+    </div>
+
+    <hr class="divider" />
+
+    <!-- UTM PARAMETERS -->
+    <div class="section-label">UTM Parameters</div>
+
+    <div class="grid-2">
+      <div class="field-group">
+        <label for="utm-source">Source</label>
+        <select id="utm-source">
+          <option value="linkedin">linkedin</option>
+          <option value="email">email</option>
+          <option value="twitter">twitter</option>
+          <option value="whatsapp">whatsapp</option>
+          <option value="custom">custom...</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="utm-medium">Medium</label>
+        <select id="utm-medium">
+          <option value="message">message (direct DM)</option>
+          <option value="post">post (company page)</option>
+          <option value="email">email (newsletter)</option>
+          <option value="profile">profile (bio link)</option>
+          <option value="custom">custom...</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group" id="source-custom-group" style="display:none;">
+      <label for="source-custom">Custom Source</label>
+      <input type="text" id="source-custom" placeholder="e.g. substack" />
+    </div>
+
+    <div class="field-group" id="medium-custom-group" style="display:none;">
+      <label for="medium-custom">Custom Medium</label>
+      <input type="text" id="medium-custom" placeholder="e.g. newsletter" />
+    </div>
+
+    <div class="field-group">
+      <label for="utm-campaign">Campaign — Contact or Context</label>
+      <input type="text" id="utm-campaign" placeholder="e.g. arnaud_floris or africa_forward_webinar" />
+    </div>
+
+    <div class="field-group">
+      <label for="utm-content">Content Tag — Optional</label>
+      <input type="text" id="utm-content" placeholder="e.g. follow_up_1 or first_message" />
+    </div>
+
+    <button class="generate-btn" onclick="generate()">Generate UTM Link</button>
+
+    <!-- OUTPUT -->
+    <div class="output-panel" id="output-panel">
+      <div class="output-header">
+        <span>Generated Link</span>
+        <button class="copy-btn" id="copy-btn" onclick="copyMain()">Copy</button>
+      </div>
+      <div class="output-url" id="output-url"></div>
+      <div class="output-breakdown" id="output-breakdown"></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-section" id="history-section">
+      <div class="history-header">
+        <h3>Recent Links</h3>
+        <button class="clear-btn" onclick="clearHistory()">Clear all</button>
+      </div>
+      <div id="history-list"></div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    const history = [];
+
+    document.getElementById('base-url').addEventListener('change', function() {
+      document.getElementById('custom-url-group').style.display =
+        this.value === 'custom' ? 'block' : 'none';
+    });
+
+    document.getElementById('utm-source').addEventListener('change', function() {
+      document.getElementById('source-custom-group').style.display =
+        this.value === 'custom' ? 'block' : 'none';
+    });
+
+    document.getElementById('utm-medium').addEventListener('change', function() {
+      document.getElementById('medium-custom-group').style.display =
+        this.value === 'custom' ? 'block' : 'none';
+    });
+
+    function slugify(str) {
+      return str.toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_|_$/g, '');
+    }
+
+    function generate() {
+      const baseSelect = document.getElementById('base-url').value;
+      const base = baseSelect === 'custom'
+        ? document.getElementById('custom-url').value.trim()
+        : baseSelect;
+
+      if (!base) { alert('Please enter a destination URL.'); return; }
+
+      const sourceRaw = document.getElementById('utm-source').value === 'custom'
+        ? document.getElementById('source-custom').value
+        : document.getElementById('utm-source').value;
+
+      const mediumRaw = document.getElementById('utm-medium').value === 'custom'
+        ? document.getElementById('medium-custom').value
+        : document.getElementById('utm-medium').value.split(' ')[0];
+
+      const campaignRaw = document.getElementById('utm-campaign').value;
+      const contentRaw = document.getElementById('utm-content').value;
+
+      if (!campaignRaw) { alert('Please enter a campaign name (contact or context).'); return; }
+
+      const source = slugify(sourceRaw);
+      const medium = slugify(mediumRaw);
+      const campaign = slugify(campaignRaw);
+      const content = contentRaw ? slugify(contentRaw) : '';
+
+      // Handle anchor in base URL
+      let urlBase = base;
+      let anchor = '';
+      if (base.includes('#')) {
+        const parts = base.split('#');
+        urlBase = parts[0];
+        anchor = '#' + parts[1];
+      }
+
+      const separator = urlBase.includes('?') ? '&' : '?';
+      let url = urlBase + separator
+        + 'utm_source=' + source
+        + '&utm_medium=' + medium
+        + '&utm_campaign=' + campaign;
+
+      if (content) url += '&utm_content=' + content;
+      url += anchor;
+
+      // Display
+      document.getElementById('output-url').textContent = url;
+
+      const breakdown = [
+        { key: 'Source', val: source },
+        { key: 'Medium', val: medium },
+        { key: 'Campaign', val: campaign },
+      ];
+      if (content) breakdown.push({ key: 'Content', val: content });
+
+      document.getElementById('output-breakdown').innerHTML = breakdown.map(r =>
+        `<div class="param-row">
+          <span class="param-key">${r.key}</span>
+          <span class="param-val">${r.val}</span>
+        </div>`
+      ).join('');
+
+      document.getElementById('output-panel').classList.add('visible');
+      document.getElementById('copy-btn').textContent = 'Copy';
+      document.getElementById('copy-btn').classList.remove('copied');
+
+      // Add to session history
+      const timestamp = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      history.unshift({ url, campaign, timestamp });
+      renderHistory();
+    }
+
+    function copyMain() {
+      const url = document.getElementById('output-url').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        showToast();
+      });
+    }
+
+    function copyHistoryItem(url) {
+      navigator.clipboard.writeText(url).then(() => showToast());
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1800);
+    }
+
+    function renderHistory() {
+      const section = document.getElementById('history-section');
+      const list = document.getElementById('history-list');
+      if (history.length === 0) { section.classList.remove('visible'); return; }
+      section.classList.add('visible');
+      list.innerHTML = history.map((item, i) =>
+        `<div class="history-item">
+          <div>
+            <div class="history-meta">${item.timestamp} — ${item.campaign}</div>
+            <div class="history-url">${item.url}</div>
+          </div>
+          <button class="history-copy" onclick="copyHistoryItem('${item.url}')">Copy</button>
+        </div>`
+      ).join('');
+    }
+
+    function clearHistory() {
+      history.length = 0;
+      renderHistory();
+    }
+  </script>
+
+</body>
+</html>
