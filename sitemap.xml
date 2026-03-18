@@ -2,9 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/</loc>
-    <lastmod>2026-03-13</lastmod>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jpouandji-operator.github.io/portfolio/canal-multichoice-platform-economics-africa/</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/ai-africa-platform-economics/</loc>
@@ -28,7 +34,7 @@
     <loc>https://jpouandji-operator.github.io/portfolio/mtn-ihs-towers-energy-africa/</loc>
     <lastmod>2026-02-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/airtel-infrastructure-pivot/</loc>
