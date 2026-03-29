@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>The Africa IC Checklist - Pre-IC Pressure Test for Africa Deals | Growth Operator Notes</title>
+  <meta name="description" content="A pre-IC pressure test on Africa-specific deal assumptions. Five operator-sourced dimensions. Output: the questions to ask before you wire. By Jean-Philippe Ouandji." />
+  <meta name="keywords" content="Africa VC due diligence, Africa IC checklist, emerging markets investment, Africa PE checklist, Africa deal assessment, platform economics Africa, growth operator Africa" />
+  <meta name="author" content="Jean-Philippe Ouandji" />
+  <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The Africa IC Checklist - Pre-IC Pressure Test for Africa Deals" />
+  <meta property="og:description" content="Five operator-sourced dimensions. The questions to ask before you wire." />
+  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "The Africa IC Checklist",
+    "description": "A pre-IC pressure test on Africa-specific deal assumptions for VC and PE investors.",
+    "url": "https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/",
+    "author": {
+      "@type": "Person",
+      "name": "Jean-Philippe Ouandji",
+      "url": "https://jpouandji-operator.github.io/portfolio/"
+    }
+  }
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CWB7VQ56XE');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
+
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --surface: #edeae2;
+      --warn-bg: #fef9ec;
+      --warn-text: #92660a;
+      --red-bg: #fdf0ee;
+      --red-text: #c8320a;
+      --green-bg: #eef4ee;
+      --green-text: #2d6a2d;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.7; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site-nav { border-bottom: 1px solid var(--ink); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--ink); text-decoration: none; }
+    .nav-back { font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; }
+    .nav-back:hover { color: var(--accent); text-decoration: none; }
+
+    .hero { border-bottom: 1px solid var(--ink); padding: 3rem 2rem 2.5rem; max-width: 800px; margin: 0 auto; }
+    .hero-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+    .hero-sub { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 560px; }
+
+    .privacy-bar { background: var(--surface); border-bottom: 1px solid var(--rule); padding: 0.75rem 2rem; font-size: 12px; color: var(--muted); max-width: 800px; margin: 0 auto; display: flex; align-items: flex-start; gap: 8px; }
+    .privacy-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); margin-top: 6px; flex-shrink: 0; }
+
+    .main { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+    .context-section { margin-bottom: 2.5rem; }
+    .section-rule { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); padding-bottom: 0.5rem; margin-bottom: 1.25rem; }
+    .context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field-label { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .field-req { color: var(--accent); }
+
+    select, input[type=text] {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 8px 10px;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      color: var(--ink);
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--ink); }
+
+    .dim-block { border: 1px solid var(--rule); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+    .dim-header { padding: 1.25rem 1.5rem 0; }
+    .dim-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }
+    .dim-number { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; }
+    .dim-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; }
+    .dim-tag { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .tag-op { background: var(--ink); color: var(--paper); }
+    .tag-st { background: var(--surface); color: var(--muted); border: 1px solid var(--rule); }
+    .dim-quote { font-size: 12px; color: var(--muted); line-height: 1.7; border-left: 2px solid var(--accent); padding-left: 1rem; margin-bottom: 1.25rem; font-style: italic; }
+    .dim-fields { padding: 0 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fields-row.full { grid-template-columns: 1fr; }
+
+    .gate { display: none; font-size: 12px; background: var(--warn-bg); color: var(--warn-text); border-top: 1px solid #f0d99a; padding: 0.75rem 1.5rem; line-height: 1.6; }
+    .gate.on { display: block; }
+
+    .coverage-note { font-size: 12px; color: var(--muted); border: 1px dashed var(--rule); border-radius: 2px; padding: 1rem 1.25rem; margin-bottom: 2rem; line-height: 1.7; }
+    .coverage-note strong { color: var(--ink); }
+
+    .run-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .btn-run { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; padding: 10px 24px; background: var(--ink); color: var(--paper); border: none; border-radius: 2px; cursor: pointer; letter-spacing: 0.03em; transition: opacity 0.15s; }
+    .btn-run:hover { opacity: 0.85; }
+    .btn-run:disabled { opacity: 0.35; cursor: not-allowed; }
+    .run-note { font-size: 11px; color: var(--muted); }
+
+    .spinner-wrap { display: none; align-items: center; gap: 10px; padding: 1.5rem 0; font-size: 13px; color: var(--muted); }
+    .spinner-wrap.on { display: flex; }
+    .spinner { width: 14px; height: 14px; border: 1.5px solid var(--rule); border-top-color: var(--ink); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .output { display: none; margin-top: 2rem; }
+    .output.on { display: block; }
+
+    .memo-header { border-top: 2px solid var(--ink); padding-top: 1.5rem; margin-bottom: 0.25rem; }
+    .memo-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+    .memo-meta { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 1.5rem; margin-top: 0.25rem; }
+
+    .result-block { border: 1px solid var(--rule); border-radius: 2px; margin-bottom: 1rem; overflow: hidden; }
+    .result-header { padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--rule); }
+    .result-dim { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .flag-row { display: flex; align-items: center; gap: 8px; }
+    .flag-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-red { background: var(--accent); }
+    .dot-amber { background: #d4820a; }
+    .dot-green { background: #2d6a2d; }
+    .flag-text { font-size: 13px; font-weight: 500; }
+    .result-body { padding: 1rem 1.25rem; }
+    .result-claim { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 0.75rem; }
+    .result-claim strong { color: var(--ink); }
+    .result-bench { font-size: 12px; color: var(--muted); line-height: 1.7; background: var(--surface); padding: 0.75rem 1rem; border-radius: 2px; margin-bottom: 1rem; }
+    .result-bench strong { color: var(--ink); }
+    .qs-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    .ic-q { font-size: 13px; color: var(--ink); line-height: 1.7; padding: 6px 0; border-top: 1px solid var(--rule); }
+
+    .memo-close { font-size: 13px; color: var(--muted); line-height: 1.7; margin-top: 1.5rem; padding: 1rem 1.25rem; background: var(--surface); border-radius: 2px; font-style: italic; }
+    .memo-close strong { color: var(--ink); font-style: normal; }
+
+    .feedback-block { margin-top: 2rem; border: 1px solid var(--rule); border-radius: 2px; padding: 1.5rem; }
+    .feedback-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feedback-sub { font-size: 12px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+    .feedback-q { font-size: 12px; letter-spacing: 0.04em; color: var(--ink); margin-bottom: 0.5rem; }
+    .yn-row { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .yn-btn { font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 6px 16px; background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+    .yn-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .yn-btn.selected { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    textarea { font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 8px 10px; background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; color: var(--ink); width: 100%; min-height: 80px; resize: vertical; line-height: 1.6; margin-bottom: 1rem; }
+    textarea:focus { outline: none; border-color: var(--ink); }
+    .btn-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 8px 18px; background: var(--paper); color: var(--ink); border: 1px solid var(--ink); border-radius: 2px; cursor: pointer; transition: all 0.15s; }
+    .btn-feedback:hover { background: var(--ink); color: var(--paper); }
+    .feedback-thanks { display: none; font-size: 13px; color: var(--muted); padding: 0.75rem 0; }
+    .feedback-thanks.on { display: block; }
+
+    .cta-block { margin-top: 2rem; border-top: 1px solid var(--ink); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; }
+    .cta-left { font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .cta-left strong { color: var(--ink); }
+    .cta-links { display: flex; flex-direction: column; gap: 0.4rem; font-size: 12px; white-space: nowrap; }
+
+    .site-footer { border-top: 1px solid var(--ink); padding: 1.5rem 2rem; max-width: 800px; margin: 3rem auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 2rem 1.25rem 1.5rem; }
+      .hero-title { font-size: 1.7rem; }
+      .main { padding: 1.5rem 1.25rem; }
+      .context-grid { grid-template-columns: 1fr; }
+      .fields-row { grid-template-columns: 1fr; }
+      .cta-block { flex-direction: column; gap: 1rem; }
+      .site-nav { padding: 1rem 1.25rem; }
+      .privacy-bar { padding: 0.75rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="../" class="nav-brand">Growth Operator Notes</a>
+    <a href="../" class="nav-back">Back to portfolio</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-label">Tool · Africa Deal Intelligence</div>
+    <h1 class="hero-title">The Africa IC Checklist</h1>
+    <p class="hero-sub">A pre-IC pressure test on Africa-specific deal assumptions. Five operator-sourced dimensions. Output: the questions to ask before you wire.</p>
+  </div>
+
+  <div class="privacy-bar">
+    <div class="privacy-dot"></div>
+    <div>No information entered here is stored, logged, or used beyond generating your analysis. This session does not persist. Enter only what you are comfortable paraphrasing from the founder's materials.</div>
+  </div>
+
+  <main class="main">
+
+    <div class="context-section">
+      <div class="section-rule">Deal context</div>
+      <div class="context-grid">
+        <div class="field">
+          <div class="field-label">Target market <span class="field-req">*</span></div>
+          <select id="market">
+            <option value="">Select country</option>
+            <option>Nigeria</option><option>Kenya</option><option>Ghana</option>
+            <option>Ivory Coast</option><option>Senegal</option><option>Ethiopia</option>
+            <option>Tanzania</option><option>South Africa</option><option>Egypt</option>
+            <option>Rwanda</option><option>Cameroon</option><option>Uganda</option>
+            <option>Multiple markets</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="field-label">Sector <span class="field-req">*</span></div>
+          <select id="sector">
+            <option value="">Select sector</option>
+            <option>Fintech / Mobile money</option><option>E-commerce / Logistics</option>
+            <option>Agritech</option><option>Healthtech</option><option>Edtech</option>
+            <option>Energy / Cleantech</option><option>Media / Entertainment</option>
+            <option>B2B SaaS</option><option>Telecoms / Infrastructure</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="field-label">Stage <span class="field-req">*</span></div>
+          <select id="stage">
+            <option value="">Select stage</option>
+            <option>Pre-seed</option><option>Seed</option><option>Series A</option>
+            <option>Series B+</option><option>Growth / PE</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="field-label">Ticket size (USD)</div>
+          <select id="ticket">
+            <option value="">Select range</option>
+            <option>Under $500k</option><option>$500k - $2M</option>
+            <option>$2M - $10M</option><option>$10M - $50M</option><option>$50M+</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-rule">Five dimensions</div>
+
+    <!-- DIMENSION 1 -->
+    <div class="dim-block">
+      <div class="dim-header">
+        <div class="dim-top">
+          <div>
+            <div class="dim-number">Dimension 1</div>
+            <div class="dim-title">Distribution economics</div>
+          </div>
+          <div class="dim-tag tag-op">Operator lens</div>
+        </div>
+        <div class="dim-quote">"Most African market models underestimate the full commission stack. An agent model that looks like 15% margin on paper often reaches the founder at 4-6% after airtime incentives, aggregator cuts, and churn-driven reacquisition costs."</div>
+      </div>
+      <div class="dim-fields">
+        <div class="fields-row">
+          <div class="field">
+            <div class="field-label">Founder's stated gross margin <span class="field-req">*</span></div>
+            <input type="text" id="d1_margin" placeholder="e.g. 35%" oninput="gate('d1')" />
+          </div>
+          <div class="field">
+            <div class="field-label">Distribution model claimed</div>
+            <select id="d1_model" onchange="gate('d1')">
+              <option value="">Select</option>
+              <option>Direct (no intermediary)</option>
+              <option>Agent network</option>
+              <option>Telco partnership</option>
+              <option>Platform / marketplace</option>
+              <option>B2B only</option>
+              <option>Not stated</option>
+            </select>
+          </div>
+        </div>
+        <div class="fields-row full">
+          <div class="field">
+            <div class="field-label">Has the founder broken down the full margin stack - agent commission, aggregator fee, last-mile cost?</div>
+            <select id="d1_stack" onchange="gate('d1')">
+              <option value="">Select</option>
+              <option>Yes - with specific percentages per layer</option>
+              <option>Yes - but only at a high level</option>
+              <option>No - margin stated as a single number</option>
+              <option>Not discussed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="gate" id="gate_d1">Insufficient information on distribution economics. Do not proceed to IC without the full margin stack broken down by layer. A single gross margin number is not a distribution model.</div>
+    </div>
+
+    <!-- DIMENSION 2 -->
+    <div class="dim-block">
+      <div class="dim-header">
+        <div class="dim-top">
+          <div>
+            <div class="dim-number">Dimension 2</div>
+            <div class="dim-title">Regulatory timing risk</div>
+          </div>
+          <div class="dim-tag tag-op">Operator lens</div>
+        </div>
+        <div class="dim-quote">"African governments do not move slowly on digital financial services when political incentives align. Mobile money licensing shifted materially in Senegal (2021) and Ivory Coast (2023) with less than 90 days notice. Most founders model regulatory risk as a general disclaimer, not a specific scenario."</div>
+      </div>
+      <div class="dim-fields">
+        <div class="fields-row">
+          <div class="field">
+            <div class="field-label">Regulatory dependency <span class="field-req">*</span></div>
+            <select id="d2_dep" onchange="gate('d2')">
+              <option value="">Select</option>
+              <option>Requires specific licence to operate</option>
+              <option>Operates under general business registration</option>
+              <option>Depends on a partner's licence</option>
+              <option>Unregulated sector currently</option>
+              <option>Not stated</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-label">Has the founder named a specific regulatory risk?</div>
+            <select id="d2_scenario" onchange="gate('d2')">
+              <option value="">Select</option>
+              <option>Yes - named a specific policy change and impact</option>
+              <option>Yes - mentioned regulatory risk generally</option>
+              <option>No - not addressed</option>
+            </select>
+          </div>
+        </div>
+        <div class="fields-row full">
+          <div class="field">
+            <div class="field-label">Contingency model if primary regulatory assumption breaks</div>
+            <select id="d2_contingency" onchange="gate('d2')">
+              <option value="">Select</option>
+              <option>Documented - alternative operating model exists</option>
+              <option>Partial - some mitigation discussed</option>
+              <option>None - founder has not modelled this</option>
+              <option>Not asked yet</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="gate" id="gate_d2">Insufficient information on regulatory exposure. A founder who cannot name the specific decision that breaks their model has not stress-tested it. Flag this before IC.</div>
+    </div>
+
+    <!-- DIMENSION 3 -->
+    <div class="dim-block">
+      <div class="dim-header">
+        <div class="dim-top">
+          <div>
+            <div class="dim-number">Dimension 3</div>
+            <div class="dim-title">Exit pathway realism</div>
+          </div>
+          <div class="dim-tag tag-st">Structural</div>
+        </div>
+        <div class="dim-quote">"Africa's exit-to-investment ratio was 0.13x in 2024. 84% of exits were trade sales. IPOs are effectively closed as a route for most companies. A founder who cannot name three specific acquirers and the rationale for each does not have an exit thesis - they have an exit hope."</div>
+      </div>
+      <div class="dim-fields">
+        <div class="fields-row">
+          <div class="field">
+            <div class="field-label">Stated exit route <span class="field-req">*</span></div>
+            <select id="d3_route" onchange="gate('d3')">
+              <option value="">Select</option>
+              <option>Trade sale - named specific acquirers</option>
+              <option>Trade sale - generic strategic buyer</option>
+              <option>Secondary sale to financial investor</option>
+              <option>IPO</option>
+              <option>Not discussed</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-label">Has the founder named specific acquirers?</div>
+            <select id="d3_acquirers" onchange="gate('d3')">
+              <option value="">Select</option>
+              <option>Yes - named 2+ with specific rationale</option>
+              <option>Partial - named companies, no rationale</option>
+              <option>No - category only (e.g. "a telco")</option>
+              <option>Not discussed</option>
+            </select>
+          </div>
+        </div>
+        <div class="fields-row full">
+          <div class="field">
+            <div class="field-label">Has the founder had any contact with potential acquirers?</div>
+            <select id="d3_contact" onchange="gate('d3')">
+              <option value="">Select</option>
+              <option>Yes - active conversations</option>
+              <option>Yes - warm relationships, no formal discussions</option>
+              <option>No - but has a clear rationale for why they would buy</option>
+              <option>No - not at this stage</option>
+              <option>Not asked</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="gate" id="gate_d3">Insufficient information on exit realism. Given Africa's current liquidity environment, an exit thesis without named acquirers and a rationale is a material gap. Do not treat this as a later-stage concern.</div>
+    </div>
+
+    <!-- DIMENSION 4 -->
+    <div class="dim-block">
+      <div class="dim-header">
+        <div class="dim-top">
+          <div>
+            <div class="dim-number">Dimension 4</div>
+            <div class="dim-title">Demand validation</div>
+          </div>
+          <div class="dim-tag tag-op">Operator lens</div>
+        </div>
+        <div class="dim-quote">"Africa's demographics are not a market. 400 million people under 25 is a population statistic. The question is whether those people will pay, at what price point, for this specific product, through this specific channel. Survey data and TAM analysis do not answer that question. Paying customers do."</div>
+      </div>
+      <div class="dim-fields">
+        <div class="fields-row">
+          <div class="field">
+            <div class="field-label">Primary demand evidence <span class="field-req">*</span></div>
+            <select id="d4_evidence" onchange="gate('d4')">
+              <option value="">Select</option>
+              <option>Paying customers at scale (1,000+) in this market</option>
+              <option>Paying customers in pilot (under 1,000)</option>
+              <option>LOIs or pre-orders with named customers</option>
+              <option>Surveys or interviews showing willingness to pay</option>
+              <option>Market size data and demographic analysis only</option>
+              <option>No demand validation conducted</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-label">Is the target price point validated?</div>
+            <select id="d4_price" onchange="gate('d4')">
+              <option value="">Select</option>
+              <option>Yes - customers are paying at this price point now</option>
+              <option>Partial - tested at a lower price, scaling up assumed</option>
+              <option>No - price point is modelled, not tested</option>
+              <option>Not discussed</option>
+            </select>
+          </div>
+        </div>
+        <div class="fields-row full">
+          <div class="field">
+            <div class="field-label">What existing behaviour does this product replace - and what does the customer currently pay for it?</div>
+            <select id="d4_behaviour" onchange="gate('d4')">
+              <option value="">Select</option>
+              <option>Founder named a specific existing behaviour with a known cost</option>
+              <option>Founder described the behaviour but not the cost</option>
+              <option>Founder framed it as a new behaviour with no existing substitute</option>
+              <option>Not discussed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="gate" id="gate_d4">Demand validation based on demographics or market size analysis alone is not sufficient. The question is not whether the market exists - it is whether this customer will pay this price through this channel. Do not proceed to IC without at least one concrete paying customer data point.</div>
+    </div>
+
+    <!-- DIMENSION 5 -->
+    <div class="dim-block">
+      <div class="dim-header">
+        <div class="dim-top">
+          <div>
+            <div class="dim-number">Dimension 5</div>
+            <div class="dim-title">Team resilience</div>
+          </div>
+          <div class="dim-tag tag-op">Operator lens</div>
+        </div>
+        <div class="dim-quote">"In African markets, the model you invest in is rarely the model that survives. Regulatory shifts, infrastructure failures, currency crises, and partner collapses are not edge cases - they are the operating environment. The team question is not whether they have built before. It is whether they have recovered before."</div>
+      </div>
+      <div class="dim-fields">
+        <div class="fields-row">
+          <div class="field">
+            <div class="field-label">In-market operating experience <span class="field-req">*</span></div>
+            <select id="d5_experience" onchange="gate('d5')">
+              <option value="">Select</option>
+              <option>Founder has 5+ years operating in this specific market</option>
+              <option>Founder has 2-5 years in this market</option>
+              <option>Founder has regional experience, not this specific market</option>
+              <option>Local leadership hired, founder operates remotely</option>
+              <option>HQ outside Africa, local country managers below leadership</option>
+              <option>No in-market experience at leadership level</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-label">Has the team navigated a material operational crisis in a comparable market?</div>
+            <select id="d5_crisis" onchange="gate('d5')">
+              <option value="">Select</option>
+              <option>Yes - named a specific crisis and how they resolved it</option>
+              <option>Yes - referenced general market challenges</option>
+              <option>No - first venture in this market</option>
+              <option>Not discussed</option>
+            </select>
+          </div>
+        </div>
+        <div class="fields-row full">
+          <div class="field">
+            <div class="field-label">Key person dependency risk</div>
+            <select id="d5_dependency" onchange="gate('d5')">
+              <option value="">Select</option>
+              <option>Team of 3+ with overlapping market knowledge</option>
+              <option>One key person with local knowledge, others remote</option>
+              <option>Single founder, no redundancy</option>
+              <option>Not assessed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="gate" id="gate_d5">Team resilience is under-assessed for this deal. In African markets, key person dependency combined with no documented crisis navigation experience is a material risk - not a later-stage concern. Flag before IC.</div>
+    </div>
+
+    <div class="coverage-note">
+      <strong>Coverage note:</strong> This checklist covers 5 of 10 due diligence dimensions. Dimensions not yet covered: currency and FX risk, model origin, unit economics trajectory, infrastructure posture, and cap table structure. These will be added as the benchmark data layer deepens. Treat this output as a starting point for the IC conversation, not a complete clearance.
+    </div>
+
+    <div class="run-row">
+      <button class="btn-run" id="runBtn" onclick="runAnalysis()">Generate IC memo</button>
+      <div class="run-note">Runs locally in your browser. Nothing sent or stored.</div>
+    </div>
+
+    <div class="spinner-wrap" id="spinner">
+      <div class="spinner"></div>
+      <div>Running operator analysis...</div>
+    </div>
+
+    <div class="output" id="output"></div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>Growth Operator Notes - Jean-Philippe Ouandji</div>
+    <a href="../">jpouandji-operator.github.io/portfolio</a>
+  </footer>
+
+<script>
+var B = {
+  dist: {
+    agent: "Agent network margins in West Africa typically compress to 4-8% net after airtime incentives (8-15%), aggregator fees (3-6%), and churn-driven reacquisition. A gross margin stated without stack breakdown is almost always pre-incentive.",
+    telco: "Telco partnerships in Francophone Africa carry revenue share agreements of 20-40% of gross revenue, often with minimum guarantee clauses that flip the risk to the operator in low-volume months.",
+    platform: "Platform models face payment gateway fees (1.5-3.5%), fraud provision (1-2%), and disputed transaction costs that are rarely modelled at pre-seed.",
+    direct: "Direct distribution models in African markets routinely underestimate last-mile cost: field agent management, physical cash handling, and geographic coverage gaps that force hybrid models by Series A.",
+    def: "Without a named distribution model and stack breakdown, margin assumptions cannot be validated. Every intermediary from product to end customer must be costed before IC."
+  },
+  reg: {
+    fintech: "Mobile money and fintech licensing in Sub-Saharan Africa has shifted materially in at least 6 markets since 2020. The pattern: permissive environment, rapid growth, then tightening on data localisation, capital requirements, or revenue sharing with incumbents. Senegal (2021) and Ivory Coast (2023) are the most recent examples.",
+    ecom: "E-commerce regulation in Africa is less volatile than fintech but import duty structures, VAT on digital services, and cross-border payment restrictions have materially affected unit economics in Nigeria (2023) and Ghana (2022).",
+    energy: "Off-grid energy regulation is the most government-sensitive sector after fintech. Subsidy structures, grid extension policies, and rural electrification mandates can break off-grid economics within a single budget cycle.",
+    def: "Regulatory risk stated as a general disclaimer rather than a specific scenario is a red flag at any stage. The question is not whether regulation will change - it will. The question is which specific change, on what timeline, triggered by what political incentive."
+  },
+  exit: {
+    named: "Named acquirers with rationale is the minimum credible exit thesis in the current Africa liquidity environment. Verify whether the founder has an existing relationship - a warm contact versus a cold name on a slide are materially different positions.",
+    generic: "A generic strategic buyer category without named companies suggests the exit thesis has not been pressure-tested. In Africa's trade sale market, acquirer appetite is highly company-specific, not category-wide.",
+    secondary: "Secondary sales to financial investors are increasing but the buyer universe is thin outside development finance institutions and a small number of dedicated Africa funds.",
+    ipo: "IPO is not a realistic near-term exit for the vast majority of African startups. Two African IPOs in 2024 total. This thesis requires extraordinary justification and should be treated as a red flag without it.",
+    def: "An undiscussed exit is a material gap at any stage beyond pre-seed. Africa's exit-to-investment ratio was 0.13x in 2024. Exit realism is front-loaded diligence, not a later-stage concern."
+  },
+  demand: {
+    scale: "Paying customers at scale is the strongest demand signal. The question after confirmed paying customers is retention and churn - whether customers return at the stated frequency matters as much as whether they paid once.",
+    pilot: "Sub-1,000 paying customers in pilot is encouraging but insufficient to validate price elasticity or channel scalability. The critical gap: do the pilot economics hold when the founder's direct involvement is removed from the customer relationship?",
+    loi: "LOIs and pre-orders indicate intent but not behaviour. In African B2B markets, there is a well-documented gap between signed LOIs and conversion to paying contracts. Verify the conversion rate on prior LOIs if available.",
+    survey: "Survey-based willingness to pay consistently overstates actual conversion in African consumer markets by 40-60%. Treat survey data as directional only.",
+    tam: "TAM analysis and demographic data describe a population, not a customer. This is the demographics-as-demand fallacy - the most common investment mistake in African consumer markets.",
+    def: "No demand validation is a critical gap at any stage beyond idea. Do not proceed to IC without at minimum a documented pilot with paying customers or named LOIs from identified buyers."
+  },
+  team: {
+    strong: "5+ years of in-market operating experience at founder level is the benchmark that separates operators from tourists in African markets. Verify whether that experience is in the specific sector being funded - market knowledge does not automatically transfer across sectors.",
+    moderate: "2-5 years in-market is meaningful but leaves material knowledge gaps around regulatory cycles and crisis navigation. The key question is whether the team has experienced at least one significant market disruption and recovered from it.",
+    regional: "Regional experience without country-specific depth is a risk that founders frequently understate. Ivory Coast and Senegal are different operating environments despite sharing a currency. Nigeria and Ghana share a language and little else operationally.",
+    remote: "Remote founder with local leadership creates a specific risk: the local team optimises for what the remote founder can see and measure. Distribution problems, agent behaviour, and customer service chain failures are systematically under-reported in this structure.",
+    weak: "Leadership without in-market experience is the single most common cause of model failure after Series A in African markets. There is no substitute for having navigated it personally."
+  }
+};
+
+function getBench(dim) {
+  var s = document.getElementById('sector').value;
+  if (dim === 'dist') {
+    var m = document.getElementById('d1_model').value;
+    if (m.includes('Agent')) return B.dist.agent;
+    if (m.includes('Telco')) return B.dist.telco;
+    if (m.includes('Platform')) return B.dist.platform;
+    if (m.includes('Direct')) return B.dist.direct;
+    return B.dist.def;
+  }
+  if (dim === 'reg') {
+    if (s.includes('Fintech') || s.includes('Mobile')) return B.reg.fintech;
+    if (s.includes('E-commerce')) return B.reg.ecom;
+    if (s.includes('Energy')) return B.reg.energy;
+    return B.reg.def;
+  }
+  if (dim === 'exit') {
+    var r = document.getElementById('d3_route').value;
+    if (r.includes('named specific')) return B.exit.named;
+    if (r.includes('generic')) return B.exit.generic;
+    if (r.includes('Secondary')) return B.exit.secondary;
+    if (r.includes('IPO')) return B.exit.ipo;
+    return B.exit.def;
+  }
+  if (dim === 'demand') {
+    var e = document.getElementById('d4_evidence').value;
+    if (e.includes('scale')) return B.demand.scale;
+    if (e.includes('pilot')) return B.demand.pilot;
+    if (e.includes('LOI')) return B.demand.loi;
+    if (e.includes('Survey')) return B.demand.survey;
+    if (e.includes('demographic') || e.includes('market size')) return B.demand.tam;
+    return B.demand.def;
+  }
+  if (dim === 'team') {
+    var x = document.getElementById('d5_experience').value;
+    if (x.includes('5+')) return B.team.strong;
+    if (x.includes('2-5')) return B.team.moderate;
+    if (x.includes('regional')) return B.team.regional;
+    if (x.includes('remotely')) return B.team.remote;
+    return B.team.weak;
+  }
+  return '';
+}
+
+function flagStatus(dim) {
+  if (dim === 'dist') {
+    var mg = document.getElementById('d1_margin').value.trim();
+    var st = document.getElementById('d1_stack').value;
+    if (!mg || st === 'Not discussed' || st === '') return 'red';
+    if (st === 'No - margin stated as a single number') return 'amber';
+    return 'green';
+  }
+  if (dim === 'reg') {
+    var co = document.getElementById('d2_contingency').value;
+    var sc = document.getElementById('d2_scenario').value;
+    var dp = document.getElementById('d2_dep').value;
+    if (!dp || co === 'None - founder has not modelled this' || co === '') return 'red';
+    if (sc === 'Yes - mentioned regulatory risk generally') return 'amber';
+    return 'green';
+  }
+  if (dim === 'exit') {
+    var ro = document.getElementById('d3_route').value;
+    var aq = document.getElementById('d3_acquirers').value;
+    if (ro === 'IPO' || ro === 'Not discussed' || !ro) return 'red';
+    if (aq.includes('category only') || aq === 'Not discussed') return 'amber';
+    return 'green';
+  }
+  if (dim === 'demand') {
+    var ev = document.getElementById('d4_evidence').value;
+    var pr = document.getElementById('d4_price').value;
+    if (!ev || ev.includes('demographic') || ev.includes('No demand')) return 'red';
+    if (ev.includes('Survey') || pr.includes('modelled')) return 'amber';
+    return 'green';
+  }
+  if (dim === 'team') {
+    var ex = document.getElementById('d5_experience').value;
+    var dep = document.getElementById('d5_dependency').value;
+    var cr = document.getElementById('d5_crisis').value;
+    if (!ex || ex.includes('No in-market')) return 'red';
+    if (dep.includes('Single founder') || cr === 'No - first venture in this market') return 'amber';
+    return 'green';
+  }
+  return 'green';
+}
+
+function flagLabel(s) {
+  if (s === 'red') return 'Pressure before IC';
+  if (s === 'amber') return 'Watch closely';
+  return 'Adequately addressed';
+}
+
+function gate(dim) {
+  var gates = {
+    d1: function() {
+      var m = document.getElementById('d1_margin').value.trim();
+      var s = document.getElementById('d1_stack').value;
+      return !m || s === 'Not discussed' || s === '';
+    },
+    d2: function() {
+      var d = document.getElementById('d2_dep').value;
+      var c = document.getElementById('d2_contingency').value;
+      return !d || c === 'None - founder has not modelled this' || c === '';
+    },
+    d3: function() {
+      var r = document.getElementById('d3_route').value;
+      var a = document.getElementById('d3_acquirers').value;
+      return r === 'IPO' || r === 'Not discussed' || !r || a === 'Not discussed';
+    },
+    d4: function() {
+      var e = document.getElementById('d4_evidence').value;
+      return !e || e.includes('demographic') || e.includes('No demand');
+    },
+    d5: function() {
+      var e = document.getElementById('d5_experience').value;
+      var d = document.getElementById('d5_dependency').value;
+      return !e || e.includes('No in-market') || d.includes('Single founder');
+    }
+  };
+  var el = document.getElementById('gate_' + dim);
+  if (el && gates[dim]) el.classList.toggle('on', gates[dim]());
+}
+
+function getClaim(dim) {
+  if (dim === 'dist') {
+    var mg = document.getElementById('d1_margin').value.trim() || 'not stated';
+    var mo = document.getElementById('d1_model').value || 'not stated';
+    var st = document.getElementById('d1_stack').value || 'not discussed';
+    return 'Gross margin claimed: ' + mg + '. Distribution model: ' + mo.toLowerCase() + '. Stack breakdown: ' + st.toLowerCase() + '.';
+  }
+  if (dim === 'reg') {
+    var dp = document.getElementById('d2_dep').value || 'not stated';
+    var sc = document.getElementById('d2_scenario').value || 'not asked';
+    var co = document.getElementById('d2_contingency').value || 'not discussed';
+    return 'Regulatory dependency: ' + dp.toLowerCase() + '. Specific scenario named: ' + sc.toLowerCase() + '. Contingency model: ' + co.toLowerCase() + '.';
+  }
+  if (dim === 'exit') {
+    var ro = document.getElementById('d3_route').value || 'not discussed';
+    var aq = document.getElementById('d3_acquirers').value || 'not discussed';
+    var ct = document.getElementById('d3_contact').value || 'not asked';
+    return 'Exit route: ' + ro.toLowerCase() + '. Named acquirers: ' + aq.toLowerCase() + '. Acquirer contact: ' + ct.toLowerCase() + '.';
+  }
+  if (dim === 'demand') {
+    var ev = document.getElementById('d4_evidence').value || 'not stated';
+    var pr = document.getElementById('d4_price').value || 'not discussed';
+    var bh = document.getElementById('d4_behaviour').value || 'not discussed';
+    return 'Demand evidence: ' + ev.toLowerCase() + '. Price point validated: ' + pr.toLowerCase() + '. Existing behaviour replacement: ' + bh.toLowerCase() + '.';
+  }
+  if (dim === 'team') {
+    var ex = document.getElementById('d5_experience').value || 'not stated';
+    var cr = document.getElementById('d5_crisis').value || 'not discussed';
+    var dep = document.getElementById('d5_dependency').value || 'not assessed';
+    return 'In-market experience: ' + ex.toLowerCase() + '. Crisis navigation: ' + cr.toLowerCase() + '. Key person dependency: ' + dep.toLowerCase() + '.';
+  }
+  return '';
+}
+
+function getQuestions(dim) {
+  var mk = document.getElementById('market').value || 'the target market';
+  var sk = document.getElementById('sector').value || 'this sector';
+  var Q = {
+    dist: [
+      "Walk me through the full margin stack from your product to the end customer - every intermediary, every fee, every incentive. Give me percentages, not narrative.",
+      "What is your effective net margin after agent churn and reacquisition cost? How does that number change if your top 20% of agents leave in year one?",
+      "Which distribution assumption would you be most embarrassed to defend if it turned out to be wrong - and why?"
+    ],
+    reg: [
+      "Name the single regulatory decision in " + mk + " that would force you to restructure your operating model within 90 days. What is your documented plan B?",
+      "Who is your regulatory counsel in-market, and have they reviewed the current licensing framework for your specific model - not the sector generally?",
+      "In the last 24 months, has any competitor or adjacent operator in " + mk + " been materially affected by a regulatory change? What happened and why are you structurally different?"
+    ],
+    exit: [
+      "Name the three most realistic acquirers for this business. For each: who owns the decision, what problem does acquiring you solve for them specifically, and have you spoken to anyone there?",
+      "Given that Africa produced 26 venture-backed exits in all of 2024, what is your realistic exit timeline and what market conditions need to be true for a trade sale at your target multiple?",
+      "If your primary acquirer category consolidates before you are exit-ready, what is the alternative path to returning capital?"
+    ],
+    demand: [
+      "What is the closest existing behaviour your product replaces in " + mk + "? What does the customer currently pay for it - formally or informally - and why will they pay your price instead?",
+      "What happens to your conversion rate when you remove the founder from the sales process? Do you have data on this from the pilot?",
+      "Name the single assumption in your demand model that is most dependent on " + mk + " market conditions being exactly as they are today."
+    ],
+    team: [
+      "Describe the most significant operational crisis your team has navigated in " + mk + " or a comparable African market. What broke, what did you do, and what is structurally different now?",
+      "If you lost your most locally-experienced person tomorrow, which decision made in the next 90 days would your business most likely get wrong - and what does that tell us about key person risk?",
+      "How does your leadership team's decision-making process change when operating data conflicts with the model? Give me a specific example from this market."
+    ]
+  };
+  return Q[dim] || [];
+}
+
+var ynVal = '';
+
+function selectYN(val) {
+  ynVal = val;
+  document.querySelectorAll('.yn-btn').forEach(function(b) { b.classList.remove('selected'); });
+  var btn = document.getElementById('yn_' + val);
+  if (btn) btn.classList.add('selected');
+}
+
+function submitFeedback() {
+  var missing = document.getElementById('fb_missing').value.trim();
+  var formData = new FormData();
+  formData.append('useful', ynVal || 'not answered');
+  formData.append('missing', missing || 'none');
+  formData.append('market', document.getElementById('market').value);
+  formData.append('sector', document.getElementById('sector').value);
+  formData.append('stage', document.getElementById('stage').value);
+
+  fetch('https://formspree.io/f/xaqlekjw', {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  }).then(function() {
+    document.getElementById('fb_form').style.display = 'none';
+    document.getElementById('fb_thanks').classList.add('on');
+  }).catch(function() {
+    document.getElementById('fb_form').style.display = 'none';
+    document.getElementById('fb_thanks').classList.add('on');
+  });
+
+  gtag('event', 'feedback_submitted', {
+    'event_category': 'IC Checklist',
+    'event_label': ynVal
+  });
+}
+
+function runAnalysis() {
+  var market = document.getElementById('market').value;
+  var sector = document.getElementById('sector').value;
+  var stage = document.getElementById('stage').value;
+  var d1m = document.getElementById('d1_margin').value.trim();
+  var d2d = document.getElementById('d2_dep').value;
+  var d3r = document.getElementById('d3_route').value;
+  var d4e = document.getElementById('d4_evidence').value;
+  var d5x = document.getElementById('d5_experience').value;
+
+  if (!market || !sector || !stage) {
+    alert('Please complete the deal context fields (market, sector, stage) before running analysis.');
+    return;
+  }
+  if (!d1m || !d2d || !d3r || !d4e || !d5x) {
+    alert('Please complete the required fields (marked in red) in each dimension.');
+    return;
+  }
+
+  document.getElementById('spinner').classList.add('on');
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('output').classList.remove('on');
+
+  gtag('event', 'ic_checklist_run', {
+    'event_category': 'IC Checklist',
+    'event_label': sector + ' / ' + market
+  });
+
+  setTimeout(function() {
+    document.getElementById('spinner').classList.remove('on');
+
+    var dims = [
+      { key: 'dist', name: 'Distribution economics' },
+      { key: 'reg', name: 'Regulatory timing risk' },
+      { key: 'exit', name: 'Exit pathway realism' },
+      { key: 'demand', name: 'Demand validation' },
+      { key: 'team', name: 'Team resilience' }
+    ];
+
+    var redDims = dims.filter(function(d) { return flagStatus(d.key) === 'red'; }).map(function(d) { return d.name; });
+    var amberDims = dims.filter(function(d) { return flagStatus(d.key) === 'amber'; }).map(function(d) { return d.name; });
+
+    var close = '';
+    if (redDims.length > 0) {
+      close = '<strong>Critical gaps before IC:</strong> ' + redDims.join(', ') + '. A founder who cannot answer the questions above with specific numbers and named examples has not stress-tested this market. Resolve these before the meeting, not during it.';
+    } else if (amberDims.length > 0) {
+      close = '<strong>No critical gaps identified.</strong> Watch closely: ' + amberDims.join(', ') + '. Use the IC questions above to pressure these dimensions in the meeting.';
+    } else {
+      close = '<strong>No critical gaps identified</strong> across the five dimensions assessed. Use the IC questions above as your pressure layer. This checklist covers 5 of 10 dimensions - currency exposure, unit economics trajectory, infrastructure posture, model origin, and cap table structure remain unassessed.';
+    }
+
+    var ticket = document.getElementById('ticket').value;
+    var html = '<div class="memo-header"><div class="memo-title">IC Memo - ' + sector + ' / ' + market + '</div></div>';
+    html += '<div class="memo-meta">' + stage + (ticket ? ' &middot; ' + ticket : '') + ' &middot; Operator-sourced benchmarks &middot; Session not stored</div>';
+
+    dims.forEach(function(d) {
+      var fl = flagStatus(d.key);
+      html += '<div class="result-block">';
+      html += '<div class="result-header">';
+      html += '<div class="result-dim">' + d.name + '</div>';
+      html += '<div class="flag-row"><div class="flag-dot dot-' + fl + '"></div><div class="flag-text">' + flagLabel(fl) + '</div></div>';
+      html += '</div>';
+      html += '<div class="result-body">';
+      html += '<div class="result-claim"><strong>What the founder claims:</strong> ' + getClaim(d.key) + '</div>';
+      html += '<div class="result-bench"><strong>Operator benchmark:</strong> ' + getBench(d.key) + '</div>';
+      html += '<div class="qs-label">Questions for IC</div>';
+      getQuestions(d.key).forEach(function(q, i) {
+        html += '<div class="ic-q">' + (i + 1) + '. ' + q + '</div>';
+      });
+      html += '</div></div>';
+    });
+
+    html += '<div class="memo-close">' + close + '</div>';
+
+    html += '<div class="feedback-block">';
+    html += '<div class="feedback-title">One question</div>';
+    html += '<div class="feedback-sub">Optional and anonymous. Takes 30 seconds. Helps improve the tool.</div>';
+    html += '<div id="fb_form">';
+    html += '<div class="feedback-q">Did this surface something you had not already flagged?</div>';
+    html += '<div class="yn-row"><button class="yn-btn" id="yn_yes" onclick="selectYN(\'yes\')">Yes</button><button class="yn-btn" id="yn_no" onclick="selectYN(\'no\')">No</button></div>';
+    html += '<div class="feedback-q">What did it miss? (optional)</div>';
+    html += '<textarea id="fb_missing" placeholder="Any dimension, benchmark, or question that should be here..."></textarea>';
+    html += '<button class="btn-feedback" onclick="submitFeedback()">Submit feedback</button>';
+    html += '</div>';
+    html += '<div class="feedback-thanks" id="fb_thanks">Thank you. Feedback received.</div>';
+    html += '</div>';
+
+    html += '<div class="cta-block">';
+    html += '<div class="cta-left">Analysis grounded in operator experience across African digital markets. If your deal has dimensions this tool flagged as critical - or dimensions it did not cover - that is the conversation worth having before you wire.<br><strong>Jean-Philippe Ouandji</strong> - Growth Operator Notes</div>';
+    html += '<div class="cta-links">';
+    html += '<a href="mailto:jpouandji@gmail.com">jpouandji@gmail.com</a>';
+    html += '<a href="https://www.linkedin.com/company/growth-operator-notes/" target="_blank" rel="noopener">Growth Operator Notes</a>';
+    html += '<a href="../">Portfolio</a>';
+    html += '</div></div>';
+
+    var out = document.getElementById('output');
+    out.innerHTML = html;
+    out.classList.add('on');
+    document.getElementById('runBtn').disabled = false;
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 1600);
+}
+</script>
+
+</body>
+</html>
