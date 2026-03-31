@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GON Source Monitor - Benchmark Data Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --surface: #edeae2;
+      --warn-bg: #fef9ec;
+      --warn-text: #92660a;
+      --green: #2d6a2d;
+      --green-bg: #f0f7f0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.7; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .site-nav { border-bottom: 1px solid var(--ink); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--ink); }
+    .nav-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+
+    .hero { border-bottom: 1px solid var(--ink); padding: 2.5rem 2rem 2rem; max-width: 900px; margin: 0 auto; }
+    .hero-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.75rem; }
+    .hero-sub { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 580px; }
+
+    .stats-bar { max-width: 900px; margin: 0 auto; padding: 1rem 2rem; display: flex; gap: 2rem; border-bottom: 1px solid var(--rule); }
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+    .stat-val { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; }
+    .stat-label { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .stat-val.warn { color: var(--accent); }
+    .stat-val.ok { color: var(--green); }
+
+    .controls { max-width: 900px; margin: 0 auto; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid var(--rule); }
+    .filter-label { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .filter-btn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; color: var(--muted); transition: all 0.15s; letter-spacing: 0.04em; }
+    .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .reset-btn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; color: var(--muted); margin-left: auto; }
+    .reset-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem; }
+
+    .section-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); padding-bottom: 0.5rem; margin-bottom: 1rem; margin-top: 1.5rem; }
+    .section-label:first-child { margin-top: 0; }
+
+    .source-card { border: 1px solid var(--rule); border-radius: 2px; margin-bottom: 0.75rem; overflow: hidden; transition: border-color 0.15s; }
+    .source-card:hover { border-color: var(--muted); }
+    .source-card.overdue { border-left: 3px solid var(--accent); }
+    .source-card.due-soon { border-left: 3px solid #d4820a; }
+    .source-card.ok { border-left: 3px solid var(--green); }
+    .source-card.never { border-left: 3px solid var(--rule); }
+
+    .card-main { padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 1.5rem; }
+    .card-left { flex: 1; min-width: 0; }
+    .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; flex-shrink: 0; }
+
+    .source-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .source-org { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .source-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 0.5rem; }
+    .source-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; background: var(--surface); color: var(--muted); }
+
+    .status-pill { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 2px; font-weight: 500; white-space: nowrap; }
+    .pill-overdue { background: #fde8e4; color: var(--accent); }
+    .pill-due-soon { background: var(--warn-bg); color: var(--warn-text); }
+    .pill-ok { background: var(--green-bg); color: var(--green); }
+    .pill-never { background: var(--surface); color: var(--muted); }
+
+    .last-checked { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .btn-check { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; color: var(--muted); text-decoration: none; display: inline-block; transition: all 0.15s; white-space: nowrap; }
+    .btn-check:hover { border-color: var(--ink); color: var(--ink); text-decoration: none; }
+    .btn-mark { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 12px; background: var(--ink); color: var(--paper); border: 1px solid var(--ink); border-radius: 2px; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+    .btn-mark:hover { opacity: 0.8; }
+
+    .card-notes { padding: 0.6rem 1.25rem; background: var(--surface); border-top: 1px solid var(--rule); font-size: 11px; color: var(--muted); line-height: 1.6; display: none; }
+    .card-notes.on { display: block; }
+    .notes-toggle { font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'IBM Plex Mono', monospace; padding: 0; margin-top: 0.4rem; }
+    .notes-toggle:hover { color: var(--ink); }
+
+    .weekly-block { background: var(--surface); border: 1px solid var(--rule); border-radius: 2px; padding: 1.25rem 1.5rem; margin-top: 2rem; }
+    .weekly-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .weekly-sub { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+    .prompt-queue { display: flex; flex-direction: column; gap: 0.5rem; }
+    .prompt-item { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0.75rem; border: 1px solid var(--rule); border-radius: 2px; background: var(--paper); }
+    .prompt-id { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; width: 50px; }
+    .prompt-name { font-size: 12px; flex: 1; }
+    .prompt-priority { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; flex-shrink: 0; }
+    .pri-high { background: #fde8e4; color: var(--accent); }
+    .pri-medium { background: var(--warn-bg); color: var(--warn-text); }
+    .pri-low { background: var(--surface); color: var(--muted); }
+    .prompt-status { font-size: 10px; color: var(--muted); flex-shrink: 0; }
+
+    .site-footer { border-top: 1px solid var(--ink); padding: 1.5rem 2rem; max-width: 900px; margin: 2rem auto 0; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); }
+
+    @media(max-width: 600px) {
+      .hero { padding: 2rem 1.25rem 1.5rem; }
+      .hero-title { font-size: 1.5rem; }
+      .main { padding: 1.25rem; }
+      .stats-bar { padding: 1rem 1.25rem; gap: 1.25rem; flex-wrap: wrap; }
+      .controls { padding: 0.75rem 1.25rem; flex-wrap: wrap; }
+      .card-main { flex-direction: column; gap: 0.75rem; }
+      .card-right { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+      .site-nav { padding: 1rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-brand">Growth Operator Notes</div>
+  <div class="nav-sub">Source Monitor - Internal Tool</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Internal Tool - Benchmark Intelligence</div>
+  <h1 class="hero-title">GON Source Monitor</h1>
+  <p class="hero-sub">Track when primary sources publish new documents. Check weekly. Mark as checked after reviewing. No crawling - this is a manual discipline tool, not a bot.</p>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat"><div class="stat-val warn" id="statOverdue">-</div><div class="stat-label">Overdue</div></div>
+  <div class="stat"><div class="stat-val warn" id="statDueSoon">-</div><div class="stat-label">Due this week</div></div>
+  <div class="stat"><div class="stat-val ok" id="statOk">-</div><div class="stat-label">Up to date</div></div>
+  <div class="stat"><div class="stat-val" id="statNever">-</div><div class="stat-label">Never checked</div></div>
+  <div class="stat"><div class="stat-val" id="statTotal">-</div><div class="stat-label">Total sources</div></div>
+</div>
+
+<div class="controls">
+  <div class="filter-label">Filter:</div>
+  <button class="filter-btn active" onclick="setFilter('all')">All</button>
+  <button class="filter-btn" onclick="setFilter('overdue')">Overdue</button>
+  <button class="filter-btn" onclick="setFilter('due-soon')">Due soon</button>
+  <button class="filter-btn" onclick="setFilter('never')">Never checked</button>
+  <button class="reset-btn" onclick="resetAllDates()">Reset all dates</button>
+</div>
+
+<main class="main" id="mainContent"></main>
+
+<footer class="site-footer">
+  <div>Growth Operator Notes - Jean-Philippe Ouandji</div>
+  <div>Internal use only - not indexed</div>
+</footer>
+
+<script>
+// SOURCE DEFINITIONS
+// cadence: days between checks
+// benchmarks: which benchmark IDs in the repository this source feeds
+var SOURCES = [
+  {
+    id: 'bceao-sfn',
+    name: 'BCEAO Rapport Annuel SFN',
+    org: 'BCEAO',
+    section: 'Regulatory - WAEMU',
+    desc: 'Annual report on digital financial services in UEMOA. Feeds agent commission benchmarks, transfer cost data, merchant point growth, and regulatory framework updates.',
+    url: 'https://bceao.int/publications',
+    cadence: 30,
+    benchmarks: ['D-003', 'D-008', 'MM-003', 'R-001'],
+    tags: ['WAEMU', 'Fintech', 'Mobile money', 'Regulatory'],
+    notes: 'Published annually in January covering prior year data. 2024 edition published January 2026. Check for 2025 edition in January 2027. Also check for interim circulars and instructions throughout the year - BCEAO issues these without announcement.'
+  },
+  {
+    id: 'gsma-sotir',
+    name: 'GSMA State of the Industry Report',
+    org: 'GSMA',
+    section: 'Mobile Money Context',
+    desc: 'Annual global mobile money report. Primary source for agent network size, transaction volumes, and Sub-Saharan Africa mobile money growth benchmarks.',
+    url: 'https://gsma.com/sotir',
+    cadence: 14,
+    benchmarks: ['MM-001', 'MM-002', 'D-004'],
+    tags: ['Sub-Saharan Africa', 'Mobile money', 'Agents'],
+    notes: 'Published annually - typically April/May. GSMA 2025 edition published April 2025. Watch for 2026 edition from April 2026 onwards. GSMA also publishes interim AgriTech and Mobile for Development reports - check the broader publications page.'
+  },
+  {
+    id: 'safaricom-ar',
+    name: 'Safaricom PLC Annual Report',
+    org: 'Safaricom',
+    section: 'Unit Economics - Kenya',
+    desc: 'Primary operator disclosure for M-Pesa Kenya churn, active user metrics, and subscriber acquisition data. Only public primary source for Kenya mobile money unit economics.',
+    url: 'https://safaricom.co.ke/investor-relations/financial-reports',
+    cadence: 14,
+    benchmarks: ['UE-001', 'D-002'],
+    tags: ['Kenya', 'Mobile money', 'Churn', 'Primary disclosure'],
+    notes: 'Fiscal year ends March 31. FY2024 annual report published June 2024. FY2025 report expected June 2025. Also check quarterly earnings releases - these disclose M-Pesa active user figures and sometimes churn proxies ahead of the full annual report.'
+  },
+  {
+    id: 'avca-report',
+    name: 'AVCA African Private Capital Activity Report',
+    org: 'AVCA',
+    section: 'Exit and Liquidity',
+    desc: 'Primary source for Africa VC exit ratios, deal volume, active investor counts, and exit route distribution. Feeds all three exit benchmarks in the repository.',
+    url: 'https://avca.africa/research-and-reports/',
+    cadence: 14,
+    benchmarks: ['E-001', 'E-002', 'E-003'],
+    tags: ['Africa', 'VC', 'Exit', 'PE'],
+    notes: 'Published annually - typically Q1/Q2. 2024 Activity Report covering 2024 data expected Q2 2025. Watch for 2025 Activity Report from Q1 2026 onwards. AVCA also publishes quarterly deal trackers - useful for interim updates.'
+  },
+  {
+    id: 'artci-decisions',
+    name: 'ARTCI Decisions and Reports',
+    org: 'ARTCI',
+    section: 'Regulatory - Ivory Coast',
+    desc: 'Ivory Coast telecoms regulator. Primary source for USSD access pricing, fintech-telco partnership conditions, and anti-competitive bundling decisions.',
+    url: 'https://artci.ci/decisions-reglementaires',
+    cadence: 30,
+    benchmarks: ['R-002'],
+    tags: ['Ivory Coast', 'WAEMU', 'Telecoms', 'USSD', 'Regulatory'],
+    notes: 'Decisions published on artci.ci without announcement. Last key decision: n°2023-0941 (September 2023). Check for any 2024 or 2025 decisions affecting USSD tariffs or fintech access. Also check ARTCI annual activity reports published mid-year.'
+  },
+  {
+    id: 'beac-instructions',
+    name: 'BEAC Instructions and Regulations',
+    org: 'BEAC',
+    section: 'Regulatory - CEMAC',
+    desc: 'Central bank for CEMAC zone. Primary source for Cameroon/CEMAC payment services regulation, ISO 20022 compliance deadlines, and e-money licensing framework.',
+    url: 'https://beac.int/textes-reglementaires',
+    cadence: 30,
+    benchmarks: ['R-004', 'R-005'],
+    tags: ['Cameroon', 'CEMAC', 'Regulatory', 'Fintech'],
+    notes: 'ISO 20022 compliance deadline was November 22, 2025. Check whether BEAC has issued any post-deadline guidance or extensions. Also watch for any COBAC decisions supplementing R-2025/01 on capital requirements. CEMAC exclusivity gap confirmed - no equivalent to BCEAO Art.18 yet.'
+  },
+  {
+    id: 'artp-cameroon',
+    name: 'ARTP Decisions - Cameroon',
+    org: 'ARTP Cameroon',
+    section: 'Regulatory - CEMAC',
+    desc: 'Cameroon telecoms regulator. Source for USSD access ceiling decisions and fintech-MNO partnership conditions in CEMAC.',
+    url: 'https://artp.cm/decisions-reglementaires',
+    cadence: 60,
+    benchmarks: ['R-006'],
+    tags: ['Cameroon', 'CEMAC', 'Telecoms', 'USSD'],
+    notes: 'Last key decision: n°00000213/ARTP/DG/2023 (July 2023) - USSD ceiling for financial inclusion services. Check for any 2024 or 2025 updates. ARTP publishes decisions without announcement - check the decisions page directly.'
+  },
+  {
+    id: 'cbk-ndtcp',
+    name: 'CBK NDTCP Regulations and Guidance',
+    org: 'Central Bank of Kenya',
+    section: 'Regulatory - East Africa',
+    desc: 'Kenya digital credit and payments regulation. Primary source for licensing requirements, capital thresholds, and interest rate control framework.',
+    url: 'https://centralbank.go.ke/licensing/digital-credit-providers/',
+    cadence: 30,
+    benchmarks: ['R-008'],
+    tags: ['Kenya', 'Digital lending', 'Regulatory', 'NDTCP'],
+    notes: 'NDTCP Regulations 2025 drafted August 2025, implementation ongoing. Watch for final gazette publication and any CBK guidance notes on the interest rate pre-approval process. Also monitor CBK for any new fintech licensing categories introduced in 2026.'
+  },
+  {
+    id: 'bnr-rwanda',
+    name: 'BNR Regulatory Updates and Passporting',
+    org: 'National Bank of Rwanda',
+    section: 'Regulatory - East Africa',
+    desc: 'Rwanda central bank. Source for regulatory sandbox developments and the Kenya-Rwanda fintech licence passporting agreement signed March 2026.',
+    url: 'https://bnr.rw/regulatory-sandbox',
+    cadence: 30,
+    benchmarks: ['R-010'],
+    tags: ['Rwanda', 'Kenya', 'Passporting', 'Regulatory sandbox'],
+    notes: 'Kenya-Rwanda passporting agreement signed March 2026. Watch for: joint technical committee standards publication, implementation timeline, and whether Tanzania or Uganda are added to the passporting framework. This is a fast-moving regulatory development.'
+  },
+  {
+    id: 'bog-fintech',
+    name: 'Bank of Ghana Fintech and Innovation Report',
+    org: 'Bank of Ghana',
+    section: 'Unit Economics - Ghana',
+    desc: 'Primary source for Ghana mobile lending churn rates and digital financial services market data.',
+    url: 'https://bog.gov.gh/publications/financial-stability-reports/',
+    cadence: 60,
+    benchmarks: ['UE-002'],
+    tags: ['Ghana', 'Fintech', 'Mobile lending', 'Churn'],
+    notes: 'Fintech and Innovation Report published annually. 2024 edition confirmed as source for 15-20% Ghana mobile lending churn. Watch for 2025 edition. Also check Bank of Ghana quarterly monetary policy reports for interim fintech sector data.'
+  },
+  {
+    id: 'partech-report',
+    name: 'Partech Africa Tech VC Report',
+    org: 'Partech Partners',
+    section: 'Unit Economics - Cross-sector',
+    desc: 'Annual Africa tech VC report. Secondary source for LTV/CAC benchmarks, B2B SaaS metrics, and sector-level investment trends.',
+    url: 'https://partechpartners.com/africa-report',
+    cadence: 30,
+    benchmarks: ['UE-005', 'UE-012'],
+    tags: ['Africa', 'VC', 'Fintech', 'SaaS', 'Unit economics'],
+    notes: 'Published annually in January. 2025 edition published January 2025. Watch for 2026 edition from January 2026 onwards. Partech also publishes mid-year sector updates - these sometimes contain interim unit economics data.'
+  },
+  {
+    id: 'gsma-agritech',
+    name: 'GSMA AgriTech and Mobile for Development',
+    org: 'GSMA',
+    section: 'Unit Economics - Agritech',
+    desc: 'Case studies and benchmarks for digital agricultural services. Source for smallholder farmer CAC benchmarks and agritech distribution model analysis.',
+    url: 'https://gsma.com/mobilefordevelopment/agritech',
+    cadence: 60,
+    benchmarks: ['UE-006'],
+    tags: ['Kenya', 'Nigeria', 'Agritech', 'CAC', 'Smallholder'],
+    notes: 'GSMA publishes AgriTech Accelerator case studies on an irregular schedule. Last relevant publication: 2023. Watch for any 2024 or 2025 case studies covering East or West Africa agritech unit economics. Also check ITC and Aceli Africa for agritech updates.'
+  },
+  {
+    id: 'itc-synthesis',
+    name: 'ITC Annual Evaluation Synthesis Report',
+    org: 'International Trade Centre',
+    section: 'Unit Economics - Agritech',
+    desc: 'Annual evaluation synthesis. Source for hub model CAC reduction benchmark and Nigeria $25 CAC threshold finding.',
+    url: 'https://intracen.org/resources/publications',
+    cadence: 60,
+    benchmarks: ['UE-010'],
+    tags: ['Nigeria', 'West Africa', 'Agritech', 'CAC', 'Hub model'],
+    notes: '2025 Annual Evaluation Synthesis Report (June 2025) is the source. Watch for 2026 edition from mid-2026. ITC also publishes sector-specific reports on agricultural value chains - check for any West Africa agritech coverage.'
+  },
+  {
+    id: 'salient-healthtech',
+    name: 'Salient Advisory Health Tech Report',
+    org: 'Salient Advisory',
+    section: 'Unit Economics - Healthtech',
+    desc: 'Africa healthtech market analysis. Secondary source for B2C healthtech CAC benchmarks in Nigeria and Kenya.',
+    url: 'https://salientadvisory.com/reports',
+    cadence: 60,
+    benchmarks: ['UE-011'],
+    tags: ['Nigeria', 'Kenya', 'Healthtech', 'CAC', 'Telemedicine'],
+    notes: 'Health Tech in Africa report published July 2024. Watch for 2025 edition. Salient Advisory also publishes shorter briefings on African health market developments - subscribe to their newsletter if available.'
+  },
+  {
+    id: 'ifc-africa',
+    name: 'IFC Africa Tech and Agritech Reports',
+    org: 'IFC',
+    section: 'Unit Economics - Agritech',
+    desc: 'IFC publications on digital technology and agricultural distribution in Africa. Source for agritech gross margin benchmarks.',
+    url: 'https://ifc.org/insights-reports',
+    cadence: 60,
+    benchmarks: ['UE-009'],
+    tags: ['Sub-Saharan Africa', 'Agritech', 'Gross margin', 'Input distribution'],
+    notes: '"Leveraging Digital Tech for African Business Growth" published 2024. IFC publishes on an irregular schedule - watch for any new agritech or fintech market reports. Also check IFC EMCompass notes which are published more frequently.'
+  }
+];
+
+var SECTIONS = [
+  'Regulatory - WAEMU',
+  'Regulatory - CEMAC',
+  'Regulatory - East Africa',
+  'Mobile Money Context',
+  'Unit Economics - Kenya',
+  'Unit Economics - Ghana',
+  'Unit Economics - Agritech',
+  'Unit Economics - Healthtech',
+  'Unit Economics - Cross-sector',
+  'Exit and Liquidity'
+];
+
+var PROMPT_QUEUE = [
+  { id: 'WP-001', name: 'Kenya digital lending CAC - Tala/Branch verification', priority: 'high', status: 'Not run' },
+  { id: 'WP-002', name: 'Agritech CAC payback period', priority: 'high', status: 'Not run' },
+  { id: 'WP-003', name: 'B2B healthtech CAC per facility', priority: 'high', status: 'Not run' },
+  { id: 'WP-004', name: 'Agent churn rates - West Africa', priority: 'medium', status: 'Not run' },
+  { id: 'WP-005', name: 'ARTCI decisions 2024/2025', priority: 'medium', status: 'Not run' },
+  { id: 'WP-006', name: 'CEMAC exclusivity instruments', priority: 'medium', status: 'Not run' },
+  { id: 'WP-007', name: 'Energy/cleantech infrastructure costs', priority: 'medium', status: 'Not run' },
+  { id: 'WP-008', name: 'AVCA 2025 Activity Report', priority: 'medium', status: 'Not run' },
+  { id: 'WP-009', name: 'GSMA SOTIR 2026 update', priority: 'low', status: 'Not run' },
+  { id: 'WP-010', name: 'Safaricom FY2025 churn data', priority: 'low', status: 'Not run' }
+];
+
+// STORAGE
+function getCheckedDates() {
+  try {
+    return JSON.parse(localStorage.getItem('gon_source_dates') || '{}');
+  } catch(e) { return {}; }
+}
+
+function setCheckedDate(id, dateStr) {
+  var dates = getCheckedDates();
+  dates[id] = dateStr;
+  localStorage.setItem('gon_source_dates', JSON.stringify(dates));
+}
+
+function resetAllDates() {
+  if (confirm('Reset all check dates? This cannot be undone.')) {
+    localStorage.removeItem('gon_source_dates');
+    render();
+  }
+}
+
+// STATUS LOGIC
+function getStatus(source) {
+  var dates = getCheckedDates();
+  var lastChecked = dates[source.id];
+  if (!lastChecked) return 'never';
+  var last = new Date(lastChecked);
+  var now = new Date();
+  var daysSince = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+  if (daysSince > source.cadence) return 'overdue';
+  if (daysSince > source.cadence * 0.75) return 'due-soon';
+  return 'ok';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return 'Never';
+  var d = new Date(dateStr);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function getDaysSince(dateStr) {
+  if (!dateStr) return null;
+  var d = new Date(dateStr);
+  var now = new Date();
+  return Math.floor((now - d) / (1000 * 60 * 60 * 24));
+}
+
+// FILTER STATE
+var currentFilter = 'all';
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  event.target.classList.add('active');
+  render();
+}
+
+// MARK AS CHECKED
+function markChecked(id) {
+  var today = new Date().toISOString().split('T')[0];
+  setCheckedDate(id, today);
+  render();
+}
+
+// TOGGLE NOTES
+function toggleNotes(id) {
+  var el = document.getElementById('notes-' + id);
+  var btn = document.getElementById('ntoggle-' + id);
+  if (el.classList.contains('on')) {
+    el.classList.remove('on');
+    btn.textContent = 'Show notes';
+  } else {
+    el.classList.add('on');
+    btn.textContent = 'Hide notes';
+  }
+}
+
+// RENDER
+function render() {
+  var dates = getCheckedDates();
+  var counts = { overdue: 0, 'due-soon': 0, ok: 0, never: 0 };
+
+  SOURCES.forEach(function(s) {
+    counts[getStatus(s)]++;
+  });
+
+  document.getElementById('statOverdue').textContent = counts['overdue'];
+  document.getElementById('statDueSoon').textContent = counts['due-soon'];
+  document.getElementById('statOk').textContent = counts['ok'];
+  document.getElementById('statNever').textContent = counts['never'];
+  document.getElementById('statTotal').textContent = SOURCES.length;
+
+  var html = '';
+
+  SECTIONS.forEach(function(section) {
+    var sectionSources = SOURCES.filter(function(s) { return s.section === section; });
+    if (sectionSources.length === 0) return;
+
+    var filtered = sectionSources.filter(function(s) {
+      var status = getStatus(s);
+      if (currentFilter === 'all') return true;
+      if (currentFilter === 'overdue') return status === 'overdue';
+      if (currentFilter === 'due-soon') return status === 'due-soon';
+      if (currentFilter === 'never') return status === 'never';
+      return true;
+    });
+
+    if (filtered.length === 0) return;
+
+    html += '<div class="section-label">' + section + '</div>';
+
+    filtered.forEach(function(source) {
+      var status = getStatus(source);
+      var lastChecked = dates[source.id];
+      var daysSince = getDaysSince(lastChecked);
+
+      var pillClass = 'pill-' + (status === 'due-soon' ? 'due-soon' : status);
+      var pillText = status === 'never' ? 'Never checked' : status === 'overdue' ? 'Overdue' : status === 'due-soon' ? 'Due this week' : 'Up to date';
+      var lastText = lastChecked ? 'Last checked: ' + formatDate(lastChecked) + (daysSince !== null ? ' (' + daysSince + 'd ago)' : '') : 'Not yet checked';
+
+      html += '<div class="source-card ' + status + '">';
+      html += '<div class="card-main">';
+      html += '<div class="card-left">';
+      html += '<div class="source-name">' + source.name + '</div>';
+      html += '<div class="source-org">' + source.org + ' &middot; Check every ' + source.cadence + ' days</div>';
+      html += '<div class="source-desc">' + source.desc + '</div>';
+      html += '<div class="source-tags">';
+      source.tags.forEach(function(t) { html += '<span class="tag">' + t + '</span>'; });
+      source.benchmarks.forEach(function(b) { html += '<span class="tag" style="background:var(--ink);color:var(--paper);">' + b + '</span>'; });
+      html += '</div>';
+      html += '<button class="notes-toggle" id="ntoggle-' + source.id + '" onclick="toggleNotes(\'' + source.id + '\')">Show notes</button>';
+      html += '</div>';
+      html += '<div class="card-right">';
+      html += '<span class="status-pill ' + pillClass + '">' + pillText + '</span>';
+      html += '<span class="last-checked">' + lastText + '</span>';
+      html += '<a href="' + source.url + '" target="_blank" rel="noopener" class="btn-check">Open source</a>';
+      html += '<button class="btn-mark" onclick="markChecked(\'' + source.id + '\')">Mark checked</button>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="card-notes" id="notes-' + source.id + '">' + source.notes + '</div>';
+      html += '</div>';
+    });
+  });
+
+  // Weekly prompt reminder block
+  html += '<div class="weekly-block">';
+  html += '<div class="weekly-title">Weekly Research Prompt Queue</div>';
+  html += '<div class="weekly-sub">Run at least one prompt per week through Gemini or GPT with web search. Return results to Claude for three-test vetting. Priority order below.</div>';
+  html += '<div class="prompt-queue">';
+  PROMPT_QUEUE.forEach(function(p) {
+    html += '<div class="prompt-item">';
+    html += '<div class="prompt-id">' + p.id + '</div>';
+    html += '<div class="prompt-name">' + p.name + '</div>';
+    html += '<span class="prompt-priority pri-' + p.priority + '">' + p.priority + '</span>';
+    html += '<div class="prompt-status">' + p.status + '</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+render();
+</script>
+</body>
+</html>
