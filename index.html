@@ -3,31 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
+
   <!-- SEO Meta Tags -->
-  <title>Growth Operator Africa: Platform Economics and GTM Strategy | Jean-Philippe Ouandji</title>
-  <meta name="description" content="Scaling 3.5M+ users across Africa. Operator-lens case studies on GTM strategy, platform economics, and fintech infrastructure for VCs and Founders." />
-  <meta name="keywords" content="growth operator Africa, GTM strategy Africa, platform economics emerging markets, fintech infrastructure Africa, Africa market entry, unit economics Africa, digital marketing senior manager Africa, scaling SaaS Africa, francophone Africa digital strategy, HEC Paris" />
+  <title>Growth Operator Notes - Operator Intelligence for African Private Capital | Jean-Philippe Ouandji</title>
+  <meta name="description" content="Operator intelligence for Africa-focused VC and PE investors. 12 years inside the distribution stack across fintech, telecom, and SaaS. IC Checklist, benchmark repository, war games retrospectives." />
+  <meta name="keywords" content="growth operator Africa, Africa VC due diligence, platform economics Africa, Africa market entry, unit economics emerging markets, Africa PE investment, infrastructure sovereignty, operator intelligence Africa" />
   <meta name="author" content="Jean-Philippe Ouandji" />
   <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/" />
-  
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Growth Operator Africa: 12 Years of Operator Data on Scaling in Emerging Markets" />
-  <meta property="og:description" content="Operator-lens case studies on platform economics, fintech infrastructure, and GTM strategy across Africa. Built for VCs and Founders who want frameworks, not headlines." />
+  <meta property="og:title" content="Growth Operator Notes - Operator Intelligence for African Private Capital" />
+  <meta property="og:description" content="12 years inside the distribution stack. IC Checklist, benchmark repository, and war games retrospectives for Africa-focused investors." />
   <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/" />
-  <meta property="og:image" content="https://jpouandji-operator.github.io/portfolio/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  
+  <meta property="og:image" content="https://jpouandji-operator.github.io/portfolio/og-image.jpg" />
+
   <!-- Schema.org -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Jean-Philippe Ouandji",
-    "jobTitle": "Growth Operator - Digital Marketing Senior Manager",
-    "description": "12+ years scaling digital products across Africa. Operator-lens analysis on platform economics, GTM strategy, fintech infrastructure, and emerging market growth for VCs and Founders.",
+    "jobTitle": "Digital Marketing Senior Manager and Growth Operator",
+    "description": "Operator intelligence for Africa-focused VC and PE investors. 12 years inside the distribution stack across fintech, telecom, and SaaS markets.",
     "url": "https://jpouandji-operator.github.io/portfolio/",
     "sameAs": [
       "https://linkedin.com/in/jean-philippe-ouandji",
@@ -38,13 +36,11 @@
       {"@type": "EducationalOrganization", "name": "Monash University"}
     ],
     "knowsAbout": [
-      "Growth Operations", "Platform Economics", "Unit Economics", "GTM Strategy Africa",
-      "Digital Marketing", "Product Marketing", "App Scaling", "Fintech Infrastructure",
-      "Emerging Markets", "Africa Market Entry", "Infrastructure Sovereignty", "CAPEX Rationalization"
+      "Growth Operator Africa", "Platform Economics", "Africa Market Entry", "Unit Economics", "Emerging Markets Strategy", "Infrastructure Sovereignty", "Fintech Africa", "Telecom Digital Strategy"
     ]
   }
   </script>
-  
+
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
   <script>
@@ -52,12 +48,12 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-CWB7VQ56XE');
-    
+
     window.addEventListener('load', function() {
-      let scrollDepths = [25, 50, 75, 100];
-      let firedDepths = [];
+      var scrollDepths = [25, 50, 75, 100];
+      var firedDepths = [];
       window.addEventListener('scroll', function() {
-        let scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+        var scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
         scrollDepths.forEach(function(depth) {
           if (scrollPercent >= depth && !firedDepths.includes(depth)) {
             gtag('event', 'scroll', {'event_category': 'Engagement', 'event_label': depth + '% scrolled'});
@@ -68,27 +64,27 @@
     });
   </script>
 
-  <!-- Fonts - async to avoid render blocking -->
+  <!-- Fonts: preload pattern (non-render-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
-  
+
   <style>
-    /* === VARIABLES === */
+    /* VARIABLES */
     :root {
       --paper: #f5f0e8;
       --ink: #0f0e0c;
       --accent: #c8320a;
       --muted: #7a7060;
       --rule: #d4cfc4;
+      --surface: #edeae2;
     }
-    
-    /* === BASE === */
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     html { background: var(--paper); }
-    
+
     body {
       font-family: 'Georgia', serif;
       font-size: 16px;
@@ -98,46 +94,97 @@
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
-    
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid var(--accent);
-    }
-    
+
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
     a:hover { opacity: 0.7; }
-    
     img { max-width: 100%; height: auto; display: block; }
-    
-    /* === HEADER === */
-    .header {
-      padding: 1.5rem 1rem;
+
+    /* NAV */
+    .site-nav {
       border-bottom: 2px solid var(--ink);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--paper);
+      z-index: 100;
     }
-    
+
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--ink);
+      border: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      border: none;
+    }
+
+    .nav-links a:hover { color: var(--accent); opacity: 1; }
+    .nav-links a.active { color: var(--ink); }
+
+    /* HEADER */
+    .header {
+      padding: 2rem 1rem 1.5rem;
+      border-bottom: 1px solid var(--rule);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
     .header h1 {
       font-family: 'Playfair Display', serif;
       font-size: 1.75rem;
       font-weight: 900;
       line-height: 1.2;
-      margin-bottom: 0.25rem;
+      margin-bottom: 1rem;
     }
-    
-    .header .subtitle {
-      font-size: 0.9rem;
+
+    .positioning-sentence {
+      font-size: 0.95rem;
+      line-height: 1.7;
       color: var(--muted);
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin-bottom: 0;
       font-style: italic;
     }
-    
-    /* === AUTHOR === */
+
+    /* AUTHOR */
     .author {
       padding: 1.5rem 1rem;
       border-bottom: 1px solid var(--rule);
       display: flex;
       gap: 1rem;
       align-items: flex-start;
+      max-width: 800px;
+      margin: 0 auto;
     }
-    
+
     .author-photo {
       width: 70px;
       height: 70px;
@@ -145,108 +192,147 @@
       flex-shrink: 0;
       border: 2px solid var(--ink);
     }
-    
+
     .author-info h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 0.3rem;
     }
-    
+
     .author-info p {
       font-size: 0.85rem;
       line-height: 1.5;
       color: var(--muted);
+      margin-bottom: 0.4rem;
     }
-    
-    .author-meta {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--accent);
+
+    .author-credentials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
       margin-top: 0.5rem;
     }
 
-    /* === RESULTS GRID === */
-    .results-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid var(--rule);
-      border-bottom: 2px solid var(--ink);
-    }
-
-    .result-box {
-      padding: 1.25rem 1rem;
-      text-align: center;
-      border-right: 1px solid var(--rule);
-    }
-
-    .result-box:last-child {
-      border-right: none;
-    }
-
-    .result-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: var(--accent);
-      display: block;
-      line-height: 1.1;
-      margin-bottom: 0.25rem;
-    }
-
-    .result-label {
+    .credential-badge {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--muted);
-      line-height: 1.3;
+      letter-spacing: 0.05em;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
     }
 
-    /* === TOOLS SECTION === */
+    .credential-badge.accent { background: var(--accent); }
+
+    /* TOOLS SECTION */
     .tools-section {
-      padding: 1.25rem 1rem;
-      border-bottom: 1px solid var(--rule);
+      padding: 1.5rem 1rem;
+      border-bottom: 2px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .tools-inner {
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .tools-label {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.65rem;
       text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .tools-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 0.5rem;
+    }
+
+    .tools-desc {
+      font-size: 0.9rem;
+      color: #b8b0a0;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    .tool-card {
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 1.25rem;
+      border-radius: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-card:last-child { margin-bottom: 0; }
+
+    .tool-card-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 0.6rem;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
     }
 
-    .tools-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
+    .tool-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 0.4rem;
     }
 
-    .tool-tag {
+    .tool-card-desc {
+      font-size: 0.85rem;
+      color: #b8b0a0;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-card-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent);
+    }
+
+    .tool-card-link:hover { opacity: 0.7; }
+
+    /* ARTICLES SECTION LABEL */
+    .section-label {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--ink);
-      border: 1px solid var(--ink);
-      padding: 0.2rem 0.5rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      padding: 1rem 1rem 0.5rem;
+      border-bottom: 1px solid var(--rule);
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    
-    /* === ARTICLES === */
+
+    /* ARTICLES GRID */
+    .articles-grid {
+      border-top: 1px solid var(--ink);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
     .article-card {
       padding: 1.5rem 1rem;
       border-bottom: 1px solid var(--rule);
     }
 
-    .article-card.featured {
-      border-left: 3px solid var(--accent);
-      padding-left: calc(1rem - 3px);
-    }
-    
     .article-meta {
       font-family: 'IBM Plex Mono', monospace;
       font-size: 0.65rem;
@@ -256,91 +342,213 @@
       margin-bottom: 0.5rem;
     }
 
-    .article-tag {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--paper);
-      background: var(--accent);
-      padding: 0.15rem 0.4rem;
-      margin-right: 0.5rem;
-      vertical-align: middle;
-    }
-    
     .article-card h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 700;
       line-height: 1.3;
       margin-bottom: 0.5rem;
     }
-    
-    .article-card h3 a {
-      color: var(--ink);
-      border: none;
-    }
-    
-    .article-card h3 a:hover { color: var(--accent); }
-    
+
+    .article-card h3 a { color: var(--ink); border: none; }
+    .article-card h3 a:hover { color: var(--accent); opacity: 1; }
+
     .article-desc {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       line-height: 1.6;
       color: var(--muted);
       margin-bottom: 0.75rem;
     }
-    
+
     .read-more {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       display: inline-block;
-      padding: 0.5rem 0;
-    }
-    
-    /* === NEWSLETTER === */
-    .newsletter {
-      padding: 1.5rem 1rem;
-      border-top: 2px solid var(--ink);
-      border-bottom: 1px solid var(--rule);
-      background: rgba(212, 207, 196, 0.3);
+      padding: 0.4rem 0;
     }
 
-    .newsletter h3 {
+    .article-card.featured {
+      border-left: 3px solid var(--accent);
+      padding-left: calc(1rem - 3px);
+    }
+
+    /* FULL ARTICLE */
+    .article-full {
+      padding: 1.5rem 1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .article-full-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .article-full h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+
+    .article-deck {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .article-image {
+      width: calc(100% + 2rem);
+      margin-left: -1rem;
+      margin-right: -1rem;
+      margin-bottom: 1.5rem;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .article-full h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.75rem 0;
+    }
+
+    .article-full p {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .article-full strong { font-weight: 700; color: var(--ink); }
+
+    .insight-box {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 1rem;
+      margin: 1.5rem -1rem;
+      border-left: 3px solid var(--accent);
+    }
+
+    .insight-box::before {
+      content: "OPERATOR INSIGHT";
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .insight-box p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+      color: var(--paper);
+    }
+
+    .insight-box strong { color: var(--paper); font-weight: 700; }
+
+    .sources {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule);
+      font-size: 0.85rem;
+    }
+
+    /* WORK WITH ME */
+    .work-with-me {
+      padding: 2rem 1rem;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--rule);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .wwm-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .wwm-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .wwm-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .wwm-card {
+      border: 1px solid var(--rule);
+      padding: 1.25rem;
+      border-radius: 2px;
+    }
+
+    .wwm-card-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .wwm-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
       font-weight: 700;
       margin-bottom: 0.4rem;
     }
 
-    .newsletter p {
+    .wwm-card-desc {
       font-size: 0.85rem;
       color: var(--muted);
-      margin-bottom: 0.75rem;
+      line-height: 1.6;
     }
 
-    /* === CONTACT === */
+    /* CONTACT */
     .contact {
       padding: 2rem 1rem;
       text-align: center;
-      border-top: 2px solid var(--ink);
+      border-top: 1px solid var(--rule);
     }
-    
+
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+
     .contact h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
     }
-    
+
+    .contact-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
     .contact-buttons {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      max-width: 400px;
-      margin: 0 auto;
     }
-    
+
     .btn {
       display: block;
       padding: 0.75rem 1.5rem;
@@ -348,265 +556,328 @@
       color: var(--paper);
       border: 2px solid var(--ink);
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      border-bottom: 2px solid var(--ink);
       transition: all 0.2s;
     }
-    
-    .btn:hover {
-      background: var(--paper);
-      color: var(--ink);
-      opacity: 1;
-    }
-    
-    .btn-primary {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
-    
-    .btn-primary:hover {
-      background: var(--paper);
-      color: var(--accent);
-    }
-    
-    /* === FOOTER === */
+
+    .btn:hover { background: var(--paper); color: var(--ink); opacity: 1; }
+
+    .btn-primary { background: var(--accent); border-color: var(--accent); }
+    .btn-primary:hover { background: var(--paper); color: var(--accent); }
+
+    /* FOOTER */
     footer {
       padding: 1rem;
       text-align: center;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--muted);
       border-top: 1px solid var(--rule);
     }
-    
-    /* === DESKTOP === */
+
+    /* DESKTOP */
     @media (min-width: 768px) {
-      .header {
-        padding: 2rem;
-        text-align: center;
-      }
-      
-      .header h1 { font-size: 2.5rem; }
-      
-      .header .subtitle { font-size: 1rem; }
-      
-      .author {
-        padding: 2rem;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      
-      .author-photo {
-        width: 100px;
-        height: 100px;
-      }
-      
-      .author-info h2 { font-size: 1.5rem; }
-      
-      .author-info p { font-size: 0.95rem; }
+      .header { padding: 2.5rem 2rem 2rem; text-align: left; }
+      .header h1 { font-size: 2.2rem; }
 
-      .results-grid {
-        max-width: 800px;
-        margin: 0 auto;
-        border-left: none;
-        border-right: none;
-      }
+      .author { padding: 2rem; }
+      .author-photo { width: 90px; height: 90px; }
+      .author-info h2 { font-size: 1.3rem; }
+      .author-info p { font-size: 0.9rem; }
 
-      .result-number { font-size: 2rem; }
+      .tools-section { padding: 2rem; }
 
-      .result-label { font-size: 0.65rem; }
-
-      .tools-section {
-        padding: 1.25rem 2rem;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      
       .articles-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 0;
-        max-width: 1200px;
-        margin: 0 auto;
-        border-top: 1px solid var(--ink);
       }
-      
+
       .article-card {
         border-right: 1px solid var(--rule);
         border-bottom: 1px solid var(--ink);
-        padding: 2rem;
+        padding: 1.75rem;
       }
 
-      .article-card.featured {
-        padding-left: calc(2rem - 3px);
-      }
-      
-      .article-card:last-child { border-right: none; }
-      
-      .article-card h3 { font-size: 1.5rem; }
-      
+      .article-card:nth-child(3n) { border-right: none; }
+
+      .article-full { padding: 3rem 2rem; }
+      .article-full h2 { font-size: 2rem; }
+      .article-image { width: 100%; margin-left: 0; margin-right: 0; }
+      .insight-box { margin-left: 0; margin-right: 0; }
+
+      .work-with-me { padding: 2.5rem 2rem; }
+      .wwm-grid { grid-template-columns: 1fr 1fr; }
+
       .contact { padding: 3rem 2rem; }
-      
-      .contact-buttons {
-        flex-direction: row;
-        justify-content: center;
-      }
+      .contact-buttons { flex-direction: row; justify-content: center; }
 
-      .newsletter {
-        padding: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
+      .section-label { padding: 1.25rem 2rem 0.75rem; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { gap: 1rem; }
+      .header h1 { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- NAV -->
+  <nav class="site-nav">
+    <a href="https://jpouandji-operator.github.io/portfolio/" class="nav-brand">Growth Operator Notes</a>
+    <ul class="nav-links">
+      <li><a href="https://jpouandji-operator.github.io/portfolio/" class="active">Portfolio</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Tools</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
   <!-- HEADER -->
   <header class="header">
-    <h1>Scaling Digital Infrastructure Across Africa</h1>
-    <p class="subtitle">Operator-lens analysis on platform economics, GTM strategy, and emerging market growth - for VCs and Founders</p>
+    <p class="header-label">Growth Operator Notes</p>
+    <h1>Operator Intelligence for African Private Capital</h1>
+    <p class="positioning-sentence">GON is the operator intelligence layer for African private capital - built from twelve years inside the distribution stack, maintained against primary institutional sources, and validated against real deal outcomes.</p>
   </header>
 
   <!-- AUTHOR -->
   <section class="author">
-    <img src="author-photo.png" alt="Jean-Philippe Ouandji - Digital Marketing Senior Manager and Growth Operator Africa" class="author-photo" fetchpriority="high" width="70" height="70" />
+    <img src="author-photo.png" alt="Jean-Philippe Ouandji" class="author-photo" />
     <div class="author-info">
       <h2>Jean-Philippe Ouandji</h2>
-      <p>Digital Marketing Senior Manager with 12+ years scaling digital products across Africa. Operator across fintech, telecom, and SaaS in multiple African markets. I write for VCs and Founders who want to understand how growth actually works on the ground.</p>
-      <div class="author-meta">HEC Paris · Monash · Native English · Fluent French</div>
+      <p>Digital Marketing Senior Manager and Growth Operator with 12+ years scaling digital products across African fintech, telecom, and SaaS markets. Former Orange, MTN, Banque Atlantique.</p>
+      <div class="author-credentials">
+        <span class="credential-badge accent">3.5M users scaled</span>
+        <span class="credential-badge accent">EUR 2.9M revenue</span>
+        <span class="credential-badge">HEC Paris</span>
+        <span class="credential-badge">Monash University</span>
+        <span class="credential-badge">Paris</span>
+      </div>
     </div>
   </section>
 
-  <!-- RESULTS GRID -->
-  <div class="results-grid">
-    <div class="result-box">
-      <span class="result-number">3.5M</span>
-      <span class="result-label">Users Scaled Across Africa</span>
-    </div>
-    <div class="result-box">
-      <span class="result-number">2.9M</span>
-      <span class="result-label">EUR Revenue Generated</span>
-    </div>
-    <div class="result-box">
-      <span class="result-number">12+</span>
-      <span class="result-label">Years in African Markets</span>
-    </div>
-  </div>
+  <!-- TOOLS SECTION -->
+  <section class="tools-section">
+    <div class="tools-inner">
+      <p class="tools-label">Operator Tools</p>
+      <h2 class="tools-heading">Built for investors who need to pressure-test Africa assumptions before the IC</h2>
+      <p class="tools-desc">The analysis here is only as useful as the tools built from it. Below is what exists today. Each tool is maintained against the same benchmark repository and three-test sourcing standard that powers the articles.</p>
 
-  <!-- TOOLS BUILT WITH -->
-  <div class="tools-section">
-    <div class="tools-label">Tools Built With on This Project</div>
-    <div class="tools-list">
-      <span class="tool-tag">GA4 Custom Events</span>
-      <span class="tool-tag">Google Search Console</span>
-      <span class="tool-tag">Scroll Depth Tracking</span>
-      <span class="tool-tag">MailerLite</span>
-      <span class="tool-tag">GitHub Pages</span>
-      <span class="tool-tag">Schema.org Structured Data</span>
-      <span class="tool-tag">Open Graph</span>
-      <span class="tool-tag">PageSpeed Optimization</span>
+      <div class="tool-card">
+        <p class="tool-card-label">Live Tool - v3.1</p>
+        <h3 class="tool-card-title">The Africa IC Checklist</h3>
+        <p class="tool-card-desc">A pre-IC pressure test for Africa-focused VC and PE investors. Six operator-sourced dimensions: distribution economics, demand validation, regulatory risk, currency and FX, exit pathway realism, and team governance. Hard gate logic refuses output on insufficient inputs. The questions that survive every pitch meeting.</p>
+        <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" class="tool-card-link" onclick="gtag('event', 'tool_click', {'tool_name': 'ic_checklist'});">Run the Checklist &#8594;</a>
+      </div>
     </div>
-  </div>
+  </section>
 
   <!-- ARTICLES GRID -->
+  <p class="section-label">Operator Analysis - 9 Articles</p>
   <section class="articles-grid">
-<!-- Tool: Africa IC Checklist -->
+
     <article class="article-card featured">
-      <div class="article-meta">Tool · VC / PE Deal Intelligence · Mar 2026</div>
-      <h3><a href="africa-ic-checklist/">The Africa IC Checklist</a></h3>
-      <p class="article-desc">A pre-IC pressure test on Africa-specific deal assumptions. Five operator-sourced dimensions. Output: the questions to ask before you wire.</p>
-      <a href="africa-ic-checklist/" class="read-more">Run the checklist →</a>
-    </article>
-    
-    <!-- Article 8: Canal+ MultiChoice - NEWEST -->
-    <article class="article-card">
-      <div class="article-meta"><span class="article-tag">New</span>Media · Platform Economics · 18 Mar 2026</div>
-      <h3><a href="canal-multichoice-platform-economics-africa/">Canal+ Did Not Buy a Media Company. They Bought an Obligation to Overshoot the Market.</a></h3>
-      <p class="article-desc">Showmax lost 370M EUR before the acquisition and burned a further $297M in FY2025 alone. The story is not about streaming. It is about what large acquisition prices force emerging market businesses to become.</p>
-      <a href="canal-multichoice-platform-economics-africa/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">Telecom - Media - Platform Strategy - 18 Mar 2026</div>
+      <h3><a href="https://jpouandji-operator.github.io/portfolio/canal-multichoice-platform-economics-africa/">Canal+ Did Not Buy a Media Company. They Bought an Obligation to Overshoot the Market.</a></h3>
+      <p class="article-desc">Why the Canal+/MultiChoice deal is not about content - it is about the structural obligation to serve a market that neither party fully understands yet.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/canal-multichoice-platform-economics-africa/" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 7: AI in Africa -->
     <article class="article-card">
-      <div class="article-meta">AI · Platform Economics · 13 Mar 2026</div>
-      <h3><a href="ai-africa-platform-economics/">AI in Africa: The Three Sectors Where the Moat Is Already Being Built</a></h3>
-      <p class="article-desc">Beyond the hype, three African sectors are using AI to build proprietary data moats that will be structurally difficult to replicate.</p>
-      <a href="ai-africa-platform-economics/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">AI - Platform Economics - 13 Mar 2026</div>
+      <h3><a href="https://jpouandji-operator.github.io/portfolio/ai-africa-platform-economics/">AI in Africa: The Three Sectors Where the Moat Is Already Being Built</a></h3>
+      <p class="article-desc">Most AI-in-Africa coverage is about potential. This is about the three sectors where distribution moats are forming right now, and why the window is shorter than it looks.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/ai-africa-platform-economics/" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 6: World Bank -->
     <article class="article-card">
-      <div class="article-meta">Distribution · Market Entry · 5 Mar 2026</div>
-      <h3><a href="world-bank-tenders-africa-distribution/">Africa's Most Underpriced Distribution Channel: World Bank Tenders</a></h3>
-      <p class="article-desc">Why the World Bank procurement layer belongs in your GTM strategy, and how operators are using it as a distribution moat most startups have never considered.</p>
-      <a href="world-bank-tenders-africa-distribution/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">Fintech - Infrastructure - 2 Mar 2026</div>
+      <h3><a href="https://jpouandji-operator.github.io/portfolio/stablecoins-africa-fintech-infrastructure/">Africa Already Won the Stablecoin Race. Nobody Told the VCs.</a></h3>
+      <p class="article-desc">The stablecoin debate in Western markets is a regulatory argument. In Africa it is a solved distribution problem. The gap between those two realities is where the opportunity lives.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/stablecoins-africa-fintech-infrastructure/" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 5: Stablecoins -->
     <article class="article-card">
-      <div class="article-meta">Fintech · Infrastructure · 2 Mar 2026</div>
-      <h3><a href="stablecoins-africa-fintech-infrastructure/">Africa Already Won the Stablecoin Race. Nobody Told the VCs.</a></h3>
-      <p class="article-desc">Stablecoin adoption in Africa is not a future bet. The infrastructure moat is already being built, and most VC theses are still looking at the wrong layer.</p>
-      <a href="stablecoins-africa-fintech-infrastructure/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">Energy - Infrastructure - 26 Feb 2026</div>
+      <h3><a href="https://jpouandji-operator.github.io/portfolio/mtn-ihs-towers-energy-africa/">MTN Just Became an Energy Company. Does Your Portfolio Know?</a></h3>
+      <p class="article-desc">The MTN/IHS Towers deal is not a telecom story. It is an energy infrastructure arbitrage that most investors are still reading as a telco balance sheet move.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/mtn-ihs-towers-energy-africa/" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 4: MTN / IHS -->
     <article class="article-card">
-      <div class="article-meta">Telecom · Energy · Infrastructure · 26 Feb 2026</div>
-      <h3><a href="mtn-ihs-towers-energy-africa/">MTN Just Became an Energy Company. Does Your Portfolio Know?</a></h3>
-      <p class="article-desc">The MTN and IHS Towers acquisition is not a telecom story. It is an infrastructure sovereignty play that reframes what platform economics means in African markets.</p>
-      <a href="mtn-ihs-towers-energy-africa/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">E-commerce - Distribution - 5 Mar 2026</div>
+      <h3><a href="https://jpouandji-operator.github.io/portfolio/world-bank-tenders-africa-distribution/">Africa's Most Underpriced Distribution Channel: World Bank Tenders</a></h3>
+      <p class="article-desc">The World Bank disburses billions through Africa every year. The companies that understand how to use that as a distribution moat are operating in a market with almost no competition.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/world-bank-tenders-africa-distribution/" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 3: Airtel -->
     <article class="article-card">
-      <div class="article-meta">Telecom · Infrastructure · Platform Strategy · 23 Feb 2026</div>
-      <h3><a href="airtel-infrastructure-pivot/">Beyond the Map: What Airtel's Pivot Tells Us About the New Rules of Growth</a></h3>
-      <p class="article-desc">Airtel Africa is no longer chasing new countries. They are becoming an infrastructure company that happens to have a mobile network.</p>
-      <a href="airtel-infrastructure-pivot/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">Telecom - Platform Strategy - 23 Feb 2026</div>
+      <h3><a href="#airtel">Beyond the Map: What Airtel's Pivot Tells Us About the New Rules of Growth</a></h3>
+      <p class="article-desc">Airtel Africa is no longer chasing new countries. They are becoming an infrastructure company that happens to have a mobile network - and the unit economics tell you why.</p>
+      <a href="#airtel" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 2: Jumia -->
     <article class="article-card">
-      <div class="article-meta">E-commerce · Africa · 9 Feb 2026</div>
-      <h3><a href="jumia-pudo-ecommerce-africa/">The Death of the "Amazon of Africa" Label</a></h3>
-      <p class="article-desc">How Jumia's "Shrink-to-Grow" pivot and the rise of Pickup Stations are redrawing the map of African commerce.</p>
-      <a href="jumia-pudo-ecommerce-africa/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">E-commerce - Unit Economics - 9 Feb 2026</div>
+      <h3><a href="#jumia">The Death of the "Amazon of Africa" Label</a></h3>
+      <p class="article-desc">How Jumia's shrink-to-grow pivot and the rise of pickup stations are redrawing the map of African commerce - and what the unit economics actually look like now.</p>
+      <a href="#jumia" class="read-more">Read Analysis &#8594;</a>
     </article>
 
-    <!-- Article 1: VAS -->
     <article class="article-card">
-      <div class="article-meta">Telecom · Platform Strategy · 13 Jan 2026</div>
-      <h3><a href="vas-telcos-investment-delegation/">VAS and Telcos: What We Got Wrong</a></h3>
-      <p class="article-desc">Why Value-Added Services were misunderstood for a decade, and what broke the investment-delegation model.</p>
-      <a href="vas-telcos-investment-delegation/" class="read-more">Read Analysis →</a>
+      <div class="article-meta">Telecom - Distribution - 13 Jan 2026</div>
+      <h3><a href="#vas">VAS and Telcos: What We Got Wrong</a></h3>
+      <p class="article-desc">Why Value-Added Services were misunderstood for a decade, what broke the investment-delegation model, and what the distribution infrastructure question actually is in 2026.</p>
+      <a href="#vas" class="read-more">Read Analysis &#8594;</a>
+    </article>
+
+    <article class="article-card">
+      <div class="article-meta">Africa Market Entry - Due Diligence - Mar 2026</div>
+      <h3><a href="https://jpouandji-operator.github.io/portfolio/africa-market-entry-assumptions-distribution-economics/">Africa Market Entry Does Not Fail at the Idea Stage. It Fails Here.</a></h3>
+      <p class="article-desc">Six Africa market entry assumptions that kill otherwise sound deals. A growth operator's analysis of where distribution economics, regulatory timing, and demand validation actually break.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/africa-market-entry-assumptions-distribution-economics/" class="read-more">Read Analysis &#8594;</a>
     </article>
 
   </section>
 
-  <!-- NEWSLETTER -->
-  <section class="newsletter">
-    <h3>Growth Operator Notes · Newsletter</h3>
-    <p>Operator-lens analysis of African digital markets. No fluff. Published when there is something worth saying.</p>
-    <a href="https://landing.mailerlite.com/webforms/landing/mlb2-38086737" target="_blank" rel="noopener" class="btn" style="display:inline-block;max-width:300px;margin-top:0.5rem;">Subscribe →</a>
+  <!-- FULL ARTICLE: AIRTEL -->
+  <article id="airtel" class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Telecom - Infrastructure - Platform Strategy - 23 February 2026</div>
+      <h2>Beyond the Map: What Airtel's Pivot Tells Us About the New Rules of Growth</h2>
+      <p class="article-deck">Airtel Africa is no longer chasing new countries. They're becoming an infrastructure company that happens to have a mobile network.</p>
+    </div>
+
+    <img src="airtel-header.png" alt="Airtel Africa infrastructure platform economics emerging markets" class="article-image" loading="lazy" />
+
+    <p>I've been watching the headlines about Airtel Africa's recent restructuring, and it feels like a full-circle moment. For years, the narrative in the "Real Economy" was about the land grab - adding countries, chasing subscriber counts, and showing a map covered in red. That is a platform economics story masquerading as a geography story.</p>
+
+    <p>But Airtel just flipped the script. They aren't chasing new flags anymore. They're becoming an infrastructure company that happens to have a mobile network. As a <a href="https://jpouandji-operator.github.io/portfolio/ai-africa-platform-economics/" target="_blank" rel="noopener">growth operator who has watched platform economics play out across African markets</a>, this is the move I would have made three years ago.</p>
+
+    <h3>The "Plumbing" is the Product</h3>
+
+    <p>Most people see "Data Centers" or "Fiber Networks" as boring back-end costs. But as a Growth Operator, I see them as the ultimate platform economics play. By spinning off Nxtra and Telesonic, Airtel is moving from the volatile world of B2C prepaid users to the stable, high-margin world of B2B infrastructure - the same shift I analysed in the context of <a href="#vas" rel="internal">the investment-delegation model that defined VAS for a decade</a>.</p>
+
+    <img src="airtel-diagram.png" alt="Breadth vs Depth strategy comparison Africa telecom" class="article-image" loading="lazy" />
+
+    <div class="insight-box">
+      <p><strong>The Lesson for Scale-ups:</strong> Stop obsessing over your total user count if your "plumbing" is leaky. If you have built a tool to manage your logistics or data that is better than the product you are selling - that might be your real business. The unit economics of infrastructure are different from the unit economics of a subscriber base. Airtel is learning this lesson faster than most.</p>
+    </div>
+
+    <h3>Leapfrogging isn't just for Startups</h3>
+
+    <p>Airtel's partnership with Starlink is the ultimate Africa market entry hack. Instead of the grueling process of burying fiber in remote regions, they are renting the sky. It is a reminder that being an operator isn't about owning every part of the chain - it is about orchestrating the most efficient one. The <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" target="_blank" rel="noopener">distribution economics question in any Africa deal</a> is not "how much infrastructure do you own" but "how indispensable is your position in the stack."</p>
+
+    <h3>The Bottom Line</h3>
+
+    <p>We are entering the era of unit economics validation. The coordination tax of managing 14 different regulatory environments is too high if you aren't monetising the core infrastructure. Airtel is choosing depth over breadth. In 2026, the winners in the African tech space won't be the ones with the biggest map, but the ones with the most indispensable pipes.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      - <a href="https://www.theafricareport.com/313697/airtel-africa-restructuring-nxtra/" target="_blank" rel="noopener">The Africa Report - Airtel Africa restructuring and Nxtra spin-off analysis</a><br>
+      - <a href="https://www.hec.edu/en/knowledge/articles/platform-strategy-emerging-markets" target="_blank" rel="noopener">HEC Paris Knowledge - Platform Strategy in Emerging Markets</a>
+    </div>
+  </article>
+
+  <!-- FULL ARTICLE: JUMIA -->
+  <article id="jumia" class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">E-commerce - Africa - 9 February 2026</div>
+      <h2>The Death of the "Amazon of Africa" Label</h2>
+      <p class="article-deck">For a decade, Jumia was the poster child for burning cash in Africa. As we hit early 2026, the data tells a different story.</p>
+    </div>
+
+    <img src="jumia-diagram.png" alt="Jumia PUDO pickup station network unit economics Africa" class="article-image" loading="lazy" />
+
+    <p>Between 2012 and 2022, the narrative was a cycle of high-level management in Dubai, massive marketing spends, and unsustainable last-mile logistics costs. But under CEO Francis Dufay, Jumia executed a shrink-to-grow strategy that many VCs once thought impossible for a pan-African giant. The same distribution economics pressure that broke the original model is now what makes the new model defensible.</p>
+
+    <p><strong>The 2026 Performance Benchmarks.</strong> The results of this hard ops pivot are visible in Q3 2025 and Q1 2026 metrics: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001781256" target="_blank" rel="noopener">fulfillment expense per order has plummeted 22%, reaching approximately $1.86</a>. Revenue surged 25% year-over-year despite a leaner footprint, driven primarily by the Nigerian market. These are the unit economics that matter - not gross merchandise value.</p>
+
+    <img src="jumia-chart.png" alt="Fulfillment cost reduction traditional delivery vs PUDO network Jumia Africa" class="article-image" loading="lazy" />
+
+    <p><strong>Why pickup is the new moat.</strong> Perhaps the most significant shift is Jumia's move away from expensive home delivery. By <a href="https://techcabal.com/2024/11/jumia-pickup-stations-africa/" target="_blank" rel="noopener">scaling its network of pickup stations to over 1,500 locations</a>, Jumia solved two problems at once: slashed delivery costs and bridged the trust gap. In markets where home address systems are unreliable, the pickup station is not a compromise - it is the product. This is the same logic I traced in <a href="#airtel" rel="internal">Airtel's infrastructure pivot</a>: owning the indispensable point of contact is the moat.</p>
+
+    <div class="insight-box">
+      <p>Jumia isn't trying to be the "Amazon of Africa" anymore. They are becoming the logistics backbone of the continent. By opening their delivery network to third-party social commerce sellers through Jumia Delivery, they have turned their biggest cost center into a new revenue stream. That is platform economics in practice - not theory.</p>
+    </div>
+
+    <p><strong>The end of vanity growth.</strong> The 2026 e-commerce landscape is defined by three hard ops realities: profitability over perimeter, the rise of agentic commerce, and logistics as a service. The real winners aren't the companies selling the most shirts - they are the companies moving the most parcels. To understand how this connects to Africa market entry more broadly, the <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" target="_blank" rel="noopener">Africa IC Checklist distribution economics dimension</a> captures exactly why last-mile assumptions kill otherwise sound deals.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      - <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001781256" target="_blank" rel="noopener">SEC 6-K Filings - Jumia Q3 2025 and Q1 2026</a><br>
+      - <a href="https://techcabal.com" target="_blank" rel="noopener">TechCabal</a> / <a href="https://techpoint.africa" target="_blank" rel="noopener">Techpoint Africa</a>
+    </div>
+  </article>
+
+  <!-- FULL ARTICLE: VAS -->
+  <article id="vas" class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Telecom - Platform Strategy - 13 January 2026</div>
+      <h2>VAS and Telcos: What We Got Wrong - And Why It Matters Now</h2>
+      <p class="article-deck">A structural analysis of why Value-Added Services were misunderstood for a decade, what broke the investment-delegation model, and why the "premium content" answer misses the real question.</p>
+    </div>
+
+    <img src="vas-header.png" alt="VAS investment-delegation model telecom Africa platform economics 2014-2024" class="article-image" loading="lazy" />
+
+    <p>If you have ever worked in or around a telecom operator in Africa, you have probably heard some version of this sentence: "VAS are just extra services." That perception is widespread - and it is precisely why VAS have been so poorly understood for years. The misreading is not about the services themselves. It is about what distribution infrastructure actually means when traditional payment rails don't exist.</p>
+
+    <p><strong>What VAS really were.</strong> Before app stores. Before widespread card payments. Before subscriptions became the default. VAS enabled telecom operators to monetise non-banked users, expand ARPU beyond connectivity, distribute digital products at massive scale, and turn trust and billing into a platform. In many emerging markets, VAS were the first large-scale digital economy people ever interacted with. They were not elegant. They were effective. The <a href="https://jpouandji-operator.github.io/portfolio/stablecoins-africa-fintech-infrastructure/" target="_blank" rel="noopener">stablecoin distribution question in Africa</a> is structurally the same problem: who controls the billing relationship controls the market.</p>
+
+    <img src="vas-diagram.png" alt="Investment-delegation model before and after telco VAS Africa" class="article-image" loading="lazy" />
+
+    <div class="insight-box">
+      <p><strong>The Investment-Delegation Model:</strong> Operators didn't build content; they delegated it to aggregators and studios. The operator provided the infrastructure (billing, distribution, trust), the aggregator managed content and customer experience. This worked because margins were high enough to split three ways: content creator, aggregator, operator. When data bundles collapsed the margin stack, the model had nowhere to go.</p>
+    </div>
+
+    <p><strong>What broke it.</strong> The model worked until it didn't. Margin compression from data bundles, the rise of app stores as the default distribution layer, regulatory pressure on auto-renewals, and WhatsApp and YouTube replacing carrier portals all contributed to its decline. The operators who survived are the ones who understood that the moat was never the content - it was the billing infrastructure. The ones who confused the two are still trying to launch "premium content" plays in 2026.</p>
+
+    <p><strong>The bottom line.</strong> VAS is not about premium content - it is about distribution infrastructure. The question isn't "what content should we offer" but "how do we become indispensable pipes for digital services in markets where traditional payment rails are weak?" That is the same question that <a href="#airtel" rel="internal">Airtel is now answering at the infrastructure layer</a> - and it is the question that matters in 2026. For investors assessing any Africa platform deal, the <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" target="_blank" rel="noopener">distribution economics dimension of the IC Checklist</a> starts exactly here.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      - <a href="https://www.hec.edu/en/knowledge" target="_blank" rel="noopener">HEC Paris Knowledge - Platform Strategy Research</a><br>
+      - Industry analysis and 12 years of operational experience across WAEMU and CEMAC telecom markets
+    </div>
+  </article>
+
+  <!-- WORK WITH ME -->
+  <section class="work-with-me" id="work-with-me">
+    <p class="wwm-label">Work With Me</p>
+    <h2 class="wwm-heading">Two ways to work together</h2>
+    <div class="wwm-grid">
+      <div class="wwm-card">
+        <p class="wwm-card-label">For Investors</p>
+        <h3 class="wwm-card-title">Operator diligence support on Africa deals</h3>
+        <p class="wwm-card-desc">If you are running a deal in Francophone West Africa or CEMAC and need operator-layer perspective on distribution economics, regulatory risk, or demand validation - I can help you pressure-test assumptions before the IC. The IC Checklist is the structured starting point; the conversation goes deeper from there.</p>
+      </div>
+      <div class="wwm-card">
+        <p class="wwm-card-label">For Employers</p>
+        <h3 class="wwm-card-title">Senior digital marketing and growth leadership</h3>
+        <p class="wwm-card-desc">12+ years scaling digital products across African fintech, telecom, and SaaS markets. Available for senior digital marketing, growth, or product marketing roles. Track record: 3.5M users, EUR 2.9M revenue, distribution stack experience across Orange, MTN, and Banque Atlantique.</p>
+      </div>
+    </div>
   </section>
 
   <!-- CONTACT -->
-  <section class="contact">
-    <h2>Let's Connect</h2>
-    <div class="contact-buttons">
-      <a href="#" class="btn btn-primary" id="email-btn">✉ Email</a>
-      <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'linkedin_click');">LinkedIn Profile</a>
-      <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'growth_operator_click');">Growth Operator Notes</a>
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <h2>Running a deal in Africa?</h2>
+      <p class="contact-sub">The IC Checklist is a 10-minute pressure test before your next investment committee. Or reach out directly - the analysis here is built to be useful in real decisions, not just read.</p>
+      <div class="contact-buttons">
+        <a href="#" class="btn btn-primary" id="email-btn" onclick="gtag('event', 'wwm_email_click'); return false;">&#x2709; Email Jean-Philippe</a>
+        <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'linkedin_click');">LinkedIn Profile</a>
+        <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'growth_operator_click');">Growth Operator Notes</a>
+      </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>Jean-Philippe Ouandji · Digital Marketing Senior Manager · Paris, France · 2026</p>
+    <p>Jean-Philippe Ouandji - Growth Operator Notes - Paris, France - 2026</p>
   </footer>
 
   <script>
@@ -616,7 +887,7 @@
         emailBtn.onclick = function(e) {
           e.preventDefault();
           window.location.href = 'mailto:' + 'jpouandji' + '@' + 'gmail.com';
-          if (typeof gtag !== 'undefined') gtag('event', 'email_click');
+          if (typeof gtag !== 'undefined') { gtag('event', 'wwm_email_click'); }
           return false;
         };
       }
