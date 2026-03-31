@@ -1,0 +1,137 @@
+<!-- ============================================================ -->
+<!-- TOOLS SECTION - INSERT BETWEEN ARTICLES GRID AND WORK WITH ME -->
+<!-- ============================================================ -->
+
+<!-- CSS to add to <style> block -->
+<style id="tools-section-css">
+  /* ═══ TOOLS SECTION ═══ */
+  .tools-section {
+    padding: 2rem 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .tools-section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .tools-section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .tools-section-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    max-width: 560px;
+  }
+
+  .tool-card {
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .tool-card-left {
+    flex: 1;
+  }
+
+  .tool-card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  .tool-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+
+  .tool-card-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tool-card-right {
+    flex-shrink: 0;
+  }
+
+  .btn-tool {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 1.25rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-bottom: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+
+  .btn-tool:hover {
+    opacity: 0.8;
+    color: var(--paper);
+    border-bottom: none;
+  }
+
+  @media (min-width: 768px) {
+    .tools-section {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tool-card {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .btn-tool {
+      width: 100%;
+      text-align: center;
+      display: block;
+    }
+  }
+</style>
+
+<!-- HTML to insert between articles grid and Work With Me section -->
+<section class="tools-section">
+  <div class="tools-section-label">Operator Intelligence Tools</div>
+  <h2 class="tools-section-heading">Built for Africa deal professionals</h2>
+  <p class="tools-section-sub">GON is the operator intelligence layer for African private capital - built from twelve years inside the distribution stack, maintained against primary institutional sources, and validated against real deal outcomes.</p>
+
+  <div class="tool-card">
+    <div class="tool-card-left">
+      <div class="tool-card-label">Pre-IC Assessment Tool</div>
+      <div class="tool-card-title">The Africa IC Checklist</div>
+      <div class="tool-card-desc">A pre-IC pressure test on Africa-specific deal assumptions. Six operator-sourced dimensions. Output: the questions that survive every pitch meeting - the ones that live below the line of the financial model.</div>
+    </div>
+    <div class="tool-card-right">
+      <a href="africa-ic-checklist/" class="btn-tool">Run the checklist</a>
+    </div>
+  </div>
+</section>

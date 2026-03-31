@@ -1,0 +1,17 @@
+<!-- ADD THIS ENTRY TO sitemap.xml IF NOT ALREADY PRESENT -->
+<!-- The IC Checklist must be in the sitemap for Google to crawl it properly -->
+
+<url>
+  <loc>https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/</loc>
+  <lastmod>2026-03-31</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.9</priority>
+</url>
+
+<!-- Also update the homepage lastmod to today -->
+<!-- Find the homepage <url> entry and change <lastmod> to 2026-03-31 -->
+
+<!-- After updating sitemap.xml: -->
+<!-- 1. Go to Google Search Console -->
+<!-- 2. Sitemaps > submit sitemap URL -->
+<!-- 3. Also use URL Inspection on the IC Checklist URL and request indexing -->
