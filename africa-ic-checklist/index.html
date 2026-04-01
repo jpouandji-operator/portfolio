@@ -712,6 +712,16 @@ function goStep(n) {
     var st = document.getElementById('stage').value;
     if (!m || !s || !st) { alert('Please complete all required fields before continuing.'); return; }
   }
+  // Hide hero and privacy bar after step 1
+  var hero = document.querySelector('.hero');
+  var privacy = document.querySelector('.privacy-bar');
+  if (n > 1) {
+    if (hero) hero.style.display = 'none';
+    if (privacy) privacy.style.display = 'none';
+  } else {
+    if (hero) hero.style.display = '';
+    if (privacy) privacy.style.display = '';
+  }
   if (n === 3) {
     var mg = document.getElementById('d1_margin').value.trim();
     if (!mg) { alert('Please enter the gross margin before continuing.'); return; }
@@ -745,6 +755,10 @@ function goReview() {
   if (!cur) { alert('Please select the currency structure before continuing.'); return; }
   document.getElementById('step' + currentStep).classList.remove('active');
   document.getElementById('reviewPanel').classList.add('active');
+  var hero = document.querySelector('.hero');
+  var privacy = document.querySelector('.privacy-bar');
+  if (hero) hero.style.display = 'none';
+  if (privacy) privacy.style.display = 'none';
   document.getElementById('progressLabel').textContent = 'Review';
   document.getElementById('progressCount').textContent = 'All 7 dimensions';
   document.getElementById('progressFill').style.width = '100%';
