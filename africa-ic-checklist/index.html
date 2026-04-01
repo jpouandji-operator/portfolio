@@ -1084,8 +1084,8 @@ function runAnalysis() {
     html += '<div class="post-cta-sub">This memo covers six dimensions. If a red flag surfaced - or the four uncovered dimensions are material for your deal - that is the conversation worth having before you wire.</div>';
     html += '</div>';
     html += '<div class="post-cta-buttons">';
-    html += '<a href="mailto:jpouandji@gmail.com" class="btn-post-cta primary" onclick="gtag('event', 'wwm_email_click', {'event_category': 'IC Checklist Post-Output'});">Email Jean-Philippe</a>';
-    html += '<a href="https://www.linkedin.com/company/growth-operator-notes/" target="_blank" rel="noopener" class="btn-post-cta secondary" onclick="gtag('event', 'growth_operator_click', {'event_category': 'IC Checklist Post-Output'});">Follow Growth Operator Notes</a>';
+    html += '<a href="mailto:jpouandji@gmail.com" class="btn-post-cta primary" onclick="if(typeof gtag!=='undefined'){gtag('event','wwm_email_click',{'event_category':'IC Checklist Post-Output'});}window.location.href='mailto:jpouandji@gmail.com';return false;">Email Jean-Philippe</a>';
+    html += '<a href="https://www.linkedin.com/company/growth-operator-notes/" target="_blank" rel="noopener" class="btn-post-cta secondary">Follow Growth Operator Notes</a>';
     html += '</div>';
     html += '</div>';
 
