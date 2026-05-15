@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GON Push Tool</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #e8e8e8; font-family: 'Courier New', monospace; }
+    ::-webkit-scrollbar { width: 6px; } 
+    ::-webkit-scrollbar-track { background: #111; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    input, textarea, button { font-family: 'Courier New', monospace; }
+    input:focus, textarea:focus { outline: none; border-color: #c8a96e !important; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useCallback } = React;
+
+const BASE_ID = "appAr4TpVGHSoh9CU";
+
+const FIELD_MAP = {
+  "Entry ID": "Entry ID",
+  "Metric Name": "Metric Name",
+  "Value": "Value",
+  "Value Type": "Value Type",
+  "Market": "Market",
+  "Sector": "Sector",
+  "IC Dimension": "IC Dimension",
+  "Data Tier": "Data Tier",
+  "Source Name": "Source Name",
+  "Source URL": "Source URL",
+  "Source Date": "Source Date",
+  "Decay Class": "Decay Class",
+  "Entry Status": "Entry Status",
+  "Recency Test": "Recency Test",
+  "Recency Note": "Recency Note",
+  "Specificity Test": "Specificity Test",
+  "Specificity Note": "Specificity Note",
+  "Interpretability Test": "Interpretability Test",
+  "Interpretability Note": "Interpretability Note",
+  "Three-Test Status": "Three-Test Status",
+  "Confidence Level": "Confidence Level",
+  "Operator Note": "Operator Note",
+  "IC Checklist Implication": "IC Checklist Implication",
+  "Linked Articles": "Linked Articles",
+  "Linked Thesis ID": "Linked Thesis ID",
+  "Tier B Provenance": "Tier B Provenance",
+  "Future Review": "Future Review",
+  "Notes": "Notes",
+  "Version": "Version",
+  "Added By": "Added By",
+};
+
+const MULTI_SELECT_FIELDS = new Set(["Market"]);
+const NUMBER_FIELDS = new Set(["Version"]);
+
+const SINGLE_SELECT_OPTIONS = {
+  "Value Type": ["Point","Range","Directional","Regulatory provision","Operator estimate","Narrative only"],
+  "Sector": ["Fintech / Mobile money","Telecoms","Agritech","Energy / Cleantech","E-commerce / Logistics","Healthtech","SaaS / B2B","Entertainment / Media","Real estate","Cross-sector"],
+  "IC Dimension": ["Distribution economics","Regulatory environment","Exit dynamics","Demand validation","Unit economics","Infrastructure","Currency / macro risk","Team / operator capability"],
+  "Data Tier": ["Tier A - Cited source","Tier B - Operator network signal","Tier B - Operator estimate"],
+  "Decay Class": ["Structural (36 months)","Market dynamics (12 months)","Regulatory (6 months)","Operator signal (quarterly)"],
+  "Entry Status": ["Active","Announced","Flagged for review","Superseded","Broken promise","Implementation success","Killed"],
+  "Recency Test": ["Pass","Pass with flag","Fail"],
+  "Specificity Test": ["Pass","Pass with caveat","Fail"],
+  "Interpretability Test": ["Pass","Fail"],
+  "Three-Test Status": ["Pass","Pass with caveat","Directional only","Fail"],
+  "Confidence Level": ["High","Medium","Low"],
+  "Added By": ["JP - direct entry","GON Scan - auto-generated","External submission"],
+};
+
+const MARKETS = ["Ivory Coast","Senegal","Cameroon","Mali","Burkina Faso","Benin","Togo","Niger","Guinea-Bissau","Congo","Gabon","Chad","CAR","Equatorial Guinea","Nigeria","Kenya","Ghana","Tanzania","Rwanda","Uganda","South Africa","Ethiopia","Egypt","Morocco","Angola","DR Congo","WAEMU","CEMAC","East Africa","West Africa","Sub-Saharan Africa","Pan-African"];
+
+// ─── PARSER ───────────────────────────────────────────────────────────────────
+function parseRecord(text) {
+  const record = {};
+  const lines = text.split("\n");
+  for (const line of lines) {
+    const colonIdx = line.indexOf(":");
+    if (colonIdx === -1) continue;
+    const rawKey = line.substring(0, colonIdx).replace(/\*\*/g, "").trim();
+    const rawVal = line.substring(colonIdx + 1).trim().replace(/\*\*/g, "").trim();
+    if (!rawKey || !rawVal) continue;
+    const mappedKey = FIELD_MAP[rawKey];
+    if (!mappedKey) continue;
+    if (MULTI_SELECT_FIELDS.has(mappedKey)) {
+      record[mappedKey] = rawVal.split(",").map(v => v.trim()).filter(Boolean);
+    } else if (NUMBER_FIELDS.has(mappedKey)) {
+      record[mappedKey] = parseInt(rawVal) || 1;
+    } else {
+      record[mappedKey] = rawVal;
+    }
+  }
+  if (!record["Added By"]) record["Added By"] = "GON Scan - auto-generated";
+  if (!record["Entry Status"]) record["Entry Status"] = "Active";
+  if (!record["Version"]) record["Version"] = 1;
+  return record;
+}
+
+function parseMultipleRecords(text) {
+  const sections = text
+    .split(/(?=###\s+GON-)/)
+    .map(s => s.trim())
+    .filter(s => s.length > 20);
+  return sections.map((section, i) => {
+    const parsed = parseRecord(section);
+    if (!parsed["Entry ID"]) {
+      const m = section.match(/###\s+(GON-[A-Z]+-\d+)/);
+      if (m) parsed["Entry ID"] = m[1];
+    }
+    if (!parsed["Metric Name"]) {
+      const m = section.match(/###\s+GON-[A-Z]+-\d+\s*[-:]\s*(.+)/);
+      if (m) parsed["Metric Name"] = m[1].trim();
+    }
+    return { raw: section, fields: parsed, index: i };
+  }).filter(r => r.fields["Entry ID"] || r.fields["Metric Name"]);
+}
+
+// ─── API ──────────────────────────────────────────────────────────────────────
+async function pushToAirtable(token, tableName, fields) {
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(tableName)}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ fields }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
+  return data;
+}
+
+// ─── STYLES ───────────────────────────────────────────────────────────────────
+const S = {
+  card: { background: "#111", border: "1px solid #1e1e1e", borderRadius: 6, padding: "14px 18px", marginBottom: 14 },
+  label: { fontSize: 9, color: "#555", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6, display: "block", fontWeight: 700 },
+  input: { width: "100%", background: "#0d0d0d", border: "1px solid #222", borderRadius: 4, padding: "7px 10px", color: "#e8e8e8", fontSize: 12, outline: "none" },
+  select: { width: "100%", background: "#0d0d0d", border: "1px solid #222", borderRadius: 4, padding: "7px 10px", color: "#e8e8e8", fontSize: 12, outline: "none" },
+  btn: (active, variant="primary") => ({
+    background: !active ? "#1a1a1a" : variant === "primary" ? "#c8a96e" : "#1a2a1a",
+    color: !active ? "#444" : variant === "primary" ? "#000" : "#74c69d",
+    border: !active ? "1px solid #222" : variant === "primary" ? "none" : "1px solid #2d6a4f",
+    borderRadius: 4, padding: "7px 16px", cursor: active ? "pointer" : "not-allowed",
+    fontSize: 11, fontWeight: 800, letterSpacing: "0.08em",
+  }),
+  tag: (color="#c8a96e", bg="#1a1500") => ({
+    display: "inline-block", padding: "2px 8px", borderRadius: 3,
+    fontSize: 10, fontWeight: 700, color, background: bg, letterSpacing: "0.05em"
+  }),
+};
+
+// ─── RECORD CARD ──────────────────────────────────────────────────────────────
+function RecordCard({ record, status, error, selected, onToggle }) {
+  const [expanded, setExpanded] = useState(false);
+  const id = record.fields["Entry ID"] || "?";
+  const name = record.fields["Metric Name"] || "Unknown";
+  const market = Array.isArray(record.fields["Market"]) ? record.fields["Market"].join(", ") : record.fields["Market"] || "";
+  const borderColor = status === "success" ? "#2d6a4f" : status === "error" ? "#7f1d1d" : status === "pushing" ? "#c8a96e" : selected ? "#333" : "#1e1e1e";
+
+  return (
+    <div style={{ background: "#111", border: `1px solid ${borderColor}`, borderRadius: 6, marginBottom: 10, overflow: "hidden", transition: "border-color 0.2s" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", cursor: "pointer" }} onClick={() => onToggle(record.index)}>
+        <input type="checkbox" checked={selected} onChange={() => onToggle(record.index)} onClick={e => e.stopPropagation()} style={{ accentColor: "#c8a96e", width: 16, height: 16, cursor: "pointer", flexShrink: 0 }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 11, color: "#c8a96e", fontWeight: 700, letterSpacing: "0.08em" }}>{id}</div>
+          <div style={{ fontSize: 12, color: "#e8e8e8", fontWeight: 600, lineHeight: 1.3, marginTop: 2 }}>{name}</div>
+          {market && <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>{market}</div>}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          {status === "success" && <span style={S.tag("#74c69d","#0a1a0a")}>PUSHED</span>}
+          {status === "error" && <span style={S.tag("#f87171","#1a0a0a")}>FAILED</span>}
+          {status === "pushing" && <span style={S.tag("#c8a96e","#1a1500")}>PUSHING</span>}
+          <button onClick={e => { e.stopPropagation(); setExpanded(!expanded); }} style={{ background: "none", border: "1px solid #222", color: "#555", borderRadius: 4, padding: "3px 8px", cursor: "pointer", fontSize: 10 }}>
+            {expanded ? "Hide" : "Preview"}
+          </button>
+        </div>
+      </div>
+      {error && <div style={{ padding: "8px 16px", background: "#1a0000", color: "#f87171", fontSize: 11 }}>Error: {error}</div>}
+      {expanded && (
+        <div style={{ borderTop: "1px solid #1a1a1a", padding: "12px 16px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            {Object.entries(record.fields).filter(([,v]) => v && v !== "").slice(0, 20).map(([k, v]) => (
+              <div key={k} style={{ gridColumn: ["Operator Note","IC Checklist Implication","Value","Notes"].includes(k) ? "1 / -1" : "auto" }}>
+                <div style={{ fontSize: 9, color: "#444", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>{k}</div>
+                <div style={{ fontSize: 11, color: "#bbb", lineHeight: 1.4, wordBreak: "break-word" }}>
+                  {Array.isArray(v) ? v.join(", ") : String(v).substring(0, 200)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── SINGLE ENTRY FORM ────────────────────────────────────────────────────────
+function SingleEntryForm({ token, table }) {
+  const [fields, setFields] = useState({ "Added By": "JP - direct entry", "Entry Status": "Active", "Version": "1" });
+  const [status, setStatus] = useState("idle");
+  const [log, setLog] = useState("");
+  const [selectedMarkets, setSelectedMarkets] = useState([]);
+
+  const set = (k, v) => setFields(prev => ({ ...prev, [k]: v }));
+  const toggleMarket = (m) => setSelectedMarkets(prev => prev.includes(m) ? prev.filter(x => x !== m) : [...prev, m]);
+
+  const handlePush = async () => {
+    if (!token) { setLog("No token saved"); return; }
+    setStatus("pushing");
+    setLog("Pushing...");
+    try {
+      const f = { ...fields, Market: selectedMarkets };
+      if (f.Version) f.Version = parseInt(f.Version) || 1;
+      const result = await pushToAirtable(token, table, f);
+      setStatus("success");
+      setLog(`Pushed successfully. Airtable ID: ${result.id}`);
+    } catch (e) {
+      setStatus("error");
+      setLog(`Failed: ${e.message}`);
+    }
+  };
+
+  const textFields = ["Entry ID","Metric Name","Source Name","Source URL","Source Date","Recency Note","Specificity Note","Interpretability Note","Linked Articles","Linked Thesis ID"];
+  const longTextFields = ["Value","Operator Note","IC Checklist Implication","Tier B Provenance","Notes","Future Review"];
+
+  return (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+        {textFields.map(f => (
+          <div key={f}>
+            <label style={S.label}>{f}</label>
+            <input value={fields[f] || ""} onChange={e => set(f, e.target.value)} style={S.input} />
+          </div>
+        ))}
+        {Object.entries(SINGLE_SELECT_OPTIONS).map(([f, opts]) => (
+          <div key={f}>
+            <label style={S.label}>{f}</label>
+            <select value={fields[f] || ""} onChange={e => set(f, e.target.value)} style={S.select}>
+              <option value="">-- select --</option>
+              {opts.map(o => <option key={o} value={o}>{o}</option>)}
+            </select>
+          </div>
+        ))}
+        <div>
+          <label style={S.label}>Version</label>
+          <input type="number" value={fields["Version"] || "1"} onChange={e => set("Version", e.target.value)} style={S.input} />
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label style={S.label}>Market (select all that apply)</label>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {MARKETS.map(m => (
+            <button key={m} onClick={() => toggleMarket(m)} style={{
+              padding: "3px 9px", borderRadius: 4, fontSize: 10, cursor: "pointer", fontWeight: selectedMarkets.includes(m) ? 700 : 400,
+              background: selectedMarkets.includes(m) ? "#c8a96e" : "transparent",
+              color: selectedMarkets.includes(m) ? "#000" : "#666",
+              border: `1px solid ${selectedMarkets.includes(m) ? "#c8a96e" : "#222"}`,
+            }}>{m}</button>
+          ))}
+        </div>
+      </div>
+
+      {longTextFields.map(f => (
+        <div key={f} style={{ marginBottom: 10 }}>
+          <label style={S.label}>{f}</label>
+          <textarea value={fields[f] || ""} onChange={e => set(f, e.target.value)} rows={f === "Operator Note" ? 5 : 3}
+            style={{ ...S.input, resize: "vertical", lineHeight: 1.5 }} />
+        </div>
+      ))}
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14 }}>
+        {log && (
+          <div style={{ fontSize: 11, color: status === "success" ? "#74c69d" : status === "error" ? "#f87171" : "#888" }}>
+            {log}
+          </div>
+        )}
+        <button onClick={handlePush} disabled={!token} style={{ ...S.btn(!!token), marginLeft: "auto" }}>
+          PUSH TO AIRTABLE
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+function App() {
+  const [token, setToken] = useState(localStorage.getItem("gon_token") || "");
+  const [tokenSaved, setTokenSaved] = useState(!!localStorage.getItem("gon_token"));
+  const [inputText, setInputText] = useState("");
+  const [table, setTable] = useState("Benchmarks");
+  const [mode, setMode] = useState("batch");
+  const [records, setRecords] = useState([]);
+  const [selected, setSelected] = useState(new Set());
+  const [statuses, setStatuses] = useState({});
+  const [errors, setErrors] = useState({});
+  const [log, setLog] = useState([]);
+
+  const addLog = (msg, type = "info") => setLog(prev => [...prev.slice(-99), { msg, type, time: new Date().toLocaleTimeString() }]);
+
+  const saveToken = () => {
+    if (!token) return;
+    localStorage.setItem("gon_token", token);
+    setTokenSaved(true);
+    addLog("Token saved to browser storage", "info");
+  };
+
+  const clearToken = () => {
+    localStorage.removeItem("gon_token");
+    setToken("");
+    setTokenSaved(false);
+  };
+
+  const handleParse = () => {
+    if (!inputText.trim()) return;
+    const parsed = parseMultipleRecords(inputText);
+    setRecords(parsed);
+    setSelected(new Set(parsed.map(r => r.index)));
+    setStatuses({});
+    setErrors({});
+    addLog(`Parsed ${parsed.length} record(s)`, "info");
+  };
+
+  const toggleRecord = useCallback((idx) => {
+    setSelected(prev => { const n = new Set(prev); n.has(idx) ? n.delete(idx) : n.add(idx); return n; });
+  }, []);
+
+  const toggleAll = () => {
+    if (selected.size === records.length) setSelected(new Set());
+    else setSelected(new Set(records.map(r => r.index)));
+  };
+
+  const handlePush = async () => {
+    if (!token) { addLog("No token", "error"); return; }
+    const toPush = records.filter(r => selected.has(r.index));
+    if (!toPush.length) { addLog("No records selected", "error"); return; }
+    addLog(`Pushing ${toPush.length} record(s) to ${table}...`, "info");
+    for (const record of toPush) {
+      setStatuses(prev => ({ ...prev, [record.index]: "pushing" }));
+      try {
+        const result = await pushToAirtable(token, table, record.fields);
+        setStatuses(prev => ({ ...prev, [record.index]: "success" }));
+        addLog(`${record.fields["Entry ID"] || "Record"} - ID: ${result.id}`, "success");
+      } catch (e) {
+        setStatuses(prev => ({ ...prev, [record.index]: "error" }));
+        setErrors(prev => ({ ...prev, [record.index]: e.message }));
+        addLog(`${record.fields["Entry ID"] || "Record"} FAILED: ${e.message}`, "error");
+      }
+      await new Promise(r => setTimeout(r, 350));
+    }
+    addLog("Done", "info");
+  };
+
+  const pushed = Object.values(statuses).filter(s => s === "success").length;
+  const failed = Object.values(statuses).filter(s => s === "error").length;
+
+  return (
+    <div style={{ minHeight: "100vh" }}>
+      {/* Header */}
+      <div style={{ background: "#000", borderBottom: "1px solid #1a1a1a", padding: "14px 24px", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 920, margin: "0 auto" }}>
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#c8a96e", letterSpacing: "0.12em" }}>GON PUSH TOOL</div>
+            <div style={{ fontSize: 9, color: "#333", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: 1 }}>
+              Scan Output to Airtable - Direct Integration
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            {pushed > 0 && <span style={S.tag("#74c69d","#0a1a0a")}>{pushed} pushed</span>}
+            {failed > 0 && <span style={S.tag("#f87171","#1a0a0a")}>{failed} failed</span>}
+            <span style={{ fontSize: 10, color: "#333" }}>Base: {BASE_ID.substring(0, 10)}...</span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 920, margin: "0 auto", padding: "20px 24px" }}>
+
+        {/* Token */}
+        <div style={S.card}>
+          <label style={S.label}>Airtable Personal Access Token</label>
+          {!tokenSaved ? (
+            <div style={{ display: "flex", gap: 8 }}>
+              <input type="password" placeholder="pat..." value={token} onChange={e => setToken(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && saveToken()}
+                style={{ ...S.input, flex: 1 }} />
+              <button onClick={saveToken} disabled={!token} style={S.btn(!!token)}>SAVE</button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 11, color: "#74c69d" }}>Token active - {token.substring(0, 16)}...</span>
+              <button onClick={clearToken} style={{ background: "none", border: "1px solid #222", color: "#555", borderRadius: 4, padding: "4px 10px", cursor: "pointer", fontSize: 10 }}>Clear</button>
+            </div>
+          )}
+          <div style={{ fontSize: 10, color: "#333", marginTop: 8 }}>
+            Token is saved in browser local storage - persists across sessions on this device.
+          </div>
+        </div>
+
+        {/* Table + Mode */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+          <div style={{ ...S.card, flex: 1, marginBottom: 0 }}>
+            <label style={S.label}>Target Table</label>
+            <div style={{ display: "flex", gap: 6 }}>
+              {["Benchmarks","Theses","Gap Map"].map(t => (
+                <button key={t} onClick={() => setTable(t)} style={{
+                  padding: "5px 12px", borderRadius: 4, fontSize: 11, cursor: "pointer", fontWeight: table === t ? 700 : 400,
+                  background: table === t ? "#c8a96e" : "transparent", color: table === t ? "#000" : "#666",
+                  border: `1px solid ${table === t ? "#c8a96e" : "#222"}`,
+                }}>{t}</button>
+              ))}
+            </div>
+          </div>
+          <div style={{ ...S.card, marginBottom: 0 }}>
+            <label style={S.label}>Mode</label>
+            <div style={{ display: "flex", gap: 6 }}>
+              {["batch","single"].map(m => (
+                <button key={m} onClick={() => setMode(m)} style={{
+                  padding: "5px 12px", borderRadius: 4, fontSize: 11, cursor: "pointer", fontWeight: mode === m ? 700 : 400,
+                  background: mode === m ? "#c8a96e" : "transparent", color: mode === m ? "#000" : "#666",
+                  border: `1px solid ${mode === m ? "#c8a96e" : "#222"}`,
+                }}>{m === "batch" ? "Batch Scan" : "Single Entry"}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {mode === "batch" ? (
+          <>
+            {/* Input */}
+            <div style={S.card}>
+              <label style={S.label}>Paste GON Scan Output</label>
+              <textarea value={inputText} onChange={e => { setInputText(e.target.value); }}
+                placeholder={"Paste scan benchmark entries here.\n\nExpected format:\n### GON-FIN-001 - Metric Name\n**Entry ID:** GON-FIN-001\n**Metric Name:** ...\n**Value:** ...\n**Market:** Kenya, Nigeria\n...\n---\n### GON-REG-012 - Next entry..."}
+                style={{ ...S.input, height: 200, resize: "vertical", lineHeight: 1.5 }} />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10 }}>
+                <span style={{ fontSize: 10, color: "#333" }}>{inputText.length > 0 ? `${inputText.length} chars` : "Supports multiple entries separated by ### headers"}</span>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={() => { setInputText(""); setRecords([]); }} style={{ background: "none", border: "1px solid #1e1e1e", color: "#555", borderRadius: 4, padding: "5px 12px", cursor: "pointer", fontSize: 11 }}>Clear</button>
+                  <button onClick={handleParse} disabled={!inputText.trim()} style={S.btn(!!inputText.trim())}>PARSE</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Records */}
+            {records.length > 0 && (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                  <span style={{ fontSize: 10, color: "#555", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                    {records.length} Record{records.length !== 1 ? "s" : ""} - {selected.size} selected
+                  </span>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button onClick={toggleAll} style={{ background: "none", border: "1px solid #222", color: "#666", borderRadius: 4, padding: "5px 12px", cursor: "pointer", fontSize: 11 }}>
+                      {selected.size === records.length ? "Deselect all" : "Select all"}
+                    </button>
+                    <button onClick={handlePush} disabled={!tokenSaved || !selected.size}
+                      style={S.btn(tokenSaved && selected.size > 0)}>
+                      PUSH {selected.size > 0 ? selected.size : ""} TO AIRTABLE
+                    </button>
+                  </div>
+                </div>
+                {records.map(r => (
+                  <RecordCard key={r.index} record={r} status={statuses[r.index]} error={errors[r.index]}
+                    selected={selected.has(r.index)} onToggle={toggleRecord} />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div style={S.card}>
+            <div style={{ fontSize: 10, color: "#c8a96e", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 14, fontWeight: 700 }}>
+              Single Record - {table}
+            </div>
+            <SingleEntryForm token={token} table={table} />
+          </div>
+        )}
+
+        {/* Log */}
+        {log.length > 0 && (
+          <div style={{ ...S.card, marginTop: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <label style={{ ...S.label, marginBottom: 0 }}>Activity Log</label>
+              <button onClick={() => setLog([])} style={{ background: "none", border: "none", color: "#444", fontSize: 10, cursor: "pointer" }}>Clear</button>
+            </div>
+            <div style={{ maxHeight: 180, overflowY: "auto" }}>
+              {log.slice().reverse().map((e, i) => (
+                <div key={i} style={{ fontSize: 11, lineHeight: 1.7, color: e.type === "success" ? "#74c69d" : e.type === "error" ? "#f87171" : "#555" }}>
+                  <span style={{ color: "#2a2a2a", marginRight: 8 }}>{e.time}</span>{e.msg}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div style={{ fontSize: 10, color: "#222", textAlign: "center", marginTop: 20, lineHeight: 1.8 }}>
+          GON Intelligence Database - Growth Operator Notes<br/>
+          Rotate your Airtable token regularly. Never share this URL publicly.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+</script>
+</body>
+</html>
