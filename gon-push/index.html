@@ -65,7 +65,7 @@ const SINGLE_SELECT_OPTIONS = {
   "Value Type": ["Point","Range","Directional","Regulatory provision","Operator estimate","Narrative only"],
   "Sector": ["Fintech / Mobile money","Telecoms","Agritech","Energy / Cleantech","E-commerce / Logistics","Healthtech","SaaS / B2B","Entertainment / Media","Real estate","Cross-sector"],
   "IC Dimension": ["Distribution economics","Regulatory environment","Exit dynamics","Demand validation","Unit economics","Infrastructure","Currency / macro risk","Team / operator capability"],
-  "Data Tier": ["Tier A - Cited source","Tier B - Operator network signal","Tier B - Operator estimate"],
+  "Data Tier": ["Tier A - Cited Source","Tier B - Operator network","Tier B - Operator estimate"],
   "Decay Class": ["Structural (36 months)","Market dynamics (12 months)","Regulatory (6 months)","Operator signal (quarterly)"],
   "Entry Status": ["Active","Announced","Flagged for review","Superseded","Broken promise","Implementation success","Killed"],
   "Recency Test": ["Pass","Pass with flag","Fail"],
@@ -75,6 +75,28 @@ const SINGLE_SELECT_OPTIONS = {
   "Confidence Level": ["High","Medium","Low"],
   "Added By": ["JP - direct entry","GON Scan - auto-generated","External submission"],
 };
+
+// Value normalisation - corrects common mismatches between scan output and Airtable
+const NORMALISE = {
+  "Tier A - Cited source": "Tier A - Cited Source",
+  "Tier A - cited source": "Tier A - Cited Source",
+  "Tier B - Operator network signal": "Tier B - Operator network",
+  "Tier B - operator network signal": "Tier B - Operator network",
+  "Pass With Flag": "Pass with flag",
+  "Pass With Caveat": "Pass with caveat",
+  "Directional Only": "Directional only",
+  "Pan-African": "Pan African",
+  "Sub-Saharan Africa": "Sub Saharan Africa",
+  "DR Congo": "DRC",
+  "Cameroon": "Cameroun",
+};
+
+function normaliseValue(val) {
+  if (typeof val === "string") return NORMALISE[val] || val;
+  if (Array.isArray(val)) return val.map(v => NORMALISE[v] || v);
+  return val;
+}
+
 
 const MARKETS = ["Algeria","Angola","Benin","Botswana","Burkina Faso","Cameroun","CAR","CEMAC","Chad","Congo","DRC","East Africa","Egypt","Equatorial Guinea","Ethiopia","Gabon","Ghana","Guinea-Bissau","Ivory Coast","Kenya","Malawi","Mali","Morocco","Mozambique","Niger","Nigeria","Pan African","Rwanda","Senegal","South Africa","Sub Suharan Africa","Tanzania","Togo","Tunisia","Uganda","WAEMU","West Africa","Zambia","Zimbabwe"];
 
@@ -95,7 +117,11 @@ function parseRecord(text) {
     } else if (NUMBER_FIELDS.has(mappedKey)) {
       record[mappedKey] = parseInt(rawVal) || 1;
     } else {
-      record[mappedKey] = rawVal;
+      record[mappedKey] = normaliseValue(rawVal);
+    }
+    // Also normalise multi-select values
+    if (MULTI_SELECT_FIELDS.has(mappedKey) && Array.isArray(record[mappedKey])) {
+      record[mappedKey] = record[mappedKey].map(v => NORMALISE[v] || v);
     }
   }
   if (!record["Added By"]) record["Added By"] = "GON Scan - auto-generated";
