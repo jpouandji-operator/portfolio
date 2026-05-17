@@ -537,11 +537,8 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
-</script>
-</body>
-</html>
-// Table-specific field maps
+
+// ─── TABLE-SPECIFIC FIELD MAPS ────────────────────────────────────────────────
 const THESES_FIELD_MAP = {
   "Thesis ID": "Thesis ID",
   "Thesis Statement": "Thesis Statement",
@@ -575,7 +572,20 @@ const GAPMAP_SINGLE_SELECT = new Set(["Gap Type", "Priority", "Status"]);
 const GAPMAP_MULTI = new Set(["Market"]);
 
 function getFieldMapForTable(tableName) {
-  if (tableName === "Theses") return { map: THESES_FIELD_MAP, single: THESES_SINGLE_SELECT, multi: new Set() };
-  if (tableName === "Gap Map") return { map: GAPMAP_FIELD_MAP, single: GAPMAP_SINGLE_SELECT, multi: GAPMAP_MULTI };
+  if (tableName === "Theses") return { 
+    map: THESES_FIELD_MAP, 
+    single: THESES_SINGLE_SELECT, 
+    multi: new Set() 
+  };
+  if (tableName === "Gap Map") return { 
+    map: GAPMAP_FIELD_MAP, 
+    single: GAPMAP_SINGLE_SELECT, 
+    multi: GAPMAP_MULTI 
+  };
   return { map: FIELD_MAP, single: SINGLE_SELECT_FIELDS, multi: MULTI_SELECT_FIELDS };
 }
+
+ReactDOM.render(<App />, document.getElementById("root"));
+</script>
+</body>
+</html>
