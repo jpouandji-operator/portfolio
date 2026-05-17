@@ -298,7 +298,9 @@ function parseInput() {
   const text = document.getElementById('scanInput').value.trim();
   if (!text) return;
   const { map, multi } = getFieldMap();
-  const sections = text.split(/(?=###\s+)/g).map(s => s.trim()).filter(s => s.length > 20);
+  // Strip comment lines (lines starting with #) before parsing
+  const cleanText = text.split('\n').filter(line => !line.trim().startsWith('#')).join('\n');
+  const sections = cleanText.split(/(?=###\s+)/g).map(s => s.trim()).filter(s => s.length > 20);
 
   records = [];
   sections.forEach((section, i) => {
