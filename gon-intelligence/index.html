@@ -6,774 +6,350 @@
 <title>GON Intelligence - African Private Capital Pressure Test</title>
 <meta name="description" content="Operator intelligence for Africa-focused VC and PE investors. Surface distribution risks, regulatory fragility, and demand gaps before the IC meeting." />
 <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/gon-intelligence/" />
-<meta property="og:title" content="GON Intelligence - African Private Capital" />
-<meta property="og:description" content="What assumption in this deal is most likely to fail?" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CWB7VQ56XE');</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --paper: #f5f0e8;
-  --ink: #0f0e0c;
-  --accent: #c8320a;
-  --muted: #7a7060;
-  --rule: #d4cfc4;
-  --paper2: #ede8df;
-  --paper3: #e6e0d6;
+:root{--paper:#f5f0e8;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--paper2:#ede8df;--paper3:#e6e0d6;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:var(--paper);font-family:'Georgia',serif;font-size:16px;line-height:1.7;color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);}
+a:hover{opacity:0.7;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes dotPulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+@keyframes progressRun{from{width:0%}to{width:100%}}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* HEADER */
+.header{padding:1.5rem 1rem;border-bottom:2px solid var(--ink);animation:fadeIn 0.4s ease;}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;}
+.header h1{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;line-height:1.2;}
+.header-sub{font-size:0.85rem;color:var(--muted);font-style:italic;margin-top:0.2rem;}
+.header-nav{display:flex;gap:1.25rem;align-items:center;padding-top:0.3rem;}
+.header-nav a{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border:none;transition:color 0.2s;}
+.header-nav a:hover{color:var(--accent);opacity:1;}
+.token-btn{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border:1px solid var(--rule);padding:3px 9px;cursor:pointer;background:none;transition:all 0.2s;}
+.token-btn:hover{border-color:var(--ink);color:var(--ink);}
+.token-btn.active{color:var(--accent);border-color:var(--accent);}
+
+/* TOKEN PANEL */
+.token-panel{background:var(--paper2);border-bottom:1px solid var(--rule);overflow:hidden;max-height:0;transition:max-height 0.3s ease,padding 0.3s ease;}
+.token-panel.open{max-height:100px;padding:1rem;}
+.token-panel-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem;}
+.token-row{display:flex;gap:8px;}
+.token-input{flex:1;background:var(--paper);border:1px solid var(--rule);padding:7px 10px;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.token-input:focus{border-color:var(--ink);}
+.token-save{background:var(--ink);color:var(--paper);border:none;padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:background 0.2s;}
+.token-save:hover{background:var(--accent);}
+
+/* PROGRESS */
+.progress-bar{height:2px;background:var(--rule);position:relative;overflow:hidden;opacity:0;transition:opacity 0.2s;}
+.progress-bar.active{opacity:1;}
+.progress-bar::after{content:'';position:absolute;top:0;left:0;height:100%;width:0%;background:var(--accent);animation:progressRun 1.8s ease-in-out infinite;}
+
+/* MAIN */
+.main{max-width:700px;margin:0 auto;padding:0 1rem 5rem;}
+
+/* SEARCH */
+.search-section{padding:1.5rem 0 1rem;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.1s both;}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.6rem;}
+.search-headline{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:0.4rem;}
+.search-headline em{font-style:italic;color:var(--accent);}
+.search-sub{font-size:0.85rem;color:var(--muted);font-style:italic;line-height:1.6;margin-bottom:1.1rem;}
+.search-row{display:flex;border:2px solid var(--ink);margin-bottom:0.75rem;transition:border-color 0.2s;}
+.search-row:focus-within{border-color:var(--accent);}
+.search-input{flex:1;background:transparent;border:none;padding:10px 14px;font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink);outline:none;}
+.search-input::placeholder{color:var(--muted);font-style:italic;}
+.search-btn{background:var(--ink);color:var(--paper);border:none;padding:10px 20px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.search-btn:hover:not(:disabled){background:var(--accent);}
+.search-btn:disabled{background:var(--muted);cursor:not-allowed;}
+.dots{display:none;}
+.dots span{width:4px;height:4px;background:var(--paper);border-radius:50%;display:inline-block;margin:0 1px;animation:dotPulse 1.2s ease-in-out infinite;}
+.dots span:nth-child(2){animation-delay:0.15s;}
+.dots span:nth-child(3){animation-delay:0.3s;}
+.searching .dots{display:inline-flex;align-items:center;}
+.searching .btn-text{display:none;}
+.filters{display:flex;gap:5px;flex-wrap:wrap;}
+.filter-chip{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.05em;padding:3px 10px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;transition:all 0.15s;background:transparent;}
+.filter-chip:hover{border-color:var(--muted);color:var(--ink);}
+.filter-chip.active{border-color:var(--ink);color:var(--ink);background:var(--paper2);}
+
+/* EXAMPLES */
+.examples-section{padding:0.75rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.2s both;}
+.examples-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem;}
+.example-pills{display:flex;flex-wrap:wrap;gap:5px;}
+.ex-pill{font-size:0.78rem;padding:4px 12px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;font-style:italic;transition:all 0.15s;position:relative;overflow:hidden;}
+.ex-pill::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.2s;}
+.ex-pill:hover{border-color:var(--ink);color:var(--ink);}
+.ex-pill:hover::after{width:100%;}
+
+/* PREVIEW */
+.preview-section{padding:1rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.3s both;}
+.preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.preview-card{background:var(--paper);padding:0.75rem;transition:background 0.2s;}
+.preview-card:hover{background:var(--paper2);}
+.pc-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.35rem;}
+.pc-text{font-size:0.78rem;line-height:1.5;font-style:italic;margin-bottom:0.4rem;}
+.pc-dim{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;color:var(--muted);margin-bottom:0.5rem;}
+
+/* SCOPE */
+.scope-note{padding:0.75rem 0;border-bottom:1px solid var(--rule);font-size:0.8rem;color:var(--muted);font-style:italic;line-height:1.6;animation:fadeUp 0.5s ease 0.4s both;}
+.scope-note strong{font-style:normal;color:var(--ink);}
+
+/* FLAGS */
+.flag{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;display:inline-block;}
+.flag-red{background:var(--accent);color:var(--paper);}
+.flag-amber{background:var(--ink);color:var(--paper);}
+.flag-green{border:1px solid var(--rule);color:var(--muted);}
+.flag-neutral{border:1px solid var(--rule);color:var(--muted);}
+.flag-gap{border:1px solid var(--muted);color:var(--muted);font-style:italic;}
+.flag-adjacent{border:1px solid var(--muted);color:var(--muted);font-style:italic;background:var(--paper2);}
+
+/* SKELETON */
+.skeleton-card{padding:1.25rem 0;border-bottom:1px solid var(--rule);}
+.skel{border-radius:2px;background:linear-gradient(90deg,var(--rule) 25%,var(--paper2) 50%,var(--rule) 75%);background-size:400px 100%;animation:shimmer 1.4s ease-in-out infinite;margin-bottom:8px;}
+
+/* RESULTS HEADER */
+.results-topbar{padding:0.75rem 0;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;animation:fadeIn 0.3s ease;}
+.results-context{font-size:0.85rem;color:var(--muted);font-style:italic;}
+.results-context strong{color:var(--ink);font-style:normal;}
+.back-btn{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);background:none;border:1px solid var(--rule);padding:4px 12px;cursor:pointer;transition:all 0.2s;}
+.back-btn:hover{border-color:var(--ink);color:var(--ink);}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1rem 0;}
+.stat{background:var(--paper);padding:0.75rem 1rem;}
+.stat-n{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;line-height:1;color:var(--accent);margin-bottom:2px;animation:slideUp 0.4s ease both;}
+.stat-l{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);}
+
+/* RELEVANCE GROUP HEADER */
+.group-header{
+  padding:0.6rem 0;
+  border-bottom:1px solid var(--rule);
+  margin-top:0.5rem;
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+}
+.group-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--muted);
+}
+.group-label.primary{color:var(--ink);}
+.group-count{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.58rem;
+  color:var(--muted);
+  border:1px solid var(--rule);
+  padding:1px 7px;
+}
+.group-rationale{
+  font-size:0.75rem;
+  color:var(--muted);
+  font-style:italic;
+  padding:0.4rem 0 0.6rem;
+  border-bottom:1px solid var(--rule);
+  line-height:1.5;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body {
-  background: var(--paper);
-  font-family: 'Georgia', serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+/* INTEL CARD - COMPRESSED DEFAULT */
+.intel-card{
+  border-bottom:1px solid var(--rule);
+  padding:1rem 0;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity 0.35s ease,transform 0.35s ease;
 }
-a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
-a:hover { opacity: 0.7; }
+.intel-card.visible{opacity:1;transform:translateY(0);}
+.intel-card.red{border-left:3px solid var(--accent);padding-left:1rem;}
+.intel-card.amber{border-left:3px solid var(--ink);padding-left:1rem;}
+.intel-card.adjacent{border-left:3px solid var(--rule);padding-left:1rem;opacity:0.85;}
 
-/* ── ANIMATIONS ─────────────────────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; } to { opacity: 1; }
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse {
-  0%,100% { opacity: 0.4; } 50% { opacity: 0.9; }
-}
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes progressBar {
-  from { width: 0%; } to { width: 100%; }
-}
-@keyframes shimmer {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-@keyframes dotPulse {
-  0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1); opacity: 1; }
-}
-@keyframes expandDown {
-  from { opacity: 0; max-height: 0; }
-  to   { opacity: 1; max-height: 400px; }
-}
+.card-flags{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:0.5rem;}
 
-.anim-fade-up { animation: fadeUp 0.4s ease both; }
-.anim-fade-in { animation: fadeIn 0.3s ease both; }
-
-/* ── HEADER ─────────────────────────────────────────────────────────────── */
-.header {
-  padding: 1.5rem 1rem;
-  border-bottom: 2px solid var(--ink);
-  animation: fadeIn 0.5s ease;
+/* LAYER 1 - always visible */
+.card-layer1{}
+.implication{
+  font-family:'Playfair Display',serif;
+  font-size:0.98rem;
+  font-weight:700;
+  font-style:italic;
+  line-height:1.35;
+  margin-bottom:0.5rem;
+  color:var(--ink);
 }
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.bench-inline{
+  font-size:0.82rem;
+  color:var(--muted);
+  margin-bottom:0.5rem;
+  display:flex;
+  align-items:baseline;
+  gap:0.5rem;
+  flex-wrap:wrap;
 }
-.header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.75rem;
-  font-weight: 900;
-  line-height: 1.2;
+.bench-val-sm{
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;
+  font-weight:900;
+  color:var(--ink);
 }
-.header-subtitle {
-  font-size: 0.85rem;
-  color: var(--muted);
-  font-style: italic;
-  margin-top: 0.2rem;
-}
-.header-nav { display: flex; gap: 1.25rem; align-items: center; padding-top: 0.3rem; }
-.header-nav a {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  border: none;
-  transition: color 0.2s;
-}
-.header-nav a:hover { color: var(--accent); opacity: 1; }
-.token-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  border: 1px solid var(--rule);
-  padding: 3px 9px;
-  cursor: pointer;
-  background: none;
-  transition: all 0.2s;
-}
-.token-btn:hover { border-color: var(--ink); color: var(--ink); }
-.token-btn.active { color: var(--accent); border-color: var(--accent); }
-
-/* ── TOKEN PANEL ─────────────────────────────────────────────────────────── */
-.token-panel {
-  background: var(--paper2);
-  border-bottom: 1px solid var(--rule);
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-}
-.token-panel.open { max-height: 100px; padding: 1rem; }
-.token-panel-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
-}
-.token-row { display: flex; gap: 8px; }
-.token-input {
-  flex: 1;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  padding: 7px 10px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--ink);
-  outline: none;
-  transition: border-color 0.2s;
-}
-.token-input:focus { border-color: var(--ink); }
-.token-save {
-  background: var(--ink);
-  color: var(--paper);
-  border: none;
-  padding: 7px 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.token-save:hover { background: var(--accent); }
-
-/* ── PROGRESS BAR ────────────────────────────────────────────────────────── */
-.progress-bar {
-  height: 2px;
-  background: var(--rule);
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.progress-bar.active { opacity: 1; }
-.progress-bar::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-  animation: progressBar 1.8s ease-in-out infinite;
+.bench-src-sm{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.58rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:0.04em;
 }
 
-/* ── MAIN ────────────────────────────────────────────────────────────────── */
-.main { max-width: 700px; margin: 0 auto; padding: 0 1rem 5rem; }
+/* EXPAND TRIGGER */
+.expand-trigger{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.58rem;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--accent);
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:0;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  transition:opacity 0.2s;
+  margin-top:0.3rem;
+}
+.expand-trigger:hover{opacity:0.7;}
+.expand-trigger::before{content:'+ ';font-size:0.7rem;}
+.expand-trigger.open::before{content:'− ';}
 
-/* ── SEARCH ──────────────────────────────────────────────────────────────── */
-.search-section {
-  padding: 1.5rem 0 1rem;
-  border-bottom: 1px solid var(--rule);
-  animation: fadeUp 0.5s ease 0.1s both;
+/* LAYER 2 - expanded */
+.card-layer2{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.4s ease,opacity 0.3s ease;
+  opacity:0;
 }
-.eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin-bottom: 0.6rem;
-}
-.search-headline {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.25;
-  margin-bottom: 0.4rem;
-}
-.search-headline em { font-style: italic; color: var(--accent); }
-.search-sub {
-  font-size: 0.85rem;
-  color: var(--muted);
-  font-style: italic;
-  line-height: 1.6;
-  margin-bottom: 1.1rem;
-}
-.search-row {
-  display: flex;
-  border: 2px solid var(--ink);
-  margin-bottom: 0.75rem;
-  transition: border-color 0.2s;
-  position: relative;
-}
-.search-row:focus-within { border-color: var(--accent); }
-.search-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 10px 14px;
-  font-family: 'Georgia', serif;
-  font-size: 0.95rem;
-  color: var(--ink);
-  outline: none;
-}
-.search-input::placeholder { color: var(--muted); font-style: italic; }
-.search-btn {
-  background: var(--ink);
-  color: var(--paper);
-  border: none;
-  padding: 10px 20px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-.search-btn:hover:not(:disabled) { background: var(--accent); }
-.search-btn:disabled { background: var(--muted); cursor: not-allowed; }
+.card-layer2.open{max-height:600px;opacity:1;}
 
-/* Loading dots */
-.dots { display: none; }
-.dots span {
-  width: 4px; height: 4px;
-  background: var(--paper);
-  border-radius: 50%;
-  display: inline-block;
-  margin: 0 1px;
-  animation: dotPulse 1.2s ease-in-out infinite;
+.op-note{
+  font-size:0.85rem;
+  line-height:1.75;
+  color:var(--muted);
+  border-top:1px solid var(--rule);
+  padding-top:0.75rem;
+  margin-top:0.75rem;
 }
-.dots span:nth-child(2) { animation-delay: 0.15s; }
-.dots span:nth-child(3) { animation-delay: 0.3s; }
-.searching .dots { display: inline-flex; align-items: center; }
-.searching .btn-text { display: none; }
+.confidence-note{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  margin-top:0.5rem;
+  padding:0.4rem 0.6rem;
+  border:1px solid var(--rule);
+  display:inline-block;
+}
+.not-mean-block{
+  background:var(--paper2);
+  border-left:2px solid var(--rule);
+  padding:0.6rem 0.75rem;
+  margin-top:0.75rem;
+  font-size:0.82rem;
+  color:var(--muted);
+  line-height:1.6;
+  font-style:italic;
+}
+.not-mean-lbl{font-style:normal;font-weight:700;color:var(--ink);}
+.ic-q-block{background:var(--ink);color:var(--paper);padding:0.75rem 1rem;margin-top:0.75rem;}
+.ic-q-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:5px;}
+.ic-q-text{font-size:0.85rem;line-height:1.6;font-style:italic;}
+.src-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:0.75rem;}
+.src-tag{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;color:var(--muted);border:1px solid var(--rule);padding:2px 7px;text-transform:uppercase;letter-spacing:0.04em;}
 
-.filters { display: flex; gap: 5px; flex-wrap: wrap; }
-.filter-chip {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 3px 10px;
-  border: 1px solid var(--rule);
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  background: transparent;
-}
-.filter-chip:hover { border-color: var(--muted); color: var(--ink); }
-.filter-chip.active { border-color: var(--ink); color: var(--ink); background: var(--paper2); }
+/* GAP CARD */
+.gap-card{border-bottom:1px solid var(--rule);padding:1rem 0;display:flex;gap:1rem;opacity:0;transform:translateY(10px);transition:opacity 0.35s ease,transform 0.35s ease;}
+.gap-card.visible{opacity:1;transform:translateY(0);}
+.gap-marker{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted);flex-shrink:0;margin-top:3px;}
+.gap-inner{flex:1;}
+.gap-title{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;margin-bottom:0.35rem;}
+.gap-why{font-size:0.82rem;color:var(--muted);line-height:1.7;}
+.gap-ic{font-size:0.8rem;color:var(--muted);font-style:italic;border-left:2px solid var(--rule);padding-left:0.75rem;line-height:1.6;margin-top:0.5rem;}
+.gap-ic-lbl{font-style:normal;font-weight:700;color:var(--ink);}
+.gap-badge{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border:1px solid var(--rule);padding:2px 7px;display:inline-block;margin-top:0.5rem;}
 
-/* ── EXAMPLES ────────────────────────────────────────────────────────────── */
-.examples-section {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--rule);
-  animation: fadeUp 0.5s ease 0.2s both;
-}
-.examples-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
-}
-.example-pills { display: flex; flex-wrap: wrap; gap: 5px; }
-.ex-pill {
-  font-size: 0.78rem;
-  padding: 4px 12px;
-  border: 1px solid var(--rule);
-  color: var(--muted);
-  cursor: pointer;
-  font-style: italic;
-  transition: all 0.15s;
-  position: relative;
-  overflow: hidden;
-}
-.ex-pill::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0%; height: 2px;
-  background: var(--accent);
-  transition: width 0.2s;
-}
-.ex-pill:hover { border-color: var(--ink); color: var(--ink); }
-.ex-pill:hover::after { width: 100%; }
+/* ACTIONS */
+.actions-row{display:flex;gap:7px;flex-wrap:wrap;padding:1rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.4s ease both;}
+.action-btn{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;padding:7px 14px;border:1px solid var(--rule);background:var(--paper);color:var(--muted);cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.action-btn::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.2s;}
+.action-btn:hover{border-color:var(--ink);color:var(--ink);}
+.action-btn:hover::after{width:100%;}
+.action-btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.action-btn.primary:hover{background:var(--accent);border-color:var(--accent);}
+.action-btn.primary::after{display:none;}
+.action-btn:active{transform:scale(0.97);}
 
-/* ── PREVIEW ─────────────────────────────────────────────────────────────── */
-.preview-section {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--rule);
-  animation: fadeUp 0.5s ease 0.3s both;
-}
-.preview-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 1px;
-  background: var(--rule);
-  border: 1px solid var(--rule);
-}
-.preview-card {
-  background: var(--paper);
-  padding: 0.75rem;
-  transition: background 0.2s;
-  cursor: default;
-}
-.preview-card:hover { background: var(--paper2); }
-.pc-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-bottom: 0.35rem;
-}
-.pc-text { font-size: 0.78rem; line-height: 1.5; font-style: italic; margin-bottom: 0.4rem; }
-.pc-dim { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; color: var(--muted); margin-bottom: 0.5rem; }
+/* ERROR */
+.error-block{background:var(--paper2);border-left:3px solid var(--accent);padding:0.75rem 1rem;font-size:0.85rem;color:var(--accent);margin:1rem 0;display:none;animation:fadeIn 0.3s ease;}
 
-/* ── SCOPE ───────────────────────────────────────────────────────────────── */
-.scope-note {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--rule);
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-style: italic;
-  line-height: 1.6;
-  animation: fadeUp 0.5s ease 0.4s both;
-}
-.scope-note strong { font-style: normal; color: var(--ink); }
+/* EMPTY */
+.empty-result{padding:3rem 0;text-align:center;color:var(--muted);animation:fadeIn 0.4s ease;}
+.empty-result p{font-style:italic;font-size:0.9rem;line-height:1.7;}
 
-/* ── FLAGS ───────────────────────────────────────────────────────────────── */
-.flag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 2px 8px;
-  display: inline-block;
-}
-.flag-red { background: var(--accent); color: var(--paper); }
-.flag-amber { background: var(--ink); color: var(--paper); }
-.flag-green { border: 1px solid var(--rule); color: var(--muted); }
-.flag-neutral { border: 1px solid var(--rule); color: var(--muted); }
-.flag-gap { border: 1px solid var(--muted); color: var(--muted); font-style: italic; }
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--paper);padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.06em;opacity:0;transform:translateY(8px);transition:opacity 0.25s,transform 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateY(0);}
 
-/* ── SKELETON ────────────────────────────────────────────────────────────── */
-.skeleton-card { padding: 1.25rem 0; border-bottom: 1px solid var(--rule); }
-.skel {
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--rule) 25%, var(--paper2) 50%, var(--rule) 75%);
-  background-size: 400px 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
-  margin-bottom: 8px;
-}
+/* FOOTER */
+.footer{padding:1.5rem 1rem;border-top:2px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
 
-/* ── RESULTS ─────────────────────────────────────────────────────────────── */
-.results-topbar {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  animation: fadeIn 0.3s ease;
-}
-.results-context { font-size: 0.85rem; color: var(--muted); font-style: italic; }
-.results-context strong { color: var(--ink); font-style: normal; }
-.back-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  background: none;
-  border: 1px solid var(--rule);
-  padding: 4px 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.back-btn:hover { border-color: var(--ink); color: var(--ink); }
+/* SCREENS */
+.screen{display:none;}
+.screen.active{display:block;}
 
-/* ── STATS ───────────────────────────────────────────────────────────────── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 1px;
-  background: var(--rule);
-  border: 1px solid var(--rule);
-  margin: 1rem 0;
-}
-.stat { background: var(--paper); padding: 0.75rem 1rem; }
-.stat-n {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.2rem;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--accent);
-  margin-bottom: 2px;
-  animation: countUp 0.4s ease both;
-}
-.stat-l {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-
-/* ── SECTION LABEL ───────────────────────────────────────────────────────── */
-.sec-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-/* ── INTEL CARD ──────────────────────────────────────────────────────────── */
-.intel-card {
-  border-bottom: 1px solid var(--rule);
-  padding: 1.25rem 0;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
-}
-.intel-card.visible { opacity: 1; transform: translateY(0); }
-.intel-card.red { border-left: 3px solid var(--accent); padding-left: 1rem; }
-.intel-card.amber { border-left: 3px solid var(--ink); padding-left: 1rem; }
-
-.card-flags { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; margin-bottom: 0.6rem; }
-
-.implication {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  font-style: italic;
-  line-height: 1.35;
-  margin-bottom: 0.6rem;
-  color: var(--ink);
-}
-
-.bench-block { margin-bottom: 0.6rem; }
-.bench-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: var(--ink);
-  line-height: 1;
-  display: block;
-  margin-bottom: 2px;
-  animation: countUp 0.5s ease both;
-}
-.bench-src {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.op-note {
-  font-size: 0.88rem;
-  line-height: 1.75;
-  color: var(--muted);
-  border-top: 1px solid var(--rule);
-  padding-top: 0.75rem;
-  margin-top: 0.6rem;
-  max-height: 80px;
-  overflow: hidden;
-  position: relative;
-  transition: max-height 0.4s ease;
-}
-.op-note::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 30px;
-  background: linear-gradient(transparent, var(--paper));
-  transition: opacity 0.3s;
-}
-.intel-card.expanded .op-note { max-height: 400px; }
-.intel-card.expanded .op-note::after { opacity: 0; }
-
-.expand-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-top: 0.4rem;
-  display: block;
-  transition: opacity 0.2s;
-}
-.expand-btn:hover { opacity: 0.7; }
-
-.not-mean-block {
-  background: var(--paper2);
-  border-left: 2px solid var(--rule);
-  padding: 0.6rem 0.75rem;
-  margin-top: 0.75rem;
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.6;
-  font-style: italic;
-  overflow: hidden;
-  animation: expandDown 0.3s ease both;
-}
-.not-mean-lbl { font-style: normal; font-weight: 700; color: var(--ink); }
-
-.ic-q-block {
-  background: var(--ink);
-  color: var(--paper);
-  padding: 0.75rem 1rem;
-  margin-top: 0.75rem;
-  overflow: hidden;
-  animation: expandDown 0.35s ease 0.05s both;
-}
-.ic-q-lbl {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  display: block;
-  margin-bottom: 5px;
-}
-.ic-q-text { font-size: 0.85rem; line-height: 1.6; font-style: italic; }
-
-.src-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 0.75rem; }
-.src-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  color: var(--muted);
-  border: 1px solid var(--rule);
-  padding: 2px 7px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  transition: border-color 0.15s, color 0.15s;
-}
-.src-tag:hover { border-color: var(--muted); color: var(--ink); }
-
-/* ── GAP CARD ────────────────────────────────────────────────────────────── */
-.gap-card {
-  border-bottom: 1px solid var(--rule);
-  padding: 1.25rem 0;
-  display: flex;
-  gap: 1rem;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.gap-card.visible { opacity: 1; transform: translateY(0); }
-.gap-marker {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--muted);
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-.gap-inner { flex: 1; }
-.gap-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-}
-.gap-why { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
-.gap-ic {
-  font-size: 0.82rem;
-  color: var(--muted);
-  font-style: italic;
-  border-left: 2px solid var(--rule);
-  padding-left: 0.75rem;
-  line-height: 1.6;
-  margin-top: 0.6rem;
-}
-.gap-ic-lbl { font-style: normal; font-weight: 700; color: var(--ink); }
-.gap-badge {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  border: 1px solid var(--rule);
-  padding: 2px 7px;
-  display: inline-block;
-  margin-top: 0.5rem;
-}
-
-/* ── ACTIONS ─────────────────────────────────────────────────────────────── */
-.actions-row {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--rule);
-  animation: fadeUp 0.4s ease both;
-}
-.action-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 7px 14px;
-  border: 1px solid var(--rule);
-  background: var(--paper);
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.action-btn::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0%; height: 2px;
-  background: var(--accent);
-  transition: width 0.2s;
-}
-.action-btn:hover { border-color: var(--ink); color: var(--ink); }
-.action-btn:hover::after { width: 100%; }
-.action-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.action-btn.primary:hover { background: var(--accent); border-color: var(--accent); }
-.action-btn.primary::after { display: none; }
-.action-btn:active { transform: scale(0.97); }
-
-/* ── ERROR ───────────────────────────────────────────────────────────────── */
-.error-block {
-  background: var(--paper2);
-  border-left: 3px solid var(--accent);
-  padding: 0.75rem 1rem;
-  font-size: 0.85rem;
-  color: var(--accent);
-  margin: 1rem 0;
-  display: none;
-  animation: fadeIn 0.3s ease;
-}
-
-/* ── EMPTY RESULT ────────────────────────────────────────────────────────── */
-.empty-result {
-  padding: 3rem 0;
-  text-align: center;
-  color: var(--muted);
-  animation: fadeIn 0.4s ease;
-}
-.empty-result p { font-style: italic; font-size: 0.9rem; line-height: 1.7; }
-
-/* ── TOAST ───────────────────────────────────────────────────────────────── */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 10px 18px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.25s, transform 0.25s;
-  pointer-events: none;
-  z-index: 999;
-}
-.toast.show { opacity: 1; transform: translateY(0); }
-
-/* ── FOOTER ──────────────────────────────────────────────────────────────── */
-.footer {
-  padding: 1.5rem 1rem;
-  border-top: 2px solid var(--ink);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-/* ── SCREENS ─────────────────────────────────────────────────────────────── */
-.screen { display: none; }
-.screen.active { display: block; }
-
-/* ── MOBILE ──────────────────────────────────────────────────────────────── */
-@media(max-width:600px) {
-  .main { padding: 0 1rem 4rem; }
-  .search-headline { font-size: 1.2rem; }
-  .preview-grid { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: repeat(3,1fr); }
-  .header-nav { display: none; }
-  .bench-val { font-size: 1.4rem; }
-  .actions-row { gap: 5px; }
-  .action-btn { font-size: 0.55rem; padding: 6px 10px; }
+@media(max-width:600px){
+  .main{padding:0 1rem 4rem;}
+  .search-headline{font-size:1.2rem;}
+  .preview-grid{grid-template-columns:1fr;}
+  .header-nav{display:none;}
+  .actions-row{gap:5px;}
+  .action-btn{font-size:0.55rem;padding:6px 10px;}
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-row">
     <div>
       <h1>GON Intelligence</h1>
-      <div class="header-subtitle">Growth Operator Notes - African Private Capital</div>
+      <div class="header-sub">Growth Operator Notes &mdash; African Private Capital</div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
       <nav class="header-nav">
         <a href="../africa-ic-checklist/">IC Checklist</a>
         <a href="../">Portfolio</a>
         <a href="mailto:jpouandji@gmail.com">Contact</a>
-        <button class="token-btn" id="tokenBtn" onclick="toggleToken()">&#9679; Token</button>
+        <button class="token-btn" id="tokenBtn" onclick="toggleToken()">&#9675; Token</button>
       </nav>
     </div>
   </div>
 </div>
 
-<!-- TOKEN PANEL -->
 <div class="token-panel" id="tokenPanel">
   <div class="token-panel-label">Airtable Personal Access Token</div>
   <div class="token-row">
-    <input type="password" class="token-input" id="tokenInput" placeholder="pat..." />
+    <input type="password" class="token-input" id="tokenInput" placeholder="pat..."/>
     <button class="token-save" onclick="saveToken()">Save</button>
   </div>
 </div>
 
-<!-- PROGRESS BAR -->
 <div class="progress-bar" id="progressBar"></div>
 
 <div class="main">
@@ -782,10 +358,10 @@ a:hover { opacity: 0.7; }
   <div id="screenEmpty" class="screen active">
     <div class="search-section">
       <div class="eyebrow">Operator intelligence for African private capital</div>
-      <div class="search-headline">What assumption in this deal is <em>most likely to fail?</em></div>
-      <div class="search-sub">Surface distribution risks, regulatory fragility, and demand gaps that standard diligence misses. Focused depth - not false breadth.</div>
+      <div class="search-headline">What are you trying to <em>pressure test?</em></div>
+      <div class="search-sub">Specify the market and sector. Surface distribution risks, regulatory fragility, and demand gaps before the IC meeting.</div>
       <div class="search-row">
-        <input type="text" class="search-input" id="mainInput" placeholder="e.g. mobile money in Senegal, energy deal in Chad, fintech exits Kenya..." />
+        <input type="text" class="search-input" id="mainInput" placeholder="e.g. energy deal South Africa, mobile money Senegal, fintech exits Kenya..."/>
         <button class="search-btn" id="searchBtn" onclick="runSearch()">
           <span class="btn-text">Pressure test</span>
           <span class="dots"><span></span><span></span><span></span></span>
@@ -804,12 +380,12 @@ a:hover { opacity: 0.7; }
     <div class="examples-section">
       <div class="examples-label">Common deal questions</div>
       <div class="example-pills">
-        <span class="ex-pill" onclick="quickSearch('Mobile money distribution in Senegal')">Mobile money in Senegal</span>
-        <span class="ex-pill" onclick="quickSearch('Energy deal distribution in Chad')">Energy deal in Chad</span>
-        <span class="ex-pill" onclick="quickSearch('Fintech regulation in Cameroun')">Fintech regulation Cameroun</span>
+        <span class="ex-pill" onclick="quickSearch('Mobile money distribution Senegal')">Mobile money Senegal</span>
+        <span class="ex-pill" onclick="quickSearch('Energy deal South Africa')">Energy deal South Africa</span>
+        <span class="ex-pill" onclick="quickSearch('Fintech regulation Cameroun')">Fintech regulation Cameroun</span>
         <span class="ex-pill" onclick="quickSearch('Kenya fintech exit dynamics')">Kenya fintech exits</span>
         <span class="ex-pill" onclick="quickSearch('Nigeria agent banking distribution')">Nigeria agent banking</span>
-        <span class="ex-pill" onclick="quickSearch('WAEMU regulatory environment')">WAEMU regulatory</span>
+        <span class="ex-pill" onclick="quickSearch('WAEMU regulatory environment fintech')">WAEMU regulatory</span>
       </div>
     </div>
 
@@ -817,47 +393,44 @@ a:hover { opacity: 0.7; }
       <div class="eyebrow" style="margin-bottom:0.6rem;">Example pressure signals</div>
       <div class="preview-grid">
         <div class="preview-card">
-          <div class="pc-eyebrow">Distribution economics</div>
-          <div class="pc-text">"Your API cost assumption is the published floor - not the real competitive rate."</div>
-          <div class="pc-dim">Senegal mobile money</div>
+          <div class="pc-eyebrow">Direct match &middot; Senegal</div>
+          <div class="pc-text">"API cost assumption is the published floor, not the competitive rate."</div>
+          <div class="pc-dim">Distribution economics</div>
           <span class="flag flag-red">Critical gap</span>
         </div>
         <div class="preview-card">
-          <div class="pc-eyebrow">Regulatory environment</div>
-          <div class="pc-text">"COBAC approval runs 9-15 months operationally. Your model uses the 6-month statutory ceiling."</div>
-          <div class="pc-dim">CEMAC fintech licensing</div>
+          <div class="pc-eyebrow">Direct match &middot; CEMAC</div>
+          <div class="pc-text">"COBAC approval runs 9-15 months operationally. Statutory ceiling is 6 months."</div>
+          <div class="pc-dim">Regulatory environment</div>
           <span class="flag flag-amber">Watch closely</span>
         </div>
         <div class="preview-card">
-          <div class="pc-eyebrow">Market opacity warning</div>
-          <div class="pc-text">"No validated post-Wave CAC benchmark exists. The market does not produce this data reliably."</div>
-          <div class="pc-dim">WAEMU acquisition economics</div>
-          <span class="flag flag-gap">Opacity signal</span>
+          <div class="pc-eyebrow">Adjacent signal &middot; why flagged</div>
+          <div class="pc-text">"Comparable agent compression pattern observed. Surfaced as structural analogy, not direct match."</div>
+          <div class="pc-dim">Distribution economics</div>
+          <span class="flag flag-adjacent">Comparable market</span>
         </div>
       </div>
     </div>
 
     <div class="scope-note">
-      <strong>Coverage note:</strong> Operator-validated intelligence is deepest in WAEMU and CEMAC markets. East Africa and North Africa are benchmarked against primary institutional sources. Gaps are documented explicitly - the absence of data is itself an intelligence signal.
+      <strong>Coverage note:</strong> Deepest operator validation in WAEMU and CEMAC. East Africa and North Africa benchmarked against primary institutional sources. Adjacent market signals are explicitly labelled - never presented as direct matches.
     </div>
   </div>
 
-  <!-- RESULTS STATE -->
+  <!-- RESULTS -->
   <div id="screenResults" class="screen">
     <div class="results-topbar">
       <div class="results-context" id="resultsContext"></div>
       <button class="back-btn" onclick="goBack()">&#8592; New query</button>
     </div>
-
     <div class="stats-row">
-      <div class="stat"><div class="stat-n" id="statCritical">-</div><div class="stat-l">Critical gaps</div></div>
-      <div class="stat"><div class="stat-n" id="statWatch">-</div><div class="stat-l">Watch closely</div></div>
-      <div class="stat"><div class="stat-n" id="statOpacity">-</div><div class="stat-l">Opacity warnings</div></div>
+      <div class="stat"><div class="stat-n" id="statDirect">-</div><div class="stat-l">Direct signals</div></div>
+      <div class="stat"><div class="stat-n" id="statAdjacent">-</div><div class="stat-l">Adjacent signals</div></div>
+      <div class="stat"><div class="stat-n" id="statGaps">-</div><div class="stat-l">Opacity warnings</div></div>
     </div>
-
     <div class="error-block" id="errorBlock"></div>
     <div id="resultsContainer"></div>
-
     <div class="actions-row" id="actionsRow" style="display:none;">
       <button class="action-btn primary" onclick="copyFounderQs()">Copy founder questions</button>
       <button class="action-btn" onclick="addToMemo()">Add to IC memo</button>
@@ -872,359 +445,454 @@ a:hover { opacity: 0.7; }
   <span>GON Intelligence &mdash; Growth Operator Notes</span>
   <span><a href="mailto:jpouandji@gmail.com" style="border:none;color:var(--muted);">jpouandji@gmail.com</a></span>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-const BASE_ID = 'appAr4TpVGHSoh9CU';
-let currentFilter = '';
-let currentResults = [];
-let currentQuery = '';
+const BASE_ID='appAr4TpVGHSoh9CU';
+let currentFilter='';
+let currentResults=[];
+let currentQuery='';
+let currentGeo='';
 
 // ── TOKEN ──────────────────────────────────────────────────────────────────
-function getToken() { return localStorage.getItem('gon_tok') || ''; }
-
-function initToken() {
-  const t = getToken();
-  const btn = document.getElementById('tokenBtn');
-  if (t) {
-    btn.textContent = '● Token active';
-    btn.classList.add('active');
-  } else {
-    btn.textContent = '○ Add token';
-    document.getElementById('tokenPanel').classList.add('open');
-  }
+function getToken(){return localStorage.getItem('gon_tok')||'';}
+function initToken(){
+  const t=getToken(),btn=document.getElementById('tokenBtn');
+  if(t){btn.textContent='● Token active';btn.classList.add('active');}
+  else{btn.textContent='○ Add token';document.getElementById('tokenPanel').classList.add('open');}
 }
-
-function toggleToken() {
-  const panel = document.getElementById('tokenPanel');
-  panel.classList.toggle('open');
-}
-
-function saveToken() {
-  const val = document.getElementById('tokenInput').value.trim();
-  if (!val) return;
-  localStorage.setItem('gon_tok', val);
-  const btn = document.getElementById('tokenBtn');
-  btn.textContent = '● Token active';
-  btn.classList.add('active');
+function toggleToken(){document.getElementById('tokenPanel').classList.toggle('open');}
+function saveToken(){
+  const v=document.getElementById('tokenInput').value.trim();
+  if(!v)return;
+  localStorage.setItem('gon_tok',v);
+  const btn=document.getElementById('tokenBtn');
+  btn.textContent='● Token active';btn.classList.add('active');
   document.getElementById('tokenPanel').classList.remove('open');
   showToast('Token saved');
 }
 
 // ── FILTER ─────────────────────────────────────────────────────────────────
-function setFilter(el, val) {
-  currentFilter = val;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+function setFilter(el,val){
+  currentFilter=val;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
 }
 
-// ── SEARCH ─────────────────────────────────────────────────────────────────
-function quickSearch(q) {
-  document.getElementById('mainInput').value = q;
-  runSearch();
+// ── GEOGRAPHY EXTRACTION ───────────────────────────────────────────────────
+const GEO_MAP={
+  // Countries - exact Airtable spelling
+  'senegal':'Senegal','nigeria':'Nigeria','kenya':'Kenya','ghana':'Ghana',
+  'cameroun':'Cameroun','cameroon':'Cameroun','ivory coast':'Ivory Coast',
+  'ivoire':'Ivory Coast','south africa':'South Africa','egypt':'Egypt',
+  'tanzania':'Tanzania','rwanda':'Rwanda','uganda':'Uganda','ethiopia':'Ethiopia',
+  'mali':'Mali','angola':'Angola','mozambique':'Mozambique','zambia':'Zambia',
+  'zimbabwe':'Zimbabwe','chad':'Chad','congo':'Congo','drc':'DRC',
+  'gabon':'Gabon','morocco':'Morocco','tunisia':'Tunisia','algeria':'Algeria',
+  'benin':'Benin','togo':'Togo','niger':'Niger','botswana':'Botswana',
+  'malawi':'Malawi',
+  // Regions
+  'waemu':'WAEMU','cemac':'CEMAC','east africa':'East Africa',
+  'west africa':'West Africa','sub saharan':'Sub Saharan Africa',
+  'pan african':'Pan African','pan-african':'Pan African',
+};
+
+function extractGeo(query){
+  const q=query.toLowerCase();
+  for(const[k,v] of Object.entries(GEO_MAP)){
+    if(q.includes(k))return v;
+  }
+  return null;
 }
 
-function goBack() {
+function extractSector(query){
+  const q=query.toLowerCase();
+  const map={
+    'mobile money':'Fintech / Mobile money','fintech':'Fintech / Mobile money',
+    'payment':'Fintech / Mobile money','energy':'Energy / Cleantech',
+    'solar':'Energy / Cleantech','cleantech':'Energy / Cleantech',
+    'agritech':'Agritech','agriculture':'Agritech','farming':'Agritech',
+    'health':'Healthtech','saas':'SaaS / B2B','b2b':'SaaS / B2B',
+    'ecommerce':'E-commerce / Logistics','logistics':'E-commerce / Logistics',
+    'media':'Entertainment / Media','entertainment':'Entertainment / Media',
+    'telecom':'Telecoms','telco':'Telecoms',
+  };
+  for(const[k,v] of Object.entries(map)){if(q.includes(k))return v;}
+  return null;
+}
+
+function extractStopWords(){
+  return new Set(['in','the','a','an','for','and','or','of','to','at','on',
+    'deal','about','what','is','are','this','how','with','from','south',
+    'north','east','west','sub','pan','africa','african']);
+}
+
+// ── SEARCH ─────────────────────────────────────────────────────────────────
+function quickSearch(q){document.getElementById('mainInput').value=q;runSearch();}
+function goBack(){
   document.getElementById('screenResults').classList.remove('active');
   document.getElementById('screenEmpty').classList.add('active');
-  document.getElementById('mainInput').value = '';
+  document.getElementById('mainInput').value='';
   document.getElementById('mainInput').focus();
 }
 
-async function runSearch() {
-  const query = document.getElementById('mainInput').value.trim();
-  if (!query) { document.getElementById('mainInput').focus(); return; }
-  const token = getToken();
-  if (!token) {
-    document.getElementById('tokenPanel').classList.add('open');
-    showToast('Please save your Airtable token first');
-    return;
-  }
-  currentQuery = query;
+async function runSearch(){
+  const query=document.getElementById('mainInput').value.trim();
+  if(!query){document.getElementById('mainInput').focus();return;}
+  const token=getToken();
+  if(!token){document.getElementById('tokenPanel').classList.add('open');showToast('Please save your Airtable token first');return;}
 
-  // Switch screens
+  currentQuery=query;
+  currentGeo=extractGeo(query);
+
   document.getElementById('screenEmpty').classList.remove('active');
   document.getElementById('screenResults').classList.add('active');
-  document.getElementById('actionsRow').style.display = 'none';
-  document.getElementById('errorBlock').style.display = 'none';
+  document.getElementById('actionsRow').style.display='none';
+  document.getElementById('errorBlock').style.display='none';
 
-  // Loading state
-  const btn = document.getElementById('searchBtn');
-  btn.classList.add('searching');
-  btn.disabled = true;
+  const btn=document.getElementById('searchBtn');
+  btn.classList.add('searching');btn.disabled=true;
   document.getElementById('progressBar').classList.add('active');
-  document.getElementById('resultsContext').innerHTML = `Pressure testing: <strong>${query}</strong>`;
+  document.getElementById('resultsContext').innerHTML=`Pressure testing: <strong>${query}</strong>`;
 
-  // Skeletons
-  const container = document.getElementById('resultsContainer');
-  container.innerHTML = `
-    <div class="sec-label">Loading intelligence signals...</div>
-    ${[1,2,3].map(() => `
+  const container=document.getElementById('resultsContainer');
+  container.innerHTML=`
+    <div class="group-header"><span class="group-label primary">Loading signals...</span></div>
+    ${[1,2,3].map(()=>`
       <div class="skeleton-card">
-        <div class="skel" style="height:12px;width:30%;margin-bottom:12px;"></div>
-        <div class="skel" style="height:20px;width:85%;margin-bottom:8px;"></div>
-        <div class="skel" style="height:20px;width:65%;margin-bottom:16px;"></div>
-        <div class="skel" style="height:36px;width:20%;margin-bottom:8px;"></div>
-        <div class="skel" style="height:12px;width:100%;margin-bottom:6px;"></div>
-        <div class="skel" style="height:12px;width:80%;"></div>
+        <div class="skel" style="height:10px;width:25%;margin-bottom:10px;"></div>
+        <div class="skel" style="height:18px;width:80%;margin-bottom:6px;"></div>
+        <div class="skel" style="height:18px;width:55%;margin-bottom:12px;"></div>
+        <div class="skel" style="height:12px;width:100%;margin-bottom:4px;"></div>
+        <div class="skel" style="height:12px;width:70%;"></div>
       </div>
-    `).join('')}
-  `;
+    `).join('')}`;
 
-  document.getElementById('statCritical').textContent = '-';
-  document.getElementById('statWatch').textContent = '-';
-  document.getElementById('statOpacity').textContent = '-';
+  ['statDirect','statAdjacent','statGaps'].forEach(id=>document.getElementById(id).textContent='-');
 
-  try {
-    const records = await fetchRecords(token, query);
+  try{
+    const records=await fetchAll(token,query);
     renderResults(records);
-  } catch(e) {
-    showError(e.message);
-  } finally {
-    btn.classList.remove('searching');
-    btn.disabled = false;
+  }catch(e){showError(e.message);}
+  finally{
+    btn.classList.remove('searching');btn.disabled=false;
     document.getElementById('progressBar').classList.remove('active');
   }
 }
 
 // ── AIRTABLE ───────────────────────────────────────────────────────────────
-function extractTerms(query) {
-  const stop = new Set(['in','the','a','an','for','and','or','of','to','at','on','deal','about','what','is','are','this','how','with','from']);
-  return query.toLowerCase()
-    .replace(/[^\w\s]/g,' ')
-    .split(/\s+/)
-    .filter(w => w.length > 2 && !stop.has(w))
-    .slice(0,6);
+async function fetchAll(token,query){
+  const geo=extractGeo(query);
+  const sector=extractSector(query);
+
+  // Fetch direct matches first (geography + sector)
+  const directRecords=await fetchDirect(token,geo,sector);
+
+  // Fetch broader sector matches for adjacent
+  let adjacentRecords=[];
+  if(sector&&directRecords.length<3){
+    adjacentRecords=await fetchAdjacent(token,geo,sector,directRecords);
+  }
+
+  return{direct:directRecords,adjacent:adjacentRecords,geo,sector};
 }
 
-async function fetchRecords(token, query) {
-  const terms = extractTerms(query);
-  const fields = ['{Market}','{Sector}','{IC Dimension}','{Metric Name}','{Operator Note}'];
-  const conditions = terms.map(t =>
-    `OR(${fields.map(f => `SEARCH(LOWER("${t}"),LOWER(${f}))`).join(',')})`
-  );
-  let formula = conditions.length > 1 ? `OR(${conditions.join(',')})` : conditions[0];
-  formula = `AND(${formula},OR({Entry Status}="Active",{Entry Status}="Announced"))`;
-  if (currentFilter) formula = `AND(${formula},{IC Dimension}="${currentFilter}")`;
+async function fetchDirect(token,geo,sector){
+  let formula='';
+  const parts=[];
 
-  const url = `https://api.airtable.com/v0/${BASE_ID}/Benchmarks?filterByFormula=${encodeURIComponent(formula)}&maxRecords=15`;
-  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error?.message || `API error ${res.status}`);
+  if(geo){
+    // Strong geography match - must contain the geo
+    parts.push(`SEARCH("${geo}",{Market})`);
   }
-  const data = await res.json();
-  return data.records || [];
+  if(sector){
+    parts.push(`{Sector}="${sector}"`);
+  }
+
+  if(parts.length===0){
+    // No geo or sector - fallback to keyword search
+    const terms=getKeyTerms(document.getElementById('mainInput').value);
+    if(!terms.length)return[];
+    const conds=terms.map(t=>`OR(SEARCH(LOWER("${t}"),LOWER({Metric Name})),SEARCH(LOWER("${t}"),LOWER({IC Dimension})))`);
+    formula=`AND(OR(${conds.join(',')}),{Entry Status}="Active")`;
+  }else if(parts.length===1){
+    formula=`AND(${parts[0]},{Entry Status}="Active")`;
+  }else{
+    formula=`AND(AND(${parts.join(',')}),{Entry Status}="Active")`;
+  }
+
+  if(currentFilter){formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;}
+
+  return await airtableFetch(token,formula,12);
+}
+
+async function fetchAdjacent(token,geo,sector,existing){
+  // Find same-sector records from other markets
+  const existingIds=new Set(existing.map(r=>r.id));
+  let formula=`AND({Sector}="${sector}",{Entry Status}="Active")`;
+  if(currentFilter){formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;}
+  const all=await airtableFetch(token,formula,8);
+  // Exclude direct matches and limit to 3
+  return all.filter(r=>!existingIds.has(r.id)).slice(0,3);
+}
+
+async function airtableFetch(token,formula,max){
+  const url=`https://api.airtable.com/v0/${BASE_ID}/Benchmarks?filterByFormula=${encodeURIComponent(formula)}&maxRecords=${max}`;
+  const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`API error ${res.status}`);}
+  const d=await res.json();
+  return d.records||[];
+}
+
+function getKeyTerms(query){
+  const stop=extractStopWords();
+  return query.toLowerCase().replace(/[^\w\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!stop.has(w)).slice(0,5);
+}
+
+// ── SEVERITY ───────────────────────────────────────────────────────────────
+function getSeverity(r){
+  const dim=r.fields['IC Dimension']||'';
+  const conf=r.fields['Confidence Level']||'';
+  const ts=r.fields['Three-Test Status']||'';
+  if(dim==='Regulatory environment')return'red';
+  if(ts==='Pass'&&conf==='High')return'red';
+  if(ts==='Pass with caveat'||conf==='Medium')return'amber';
+  return'green';
+}
+const SEV_LABELS={red:['flag-red','Critical gap'],amber:['flag-amber','Watch closely'],green:['flag-green','Adequately covered']};
+
+// ── IMPLICATION ────────────────────────────────────────────────────────────
+function getImplication(r){
+  const note=r.fields['Operator Note']||'';
+  // Try core claim first
+  const m=note.match(/Core claim:\s*([^.]+\.)/i)||note.match(/Assumption invalidated:\s*([^.]+\.)/i);
+  if(m)return compress(m[1].trim());
+  // First sentence of note
+  const first=note.split('.')[0];
+  if(first&&first.length>20)return compress(first.trim())+'.'
+  return r.fields['Metric Name']||'';
+}
+
+function compress(s){
+  // Remove absolute language
+  return s
+    .replace(/\bis\b/g,'suggests')
+    .replace(/\bwill\b/g,'may')
+    .replace(/\bcannot\b/g,'appears unable to')
+    .replace(/\balways\b/g,'historically')
+    .replace(/\bnever\b/g,'rarely');
+}
+
+function getICQ(r){
+  const ic=r.fields['IC Checklist Implication']||'';
+  if(ic.length>20)return ic;
+  return'';
+}
+function getStability(r){
+  const dc=r.fields['Decay Class']||'';
+  if(dc.includes('Regulatory'))return'Regulatory instrument';
+  if(dc.includes('Structural'))return'Structural signal';
+  if(dc.includes('Operator'))return'Directional signal';
+  return'Primary source';
+}
+function getConfidenceNote(r){
+  const conf=r.fields['Confidence Level']||'Medium';
+  const ts=r.fields['Three-Test Status']||'Pass';
+  if(conf==='High'&&ts==='Pass')return'High confidence · Primary institutional source';
+  if(conf==='Medium'||ts==='Pass with caveat')return'Medium confidence · Verify against primary source';
+  return'Directional · Use as analogy signal only';
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
-function getSeverity(r) {
-  const dim = r.fields['IC Dimension'] || '';
-  const conf = r.fields['Confidence Level'] || '';
-  const ts = r.fields['Three-Test Status'] || '';
-  if (dim === 'Regulatory environment') return 'red';
-  if (ts === 'Pass' && conf === 'High') return 'red';
-  if (ts === 'Pass with caveat' || conf === 'Medium') return 'amber';
-  return 'green';
-}
+function renderResults({direct,adjacent,geo,sector}){
+  currentResults=[...direct,...adjacent];
+  const container=document.getElementById('resultsContainer');
 
-function getImplication(r) {
-  const note = r.fields['Operator Note'] || '';
-  const m = note.match(/Core claim:\s*([^.]+\.)/i) || note.match(/Assumption invalidated:\s*([^.]+\.)/i);
-  if (m) return `&#8220;${m[1].trim()}&#8221;`;
-  const first = note.split('.')[0];
-  if (first && first.length > 20) return `&#8220;${first.trim()}.&#8221;`;
-  return `&#8220;${r.fields['Metric Name'] || ''}&#8221;`;
-}
+  document.getElementById('statDirect').textContent=direct.length;
+  document.getElementById('statAdjacent').textContent=adjacent.length;
+  document.getElementById('statGaps').textContent='1';
 
-function getICQ(r) {
-  const ic = r.fields['IC Checklist Implication'] || '';
-  if (ic.length > 20) return ic;
-  const m = (r.fields['Operator Note'] || '').match(/Predicted effect:\s*([^.]+\.)/i);
-  return m ? m[1].trim() : '';
-}
-
-function getStability(r) {
-  const dc = r.fields['Decay Class'] || '';
-  if (dc.includes('Regulatory')) return 'Regulatory instrument';
-  if (dc.includes('Structural')) return 'Structural signal';
-  if (dc.includes('Operator')) return 'Directional signal';
-  return 'Primary source';
-}
-
-function renderResults(records) {
-  currentResults = records;
-  const container = document.getElementById('resultsContainer');
-
-  if (!records.length) {
-    container.innerHTML = `<div class="empty-result"><p>No validated benchmarks found for <strong>"${currentQuery}"</strong>.<br>Try broader terms - market name, sector, or IC dimension.</p></div>`;
-    document.getElementById('statCritical').textContent = '0';
-    document.getElementById('statWatch').textContent = '0';
-    document.getElementById('statOpacity').textContent = '0';
+  if(!direct.length&&!adjacent.length){
+    container.innerHTML=`<div class="empty-result"><p>No validated benchmarks found for <strong>"${currentQuery}"</strong>.<br>Try: market name + sector (e.g. "energy South Africa", "fintech Senegal").</p></div>`;
     return;
   }
 
-  const critical = records.filter(r => getSeverity(r) === 'red');
-  const watch = records.filter(r => getSeverity(r) === 'amber');
+  let html='';
 
-  document.getElementById('statCritical').textContent = critical.length;
-  document.getElementById('statWatch').textContent = watch.length;
-  document.getElementById('statOpacity').textContent = '1';
+  // DIRECT SIGNALS
+  if(direct.length){
+    html+=`<div class="group-header">
+      <span class="group-label primary">Direct signals</span>
+      <span class="group-count">${direct.length}</span>
+      ${geo?`<span class="flag flag-neutral" style="font-size:0.55rem;">${geo}</span>`:''}
+      ${sector?`<span class="flag flag-neutral" style="font-size:0.55rem;">${sector}</span>`:''}
+    </div>`;
+    html+=direct.map((r,i)=>renderCard(r,i,false)).join('');
+  }else{
+    html+=`<div class="group-header"><span class="group-label primary">Direct signals</span><span class="group-count">0</span></div>`;
+    html+=`<div style="padding:0.75rem 0;border-bottom:1px solid var(--rule);font-size:0.85rem;color:var(--muted);font-style:italic;">No validated benchmarks found for ${geo||'this market'} in the current database. See adjacent signals below.</div>`;
+  }
 
-  let html = `<div class="sec-label">Pressure signals (${records.length})</div>`;
-  html += records.map((r,i) => renderCard(r,i)).join('');
-  html += `<div class="sec-label" style="margin-top:0.5rem;">Market opacity warnings</div>`;
-  html += renderGapCard();
+  // ADJACENT SIGNALS
+  if(adjacent.length){
+    const adjGeo=adjacent.map(r=>{
+      const m=Array.isArray(r.fields['Market'])?r.fields['Market'].join(', '):(r.fields['Market']||'');
+      return m;
+    }).filter(Boolean).join(', ');
 
-  container.innerHTML = html;
-  document.getElementById('actionsRow').style.display = 'flex';
+    html+=`<div class="group-header" style="margin-top:0.5rem;">
+      <span class="group-label">Comparable market signals</span>
+      <span class="group-count">${adjacent.length}</span>
+    </div>
+    <div class="group-rationale">Surfaced because these markets share ${sector?`comparable ${sector.toLowerCase()} dynamics`:'structural similarities'} with ${geo||'your target market'}. Treat as analogy signals, not direct evidence.</div>`;
+    html+=adjacent.map((r,i)=>renderCard(r,direct.length+i,true)).join('');
+  }
 
-  // Stagger card animations
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.intel-card, .gap-card').forEach((el, i) => {
-      setTimeout(() => el.classList.add('visible'), i * 80);
+  // GAP CARD
+  html+=`<div class="group-header" style="margin-top:0.5rem;"><span class="group-label">Market opacity warnings</span><span class="group-count">1</span></div>`;
+  html+=renderGapCard(geo,sector);
+
+  container.innerHTML=html;
+  document.getElementById('actionsRow').style.display='flex';
+
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.intel-card,.gap-card').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('visible'),i*70);
     });
   });
 }
 
-function renderCard(r, idx) {
-  const f = r.fields;
-  const sev = getSeverity(r);
-  const sevLabels = { red: ['flag-red','Critical gap'], amber: ['flag-amber','Watch closely'], green: ['flag-green','Adequately covered'] };
-  const [flagCls, flagLabel] = sevLabels[sev];
-  const stability = getStability(r);
-  const implication = getImplication(r);
-  const icq = getICQ(r);
-  const market = Array.isArray(f['Market']) ? f['Market'].join(', ') : (f['Market'] || '');
-  const value = (f['Value'] || '').substring(0, 80);
-  const cleanNote = (f['Operator Note'] || '')
+function renderCard(r,idx,isAdjacent){
+  const f=r.fields;
+  const sev=isAdjacent?'green':getSeverity(r);
+  const[flagCls,flagLabel]=isAdjacent?['flag-adjacent','Comparable market']:SEV_LABELS[sev];
+  const implication=getImplication(r);
+  const icq=getICQ(r);
+  const stability=getStability(r);
+  const confNote=getConfidenceNote(r);
+  const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
+  const value=(f['Value']||'').substring(0,80);
+  const cleanNote=(f['Operator Note']||'')
     .replace(/Core claim:.*$/ms,'')
     .replace(/Assumption invalidated:.*$/ms,'')
     .replace(/Predicted effect:.*$/ms,'')
-    .trim().substring(0, 400);
-
-  const notMean = sev === 'red'
-    ? `This does not mean the market is closed. It means the assumptions behind your model need to be explicitly tested against operator-level data before IC.`
-    : sev === 'amber'
-    ? `This does not mean the deal is broken. It means this dimension requires specific founder validation before it can be modelled with confidence.`
-    : '';
+    .trim().substring(0,500);
 
   return `
-    <div class="intel-card ${sev}" id="card-${idx}" style="transition-delay:${idx*0.05}s">
+    <div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
       <div class="card-flags">
         <span class="flag ${flagCls}">${flagLabel}</span>
-        <span class="flag flag-neutral">${f['IC Dimension'] || ''}</span>
+        <span class="flag flag-neutral">${f['IC Dimension']||''}</span>
         <span class="flag flag-neutral">${stability}</span>
+        ${isAdjacent&&market?`<span class="flag flag-neutral">${market}</span>`:''}
       </div>
-      <div class="implication">${implication}</div>
-      <div class="bench-block">
-        <span class="bench-val">${value}</span>
-        <span class="bench-src">${f['Source Name'] || ''}${f['Source Date'] ? ' &middot; ' + f['Source Date'] : ''}</span>
+
+      <!-- LAYER 1: always visible -->
+      <div class="card-layer1">
+        <div class="implication">${implication}</div>
+        <div class="bench-inline">
+          <span class="bench-val-sm">${value}</span>
+          <span class="bench-src-sm">${f['Source Name']||''}${f['Source Date']?' &middot; '+f['Source Date']:''}</span>
+        </div>
+        <button class="expand-trigger" id="expandBtn-${idx}" onclick="toggleExpand(${idx})">Full operator note + IC question</button>
       </div>
-      ${cleanNote ? `
-        <div class="op-note" id="note-${idx}">${cleanNote}</div>
-        <button class="expand-btn" id="expandBtn-${idx}" onclick="toggleExpand(${idx})">+ Read full operator note</button>
-      ` : ''}
-      ${notMean ? `<div class="not-mean-block"><span class="not-mean-lbl">This does not mean: </span>${notMean}</div>` : ''}
-      ${icq ? `<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>` : ''}
-      <div class="src-row">
-        ${f['Entry ID'] ? `<span class="src-tag">${f['Entry ID']}</span>` : ''}
-        ${market ? `<span class="src-tag">${market}</span>` : ''}
-        ${f['Three-Test Status'] ? `<span class="src-tag">${f['Three-Test Status']}</span>` : ''}
-        ${f['Confidence Level'] ? `<span class="src-tag">${f['Confidence Level']} confidence</span>` : ''}
+
+      <!-- LAYER 2: expanded on click -->
+      <div class="card-layer2" id="layer2-${idx}">
+        ${cleanNote?`<div class="op-note">${cleanNote}</div>`:''}
+        <div class="confidence-note">${confNote}</div>
+        ${!isAdjacent?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> the market is inaccessible or the deal is broken. It means this assumption requires explicit validation before IC.</div>`:''}
+        ${icq?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
+        <div class="src-row">
+          ${f['Entry ID']?`<span class="src-tag">${f['Entry ID']}</span>`:''}
+          ${!isAdjacent&&market?`<span class="src-tag">${market}</span>`:''}
+          ${f['Three-Test Status']?`<span class="src-tag">${f['Three-Test Status']}</span>`:''}
+          ${f['Confidence Level']?`<span class="src-tag">${f['Confidence Level']} confidence</span>`:''}
+        </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
-function toggleExpand(idx) {
-  const card = document.getElementById(`card-${idx}`);
-  const btn = document.getElementById(`expandBtn-${idx}`);
-  card.classList.toggle('expanded');
-  btn.textContent = card.classList.contains('expanded') ? '- Collapse' : '+ Read full operator note';
+function toggleExpand(idx){
+  const layer=document.getElementById(`layer2-${idx}`);
+  const btn=document.getElementById(`expandBtn-${idx}`);
+  const isOpen=layer.classList.contains('open');
+  layer.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.textContent=isOpen?'Full operator note + IC question':'Collapse';
 }
 
-function renderGapCard() {
-  const q = currentQuery.toLowerCase();
-  let title, why, impl;
-
-  if (q.includes('senegal') || q.includes('waemu') || q.includes('ivory') || q.includes('wave')) {
-    title = 'Post-Wave acquisition economics in WAEMU are structurally unreliable as benchmarks';
-    why = "Wave's market entry restructured acquisition and distribution economics across WAEMU from 2020 onward. Pre-Wave benchmarks for mobile money CAC, agent commission rates, and user acquisition costs cannot be transferred to the current landscape without material adjustment.";
-    impl = 'Request cohort-level data from post-2021 periods only. Pre-Wave CAC benchmarks should be used as directional context, not as comparable inputs to financial models.';
-  } else if (q.includes('nigeria') || q.includes('moniepoint') || q.includes('opay') || q.includes('agent')) {
-    title = 'Post-single-principal mandate agent economics have not yet produced primary benchmark data';
-    why = 'The CBN April 2026 single-principal rule eliminated multi-terminal agent banking. The new equilibrium economics for agent loyalty, commission rates, and distribution costs under exclusive relationships have not yet been documented by any primary institutional source.';
-    impl = 'Any Nigeria agent banking assumption using pre-April 2026 data models a market structure that no longer exists. Request founder-specific data from the post-April 2026 operating period.';
-  } else if (q.includes('kenya') || q.includes('east africa')) {
-    title = 'No validated post-CBK licensing reform CAC benchmarks for Kenya digital lending';
-    why = "Kenya's CBK licensing regime change disrupted the competitive landscape for digital lenders. Pre-2023 customer acquisition cost benchmarks are not reliable proxies for current market conditions.";
-    impl = 'Kenya digital lending CAC assumptions should be explicitly validated against post-2023 cohort data. Pre-reform benchmarks understate both acquisition difficulty and compliance cost.';
-  } else if (q.includes('egypt') || q.includes('north africa')) {
-    title = 'Egypt consumer finance market is structurally closed to new entrants as of February 2026';
-    why = 'FRA Decree No 43 (February 2026) suspended acceptance of new applications for consumer finance companies under the FinTech Law. Combined with earlier freezes on non-digital operators (2024, 2025), the Egypt consumer finance entry window is closed until further notice.';
-    impl = 'Any Egypt consumer lending deal must verify licensing status predates the October 2024 freeze. If unlicensed, this is a structural market access problem, not a compliance gap.';
-  } else {
-    title = `No comprehensive validated benchmark exists for "${currentQuery}"`;
-    why = 'African private capital markets produce fragmented, inconsistent, and frequently delayed primary data. The absence of a validated benchmark for this specific query means any quantitative assumption is being benchmarked against analogies from other markets, not primary data from this one.';
-    impl = 'Treat any quantitative assumption not backed by a primary institutional source as directional only. Document the gap explicitly in the IC memo. Request primary data from the founder where it exists.';
+function renderGapCard(geo,sector){
+  let title,why,impl;
+  if(geo==='Senegal'||geo==='WAEMU'){
+    title='Post-Wave acquisition economics in WAEMU appear structurally unreliable as benchmarks';
+    why="Wave's market entry suggests acquisition and distribution economics across WAEMU shifted materially from 2020 onward. Pre-Wave CAC benchmarks may not transfer to the current competitive landscape without adjustment.";
+    impl='Request cohort-level data from post-2021 periods. Pre-Wave benchmarks should be treated as directional context, not direct comparable inputs.';
+  }else if(geo==='Nigeria'){
+    title='Post-single-principal mandate agent economics have not yet produced primary benchmark data';
+    why='The CBN April 2026 single-principal rule appears to have restructured agent loyalty economics. Primary benchmark data for the new equilibrium has not yet been published by any institutional source.';
+    impl='Agent banking assumptions using pre-April 2026 data may model a market structure that no longer exists. Request founder-specific operating data from the post-April 2026 period.';
+  }else if(geo==='Kenya'||geo==='East Africa'){
+    title='Post-CBK licensing reform benchmarks for Kenya digital lending appear incomplete';
+    why="Kenya's CBK licensing regime change appears to have disrupted competitive dynamics for digital lenders. Pre-2023 CAC benchmarks may not reliably proxy current market conditions.";
+    impl='Kenya digital lending CAC assumptions may benefit from explicit validation against post-2023 cohort data.';
+  }else if(geo==='South Africa'){
+    title='South Africa energy sector benchmarks are underrepresented in GON Intelligence at current database depth';
+    why='GON Intelligence currently has deeper WAEMU and CEMAC coverage than Southern Africa. South Africa energy deal diligence may benefit from cross-referencing adjacent market patterns from Kenya and Nigeria, explicitly labelled as analogies.';
+    impl='For South Africa energy deals, treat adjacent market signals as structural analogies only. Supplement with primary South African sources: NERSA, REIPPPP procurement data, Eskom annual reports.';
+  }else if(geo==='Egypt'){
+    title='Egypt consumer finance market appears structurally closed to new entrants as of February 2026';
+    why='FRA Decree No 43 (February 2026) suspended acceptance of new FinTech Law consumer finance applications. Combined with earlier freezes, Egypt consumer finance entry appears blocked until further notice.';
+    impl='Any Egypt consumer lending deal should verify licensing status predates the October 2024 freeze.';
+  }else{
+    title=`Validated primary benchmarks for "${currentQuery}" appear limited in current GON Intelligence database`;
+    why='African private capital markets produce fragmented, inconsistent, and frequently delayed primary data. The absence of a validated direct-match benchmark for this query suggests the market either has limited institutional data coverage or falls outside current GON database depth.';
+    impl='Treat any quantitative assumption not backed by a primary institutional source as directional only. Document data gaps explicitly in the IC memo.';
   }
-
-  return `
-    <div class="gap-card">
-      <div class="gap-marker">&#9651;</div>
-      <div class="gap-inner">
-        <div class="gap-title">${title}</div>
-        <div class="gap-why">${why}</div>
-        <div class="gap-ic"><span class="gap-ic-lbl">IC implication: </span>${impl}</div>
-        <span class="gap-badge">Visible only through operator networks</span>
-      </div>
+  return`<div class="gap-card">
+    <div class="gap-marker">&#9651;</div>
+    <div class="gap-inner">
+      <div class="gap-title">${title}</div>
+      <div class="gap-why">${why}</div>
+      <div class="gap-ic"><span class="gap-ic-lbl">IC implication: </span>${impl}</div>
+      <span class="gap-badge">Visible only through operator networks</span>
     </div>
-  `;
+  </div>`;
 }
 
-function showError(msg) {
-  document.getElementById('resultsContainer').innerHTML = '';
-  const err = document.getElementById('errorBlock');
-  err.style.display = 'block';
-  err.textContent = `Error: ${msg}. Check that your Airtable token is valid and has data.records:read scope.`;
+function showError(msg){
+  document.getElementById('resultsContainer').innerHTML='';
+  const err=document.getElementById('errorBlock');
+  err.style.display='block';
+  err.textContent=`Error: ${msg}. Check your Airtable token has data.records:read scope.`;
 }
 
 // ── ACTIONS ────────────────────────────────────────────────────────────────
-function copyFounderQs() {
-  const qs = currentResults.map(r => r.fields['IC Checklist Implication'] || '').filter(Boolean);
-  if (!qs.length) { showToast('No founder questions in results'); return; }
-  const text = `FOUNDER QUESTIONS - GON Intelligence\nQuery: ${currentQuery}\nDate: ${new Date().toLocaleDateString()}\n\n${qs.map((q,i) => `${i+1}. ${q}`).join('\n\n')}`;
-  navigator.clipboard.writeText(text).then(() => showToast('Founder questions copied')).catch(() => showToast('Copy failed'));
+function copyFounderQs(){
+  const qs=currentResults.map(r=>r.fields['IC Checklist Implication']||'').filter(Boolean);
+  if(!qs.length){showToast('No founder questions in results');return;}
+  const text=`FOUNDER QUESTIONS - GON Intelligence\nQuery: ${currentQuery}\nDate: ${new Date().toLocaleDateString()}\n\n${qs.map((q,i)=>`${i+1}. ${q}`).join('\n\n')}`;
+  navigator.clipboard.writeText(text).then(()=>showToast('Founder questions copied')).catch(()=>showToast('Copy failed'));
 }
-
-function addToMemo() {
-  const blocks = currentResults.map(r => {
-    const f = r.fields;
-    const imp = getImplication(r).replace(/&#8220;|&#8221;/g,'"');
-    return `## ${f['Metric Name'] || ''}\n${imp}\n\nBenchmark: ${(f['Value'] || '').substring(0,120)}\nSource: ${f['Source Name'] || ''} (${f['Source Date'] || ''})\n\nFounder question: ${f['IC Checklist Implication'] || ''}`;
+function addToMemo(){
+  const blocks=currentResults.map(r=>{
+    const f=r.fields;
+    return`## ${f['Metric Name']||''}\n${getImplication(r)}\n\nBenchmark: ${(f['Value']||'').substring(0,120)}\nSource: ${f['Source Name']||''} (${f['Source Date']||''})\n\nFounder question: ${f['IC Checklist Implication']||''}`;
   }).join('\n\n---\n\n');
-  const text = `GON INTELLIGENCE BRIEF\nQuery: ${currentQuery}\nDate: ${new Date().toLocaleDateString()}\n\n${blocks}`;
-  navigator.clipboard.writeText(text).then(() => showToast('IC memo brief copied')).catch(() => showToast('Copy failed'));
+  navigator.clipboard.writeText(`GON INTELLIGENCE BRIEF\nQuery: ${currentQuery}\nDate: ${new Date().toLocaleDateString()}\n\n${blocks}`)
+    .then(()=>showToast('IC memo brief copied')).catch(()=>showToast('Copy failed'));
+}
+function flagPartner(){showToast('Flagged for partner review');}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-function flagPartner() { showToast('Flagged for partner review'); }
-
-// ── UTILS ──────────────────────────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ── INIT ───────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',()=>{
   initToken();
-  document.getElementById('mainInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') runSearch();
-  });
+  document.getElementById('mainInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();});
 });
 </script>
 </body>
