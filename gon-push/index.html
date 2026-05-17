@@ -89,6 +89,7 @@ const NORMALISE = {
   "Sub-Saharan Africa": "Sub Saharan Africa",
   "DR Congo": "DRC",
   "Cameroon": "Cameroun",
+  "Announced": "Announced",
 };
 
 function normaliseValue(val) {
@@ -101,7 +102,8 @@ function normaliseValue(val) {
 const MARKETS = ["Algeria","Angola","Benin","Botswana","Burkina Faso","Cameroun","CAR","CEMAC","Chad","Congo","DRC","East Africa","Egypt","Equatorial Guinea","Ethiopia","Gabon","Ghana","Guinea-Bissau","Ivory Coast","Kenya","Malawi","Mali","Morocco","Mozambique","Niger","Nigeria","Pan African","Rwanda","Senegal","South Africa","Sub Suharan Africa","Tanzania","Togo","Tunisia","Uganda","WAEMU","West Africa","Zambia","Zimbabwe"];
 
 // ─── PARSER ───────────────────────────────────────────────────────────────────
-function parseRecord(text) {
+function parseRecord(text, tableName) {
+  const { map: fieldMap, single: singleFields, multi: multiFields } = getFieldMapForTable(tableName || 'Benchmarks');
   const record = {};
   const lines = text.split("\n");
   for (const line of lines) {
@@ -110,9 +112,9 @@ function parseRecord(text) {
     const rawKey = line.substring(0, colonIdx).replace(/\*\*/g, "").trim();
     const rawVal = line.substring(colonIdx + 1).trim().replace(/\*\*/g, "").trim();
     if (!rawKey || !rawVal) continue;
-    const mappedKey = FIELD_MAP[rawKey];
+    const mappedKey = fieldMap[rawKey];
     if (!mappedKey) continue;
-    if (MULTI_SELECT_FIELDS.has(mappedKey)) {
+    if (multiFields.has(mappedKey)) {
       record[mappedKey] = rawVal.split(",").map(v => v.trim()).filter(Boolean);
     } else if (NUMBER_FIELDS.has(mappedKey)) {
       record[mappedKey] = parseInt(rawVal) || 1;
@@ -130,13 +132,13 @@ function parseRecord(text) {
   return record;
 }
 
-function parseMultipleRecords(text) {
+function parseMultipleRecords(text, tableName) {
   const sections = text
     .split(/(?=###\s+GON-)/)
     .map(s => s.trim())
     .filter(s => s.length > 20);
   return sections.map((section, i) => {
-    const parsed = parseRecord(section);
+    const parsed = parseRecord(section, tableName);
     if (!parsed["Entry ID"]) {
       const m = section.match(/###\s+(GON-[A-Z]+-\d+)/);
       if (m) parsed["Entry ID"] = m[1];
@@ -348,7 +350,7 @@ function App() {
 
   const handleParse = () => {
     if (!inputText.trim()) return;
-    const parsed = parseMultipleRecords(inputText);
+    const parsed = parseMultipleRecords(inputText, table);
     setRecords(parsed);
     setSelected(new Set(parsed.map(r => r.index)));
     setStatuses({});
@@ -539,3 +541,41 @@ ReactDOM.render(<App />, document.getElementById("root"));
 </script>
 </body>
 </html>
+// Table-specific field maps
+const THESES_FIELD_MAP = {
+  "Thesis ID": "Thesis ID",
+  "Thesis Statement": "Thesis Statement",
+  "Source Article": "Source Article",
+  "Thesis State": "Thesis State",
+  "Confirming Evidence": "Confirming Evidence",
+  "Disconfirming Evidence": "Disconfirming Evidence",
+  "Markets Where True": "Markets Where True",
+  "Markets Where Fragmented": "Markets Where Fragmented",
+  "Created Date": "Created Date",
+  "Linked Benchmarks": "Linked Benchmarks",
+  "Notes": "Notes",
+};
+
+const GAPMAP_FIELD_MAP = {
+  "Gap ID": "Gap ID",
+  "Gap Description": "Gap Description",
+  "Market": "Market",
+  "Sector": "Sector",
+  "IC Dimension": "IC Dimension",
+  "Gap Type": "Gap Type",
+  "Investment Signal": "Investment Signal",
+  "Priority": "Priority",
+  "Status": "Status",
+  "Linked Benchmarks": "Linked Benchmarks",
+  "Notes": "Notes",
+};
+
+const THESES_SINGLE_SELECT = new Set(["Thesis State"]);
+const GAPMAP_SINGLE_SELECT = new Set(["Gap Type", "Priority", "Status"]);
+const GAPMAP_MULTI = new Set(["Market"]);
+
+function getFieldMapForTable(tableName) {
+  if (tableName === "Theses") return { map: THESES_FIELD_MAP, single: THESES_SINGLE_SELECT, multi: new Set() };
+  if (tableName === "Gap Map") return { map: GAPMAP_FIELD_MAP, single: GAPMAP_SINGLE_SELECT, multi: GAPMAP_MULTI };
+  return { map: FIELD_MAP, single: SINGLE_SELECT_FIELDS, multi: MULTI_SELECT_FIELDS };
+}
