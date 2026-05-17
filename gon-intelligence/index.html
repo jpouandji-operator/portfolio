@@ -321,6 +321,46 @@ a:hover{opacity:0.7;}
   .actions-row{gap:5px;}
   .action-btn{font-size:0.55rem;padding:6px 10px;}
 }
+
+/* EVIDENCE CALIBRATION */
+.evidence-bar{
+  display:flex;
+  gap:0;
+  border:1px solid var(--rule);
+  margin-top:0.5rem;
+  overflow:hidden;
+}
+.ev-cell{
+  flex:1;
+  padding:4px 8px;
+  border-right:1px solid var(--rule);
+  min-width:0;
+}
+.ev-cell:last-child{border-right:none;}
+.ev-key{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.5rem;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--muted);
+  display:block;
+  margin-bottom:1px;
+  white-space:nowrap;
+}
+.ev-val{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:block;
+}
+.ev-val.high{color:var(--ink);}
+.ev-val.medium{color:var(--muted);}
+.ev-val.low{color:var(--muted);font-style:italic;}
+.ev-val.contested{color:var(--accent);}
+
 </style>
 </head>
 <body>
@@ -358,8 +398,8 @@ a:hover{opacity:0.7;}
   <div id="screenEmpty" class="screen active">
     <div class="search-section">
       <div class="eyebrow">Operator intelligence for African private capital</div>
-      <div class="search-headline">What are you trying to <em>pressure test?</em></div>
-      <div class="search-sub">Specify the market and sector. Surface distribution risks, regulatory fragility, and demand gaps before the IC meeting.</div>
+      <div class="search-headline">What are you least confident <em>underwriting in this deal?</em></div>
+      <div class="search-sub">Name the market and sector. Surface the distribution risks, regulatory fragility, and demand gaps that standard diligence misses.</div>
       <div class="search-row">
         <input type="text" class="search-input" id="mainInput" placeholder="e.g. energy deal South Africa, mobile money Senegal, fintech exits Kenya..."/>
         <button class="search-btn" id="searchBtn" onclick="runSearch()">
@@ -432,7 +472,7 @@ a:hover{opacity:0.7;}
     <div class="error-block" id="errorBlock"></div>
     <div id="resultsContainer"></div>
     <div class="actions-row" id="actionsRow" style="display:none;">
-      <button class="action-btn primary" onclick="copyFounderQs()">Copy founder questions</button>
+      <button class="action-btn primary" onclick="copyFounderQs()">Export DD questions</button>
       <button class="action-btn" onclick="addToMemo()">Add to IC memo</button>
       <button class="action-btn" onclick="flagPartner()">Flag for partner review</button>
       <button class="action-btn" onclick="window.location.href='../africa-ic-checklist/'">Run diligence stress test</button>
@@ -674,13 +714,16 @@ function getImplication(r){
 }
 
 function compress(s){
-  // Remove absolute language
   return s
-    .replace(/\bis\b/g,'suggests')
-    .replace(/\bwill\b/g,'may')
+    .replace(/\bis the\b/g,'appears to be the')
+    .replace(/\bwill \b/g,'may ')
     .replace(/\bcannot\b/g,'appears unable to')
     .replace(/\balways\b/g,'historically')
-    .replace(/\bnever\b/g,'rarely');
+    .replace(/\bnever\b/g,'rarely')
+    .replace(/\bmust\b/g,'should consider')
+    .replace(/\bis not\b/g,'appears not to be')
+    .replace(/\bhas not\b/g,'appears not to have')
+    .replace(/\bhave not\b/g,'appear not to have');
 }
 
 function getICQ(r){
@@ -794,13 +837,13 @@ function renderCard(r,idx,isAdjacent){
           <span class="bench-val-sm">${value}</span>
           <span class="bench-src-sm">${f['Source Name']||''}${f['Source Date']?' &middot; '+f['Source Date']:''}</span>
         </div>
+        ${buildEvidenceBar(r, isAdjacent)}
         <button class="expand-trigger" id="expandBtn-${idx}" onclick="toggleExpand(${idx})">Full operator note + IC question</button>
       </div>
 
       <!-- LAYER 2: expanded on click -->
       <div class="card-layer2" id="layer2-${idx}">
         ${cleanNote?`<div class="op-note">${cleanNote}</div>`:''}
-        <div class="confidence-note">${confNote}</div>
         ${!isAdjacent?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> the market is inaccessible or the deal is broken. It means this assumption requires explicit validation before IC.</div>`:''}
         ${icq?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
         <div class="src-row">
@@ -888,6 +931,57 @@ function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+
+function buildEvidenceBar(r, isAdjacent) {
+  const f = r.fields;
+  const conf = f['Confidence Level'] || 'Medium';
+  const ts = f['Three-Test Status'] || 'Pass';
+  const dc = f['Decay Class'] || '';
+  const sd = f['Source Date'] || 'Unknown';
+  const market = Array.isArray(f['Market']) ? f['Market'].join(', ') : (f['Market'] || '—');
+  const opNote = f['Operator Note'] || '';
+
+  // Evidence strength
+  let strength, strengthCls;
+  if (ts === 'Pass' && conf === 'High' && !isAdjacent) { strength = 'High'; strengthCls = 'high'; }
+  else if (ts === 'Pass with caveat' || conf === 'Medium' || isAdjacent) { strength = 'Medium'; strengthCls = 'medium'; }
+  else { strength = 'Directional'; strengthCls = 'low'; }
+
+  // Contradiction check
+  const hasContest = opNote.toLowerCase().includes('contested') ||
+    opNote.toLowerCase().includes('contradict') ||
+    opNote.toLowerCase().includes('fragmented') ||
+    opNote.toLowerCase().includes('varies') ||
+    ts === 'Pass with caveat';
+  const contestLabel = hasContest ? 'Contested' : 'Consistent';
+  const contestCls = hasContest ? 'contested' : 'high';
+
+  // Coverage
+  const coverage = isAdjacent ? `Analogy · ${market}` : market;
+
+  // Freshness
+  const fresh = sd.includes('2026') ? '2026' : sd.includes('2025') ? '2025' : sd || 'Unknown';
+
+  return `<div class="evidence-bar">
+    <div class="ev-cell">
+      <span class="ev-key">Evidence</span>
+      <span class="ev-val ${strengthCls}">${strength}</span>
+    </div>
+    <div class="ev-cell">
+      <span class="ev-key">Coverage</span>
+      <span class="ev-val ${isAdjacent ? 'medium' : 'high'}">${coverage}</span>
+    </div>
+    <div class="ev-cell">
+      <span class="ev-key">Updated</span>
+      <span class="ev-val">${fresh}</span>
+    </div>
+    <div class="ev-cell">
+      <span class="ev-key">Signal</span>
+      <span class="ev-val ${contestCls}">${contestLabel}</span>
+    </div>
+  </div>`;
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
