@@ -361,6 +361,78 @@ a:hover{opacity:0.7;}
 .ev-val.low{color:var(--muted);font-style:italic;}
 .ev-val.contested{color:var(--accent);}
 
+
+/* PDF OVERLAY */
+.pdf-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15,14,12,0.85);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.pdf-overlay.show { display: flex; }
+.pdf-modal {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  max-width: 640px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  position: relative;
+}
+.pdf-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.pdf-modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.pdf-close {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: none;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pdf-close:hover { border-color: var(--ink); color: var(--ink); }
+.pdf-preview {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--paper2);
+  padding: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  border: 1px solid var(--rule);
+}
+.pdf-actions { display: flex; gap: 8px; }
+.pdf-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.6rem;
+}
+
 </style>
 </head>
 <body>
@@ -472,8 +544,8 @@ a:hover{opacity:0.7;}
     <div class="error-block" id="errorBlock"></div>
     <div id="resultsContainer"></div>
     <div class="actions-row" id="actionsRow" style="display:none;">
-      <button class="action-btn primary" onclick="copyFounderQs()">Export DD questions</button>
-      <button class="action-btn" onclick="addToMemo()">Add to IC memo</button>
+      <button class="action-btn primary" onclick="showPdf()">Generate IC brief PDF</button>
+      <button class="action-btn" onclick="copyFounderQs()">Export DD questions</button>
       <button class="action-btn" onclick="flagPartner()">Flag for partner review</button>
       <button class="action-btn" onclick="window.location.href='../africa-ic-checklist/'">Run diligence stress test</button>
     </div>
@@ -485,6 +557,23 @@ a:hover{opacity:0.7;}
   <span>GON Intelligence &mdash; Growth Operator Notes</span>
   <span><a href="mailto:jpouandji@gmail.com" style="border:none;color:var(--muted);">jpouandji@gmail.com</a></span>
 </div>
+
+<!-- PDF OVERLAY -->
+<div class="pdf-overlay" id="pdfOverlay" onclick="closePdfOverlay(event)">
+  <div class="pdf-modal">
+    <div class="pdf-modal-header">
+      <div class="pdf-modal-title">IC Diligence Brief</div>
+      <button class="pdf-close" onclick="closePdf()">Close</button>
+    </div>
+    <div class="pdf-preview" id="pdfPreview"></div>
+    <div class="pdf-actions">
+      <button class="action-btn primary" onclick="downloadPdf()">Download PDF</button>
+      <button class="action-btn" onclick="copyBrief()">Copy as text</button>
+    </div>
+    <div class="pdf-note">PDF opens print dialog. Use Save as PDF in your browser print settings.</div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -844,7 +933,7 @@ function renderCard(r,idx,isAdjacent){
       <!-- LAYER 2: expanded on click -->
       <div class="card-layer2" id="layer2-${idx}">
         ${cleanNote?`<div class="op-note">${cleanNote}</div>`:''}
-        ${!isAdjacent?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> the market is inaccessible or the deal is broken. It means this assumption requires explicit validation before IC.</div>`:''}
+        ${getNotMeanText(r,isAdjacent)?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> ${getNotMeanText(r,isAdjacent)}</div>`:''}
         ${icq?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
         <div class="src-row">
           ${f['Entry ID']?`<span class="src-tag">${f['Entry ID']}</span>`:''}
@@ -903,6 +992,40 @@ function renderGapCard(geo,sector){
   </div>`;
 }
 
+
+function getNotMeanText(r, isAdjacent) {
+  if (isAdjacent) return '';
+  const dim = r.fields['IC Dimension'] || '';
+  const ts = r.fields['Three-Test Status'] || '';
+  const opNote = r.fields['Operator Note'] || '';
+  const market = Array.isArray(r.fields['Market']) ? r.fields['Market'].join(', ') : (r.fields['Market'] || '');
+
+  // Extract "This does not mean" from operator note if present
+  const m = opNote.match(/This does not mean[:\s]+([^.]+\.)/i);
+  if (m) return m[1].trim();
+
+  // Generate contextually specific "not mean" based on dimension
+  if (dim === 'Regulatory environment') {
+    return `regulatory compliance appears impossible in ${market}. It suggests the timeline and cost assumptions require validation against operational reality, not statutory ceilings.`;
+  }
+  if (dim === 'Distribution economics') {
+    return `distribution appears inaccessible. It suggests the cost structure and moat assumptions behind this model require explicit operator-level validation before IC.`;
+  }
+  if (dim === 'Demand validation') {
+    return `demand does not exist. It suggests demand assumptions require cohort-level evidence rather than top-down market sizing.`;
+  }
+  if (dim === 'Unit economics') {
+    return `the model is unviable. It suggests the unit economics assumptions require market-specific benchmarking rather than cross-market analogies.`;
+  }
+  if (dim === 'Exit dynamics') {
+    return `exits are unavailable. It suggests exit timeline and multiple assumptions should be calibrated to African corporate acquirer appetite rather than international strategic multiples.`;
+  }
+  if (ts === 'Pass with caveat') {
+    return `this signal is unreliable. It suggests the evidence base requires cross-verification before being used as a direct model input.`;
+  }
+  return '';
+}
+
 function showError(msg){
   document.getElementById('resultsContainer').innerHTML='';
   const err=document.getElementById('errorBlock');
@@ -926,6 +1049,127 @@ function addToMemo(){
     .then(()=>showToast('IC memo brief copied')).catch(()=>showToast('Copy failed'));
 }
 function flagPartner(){showToast('Flagged for partner review');}
+
+
+function generateBrief() {
+  const date = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+  let brief = `GON INTELLIGENCE BRIEF\n`;
+  brief += `${'='.repeat(50)}\n`;
+  brief += `Query: ${currentQuery}\n`;
+  brief += `Date: ${date}\n`;
+  brief += `Market: ${currentGeo || 'Multiple'}\n`;
+  brief += `Direct signals: ${document.getElementById('statDirect').textContent}\n`;
+  brief += `Adjacent signals: ${document.getElementById('statAdjacent').textContent}\n`;
+  brief += `${'='.repeat(50)}\n\n`;
+
+  if (currentResults.length) {
+    brief += `PRESSURE SIGNALS\n`;
+    brief += `${'-'.repeat(40)}\n\n`;
+    currentResults.forEach((r, i) => {
+      const f = r.fields;
+      const imp = getImplication(r).replace(/&#8220;|&#8221;/g,'"');
+      const icq = getICQ(r);
+      const market = Array.isArray(f['Market']) ? f['Market'].join(', ') : (f['Market'] || '');
+      const conf = f['Confidence Level'] || 'Medium';
+      const src = f['Source Name'] || '';
+      const date2 = f['Source Date'] || '';
+
+      brief += `${i+1}. ${f['Metric Name'] || ''}\n`;
+      brief += `   ${f['IC Dimension'] || ''} | ${market} | ${conf} confidence\n`;
+      brief += `   Signal: ${imp}\n`;
+      brief += `   Benchmark: ${(f['Value'] || '').substring(0,120)}\n`;
+      brief += `   Source: ${src}${date2 ? ' (' + date2 + ')' : ''}\n`;
+      if (icq) brief += `   Founder question: ${icq}\n`;
+      brief += `\n`;
+    });
+  }
+
+  brief += `\nMARKET OPACITY WARNINGS\n`;
+  brief += `${'-'.repeat(40)}\n`;
+  brief += `See full GON Intelligence interface for market-specific opacity signals.\n\n`;
+
+  brief += `${'='.repeat(50)}\n`;
+  brief += `Source: GON Intelligence | jpouandji-operator.github.io/portfolio/gon-intelligence/\n`;
+  brief += `Contact: jpouandji@gmail.com | LinkedIn: Growth Operator Notes\n`;
+  brief += `GON Intelligence is operator-sourced. Treat Tier B signals as directional only.`;
+
+  return brief;
+}
+
+function showPdf() {
+  const brief = generateBrief();
+  document.getElementById('pdfPreview').textContent = brief;
+  document.getElementById('pdfOverlay').classList.add('show');
+}
+
+function closePdf() {
+  document.getElementById('pdfOverlay').classList.remove('show');
+}
+
+function closePdfOverlay(e) {
+  if (e.target === document.getElementById('pdfOverlay')) closePdf();
+}
+
+function downloadPdf() {
+  const brief = generateBrief();
+  const query = currentQuery.replace(/[^a-z0-9]/gi,'_').substring(0,30);
+  const date = new Date().toISOString().split('T')[0];
+  const filename = `GON_Brief_${query}_${date}.txt`;
+
+  // Create a printable window
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`<!DOCTYPE html>
+<html><head>
+<title>GON Intelligence Brief - ${currentQuery}</title>
+<style>
+  body { font-family: 'Georgia', serif; font-size: 12px; line-height: 1.7; color: #0f0e0c; background: #f5f0e8; padding: 40px; max-width: 700px; margin: 0 auto; }
+  h1 { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+  h2 { font-size: 14px; font-weight: 700; margin: 24px 0 8px; border-bottom: 1px solid #d4cfc4; padding-bottom: 4px; }
+  .meta { font-family: 'Courier New', monospace; font-size: 10px; color: #7a7060; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 20px; }
+  .signal { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #d4cfc4; }
+  .signal-title { font-weight: 700; margin-bottom: 4px; }
+  .signal-meta { font-family: 'Courier New', monospace; font-size: 10px; color: #7a7060; text-transform: uppercase; margin-bottom: 6px; }
+  .signal-imp { font-style: italic; margin-bottom: 6px; }
+  .signal-bench { font-family: 'Courier New', monospace; font-size: 11px; margin-bottom: 4px; }
+  .signal-q { background: #0f0e0c; color: #f5f0e8; padding: 8px 12px; margin-top: 8px; font-size: 11px; }
+  .signal-q-lbl { font-family: 'Courier New', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: #c8320a; display: block; margin-bottom: 3px; }
+  .footer { margin-top: 32px; font-family: 'Courier New', monospace; font-size: 9px; color: #7a7060; text-transform: uppercase; letter-spacing: 0.05em; border-top: 2px solid #0f0e0c; padding-top: 12px; }
+  @media print { body { background: white; } }
+</style>
+</head><body>
+<h1>GON Intelligence Brief</h1>
+<div class="meta">Query: ${currentQuery} &nbsp;|&nbsp; ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})} &nbsp;|&nbsp; ${currentGeo || 'Multiple markets'}</div>
+<h2>Pressure Signals (${currentResults.length})</h2>
+${currentResults.map((r,i) => {
+  const f = r.fields;
+  const imp = getImplication(r).replace(/&#8220;/g,'"').replace(/&#8221;/g,'"');
+  const icq = getICQ(r);
+  const market = Array.isArray(f['Market']) ? f['Market'].join(', ') : (f['Market'] || '');
+  return `<div class="signal">
+    <div class="signal-title">${i+1}. ${f['Metric Name'] || ''}</div>
+    <div class="signal-meta">${f['IC Dimension'] || ''} &nbsp;|&nbsp; ${market} &nbsp;|&nbsp; ${f['Confidence Level'] || 'Medium'} confidence &nbsp;|&nbsp; ${f['Source Date'] || ''}</div>
+    <div class="signal-imp">${imp}</div>
+    <div class="signal-bench">Benchmark: ${(f['Value'] || '').substring(0,150)}</div>
+    <div class="signal-bench">Source: ${f['Source Name'] || ''}</div>
+    ${icq ? `<div class="signal-q"><span class="signal-q-lbl">Ask the founder</span>${icq}</div>` : ''}
+  </div>`;
+}).join('')}
+<h2>Market Opacity</h2>
+<p style="font-style:italic;color:#7a7060;">See GON Intelligence for full market opacity warnings specific to this query.</p>
+<div class="footer">
+  GON Intelligence &mdash; Growth Operator Notes &mdash; jpouandji@gmail.com<br>
+  Operator-sourced intelligence. Tier B signals are directional only. Not investment advice.
+</div>
+</body></html>`);
+  printWindow.document.close();
+  setTimeout(() => { printWindow.print(); }, 500);
+}
+
+function copyBrief() {
+  navigator.clipboard.writeText(generateBrief())
+    .then(() => { showToast('Brief copied as text'); closePdf(); })
+    .catch(() => showToast('Copy failed'));
+}
 
 function showToast(msg){
   const t=document.getElementById('toast');
