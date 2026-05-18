@@ -54,27 +54,109 @@ a:hover{opacity:0.7;}
 /* MAIN */
 .main{max-width:700px;margin:0 auto;padding:0 1rem 5rem;}
 
-/* SEARCH STATE */
-.search-section{padding:1.5rem 0 1rem;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.1s both;}
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.6rem;}
-.search-headline{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:0.4rem;}
-.search-headline em{font-style:italic;color:var(--accent);}
-.search-sub{font-size:0.85rem;color:var(--muted);font-style:italic;line-height:1.6;margin-bottom:1.1rem;}
-.search-row{display:flex;border:2px solid var(--ink);margin-bottom:0.75rem;transition:border-color 0.2s;}
-.search-row:focus-within{border-color:var(--accent);}
-.search-input{flex:1;background:transparent;border:none;padding:10px 14px;font-family:'Georgia',serif;font-size:0.95rem;color:var(--ink);outline:none;}
-.search-input::placeholder{color:var(--muted);font-style:italic;}
-.search-btn{background:var(--ink);color:var(--paper);border:none;padding:10px 20px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-.search-btn:hover:not(:disabled){background:var(--accent);}
-.search-btn:disabled{background:var(--muted);cursor:not-allowed;}
+/* STEP FLOW */
+.step-flow{padding:2rem 0 1rem;animation:fadeUp 0.5s ease 0.1s both;}
+.step-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:1.5rem;}
+
+/* STEP INDICATORS */
+.step-indicators{display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid var(--rule);}
+.step-ind{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;padding:0.5rem 0;margin-right:2rem;color:var(--rule);border-bottom:2px solid transparent;transition:all 0.3s;}
+.step-ind.active{color:var(--ink);border-bottom-color:var(--accent);}
+.step-ind.done{color:var(--muted);}
+
+/* STEP PANELS */
+.step-panel{display:none;animation:fadeUp 0.3s ease both;}
+.step-panel.active{display:block;}
+.step-headline{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;line-height:1.2;margin-bottom:0.5rem;}
+.step-headline em{font-style:italic;color:var(--accent);}
+.step-sub{font-size:0.88rem;color:var(--muted);font-style:italic;line-height:1.6;margin-bottom:1.5rem;}
+
+/* MARKET GRID */
+.market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin-bottom:1rem;}
+.market-tile{padding:10px 12px;border:1px solid var(--rule);cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.market-tile:hover{border-color:var(--muted);}
+.market-tile.selected{border-color:var(--accent);background:var(--paper2);}
+.market-tile.selected::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);}
+.market-tile-name{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--ink);}
+.market-tile-sub{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-top:2px;}
+.market-tile.coverage-deep .market-tile-sub{color:var(--accent);}
+
+/* SECTOR GRID */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-bottom:1rem;}
+.sector-tile{padding:10px 14px;border:1px solid var(--rule);cursor:pointer;transition:all 0.15s;position:relative;}
+.sector-tile:hover{border-color:var(--muted);}
+.sector-tile.selected{border-color:var(--accent);background:var(--paper2);}
+.sector-tile.selected::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--accent);}
+.sector-tile-name{font-size:0.88rem;color:var(--ink);font-style:italic;}
+
+/* QUESTION STEP */
+.question-context{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--rule);}
+.question-context span{color:var(--muted);}
+.question-set{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;}
+.question-card{padding:12px 16px;border:1px solid var(--rule);cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.question-card::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.25s;}
+.question-card:hover{border-color:var(--muted);background:var(--paper2);}
+.question-card:hover::after{width:100%;}
+.question-card.selected{border-color:var(--accent);background:var(--paper2);}
+.question-card.selected::after{width:100%;}
+.q-text{font-size:0.9rem;color:var(--ink);line-height:1.5;}
+.q-dimension{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-top:4px;}
+
+/* OR DIVIDER */
+.or-divider{display:flex;align-items:center;gap:1rem;margin:1rem 0;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--rule);}
+
+/* FREE INPUT */
+.free-row{display:flex;border:1px solid var(--rule);margin-bottom:1rem;transition:border-color 0.2s;}
+.free-row:focus-within{border-color:var(--ink);}
+.free-input{flex:1;background:transparent;border:none;padding:10px 14px;font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink);outline:none;}
+.free-input::placeholder{color:var(--muted);font-style:italic;}
+
+/* NAV BUTTONS */
+.step-nav{display:flex;gap:8px;align-items:center;margin-top:0.5rem;}
+.btn-next{background:var(--ink);color:var(--paper);border:none;padding:10px 24px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;}
+.btn-next:hover:not(:disabled){background:var(--accent);}
+.btn-next:disabled{background:var(--rule);color:var(--muted);cursor:not-allowed;}
+.btn-back-step{background:none;border:1px solid var(--rule);color:var(--muted);padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s;}
+.btn-back-step:hover{border-color:var(--ink);color:var(--ink);}
 .dots{display:none;}
 .dots span{width:4px;height:4px;background:var(--paper);border-radius:50%;display:inline-block;margin:0 1px;animation:dotPulse 1.2s ease-in-out infinite;}
 .dots span:nth-child(2){animation-delay:0.15s;}
 .dots span:nth-child(3){animation-delay:0.3s;}
 .searching .dots{display:inline-flex;align-items:center;}
 .searching .btn-text{display:none;}
-.filters{display:flex;gap:5px;flex-wrap:wrap;}
-.filter-chip{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.05em;padding:3px 10px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;transition:all 0.15s;background:transparent;}
+
+/* EXECUTIVE READ */
+.exec-read{margin:1.25rem 0 0.5rem;animation:fadeUp 0.4s ease both;}
+.exec-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
+.exec-eyebrow::after{content:'';flex:1;height:1px;background:var(--rule);}
+.exec-headline{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;line-height:1.3;color:var(--ink);margin-bottom:0.75rem;}
+.exec-body{font-size:0.92rem;line-height:1.75;color:var(--ink);margin-bottom:1rem;}
+.exec-body em{font-style:italic;}
+.exec-signal-row{display:flex;gap:1rem;align-items:center;padding:0.75rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:1rem;flex-wrap:wrap;gap:1.5rem;}
+.exec-signal{display:flex;flex-direction:column;gap:2px;}
+.exec-signal-label{font-family:'IBM Plex Mono',monospace;font-size:0.52rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);}
+.exec-signal-val{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:500;color:var(--ink);}
+.exec-signal-val.amber{color:#b07d00;}
+.exec-signal-val.red{color:var(--accent);}
+.exec-signal-val.green{color:#2d6a4f;}
+.exec-divider{height:1px;background:var(--rule);margin:1.25rem 0;}
+
+/* ARGUMENT SECTION */
+.argument-section{margin-bottom:1.5rem;}
+.argument-toggle{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;padding:0.5rem 0;border:none;background:none;transition:color 0.2s;}
+.argument-toggle:hover{color:var(--ink);}
+.argument-toggle::before{content:'';width:8px;height:8px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);transition:transform 0.2s;margin-bottom:2px;}
+.argument-toggle.open::before{transform:rotate(-135deg);margin-bottom:-2px;}
+.argument-body{overflow:hidden;max-height:0;transition:max-height 0.4s ease;}
+.argument-body.open{max-height:800px;}
+
+/* EVIDENCE - lighter treatment */
+.evidence-label{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:0.75rem 0 0.5rem;border-top:1px solid var(--rule);margin-top:0.5rem;}
+
+/* FILTERS - compact */
+.filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:0.5rem;}
+.filter-chip{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.05em;padding:3px 8px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;transition:all 0.15s;background:transparent;}
 .filter-chip:hover{border-color:var(--muted);color:var(--ink);}
 .filter-chip.active{border-color:var(--ink);color:var(--ink);background:var(--paper2);}
 
@@ -86,12 +168,6 @@ a:hover{opacity:0.7;}
 .ex-pill::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.2s;}
 .ex-pill:hover{border-color:var(--ink);color:var(--ink);}
 .ex-pill:hover::after{width:100%;}
-
-/* WHAT THIS IS */
-.what-section{padding:1rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.3s both;}
-.what-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.5rem;}
-.what-text{font-size:0.88rem;color:var(--muted);line-height:1.7;}
-.what-text strong{color:var(--ink);}
 .scope-note{padding:0.75rem 0;font-size:0.8rem;color:var(--muted);font-style:italic;line-height:1.6;animation:fadeUp 0.5s ease 0.4s both;}
 .scope-note strong{font-style:normal;color:var(--ink);}
 
@@ -365,48 +441,115 @@ a:hover{opacity:0.7;}
 
 <div class="main">
 
-  <!-- EMPTY STATE -->
+  <!-- EMPTY STATE - THREE STEP FLOW -->
   <div id="screenEmpty" class="screen active">
-    <div class="search-section">
-      <div class="eyebrow">Operator intelligence for African private capital</div>
-      <div class="search-headline">What are you least confident <em>underwriting in this deal?</em></div>
-      <div class="search-sub">Name the market and sector. Get an operator read, then the data behind it.</div>
-      <div class="search-row">
-        <input type="text" class="search-input" id="mainInput" placeholder="e.g. mobile money Cameroun, energy deal South Africa, fintech exits Kenya..."/>
-        <button class="search-btn" id="searchBtn" onclick="runSearch()">
-          <span class="btn-text">Get operator read</span>
-          <span class="dots"><span></span><span></span><span></span></span>
-        </button>
+    <div class="step-flow">
+      <div class="step-eyebrow">Operator intelligence for African private capital</div>
+
+      <div class="step-indicators">
+        <div class="step-ind active" id="ind-1">01 Market</div>
+        <div class="step-ind" id="ind-2">02 Sector</div>
+        <div class="step-ind" id="ind-3">03 Angle</div>
       </div>
-      <div class="filters">
-        <button class="filter-chip active" onclick="setFilter(this,'')">All signals</button>
-        <button class="filter-chip" onclick="setFilter(this,'Distribution economics')">Can this scale?</button>
-        <button class="filter-chip" onclick="setFilter(this,'Regulatory environment')">What regulation matters?</button>
-        <button class="filter-chip" onclick="setFilter(this,'Demand validation')">Is demand real?</button>
-        <button class="filter-chip" onclick="setFilter(this,'Unit economics')">What kills margins?</button>
-        <button class="filter-chip" onclick="setFilter(this,'Exit dynamics')">Can investors exit?</button>
+
+      <!-- STEP 1: MARKET -->
+      <div class="step-panel active" id="step1">
+        <div class="step-headline">Which market <em>are you looking at?</em></div>
+        <div class="step-sub">Our research is deepest in WAEMU and CEMAC. Coverage in East and Southern Africa is sourced from primary institutional sources.</div>
+        <div class="market-grid">
+          <div class="market-tile coverage-deep" onclick="selectMarket('WAEMU')">
+            <div class="market-tile-name">WAEMU</div>
+            <div class="market-tile-sub">Deep coverage</div>
+          </div>
+          <div class="market-tile coverage-deep" onclick="selectMarket('Cameroun')">
+            <div class="market-tile-name">Cameroun</div>
+            <div class="market-tile-sub">Deep coverage</div>
+          </div>
+          <div class="market-tile coverage-deep" onclick="selectMarket('Senegal')">
+            <div class="market-tile-name">Senegal</div>
+            <div class="market-tile-sub">Deep coverage</div>
+          </div>
+          <div class="market-tile coverage-deep" onclick="selectMarket('Ivory Coast')">
+            <div class="market-tile-name">Ivory Coast</div>
+            <div class="market-tile-sub">Deep coverage</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('Nigeria')">
+            <div class="market-tile-name">Nigeria</div>
+            <div class="market-tile-sub">Institutional sources</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('Kenya')">
+            <div class="market-tile-name">Kenya</div>
+            <div class="market-tile-sub">Institutional sources</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('Ghana')">
+            <div class="market-tile-name">Ghana</div>
+            <div class="market-tile-sub">Institutional sources</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('Egypt')">
+            <div class="market-tile-name">Egypt</div>
+            <div class="market-tile-sub">Institutional sources</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('South Africa')">
+            <div class="market-tile-name">South Africa</div>
+            <div class="market-tile-sub">Institutional sources</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('Rwanda')">
+            <div class="market-tile-name">Rwanda</div>
+            <div class="market-tile-sub">Institutional sources</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('CEMAC')">
+            <div class="market-tile-name">CEMAC</div>
+            <div class="market-tile-sub">Deep coverage</div>
+          </div>
+          <div class="market-tile" onclick="selectMarket('Sub Saharan Africa')">
+            <div class="market-tile-name">Pan-Africa</div>
+            <div class="market-tile-sub">Aggregate signals</div>
+          </div>
+        </div>
       </div>
+
+      <!-- STEP 2: SECTOR -->
+      <div class="step-panel" id="step2">
+        <div class="step-headline">Which sector <em>is the deal in?</em></div>
+        <div class="step-sub">Select the sector that most closely matches the business model.</div>
+        <div class="sector-grid" id="sectorGrid">
+          <div class="sector-tile" onclick="selectSector('Fintech / Mobile money')"><div class="sector-tile-name">Fintech / Mobile money</div></div>
+          <div class="sector-tile" onclick="selectSector('Telecoms')"><div class="sector-tile-name">Telecoms</div></div>
+          <div class="sector-tile" onclick="selectSector('E-commerce / Logistics')"><div class="sector-tile-name">E-commerce / Logistics</div></div>
+          <div class="sector-tile" onclick="selectSector('Agritech')"><div class="sector-tile-name">Agritech</div></div>
+          <div class="sector-tile" onclick="selectSector('Energy / Cleantech')"><div class="sector-tile-name">Energy / Cleantech</div></div>
+          <div class="sector-tile" onclick="selectSector('Healthtech')"><div class="sector-tile-name">Healthtech</div></div>
+          <div class="sector-tile" onclick="selectSector('SaaS / B2B')"><div class="sector-tile-name">SaaS / B2B</div></div>
+          <div class="sector-tile" onclick="selectSector('Entertainment / Media')"><div class="sector-tile-name">Entertainment / Media</div></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back-step" onclick="goToStep(1)">Back</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ANGLE / QUESTION -->
+      <div class="step-panel" id="step3">
+        <div class="question-context" id="questionContext"></div>
+        <div class="step-headline">What do you want <em>to pressure test?</em></div>
+        <div class="step-sub">Our research sometimes surfaces things that don't show up in the standard read. Pick the angle that matters most for your IC.</div>
+        <div class="question-set" id="questionSet"></div>
+        <div class="or-divider">or frame it yourself</div>
+        <div class="free-row">
+          <input type="text" class="free-input" id="freeInput" placeholder="e.g. what happens to agent loyalty when commissions compress..."/>
+        </div>
+        <div class="step-nav">
+          <button class="btn-back-step" onclick="goToStep(2)">Back</button>
+          <button class="btn-next" id="runBtn" onclick="runFromStep3()">
+            <span class="btn-text">Get operator read</span>
+            <span class="dots"><span></span><span></span><span></span></span>
+          </button>
+        </div>
+      </div>
+
     </div>
 
-    <div class="examples-section">
-      <div class="examples-label">Try these</div>
-      <div class="example-pills">
-        <span class="ex-pill" onclick="quickSearch('Mobile money distribution Senegal')">Mobile money Senegal</span>
-        <span class="ex-pill" onclick="quickSearch('Fintech regulation Cameroun mobile money')">Fintech Cameroun</span>
-        <span class="ex-pill" onclick="quickSearch('Nigeria agent banking distribution')">Nigeria agent banking</span>
-        <span class="ex-pill" onclick="quickSearch('Kenya fintech exit dynamics')">Kenya fintech exits</span>
-        <span class="ex-pill" onclick="quickSearch('WAEMU regulatory environment fintech')">WAEMU regulatory</span>
-        <span class="ex-pill" onclick="quickSearch('Energy deal South Africa')">Energy South Africa</span>
-      </div>
-    </div>
-
-    <div class="what-section">
-      <div class="what-title">This is not a database search.</div>
-      <div class="what-text">
-        Type a market and sector. GON reads what it knows from 12 years inside African distribution networks and validated primary sources, then gives you a straight operator take - what is actually going on, what most investors get wrong, and what to ask the founder. The data supporting that read is below it.
-        <br><br>
-        <strong>Coverage is deepest in WAEMU and CEMAC.</strong> East Africa and North Africa are covered through primary institutional sources. Gaps are flagged explicitly - the absence of data is itself a signal.
-      </div>
+    <div class="scope-note" id="scopeNote" style="display:none;">
+      <strong>Coverage note:</strong> GON's deepest operator validation is WAEMU and CEMAC, built from 12 years inside the distribution stack. East Africa and North Africa are covered through primary institutional sources. Gaps are named explicitly - the absence of data is itself a signal.
     </div>
   </div>
 
@@ -417,10 +560,22 @@ a:hover{opacity:0.7;}
       <button class="back-btn" onclick="goBack()">&#8592; New query</button>
     </div>
 
-    <!-- OPERATOR BRIEF (primary output) -->
+    <!-- EXECUTIVE READ (primary output) -->
+    <div id="execReadContainer"></div>
+
+    <!-- OPERATOR BRIEF (argument layer - collapsible) -->
     <div id="briefContainer"></div>
 
-    <!-- EVIDENCE (secondary) -->
+    <!-- EVIDENCE (secondary - lighter) -->
+    <div class="evidence-label" id="evidenceLabel" style="display:none;">Supporting evidence</div>
+    <div class="filters" id="evidenceFilters" style="display:none;">
+      <button class="filter-chip active" onclick="setFilter(this,'')">All signals</button>
+      <button class="filter-chip" onclick="setFilter(this,'Distribution economics')">Distribution</button>
+      <button class="filter-chip" onclick="setFilter(this,'Regulatory environment')">Regulatory</button>
+      <button class="filter-chip" onclick="setFilter(this,'Demand validation')">Demand</button>
+      <button class="filter-chip" onclick="setFilter(this,'Unit economics')">Unit economics</button>
+      <button class="filter-chip" onclick="setFilter(this,'Exit dynamics')">Exit</button>
+    </div>
     <div id="resultsContainer"></div>
 
     <div class="error-block" id="errorBlock"></div>
@@ -429,7 +584,7 @@ a:hover{opacity:0.7;}
       <button class="action-btn primary" onclick="showPdf()">Generate IC brief PDF</button>
       <button class="action-btn" onclick="copyFounderQs()">Export DD questions</button>
       <button class="action-btn" onclick="flagPartner()">Flag for partner review</button>
-      <button class="action-btn" onclick="window.location.href='../africa-ic-checklist/'">Run diligence stress test</button>
+      <button class="action-btn" onclick="window.location.href='../africa-ic-checklist/'">Run IC checklist</button>
     </div>
   </div>
 
@@ -465,6 +620,137 @@ let currentResults=[];
 let currentQuery='';
 let currentGeo='';
 let currentBrief='';
+let selectedMarket='';
+let selectedSector='';
+
+// ── STEP FLOW ──────────────────────────────────────────────────────────────
+const QUESTIONS = {
+  'Fintech / Mobile money': [
+    {q:'The agent network numbers look right on paper. What does our research say about what actually happens to agent loyalty when commission economics shift?', dim:'Distribution economics'},
+    {q:'Regulatory approval timelines in the pitch deck - how do they compare to what operators actually experienced getting licensed in this market?', dim:'Regulatory environment'},
+    {q:'The demand figures cite user growth. Our research pulls out something less visible: what the retention picture looks like when subsidised pricing is removed.', dim:'Demand validation'},
+    {q:'Unit economics at Series A look clean. There is an aspect of margin compression at scale that tends to be underreported in this market.', dim:'Unit economics'},
+    {q:'Exit thesis assumes a trade sale or IPO. What does the actual exit track record in this market tell us about how realistic that timeline is?', dim:'Exit dynamics'},
+  ],
+  'Telecoms': [
+    {q:'Infrastructure depth versus geographic breadth - our research surfaces a pattern in this market that complicates the standard coverage story.', dim:'Distribution economics'},
+    {q:'Spectrum and licensing - the statutory timelines look one way. What the data shows about operational reality is worth examining before IC.', dim:'Regulatory environment'},
+    {q:'ARPU projections assume a certain trajectory. There is a currency and inflation dynamic in this market that tends to get modelled away.', dim:'Unit economics'},
+    {q:'The exit pathway assumes a regional consolidation play. Our research flags something about the acquirer landscape that narrows that assumption.', dim:'Exit dynamics'},
+  ],
+  'E-commerce / Logistics': [
+    {q:'Last-mile unit economics are presented as improving with scale. There is an aspect of the agent commission stack in this market that complicates that trajectory.', dim:'Distribution economics'},
+    {q:'Demand is validated by order volumes. What the data does not always surface is whether that demand holds when delivery costs are passed to the consumer.', dim:'Demand validation'},
+    {q:'The logistics moat thesis rests on network density. Our research pulls out a structural question about whether that density is contractually defensible.', dim:'Distribution economics'},
+    {q:'The exit multiple assumes a strategic acquirer. There is a pattern in African e-commerce acquisitions that is worth examining against this specific cap table.', dim:'Exit dynamics'},
+  ],
+  'Agritech': [
+    {q:'Data network effects are the moat argument. Our research surfaces a question about how proprietary that data layer actually is in this market.', dim:'Distribution economics'},
+    {q:'Smallholder adoption curves look compelling in the deck. There is a behavioural and seasonal dynamic that tends to be underweighted in African agritech models.', dim:'Demand validation'},
+    {q:'The regulatory picture for agritech in this market is less settled than it appears. There are licensing and data sovereignty questions that have not been priced in.', dim:'Regulatory environment'},
+    {q:'Unit economics depend on input cost assumptions. Our research flags a supply chain fragility in this market that affects the model more than the headline numbers suggest.', dim:'Unit economics'},
+  ],
+  'Energy / Cleantech': [
+    {q:'The CAPEX model assumes a certain financing stack. Our research surfaces a question about how DFI and commercial capital actually combine in this market in practice.', dim:'Unit economics'},
+    {q:'Grid connection timelines are modelled on statutory frameworks. The operational reality in this market tends to look different.', dim:'Regulatory environment'},
+    {q:'Demand is validated by willingness-to-pay surveys. There is a question our research flags about how that translates to actual payment behaviour at the agent level.', dim:'Demand validation'},
+    {q:'The infrastructure ownership thesis is compelling. Our research pulls out a dependency question about grid stability that affects the unit economics more than the deck acknowledges.', dim:'Distribution economics'},
+  ],
+  'Healthtech': [
+    {q:'The B2B health sales cycle is modelled on comparable markets. Our research surfaces a question about institutional buyer behaviour in this market that affects the revenue timeline.', dim:'Demand validation'},
+    {q:'Data and regulatory compliance is presented as manageable. There are health data sovereignty provisions in this market that have not been fully priced into the operational cost model.', dim:'Regulatory environment'},
+    {q:'The distribution model assumes health system partnerships. Our research flags a question about what those partnerships actually look like when budget cycles are constrained.', dim:'Distribution economics'},
+    {q:'Margins look strong at Series A. There is a pattern of margin compression as health distribution scales in African markets that is worth examining against this model.', dim:'Unit economics'},
+  ],
+  'SaaS / B2B': [
+    {q:'Enterprise sales cycles are modelled on global benchmarks. Our research surfaces something about procurement timelines and budget authority in this specific market.', dim:'Demand validation'},
+    {q:'The pricing model assumes USD or EUR contracts. There is a currency exposure in this market that tends to appear later than the model suggests.', dim:'Unit economics'},
+    {q:'The platform stickiness argument is sound. Our research pulls out a question about what replaceability actually looks like when a dominant local player enters.', dim:'Distribution economics'},
+    {q:'Exit assumes a strategic or financial acquirer at a growth multiple. The regional SaaS acquisition track record surfaces a question about how that plays out in this geography.', dim:'Exit dynamics'},
+  ],
+  'Entertainment / Media': [
+    {q:'Subscriber acquisition costs are benchmarked against global streaming comps. Our research surfaces a question about what those numbers actually look like in this market at scale.', dim:'Unit economics'},
+    {q:'The content moat argument rests on local production. There is a structural question about regulatory content obligations in this market that changes the cost model.', dim:'Regulatory environment'},
+    {q:'Demand projections assume a certain trajectory of data cost reduction. Our research flags something about the pace of that trajectory in this specific market.', dim:'Demand validation'},
+    {q:'The acquisition or exit thesis assumes a regional consolidation buyer. There is a cap table and return structure question that affects how realistic that buyer is at the required multiple.', dim:'Exit dynamics'},
+  ],
+};
+
+const DEFAULT_QUESTIONS = [
+  {q:'The distribution model looks viable at current scale. Our research surfaces a structural question about what happens to unit economics as the network grows.', dim:'Distribution economics'},
+  {q:'Regulatory approval is modelled on statutory timelines. The operational reality in African markets tends to diverge from those ceilings in ways that affect the runway model.', dim:'Regulatory environment'},
+  {q:'Demand validation is based on early cohort data. There is a question our research flags about whether that demand holds under different pricing conditions.', dim:'Demand validation'},
+  {q:'The exit pathway assumes a known buyer type. Our research pulls out a question about how realistic that assumption is given the current liquidity environment in this market.', dim:'Exit dynamics'},
+];
+
+function goToStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step'+i).classList.remove('active');
+    document.getElementById('ind-'+i).classList.remove('active');
+    if (i < n) document.getElementById('ind-'+i).classList.add('done');
+    else document.getElementById('ind-'+i).classList.remove('done');
+  });
+  document.getElementById('step'+n).classList.add('active');
+  document.getElementById('ind-'+n).classList.add('active');
+  if (n === 3) {
+    document.getElementById('scopeNote').style.display = 'block';
+    buildQuestions();
+  }
+}
+
+function selectMarket(m) {
+  selectedMarket = m;
+  document.querySelectorAll('.market-tile').forEach(t => t.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  setTimeout(() => goToStep(2), 220);
+}
+
+function selectSector(s) {
+  selectedSector = s;
+  document.querySelectorAll('.sector-tile').forEach(t => t.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  setTimeout(() => goToStep(3), 220);
+}
+
+function buildQuestions() {
+  const ctx = document.getElementById('questionContext');
+  ctx.innerHTML = `<span>${selectedMarket}</span> &nbsp;/&nbsp; <span>${selectedSector}</span>`;
+
+  const qs = QUESTIONS[selectedSector] || DEFAULT_QUESTIONS;
+  const container = document.getElementById('questionSet');
+  container.innerHTML = qs.map((item, i) => `
+    <div class="question-card" id="qcard-${i}" onclick="selectQuestion(${i})">
+      <div class="q-text">${item.q}</div>
+      <div class="q-dimension">${item.dim}</div>
+    </div>
+  `).join('');
+}
+
+let selectedQuestion = -1;
+function selectQuestion(i) {
+  selectedQuestion = i;
+  document.querySelectorAll('.question-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('qcard-'+i).classList.add('selected');
+  document.getElementById('freeInput').value = '';
+}
+
+function runFromStep3() {
+  const free = document.getElementById('freeInput').value.trim();
+  const qs = QUESTIONS[selectedSector] || DEFAULT_QUESTIONS;
+  let questionText = '';
+  
+  if (free) {
+    questionText = free;
+  } else if (selectedQuestion >= 0) {
+    questionText = qs[selectedQuestion].q;
+    currentFilter = qs[selectedQuestion].dim;
+  } else {
+    questionText = selectedSector + ' ' + selectedMarket;
+  }
+  
+  const query = selectedMarket + ' ' + selectedSector + ' ' + questionText;
+  runSearch(query);
+}
 
 // ── TOKEN ──────────────────────────────────────────────────────────────────
 function getToken(){return localStorage.getItem('gon_tok')||'';}
@@ -491,11 +777,94 @@ function setFilter(el,val){
   el.classList.add('active');
 }
 function quickSearch(q){document.getElementById('mainInput').value=q;runSearch();}
+function renderExecRead(brief, directCount) {
+  const container = document.getElementById('execReadContainer');
+  if (!brief || !brief.market_reality) { container.innerHTML = ''; return; }
+
+  const riskLevel = brief.risk_level || 'AMBER';
+  const riskCls = riskLevel === 'RED' ? 'red' : riskLevel === 'GREEN' ? 'green' : 'amber';
+  const confCount = directCount >= 3 ? 'High' : directCount >= 1 ? 'Medium' : 'Low';
+
+  container.innerHTML = `
+    <div class="exec-read">
+      <div class="exec-eyebrow">Operator read</div>
+      <div class="exec-headline">${brief.exec_headline || brief.market_reality.split('.')[0] + '.'}</div>
+      <div class="exec-body">${brief.exec_body || brief.market_reality}</div>
+      <div class="exec-signal-row">
+        <div class="exec-signal">
+          <div class="exec-signal-label">IC signal</div>
+          <div class="exec-signal-val ${riskCls}">${riskLevel}</div>
+        </div>
+        <div class="exec-signal">
+          <div class="exec-signal-label">Evidence base</div>
+          <div class="exec-signal-val">${directCount} validated signal${directCount !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="exec-signal">
+          <div class="exec-signal-label">Confidence</div>
+          <div class="exec-signal-val">${confCount}</div>
+        </div>
+        <div class="exec-signal">
+          <div class="exec-signal-label">Coverage depth</div>
+          <div class="exec-signal-val">${selectedMarket === 'WAEMU' || selectedMarket === 'Cameroun' || selectedMarket === 'Senegal' || selectedMarket === 'Ivory Coast' || selectedMarket === 'CEMAC' ? 'Primary operator' : 'Institutional sources'}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderBriefAsArgument(brief, directCount, adjacentCount) {
+  const container = document.getElementById('briefContainer');
+  if (!brief) { container.innerHTML = ''; return; }
+
+  const qs = Array.isArray(brief.ic_questions) ? brief.ic_questions : [];
+
+  container.innerHTML = `
+    <div class="argument-section">
+      <button class="argument-toggle" id="argToggle" onclick="toggleArgument()">The argument behind this read</button>
+      <div class="argument-body" id="argBody">
+        <div class="brief-block" style="border-left:none;padding:0;margin:0.75rem 0 0;">
+
+          ${brief.what_investors_underestimate ? `
+          <div class="brief-section">
+            <div class="brief-section-label">What the research pulled out</div>
+            <div class="brief-section-text">${brief.what_investors_underestimate}</div>
+          </div>` : ''}
+
+          ${brief.what_this_changes ? `
+          <div class="brief-section">
+            <div class="brief-section-label">What this means for the deal</div>
+            <div class="brief-section-text">${brief.what_this_changes}</div>
+          </div>` : ''}
+
+          ${qs.length ? `
+          <div class="brief-section">
+            <div class="brief-section-label">Ask the founder</div>
+            <ul class="brief-questions">
+              ${qs.map(q => `<li>${q}</li>`).join('')}
+            </ul>
+          </div>` : ''}
+
+          <div class="brief-confidence">${brief.confidence_note || ''}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleArgument() {
+  const toggle = document.getElementById('argToggle');
+  const body = document.getElementById('argBody');
+  toggle.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
 function goBack(){
   document.getElementById('screenResults').classList.remove('active');
   document.getElementById('screenEmpty').classList.add('active');
-  document.getElementById('mainInput').value='';
-  document.getElementById('mainInput').focus();
+  document.getElementById('evidenceLabel').style.display='none';
+  document.getElementById('evidenceFilters').style.display='none';
+  document.getElementById('execReadContainer').innerHTML='';
+  document.getElementById('briefContainer').innerHTML='';
+  selectedMarket=''; selectedSector=''; selectedQuestion=-1;
+  goToStep(1);
 }
 
 // ── GEO / SECTOR EXTRACTION ────────────────────────────────────────────────
@@ -534,9 +903,9 @@ function extractSector(query){
 }
 
 // ── MAIN SEARCH ────────────────────────────────────────────────────────────
-async function runSearch(){
-  const query=document.getElementById('mainInput').value.trim();
-  if(!query){document.getElementById('mainInput').focus();return;}
+async function runSearch(queryOverride){
+  const query=queryOverride||document.getElementById('freeInput')&&document.getElementById('freeInput').value.trim()||'';
+  if(!query){showToast('Select a question or describe your angle');return;}
   const token=getToken();
   if(!token){document.getElementById('tokenPanel').classList.add('open');showToast('Please save your Airtable token first');return;}
 
@@ -551,7 +920,7 @@ async function runSearch(){
   const btn=document.getElementById('searchBtn');
   btn.classList.add('searching');btn.disabled=true;
   document.getElementById('progressBar').classList.add('active');
-  document.getElementById('resultsContext').innerHTML=`Operator read for: <strong>${query}</strong>`;
+  document.getElementById('resultsContext').innerHTML=`<strong>${selectedMarket||geo}</strong>&nbsp;&nbsp;/&nbsp;&nbsp;<strong>${selectedSector||sector}</strong>`;
 
   // Show brief generating state immediately
   document.getElementById('briefContainer').innerHTML=`
@@ -652,11 +1021,14 @@ When you don't have much data, you say so clearly and explain what that absence 
 
 Format your response as a JSON object with these exact keys:
 {
-  "market_reality": "2-3 sentences on what is actually happening operationally in this market that standard analysis tends to miss. Specific, not generic.",
-  "what_investors_underestimate": "1-2 sentences on the specific assumption most investors get wrong about this market or sector.",
-  "what_this_changes": "1-2 sentences on the concrete consequence for the deal model or IC decision.",
+  "exec_headline": "One sentence, 15-20 words. Written like the opening of the Canal+ article - not a conclusion but a reframe. Something that makes the reader feel the standard analysis missed something specific. Never start with the market name. Never use the phrase the question nobody is asking.",
+  "exec_body": "2-3 sentences. Build on the headline. Tone: I kept coming back to something the data shows that the standard read walks past. Direct, slightly skeptical. Not a verdict - a finding that the research pulled out.",
+  "risk_level": "RED or AMBER or GREEN - your honest IC risk read based only on the data provided",
+  "what_investors_underestimate": "1-2 sentences. Start with what looks right on the surface. Then what the data actually shows.",
+  "what_this_changes": "1-2 sentences. The concrete consequence for the deal model.",
+  "market_reality": "2-3 sentences. What is operationally happening. Specific, not generic. Only from data provided.",
   "ic_questions": ["question 1", "question 2", "question 3"],
-  "confidence_note": "One sentence on evidence basis and any important caveats."
+  "confidence_note": "One sentence. Evidence basis and caveats."
 }
 
 Respond with JSON only. No preamble, no markdown fences.`;
@@ -667,7 +1039,7 @@ Sector: ${sector}
 Data available: ${hasData?recordContext:'No validated benchmarks found in GON database for this specific market/sector combination.'}
 ${adjacent.length>0?`Adjacent market signals: ${adjacent.map(r=>`${r.fields['Market']} - ${r.fields['Metric Name']}`).join(', ')}`:''}
 
-Write a short operator brief for a VC doing diligence on a deal in this market.`;
+Write an operator brief. The exec_headline and exec_body should sound like the opening of a Canal+ article - inquisitive, reframing, something the research pulled out that the standard read misses. Not a verdict delivered but a finding surfaced.`;
 
   try{
     const response=await fetch('https://api.anthropic.com/v1/messages',{
@@ -695,58 +1067,31 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     }
 
     currentBrief=brief;
-    renderBrief(brief,geo,sector,confidenceLevel,direct.length,adjacent.length);
+    renderExecRead(brief,direct.length);
+    renderBriefAsArgument(brief,direct.length,adjacent.length);
 
   }catch(e){
-    // Fallback: show a honest no-data brief
     const fallback={
-      market_reality:`GON's validated data coverage for ${geo} ${sector} is limited at this stage. What we can say: the absence of primary validated data for this specific combination is itself a signal - it means most assumptions being used in models for this market are borrowed from better-documented markets and may not hold.`,
-      what_investors_underestimate:`The tendency to import assumptions from better-documented African markets (Nigeria, Kenya, South Africa) into less-documented ones without adjusting for local distribution infrastructure, regulatory context, and customer behavior differences.`,
-      what_this_changes:`Due diligence for this market should rely more heavily on primary founder data and direct operator interviews rather than published benchmarks. Ask the founder to show you their actual unit economics from the ground, not projections.`,
+      exec_headline:`The data we have on this market points to something worth examining before the IC meeting.`,
+      exec_body:`Our validated coverage for this specific combination is limited. That absence is itself worth noting - it means most models for this market are borrowing assumptions from better-documented markets without adjusting for local conditions.`,
+      risk_level:'AMBER',
+      market_reality:`GON's validated data coverage for ${geo} ${sector} is limited at this stage.`,
+      what_investors_underestimate:`The tendency to import assumptions from better-documented African markets into less-documented ones without adjusting for local distribution, regulatory context, and customer behavior.`,
+      what_this_changes:`Due diligence should rely more heavily on primary founder data and direct operator interviews rather than published benchmarks.`,
       ic_questions:[
-        `Show me your actual CAC and LTV from the last 6 months of operations - not projections, actual data from this market specifically.`,
-        `What is the main reason comparable businesses have failed or struggled in this market, and why are you different?`,
-        `Which assumption in your model would most change your unit economics if it turns out to be wrong?`
+        `Show me your actual CAC and LTV from the last 6 months - not projections, actual data from this market.`,
+        `What is the main reason comparable businesses have struggled in this market, and what specifically makes your model different?`,
+        `Which assumption would most change your unit economics if it turns out to be wrong?`
       ],
-      confidence_note:`Limited validated data for this specific market in GON database. Brief based on general operator pattern recognition. Treat as directional only.`
+      confidence_note:`Limited validated data for this specific market. Treat as directional only.`
     };
     currentBrief=fallback;
-    renderBrief(fallback,geo,sector,'Low - limited validated data',direct.length,adjacent.length);
+    renderExecRead(fallback,direct.length);
+    renderBriefAsArgument(fallback,direct.length,adjacent.length);
   }
 }
 
-function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount){
-  const qs=brief.ic_questions||[];
-  document.getElementById('briefContainer').innerHTML=`
-    <div class="brief-block">
-      <div class="brief-eyebrow">Operator brief &mdash; ${geo}${sector&&sector!=='this sector'?' / '+sector:''}</div>
-
-      <div class="brief-section">
-        <div class="brief-section-label">What is actually going on</div>
-        <div class="brief-section-text">${brief.market_reality||''}</div>
-      </div>
-
-      <div class="brief-section">
-        <div class="brief-section-label">What most investors underestimate</div>
-        <div class="brief-section-text">${brief.what_investors_underestimate||''}</div>
-      </div>
-
-      <div class="brief-section">
-        <div class="brief-section-label">What this means for the deal</div>
-        <div class="brief-section-text">${brief.what_this_changes||''}</div>
-      </div>
-
-      ${qs.length?`
-      <div class="brief-section">
-        <div class="brief-section-label">Ask the founder</div>
-        <ul class="brief-questions">
-          ${qs.map(q=>`<li>${q}</li>`).join('')}
-        </ul>
-      </div>`:''}
-
-      <div class="brief-confidence">${brief.confidence_note||''} &nbsp;&middot;&nbsp; <span>${directCount} direct signal${directCount!==1?'s':''}</span>${adjacentCount>0?` &nbsp;&middot;&nbsp; <span>${adjacentCount} adjacent</span>`:''}</div>
-    </div>`;
-}
+function renderBrief(){} // kept for PDF compatibility
 
 // ── RENDER EVIDENCE ────────────────────────────────────────────────────────
 function getSeverity(r){
@@ -849,6 +1194,10 @@ function toggleExpand(idx){
 }
 
 function renderEvidence(direct,adjacent){
+  if(direct.length > 0 || adjacent.length > 0){
+    document.getElementById('evidenceLabel').style.display='block';
+    document.getElementById('evidenceFilters').style.display='flex';
+  }
   const container=document.getElementById('resultsContainer');
   if(!direct.length&&!adjacent.length){container.innerHTML='';return;}
 
