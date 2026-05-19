@@ -776,7 +776,7 @@ function setFilter(el,val){
   document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
 }
-function quickSearch(q){document.getElementById('mainInput').value=q;runSearch();}
+function quickSearch(q){runSearch(q);}
 function renderExecRead(brief, directCount) {
   const container = document.getElementById('execReadContainer');
   if (!brief || !brief.market_reality) { container.innerHTML = ''; return; }
@@ -917,8 +917,8 @@ async function runSearch(queryOverride){
   document.getElementById('actionsRow').style.display='none';
   document.getElementById('errorBlock').style.display='none';
 
-  const btn=document.getElementById('searchBtn');
-  btn.classList.add('searching');btn.disabled=true;
+  const btn=document.getElementById('runBtn');
+  if(btn){btn.classList.add('searching');btn.disabled=true;}
   document.getElementById('progressBar').classList.add('active');
   document.getElementById('resultsContext').innerHTML=`<strong>${selectedMarket||geo}</strong>&nbsp;&nbsp;/&nbsp;&nbsp;<strong>${selectedSector||sector}</strong>`;
 
@@ -955,7 +955,7 @@ async function runSearch(queryOverride){
   }catch(e){
     showError(e.message);
   }finally{
-    btn.classList.remove('searching');btn.disabled=false;
+    if(btn){btn.classList.remove('searching');btn.disabled=false;}
     document.getElementById('progressBar').classList.remove('active');
   }
 }
@@ -1371,7 +1371,7 @@ function showToast(msg){
 
 document.addEventListener('DOMContentLoaded',()=>{
   initToken();
-  document.getElementById('mainInput').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch();});
+  const fi=document.getElementById('freeInput');if(fi)fi.addEventListener('keydown',e=>{if(e.key==='Enter')runFromStep3();});
 });
 </script>
 </body>
