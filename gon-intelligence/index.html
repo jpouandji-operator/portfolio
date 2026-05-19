@@ -457,51 +457,51 @@ a:hover{opacity:0.7;}
         <div class="step-headline">Which market <em>are you looking at?</em></div>
         <div class="step-sub">Our research is deepest in WAEMU and CEMAC. Coverage in East and Southern Africa is sourced from primary institutional sources.</div>
         <div class="market-grid">
-          <div class="market-tile coverage-deep" onclick="selectMarket('WAEMU')">
+          <div class="market-tile coverage-deep" onclick="selectMarket('WAEMU',this)">
             <div class="market-tile-name">WAEMU</div>
             <div class="market-tile-sub">Deep coverage</div>
           </div>
-          <div class="market-tile coverage-deep" onclick="selectMarket('Cameroun')">
+          <div class="market-tile coverage-deep" onclick="selectMarket('Cameroun',this)">
             <div class="market-tile-name">Cameroun</div>
             <div class="market-tile-sub">Deep coverage</div>
           </div>
-          <div class="market-tile coverage-deep" onclick="selectMarket('Senegal')">
+          <div class="market-tile coverage-deep" onclick="selectMarket('Senegal',this)">
             <div class="market-tile-name">Senegal</div>
             <div class="market-tile-sub">Deep coverage</div>
           </div>
-          <div class="market-tile coverage-deep" onclick="selectMarket('Ivory Coast')">
+          <div class="market-tile coverage-deep" onclick="selectMarket('Ivory Coast',this)">
             <div class="market-tile-name">Ivory Coast</div>
             <div class="market-tile-sub">Deep coverage</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('Nigeria')">
+          <div class="market-tile" onclick="selectMarket('Nigeria',this)">
             <div class="market-tile-name">Nigeria</div>
             <div class="market-tile-sub">Institutional sources</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('Kenya')">
+          <div class="market-tile" onclick="selectMarket('Kenya',this)">
             <div class="market-tile-name">Kenya</div>
             <div class="market-tile-sub">Institutional sources</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('Ghana')">
+          <div class="market-tile" onclick="selectMarket('Ghana',this)">
             <div class="market-tile-name">Ghana</div>
             <div class="market-tile-sub">Institutional sources</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('Egypt')">
+          <div class="market-tile" onclick="selectMarket('Egypt',this)">
             <div class="market-tile-name">Egypt</div>
             <div class="market-tile-sub">Institutional sources</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('South Africa')">
+          <div class="market-tile" onclick="selectMarket('South Africa',this)">
             <div class="market-tile-name">South Africa</div>
             <div class="market-tile-sub">Institutional sources</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('Rwanda')">
+          <div class="market-tile" onclick="selectMarket('Rwanda',this)">
             <div class="market-tile-name">Rwanda</div>
             <div class="market-tile-sub">Institutional sources</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('CEMAC')">
+          <div class="market-tile" onclick="selectMarket('CEMAC',this)">
             <div class="market-tile-name">CEMAC</div>
             <div class="market-tile-sub">Deep coverage</div>
           </div>
-          <div class="market-tile" onclick="selectMarket('Sub Saharan Africa')">
+          <div class="market-tile" onclick="selectMarket('Sub Saharan Africa',this)">
             <div class="market-tile-name">Pan-Africa</div>
             <div class="market-tile-sub">Aggregate signals</div>
           </div>
@@ -513,14 +513,14 @@ a:hover{opacity:0.7;}
         <div class="step-headline">Which sector <em>is the deal in?</em></div>
         <div class="step-sub">Select the sector that most closely matches the business model.</div>
         <div class="sector-grid" id="sectorGrid">
-          <div class="sector-tile" onclick="selectSector('Fintech / Mobile money')"><div class="sector-tile-name">Fintech / Mobile money</div></div>
-          <div class="sector-tile" onclick="selectSector('Telecoms')"><div class="sector-tile-name">Telecoms</div></div>
-          <div class="sector-tile" onclick="selectSector('E-commerce / Logistics')"><div class="sector-tile-name">E-commerce / Logistics</div></div>
-          <div class="sector-tile" onclick="selectSector('Agritech')"><div class="sector-tile-name">Agritech</div></div>
-          <div class="sector-tile" onclick="selectSector('Energy / Cleantech')"><div class="sector-tile-name">Energy / Cleantech</div></div>
-          <div class="sector-tile" onclick="selectSector('Healthtech')"><div class="sector-tile-name">Healthtech</div></div>
-          <div class="sector-tile" onclick="selectSector('SaaS / B2B')"><div class="sector-tile-name">SaaS / B2B</div></div>
-          <div class="sector-tile" onclick="selectSector('Entertainment / Media')"><div class="sector-tile-name">Entertainment / Media</div></div>
+          <div class="sector-tile" onclick="selectSector('Fintech / Mobile money',this)"><div class="sector-tile-name">Fintech / Mobile money</div></div>
+          <div class="sector-tile" onclick="selectSector('Telecoms',this)"><div class="sector-tile-name">Telecoms</div></div>
+          <div class="sector-tile" onclick="selectSector('E-commerce / Logistics',this)"><div class="sector-tile-name">E-commerce / Logistics</div></div>
+          <div class="sector-tile" onclick="selectSector('Agritech',this)"><div class="sector-tile-name">Agritech</div></div>
+          <div class="sector-tile" onclick="selectSector('Energy / Cleantech',this)"><div class="sector-tile-name">Energy / Cleantech</div></div>
+          <div class="sector-tile" onclick="selectSector('Healthtech',this)"><div class="sector-tile-name">Healthtech</div></div>
+          <div class="sector-tile" onclick="selectSector('SaaS / B2B',this)"><div class="sector-tile-name">SaaS / B2B</div></div>
+          <div class="sector-tile" onclick="selectSector('Entertainment / Media',this)"><div class="sector-tile-name">Entertainment / Media</div></div>
         </div>
         <div class="step-nav">
           <button class="btn-back-step" onclick="goToStep(1)">Back</button>
@@ -698,17 +698,17 @@ function goToStep(n) {
   }
 }
 
-function selectMarket(m) {
+function selectMarket(m, el) {
   selectedMarket = m;
   document.querySelectorAll('.market-tile').forEach(t => t.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
+  el.classList.add('selected');
   setTimeout(() => goToStep(2), 220);
 }
 
-function selectSector(s) {
+function selectSector(s, el) {
   selectedSector = s;
   document.querySelectorAll('.sector-tile').forEach(t => t.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
+  el.classList.add('selected');
   setTimeout(() => goToStep(3), 220);
 }
 
