@@ -196,29 +196,28 @@ let singleMarkets = [];
 const BENCHMARK_MAP = {
   "Entry ID":"Entry ID","Metric Name":"Metric Name","Value":"Value",
   "Value Type":"Value Type","Market":"Market","Sector":"Sector",
-  "IC Dimension Affected":"IC Dimension Affected","Data Tier":"Data Tier","Source Name":"Source Name",
+  "IC Dimension":"IC Dimension","Data Tier":"Data Tier","Source Name":"Source Name",
   "Source URL":"Source URL","Source Date":"Source Date","Decay Class":"Decay Class",
   "Entry Status":"Entry Status","Recency Test":"Recency Test","Recency Note":"Recency Note",
   "Specificity Test":"Specificity Test","Specificity Note":"Specificity Note",
   "Interpretability Test":"Interpretability Test","Interpretability Note":"Interpretability Note",
-  "Three-Test Status":"Three-Test Status","Confidence Level":"Confidence Level",
+  "Three-Test Status":"Three-Test Status","Confidence Level":"Confidence Level","Capital Structure":"Capital Structure","Exit Multiple Comparable":"Exit Multiple Comparable","Funding Trend Data":"Funding Trend Data",
   "Operator Note":"Operator Note","IC Checklist Implication":"IC Checklist Implication",
   "Linked Articles":"Linked Articles","Linked Thesis ID":"Linked Thesis ID",
   "Tier B Provenance":"Tier B Provenance","Notes":"Notes","Added By":"Added By",
 };
 
 const THESES_MAP = {
-  "Thesis ID":"Thesis ID",
   "Thesis Statement":"Thesis Statement",
-  "Source Article or Benchmark":"Source Article or Benchmark","Thesis State":"Thesis State",
+  "Source Article":"Source Article","Thesis State":"Thesis State",
   "Confirming Evidence":"Confirming Evidence","Disconfirming Evidence":"Disconfirming Evidence",
-  "Markets Where True":"Markets Where True","Markets Where Fragmented or False":"Markets Where Fragmented or False",
+  "Markets Where True":"Markets Where True","Markets Where Fragmented":"Markets Where Fragmented",
   "Created Date":"Created Date","Linked Benchmarks":"Linked Benchmarks","Notes":"Notes",
 };
 
 const GAPMAP_MAP = {
   "Gap ID":"Gap ID","Gap Description":"Gap Description","Market":"Market",
-  "Sector":"Sector","IC Dimension Affected":"IC Dimension Affected","Gap Type":"Gap Type",
+  "Sector":"Sector","IC Dimension":"IC Dimension","Gap Type":"Gap Type",
   "Investment Signal":"Investment Signal","Priority":"Priority",
   "Status":"Status","Linked Benchmarks":"Linked Benchmarks","Notes":"Notes",
 };
@@ -227,6 +226,11 @@ const BENCHMARK_MULTI = new Set(["Market"]);
 const GAPMAP_MULTI = new Set(["Market"]);
 
 const NORMALISE = {
+  // Capital structure values
+  "Debt dominant":"Debt dominant",
+  "Equity dominant":"Equity dominant", 
+  "Blended / hybrid":"Blended / hybrid",
+  "Mixed":"Mixed",
   "Tier A - Cited source":"Tier A - Cited Source",
   "Tier A - cited source":"Tier A - Cited Source",
   "Tier B - Operator network signal":"Tier B - Operator network",
@@ -235,15 +239,6 @@ const NORMALISE = {
   "Directional Only":"Directional only","Pan-African":"Pan African",
   "Sub-Saharan Africa":"Sub Saharan Africa","DR Congo":"DRC",
   "Cameroon":"Cameroun","Announced":"Announced",
-  "Emerging":"Emerging","Supported":"Supported","Contested":"Contested",
-  "Fragmented":"Fragmented","Decaying":"Decaying","Broken":"Broken",
-  "Open gap":"Open gap","Partially filled":"Partially filled","Closed":"Closed",
-  "High":"High","Medium":"Medium","Low":"Low",
-  "Type A - Early market gap":"Type A - Early market gap",
-  "Type B - Political or regulatory opacity":"Type B - Political or regulatory opacity",
-  "Type C - Fragmentation gap":"Type C - Fragmentation gap",
-  "Type D - Operator-only knowledge":"Type D - Operator-only knowledge",
-  "Type E - Intentional information asymmetry":"Type E - Intentional information asymmetry",
 };
 
 const MARKETS = ["Algeria","Angola","Benin","Botswana","Burkina Faso","Cameroun","CAR",
@@ -324,10 +319,9 @@ function parseInput() {
       if (!rawKey || !rawVal) continue;
       const mapped = map[rawKey];
       if (!mapped) continue;
-      const cleanVal = rawVal.replace(/^"+|"+$/g, '').trim();
-      const norm = NORMALISE[cleanVal] || cleanVal;
+      const norm = NORMALISE[rawVal] || rawVal;
       if (multi.has(mapped)) {
-        rec[mapped] = cleanVal.split(',').map(v => (NORMALISE[v.trim()] || v.trim())).filter(Boolean);
+        rec[mapped] = rawVal.split(',').map(v => (NORMALISE[v.trim()] || v.trim())).filter(Boolean);
       } else {
         rec[mapped] = norm;
       }
@@ -336,7 +330,7 @@ function parseInput() {
     if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID']) {
       const m = section.match(/###\s+([\w-]+\d{3})/);
       if (m) {
-        if (currentTable === 'Theses') { if (!rec['Thesis ID']) rec['Thesis ID'] = m[1]; }
+        if (currentTable === 'Theses') { /* Theses use Thesis Statement as primary */ }
         else if (currentTable === 'Gap Map') rec['Gap ID'] = m[1];
         else rec['Entry ID'] = m[1];
       }
@@ -507,7 +501,7 @@ function buildSingleForm() {
           <div class="market-grid">${MARKETS.map(m=>`<span class="market-tag" onclick="toggleMarket(this,'${m}')">${m}</span>`).join('')}</div>
         </div>
         ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','Cross-sector'])}
-        ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability'])}
+        ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability','Capital structure and financing'])}
         ${sf('Gap Type',['Type A - Early market gap','Type B - Political or regulatory opacity','Type C - Fragmentation gap','Type D - Operator-only knowledge'])}
         ${tf('Investment Signal','textarea','full')}
         ${sf('Priority',['High','Medium','Low'])}
@@ -525,7 +519,7 @@ function buildSingleForm() {
           <div class="market-grid">${MARKETS.map(m=>`<span class="market-tag" onclick="toggleMarket(this,'${m}')">${m}</span>`).join('')}</div>
         </div>
         ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','Cross-sector'])}
-        ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability'])}
+        ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability','Capital structure and financing'])}
         ${sf('Value Type',['Point','Range','Directional','Regulatory provision','Announced','Narrative only','Operator estimate'])}
         ${sf('Data Tier',['Tier A - Cited Source','Tier B - Operator network','Tier B - Operator estimate'])}
         ${tf('Source Name','text')}${tf('Source URL','text')}${tf('Source Date','text')}
@@ -535,6 +529,9 @@ function buildSingleForm() {
         ${sf('Specificity Test',['Pass','Pass with caveat','Fail'])}
         ${sf('Interpretability Test',['Pass','Fail'])}
         ${sf('Three-Test Status',['Pass','Pass with caveat','Directional only','Fail'])}
+        ${sf('Capital Structure',['Equity dominant','Debt dominant','Blended / hybrid','Mixed'])}
+        ${sf('Exit Multiple Comparable','text')}
+        ${sf('Funding Trend Data','text')}
         ${sf('Confidence Level',['High','Medium','Low'])}
         ${tf('Operator Note','textarea','full')}
         ${tf('IC Checklist Implication','textarea','full')}
