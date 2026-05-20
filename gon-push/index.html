@@ -358,7 +358,7 @@ function parseInput() {
         // Don't overwrite thesis statement with heading
       } else if (currentTable === 'Gap Map' && !rec['Gap Description']) {
         rec['Gap Description'] = nameMatch[1].trim();
-      } else if (!rec['Metric Name']) {
+      } else if (!rec['Metric Name'] && currentTable !== 'Gap Map') {
         rec['Metric Name'] = nameMatch[1].trim();
       }
     }
