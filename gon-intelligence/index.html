@@ -444,7 +444,7 @@ a:hover{opacity:0.7;}
   <div class="header-row">
     <div>
       <h1>GON Intelligence</h1>
-      <div class="header-sub">Growth Operator Notes &mdash; African Private Capital</div>
+      <div class="header-sub">Growth Operator Notes - African Private Capital</div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
       <nav class="header-nav">
@@ -620,12 +620,19 @@ a:hover{opacity:0.7;}
       <button class="action-btn" onclick="flagPartner()">Flag for partner review</button>
       <button class="action-btn" onclick="window.location.href='../africa-ic-checklist/'">Run IC checklist</button>
     </div>
+
+    <div id="copiaLink" style="display:none;margin:1.5rem 0 0;padding:1rem 1.25rem;border-left:3px solid var(--accent);background:var(--surface);">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;">War Games Retrospective</div>
+      <div style="font-family:'Georgia',serif;font-size:0.9rem;line-height:1.7;margin-bottom:0.5rem;"><strong>See this tool applied to a real deal.</strong> Copia Global raised $120M, built 50,000 agents, and ended with $20,300 in the bank. The signals were in the public record.</div>
+      <a href="../copia-global-war-games-retrospective/" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent);border-bottom:1px solid var(--accent);">Read the retrospective &rarr;</a>
+      <div style="font-family:'Georgia',serif;font-size:0.8rem;color:var(--muted);margin-top:0.5rem;">What the operator intelligence layer would have flagged before the Series C - using only information available at the time.</div>
+    </div>
   </div>
 
 </div>
 
 <div class="footer">
-  <span>GON Intelligence &mdash; Growth Operator Notes</span>
+  <span>GON Intelligence - Growth Operator Notes</span>
   <span><a href="mailto:jpouandji@gmail.com" style="border:none;color:var(--muted);">jpouandji@gmail.com</a></span>
 </div>
 
@@ -1098,6 +1105,7 @@ async function runSearch(queryOverride){
     // Render evidence cards
     renderEvidence(direct,adjacent);
     document.getElementById('actionsRow').style.display='flex';
+  document.getElementById('copiaLink').style.display='block';
   }catch(e){
     showError(e.message);
   }finally{
@@ -1506,7 +1514,7 @@ ${currentResults.map(r=>{const f=r.fields;return`<div class="signal">
 <div>${(f['Value']||'').substring(0,200)}</div>
 ${f['IC Checklist Implication']?`<div class="q">Ask: ${f['IC Checklist Implication']}</div>`:''}
 </div>`;}).join('')}`:''}
-<div class="footer">GON Intelligence &mdash; Growth Operator Notes &mdash; jpouandji@gmail.com<br>Not investment advice. Operator-sourced intelligence.</div>
+<div class="footer">GON Intelligence - Growth Operator Notes - jpouandji@gmail.com<br>Not investment advice. Operator-sourced intelligence.</div>
 </body></html>`);
   win.document.close();
   setTimeout(()=>win.print(),500);
