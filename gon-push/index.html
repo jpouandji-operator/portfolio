@@ -315,6 +315,13 @@ function parseInput() {
 
   records = [];
   sections.forEach((section, i) => {
+    // Skip sections that belong to a different table
+    const isGapSection = /###\s+(?:ENTRY\s+)?GAP-\d{3}/.test(section);
+    const isBenchSection = /###\s+(?:ENTRY\s+)?GON-[A-Z]+-\d{3}/.test(section);
+    const isThesisSection = /###\s+(?:ENTRY\s+)?THX-\d{3}/.test(section);
+    if (currentTable === 'Gap Map' && !isGapSection) return;
+    if (currentTable === 'Benchmarks' && !isBenchSection) return;
+    if (currentTable === 'Theses' && !isThesisSection) return;
     const rec = {};
     const lines = section.split('\n');
     for (const line of lines) {
