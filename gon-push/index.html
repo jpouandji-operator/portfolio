@@ -121,6 +121,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Courier New',monospace;min-he
         <button class="table-btn active" onclick="setTable('Benchmarks',this)">Benchmarks</button>
         <button class="table-btn" onclick="setTable('Theses',this)">Theses</button>
         <button class="table-btn" onclick="setTable('Gap Map',this)">Gap Map</button>
+        <button class="table-btn" onclick="setTable('Intelligence Network',this)">Intel Network</button>
       </div>
     </div>
     <div class="card" style="margin-bottom:0;">
@@ -225,6 +226,21 @@ const GAPMAP_MAP = {
 const BENCHMARK_MULTI = new Set(["Market"]);
 const GAPMAP_MULTI = new Set(["Market"]);
 
+const NETWORK_MAP = {
+  "Contact ID":"Contact ID",
+  "Name":"Name",
+  "Organisation":"Organisation",
+  "Layer":"Layer",
+  "Market":"Market",
+  "IC Dimension":"IC Dimension",
+  "Access Type":"Access Type",
+  "Last Contact":"Last Contact",
+  "Extracted Signal":"Extracted Signal",
+  "Status":"Status",
+  "Notes":"Notes",
+};
+const NETWORK_MULTI = new Set(["Market","IC Dimension"]);
+
 const NORMALISE = {
 
   // Capital structure values
@@ -251,6 +267,7 @@ const MARKETS = ["Algeria","Angola","Benin","Botswana","Burkina Faso","Cameroun"
 function getFieldMap() {
   if (currentTable === 'Theses') return { map: THESES_MAP, multi: new Set() };
   if (currentTable === 'Gap Map') return { map: GAPMAP_MAP, multi: GAPMAP_MULTI };
+  if (currentTable === 'Intelligence Network') return { map: NETWORK_MAP, multi: NETWORK_MULTI };
   return { map: BENCHMARK_MAP, multi: BENCHMARK_MULTI };
 }
 
@@ -319,9 +336,11 @@ function parseInput() {
     const isGapSection = /###\s+(?:ENTRY\s+)?GAP-\d{3}/.test(section);
     const isBenchSection = /###\s+(?:ENTRY\s+)?GON-[A-Z]+-\d{3}/.test(section);
     const isThesisSection = /###\s+(?:ENTRY\s+)?THX-\d{3}/.test(section);
+    const isNetworkSection = /###\s+(?:CONTACT\s+)?NET-\d{3}/.test(section);
     if (currentTable === 'Gap Map' && !isGapSection) return;
     if (currentTable === 'Benchmarks' && !isBenchSection) return;
     if (currentTable === 'Theses' && !isThesisSection) return;
+    if (currentTable === 'Intelligence Network' && !isNetworkSection) return;
     const rec = {};
     const lines = section.split('\n');
     for (const line of lines) {
@@ -352,7 +371,8 @@ function parseInput() {
     const nameMatch = section.match(/Metric Name:\s*(.+)/) ||
       section.match(/Gap Description:\s*(.+)/) ||
       section.match(/Thesis Statement:\s*(.+)/) ||
-      section.match(/###\s+(?:ENTRY\s+|GAP\s+)?[\w-]+(?:-[\w]+)*\s*[-:]\s*(.+)/);
+      section.match(/###\s+(?:ENTRY\s+|GAP\s+)?[\w-]+(?:-[\w]+)*\s*[-:]\s*(.+)/) ||
+      section.match(/Name:\s*(.+)/);
     if (nameMatch) {
       if (currentTable === 'Theses' && !rec['Thesis Statement']) {
         // Don't overwrite thesis statement with heading
@@ -366,6 +386,10 @@ function parseInput() {
     if (currentTable === 'Benchmarks') {
       if (!rec['Added By']) rec['Added By'] = 'GON Scan - auto-generated';
       if (!rec['Entry Status']) rec['Entry Status'] = 'Active';
+    }
+    // Defaults for Intelligence Network
+    if (currentTable === 'Intelligence Network') {
+      if (!rec['Status']) rec['Status'] = 'Active';
     }
     records.push({ fields: rec, index: i });
   });
