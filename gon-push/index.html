@@ -197,7 +197,7 @@ const BENCHMARK_MAP = {
   "Entry ID":"Entry ID","Metric Name":"Metric Name","Value":"Value",
   "Value Type":"Value Type","Market":"Market","Sector":"Sector",
   "IC Dimension":"IC Dimension","Data Tier":"Data Tier","Source Name":"Source Name",
-  "Source URL":"Source URL","Source Date":"Source Date","Decay Class":"Decay Class",
+  "Source URL":"Source URL","Source Date":"Source Date",
   "Entry Status":"Entry Status","Recency Test":"Recency Test","Recency Note":"Recency Note",
   "Specificity Test":"Specificity Test","Specificity Note":"Specificity Note",
   "Interpretability Test":"Interpretability Test","Interpretability Note":"Interpretability Note",
@@ -226,11 +226,7 @@ const BENCHMARK_MULTI = new Set(["Market"]);
 const GAPMAP_MULTI = new Set(["Market"]);
 
 const NORMALISE = {
-  // Decay Class - map shorthand to full Airtable option labels
-  "Market dynamics":"Market dynamics (12-month validity)",
-  "Regulatory":"Regulatory (6-month validity)",
-  "Structural":"Structural (36-month validity)",
-  "Operator signal":"Operator signal (quarterly review)",
+
   // Capital structure values
   "Debt dominant":"Debt dominant",
   "Equity dominant":"Equity dominant", 
