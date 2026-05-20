@@ -217,7 +217,7 @@ const THESES_MAP = {
 
 const GAPMAP_MAP = {
   "Gap ID":"Gap ID","Gap Description":"Gap Description","Market":"Market",
-  "Sector":"Sector","IC Dimension":"IC Dimension","Gap Type":"Gap Type",
+  "Sector":"Sector","IC Dimension Affected":"IC Dimension Affected","Gap Type":"Gap Type",
   "Investment Signal":"Investment Signal","Priority":"Priority",
   "Status":"Status","Linked Benchmarks":"Linked Benchmarks","Notes":"Notes",
 };
@@ -342,10 +342,10 @@ function parseInput() {
       }
     }
     // Extract name from heading
-    const nameMatch = section.match(/###\s+(?:ENTRY\s+|GAP\s+)?[\w-]+(?:-[\w]+)*\s*[-:]\s*(.+)/) ||
-      section.match(/Metric Name:\s*(.+)/) ||
+    const nameMatch = section.match(/Metric Name:\s*(.+)/) ||
       section.match(/Gap Description:\s*(.+)/) ||
-      section.match(/Thesis Statement:\s*(.+)/);
+      section.match(/Thesis Statement:\s*(.+)/) ||
+      section.match(/###\s+(?:ENTRY\s+|GAP\s+)?[\w-]+(?:-[\w]+)*\s*[-:]\s*(.+)/);
     if (nameMatch) {
       if (currentTable === 'Theses' && !rec['Thesis Statement']) {
         // Don't overwrite thesis statement with heading
