@@ -359,11 +359,12 @@ function parseInput() {
       }
     }
     // Extract ID from heading
-    if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID']) {
-      const m = section.match(/###\s+(?:ENTRY\s+|GAP\s+)?(GON-[A-Z]+-\d{3}|GAP-\d{3})/) || section.match(/###\s+([\w-]+\d{3})/);
+    if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID'] && !rec['Contact ID']) {
+      const m = section.match(/###\s+(?:ENTRY\s+|GAP\s+|CONTACT\s+)?(GON-[A-Z]+-\d{3}|GAP-\d{3}|NET-\d{3})/) || section.match(/###\s+([\w-]+\d{3})/);
       if (m) {
         if (currentTable === 'Theses') { /* Theses use Thesis Statement as primary */ }
         else if (currentTable === 'Gap Map') rec['Gap ID'] = m[1];
+        else if (currentTable === 'Intelligence Network') rec['Contact ID'] = m[1];
         else rec['Entry ID'] = m[1];
       }
     }
@@ -378,6 +379,8 @@ function parseInput() {
         // Don't overwrite thesis statement with heading
       } else if (currentTable === 'Gap Map' && !rec['Gap Description']) {
         rec['Gap Description'] = nameMatch[1].trim();
+      } else if (currentTable === 'Intelligence Network') {
+        // Name field already parsed from "Name: ..." line - don't set Metric Name
       } else if (!rec['Metric Name'] && currentTable !== 'Gap Map') {
         rec['Metric Name'] = nameMatch[1].trim();
       }
