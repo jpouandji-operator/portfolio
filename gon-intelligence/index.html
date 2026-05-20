@@ -463,6 +463,12 @@ a:hover{opacity:0.7;}
     <input type="password" class="token-input" id="tokenInput" placeholder="pat..."/>
     <button class="token-save" onclick="saveToken()">Save</button>
   </div>
+  <div class="token-panel-label" style="margin-top:0.5rem;">Anthropic API Key</div>
+  <div class="token-row">
+    <input type="password" class="token-input" id="claudeKeyInput" placeholder="sk-ant-..."/>
+    <button class="token-save" onclick="saveClaudeKey()">Save</button>
+    <span id="claudeKeyStatus" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);margin-left:0.5rem;"></span>
+  </div>
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
@@ -782,10 +788,22 @@ function runFromStep3() {
 
 // ── TOKEN ──────────────────────────────────────────────────────────────────
 function getToken(){return localStorage.getItem('gon_tok')||'';}
+function saveClaudeKey(){
+  const k=document.getElementById('claudeKeyInput');
+  if(k&&k.value.trim()){
+    localStorage.setItem('gon_claude_key',k.value.trim());
+    k.value='';
+    document.getElementById('claudeKeyStatus').textContent='Claude key active';
+    document.getElementById('claudeKeyStatus').style.color='var(--accent)';
+  }
+}
 function initToken(){
   const t=getToken(),btn=document.getElementById('tokenBtn');
   if(t){btn.textContent='● Token active';btn.classList.add('active');}
   else{btn.textContent='○ Add token';document.getElementById('tokenPanel').classList.add('open');}
+  const ck=localStorage.getItem('gon_claude_key');
+  const cs=document.getElementById('claudeKeyStatus');
+  if(ck&&cs){cs.textContent='Claude key active';cs.style.color='var(--accent)';}
 }
 function toggleToken(){document.getElementById('tokenPanel').classList.toggle('open');}
 function saveToken(){
@@ -1186,7 +1204,7 @@ Write an operator brief. The exec_headline and exec_body should sound like the o
   try{
     const response=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true','x-api-key':localStorage.getItem('gon_claude_key')||''},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
