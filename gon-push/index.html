@@ -303,8 +303,13 @@ function parseInput() {
   const text = document.getElementById('scanInput').value.trim();
   if (!text) return;
   const { map, multi } = getFieldMap();
-  // Strip comment lines (lines starting with #) before parsing
-  const cleanText = text.split('\n').filter(line => !line.trim().startsWith('#')).join('\n');
+  // Strip comment-only lines (# and ##) but PRESERVE ### section headers
+  const cleanText = text.split('\n').filter(line => {
+    const t = line.trim();
+    if (t.startsWith('###')) return true;
+    if (t.startsWith('##') || (t.startsWith('#') && !t.startsWith('###'))) return false;
+    return true;
+  }).join('\n');
   const sections = cleanText.split(/(?=###\s+)/g).map(s => s.trim()).filter(s => s.length > 20);
 
   records = [];
@@ -328,7 +333,7 @@ function parseInput() {
     }
     // Extract ID from heading
     if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID']) {
-      const m = section.match(/###\s+([\w-]+\d{3})/);
+      const m = section.match(/###\s+(?:ENTRY\s+|GAP\s+)?(GON-[A-Z]+-\d{3}|GAP-\d{3})/) || section.match(/###\s+([\w-]+\d{3})/);
       if (m) {
         if (currentTable === 'Theses') { /* Theses use Thesis Statement as primary */ }
         else if (currentTable === 'Gap Map') rec['Gap ID'] = m[1];
@@ -336,7 +341,10 @@ function parseInput() {
       }
     }
     // Extract name from heading
-    const nameMatch = section.match(/###\s+[\w-]+\d{3}\s*[-:]\s*(.+)/);
+    const nameMatch = section.match(/###\s+(?:ENTRY\s+|GAP\s+)?[\w-]+(?:-[\w]+)*\s*[-:]\s*(.+)/) ||
+      section.match(/Metric Name:\s*(.+)/) ||
+      section.match(/Gap Description:\s*(.+)/) ||
+      section.match(/Thesis Statement:\s*(.+)/);
     if (nameMatch) {
       if (currentTable === 'Theses' && !rec['Thesis Statement']) {
         // Don't overwrite thesis statement with heading
