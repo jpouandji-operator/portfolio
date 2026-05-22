@@ -6,6 +6,11 @@
 <title>GON Intelligence - African Private Capital</title>
 <meta name="description" content="Operator intelligence for Africa-focused VC and PE investors. Not a database. A point of view." />
 <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/gon-intelligence/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="GON Intelligence - Operator Intelligence for African Private Capital" />
+  <meta property="og:description" content="Pressure-test Africa market assumptions before the IC. Built from 12 years inside the distribution stack across WAEMU and CEMAC." />
+  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/gon-intelligence/" />
+  <meta property="og:image" content="https://jpouandji-operator.github.io/portfolio/og-image.jpg" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CWB7VQ56XE');</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -937,10 +942,27 @@ function renderExecRead(brief, directCount) {
   const riskLevel = brief.risk_level || 'AMBER';
   const riskCls = riskLevel === 'RED' ? 'red' : riskLevel === 'GREEN' ? 'green' : 'amber';
   const confCount = directCount >= 3 ? 'High' : directCount >= 1 ? 'Medium' : 'Low';
+  const deepMarkets = ['WAEMU','Cameroun','Senegal','Ivory Coast','CEMAC'];
+  const isDeep = deepMarkets.includes(selectedMarket);
+  const isOperatorRead = isDeep && directCount >= 3;
+  const readLabel = isOperatorRead ? 'Operator read' : 'Directional read';
+  const coverageDepth = isDeep ? 'Primary operator' : 'Institutional sources';
+
+  // Extrapolation ratio: what % of the brief is inference vs direct data
+  const extrapolationNote = directCount === 0
+    ? 'This brief is based entirely on adjacent market patterns. No direct validated data exists for this market/sector combination.'
+    : directCount < 3
+    ? `This brief is inferring across gaps. ${directCount} direct signal${directCount !== 1 ? 's' : ''} validated. Treat quantitative assumptions as directional until confirmed by primary sources.`
+    : `Based on ${directCount} validated signals. Synthesis may still extrapolate where direct data is absent - check evidence cards below.`;
 
   container.innerHTML = `
     <div class="exec-read">
-      <div class="exec-eyebrow">Operator read</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;">
+        <span style="color:${isOperatorRead ? 'var(--accent)' : 'var(--muted)'};">${readLabel}</span>
+        <span style="flex:1;height:1px;background:var(--rule);display:block;"></span>
+        <span style="color:var(--muted);">${confCount} confidence</span>
+      </div>
+      ${!isOperatorRead ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);background:var(--surface);border-left:2px solid var(--muted);padding:0.5rem 0.75rem;margin-bottom:0.75rem;line-height:1.6;">${extrapolationNote}</div>` : directCount < 5 ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);border-left:2px solid var(--rule);padding:0.4rem 0.75rem;margin-bottom:0.75rem;line-height:1.6;">${extrapolationNote}</div>` : ''}
       <div class="exec-headline">${brief.exec_headline || brief.market_reality.split('.')[0] + '.'}</div>
       <div class="exec-body">${brief.exec_body || brief.market_reality}</div>
       <div class="exec-signal-row">
@@ -949,16 +971,16 @@ function renderExecRead(brief, directCount) {
           <div class="exec-signal-val ${riskCls}">${riskLevel}</div>
         </div>
         <div class="exec-signal">
-          <div class="exec-signal-label">Evidence base</div>
-          <div class="exec-signal-val">${directCount} validated signal${directCount !== 1 ? 's' : ''}</div>
+          <div class="exec-signal-label">Direct signals</div>
+          <div class="exec-signal-val">${directCount}</div>
         </div>
         <div class="exec-signal">
           <div class="exec-signal-label">Confidence</div>
           <div class="exec-signal-val">${confCount}</div>
         </div>
         <div class="exec-signal">
-          <div class="exec-signal-label">Coverage depth</div>
-          <div class="exec-signal-val">${selectedMarket === 'WAEMU' || selectedMarket === 'Cameroun' || selectedMarket === 'Senegal' || selectedMarket === 'Ivory Coast' || selectedMarket === 'CEMAC' ? 'Primary operator' : 'Institutional sources'}</div>
+          <div class="exec-signal-label">Coverage</div>
+          <div class="exec-signal-val">${coverageDepth}</div>
         </div>
       </div>
     </div>`;
