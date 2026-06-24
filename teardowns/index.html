@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teardowns - Product Marketing Reviews of B2B SaaS Tools | Growth Operator Notes</title>
+  <meta name="description" content="Product marketing teardowns of B2B SaaS tools. What the pricing page promises versus what the reviews remember, written by a growth operator, not a copywriter." />
+  <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/teardowns/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Teardowns",
+    "description": "Product marketing teardowns of B2B SaaS tools, comparing pricing page promises against verified customer reviews.",
+    "url": "https://jpouandji-operator.github.io/portfolio/teardowns/",
+    "author": {"@type": "Person", "name": "Jean-Philippe Ouandji"}
+  }
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-CWB7VQ56XE');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
+
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --surface: #edeae2;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--paper); }
+    body {
+      font-family: 'Georgia', serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--paper);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+    a:hover { opacity: 0.7; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    .site-nav {
+      border-bottom: 2px solid var(--ink);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--paper);
+      z-index: 100;
+    }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--ink); border: none; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border: none; }
+    .nav-links a:hover { color: var(--accent); opacity: 1; }
+    .nav-links a.active { color: var(--ink); }
+
+    .header { padding: 2rem 1rem 1.5rem; border-bottom: 1px solid var(--rule); max-width: 800px; margin: 0 auto; }
+    .header-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 1rem; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem; }
+    .header p.dek { font-size: 0.95rem; line-height: 1.7; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 1rem; }
+
+    .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); padding: 1.5rem 1rem 0.75rem; max-width: 1200px; margin: 0 auto; }
+
+    .teardown-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border-top: 1px solid var(--ink);
+    }
+
+    .teardown-card {
+      padding: 1.75rem 1rem;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .teardown-card-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 0.25rem 0.55rem;
+      border-radius: 2px;
+      width: fit-content;
+    }
+    .teardown-card-tag.live { background: var(--accent); }
+
+    .teardown-card-meta { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+
+    .teardown-card h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; line-height: 1.3; }
+    .teardown-card h2 a { color: var(--ink); border: none; }
+    .teardown-card h2 a:hover { color: var(--accent); opacity: 1; }
+
+    .teardown-card .desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    .teardown-card .read-more { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; padding-top: 0.25rem; }
+
+    .teardown-card.placeholder {
+      opacity: 0.55;
+      border-style: dashed;
+    }
+    .teardown-card.placeholder h2 { color: var(--muted); }
+
+    .about-strip {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1.75rem 1rem;
+      border-top: 2px solid var(--ink);
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .about-strip strong { color: var(--ink); }
+
+    footer { padding: 1rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--rule); }
+
+    @media (min-width: 768px) {
+      .header { padding: 2.5rem 2rem 2rem; }
+      .header h1 { font-size: 2.2rem; }
+      .section-label { padding: 2rem 2rem 1rem; }
+      .teardown-grid { grid-template-columns: repeat(2, 1fr); }
+      .teardown-card { border-right: 1px solid var(--rule); padding: 2rem; }
+      .teardown-card:nth-child(2n) { border-right: none; }
+      .about-strip { padding: 2.5rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="https://jpouandji-operator.github.io/portfolio/" class="nav-brand">Growth Operator Notes</a>
+    <ul class="nav-links">
+      <li><a href="https://jpouandji-operator.github.io/portfolio/">Portfolio</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/teardowns/" class="active">Teardowns</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Tools</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="header">
+    <p class="header-label">Teardowns</p>
+    <h1>What the Pricing Page Promises, and What the Reviews Remember</h1>
+    <p class="dek">A series of product marketing teardowns on B2B SaaS tools. Marketing materials reveal strategic intent. Reviews reveal whether that intent gets delivered. The gap between the two is where the actual analysis lives.</p>
+  </header>
+
+  <p class="section-label">Teardowns - 1 Published</p>
+
+  <section class="teardown-grid">
+
+    <article class="teardown-card">
+      <span class="teardown-card-tag live">Teardown 01</span>
+      <div class="teardown-card-meta">B2B SaaS - HR Tech - Pricing Strategy</div>
+      <h2><a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/">What Lucca's Pricing Page Promises, and What Its Reviews Remember</a></h2>
+      <p class="desc">Lucca sells modular pricing as the alternative to bloated HR suites. The reviews tell a more complicated story about what happens once a buyer actually starts adding modules.</p>
+      <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" class="read-more">Read the Teardown &#8594;</a>
+    </article>
+
+    <article class="teardown-card placeholder">
+      <span class="teardown-card-tag">Next Up</span>
+      <div class="teardown-card-meta">B2B SaaS - Fintech</div>
+      <h2>Payplug, Pluxee, Spendesk, Aircall</h2>
+      <p class="desc">Next teardowns in the series. Same method: pricing page claims tested against Capterra, Trustpilot, and G2 reviews, written from a product-marketing lens, not a GTM-only one.</p>
+    </article>
+
+  </section>
+
+  <section class="about-strip">
+    <p><strong>About this series.</strong> Each teardown follows the same four-step pass: identify the buyer when they differ from the user, read the GTM motion (pricing visibility, demo-gating, tone) for what it signals about positioning, name one specific product-level friction or strength without guessing at what cannot be verified, and propose one concrete recommendation. It is the same operator discipline behind the rest of Growth Operator Notes, applied one product at a time.</p>
+  </section>
+
+  <footer>
+    <p>Jean-Philippe Ouandji - Growth Operator Notes - Paris, France - 2026</p>
+  </footer>
+
+</body>
+</html>
