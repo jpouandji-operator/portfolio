@@ -1,5 +1,5 @@
 # GON Topic Queue — Consolidated
-*Canonical file. Last updated: 30 June 2026.*
+*Canonical file. Last updated: 1 July 2026.*
 *Source of truth for the GON production routine. Update this file at the end of every session or routine run — nowhere else.*
 
 ---
@@ -37,7 +37,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **[DRAFTED — pending JP review — 2026-07-01]** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Draft covers Instruction 001-01-2024 exclusivity ban + PI-SPI interoperability mandate (Sept 2026 deadline). No COI found (Wave/BCEAO — no current/recent employer or named-partner overlap). See PR for sources and DALL-E prompt. |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
@@ -52,7 +52,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 |---|---|---|---|---|
 | A09 | "WAEMU Just Ran a Regulatory Selection Exercise on Your Portfolio" | 14/18 | Queued | |
 | A10 | "Wave in Cameroon Is Not a Fintech Story" | 14/18 | Queued | May overlap with A01 — routine to check before developing |
-| A11 | Copia Global War Games Retrospective | 14/18 | Queued | HTML file exists in repo (`copia-global-war-games-retrospective-index.html`) — confirm if already published |
+| A11 | Copia Global War Games Retrospective | 14/18 | Queued | **RECONCILIATION FLAG (2026-07-01): the repo has a committed `copia-global-war-games-retrospective/index.html` (+ header/diagram images), and `sitemap.xml` lists this URL live since lastmod 2026-05-19 — 11 URLs total in sitemap, one more than the 8 articles + 1 draft the session-state file tracks. This contradicts both this queue's "Queued" status and `GON_Master_Session_State.md` (last updated 6 Apr 2026, itself stale per its own 7-day freshness rule), which lists Copia as "NOT STARTED" and the single biggest blocker. The routine could not fetch the live URL directly this run (see PR/email — jpouandji-operator.github.io is blocked by this environment's egress policy), so this is reported, not resolved. JP: please confirm whether Copia is actually live and correct whichever file is stale.** |
 | A12 | "The App You Can't Delete" (iGaming/web vs native) | 13/18 | Queued | |
 | A13 | "CEMAC Is Not WAEMU With Oil" | 13/18 | Queued | |
 
@@ -74,9 +74,9 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 |---|---|---|---|
 | A21 | Energy article | [HOLD — verification pending] | Backend verification still needed — held across multiple sessions |
 | A22 | Ayoba / Feature-First Fallacy | [HOLD — COI] | Employer conflict of interest |
-| A23 | IFC: "The Four Doors Into IFC" | [HOLD — confirm published] | Brief complete as of May 25; may already be live — routine to verify in Step 1 before treating as queued |
-| A24 | Agentforce/Africa gap article | [HOLD — confirm published] | Same — brief complete May 25, check live status |
-| A25 | AI agents for Africa - database layer | [HOLD — confirm published] | Same |
+| A23 | IFC: "The Four Doors Into IFC" | [HOLD — confirm published] | Brief complete as of May 25; checked repo root 2026-07-01 — no matching directory found, so not live. Still needs JP confirmation on brief/publish intent. |
+| A24 | Agentforce/Africa gap article | [HOLD — confirm published] | Checked repo root 2026-07-01 — no matching directory found, so not live. Same as A23. |
+| A25 | AI agents for Africa - database layer | [HOLD — confirm published] | Checked repo root 2026-07-01 — no matching directory found, so not live. Same as A23. |
 | A26 | Lipa Later War Games Retrospective | [HOLD — sources pending] | Blocked on Isaac Hunja + 3 sources |
 
 ---
@@ -87,7 +87,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Company | Status | Notes |
 |---|---|---|---|
-| B01 | Lucca | [PUBLISHED] | Live at /teardowns/lucca-pricing-promises/ as of June 24, 2026 |
+| B01 | Lucca | [PUBLISHED] | Live at /teardowns/lucca-pricing-promises/ as of June 24, 2026. Confirmed 2026-07-01 via teardowns/index.html (only "Teardown 01 · live" card). Flag: this URL is not present in sitemap.xml — routine did not add it (out of scope for this run), but worth an SEO fix. |
 | B02 | Payplug | Queued | Start here for next Teardown run |
 | B03 | Pluxee | Queued | |
 | B04 | Spendesk or Pennylane | Queued | Choose one — decision pending |
@@ -102,6 +102,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-07-01 | (all) | — | — | — | GA4 MCP still not accessible this run (no GA4 connector available in this session). Skipped per protocol — no data guessed. |
 
 ---
 
@@ -110,3 +111,4 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 1 Jul 2026 | Routine run: A01 selected and drafted (17/18, no COI). Reconciliation flags added for A11 (Copia — appears live per sitemap, contradicts Queued status and stale Master Session State) and B01 (Lucca teardown live but missing from sitemap.xml). A23/A24/A25 confirmed not live via repo check. GA4 unavailable — skipped, not guessed. Live-site fetch (jpouandji-operator.github.io) blocked by this environment's egress policy this run; reconciliation instead performed against the repository source (sitemap.xml, directory listing, teardowns/index.html) as the best available substitute. |
