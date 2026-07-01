@@ -52,7 +52,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 |---|---|---|---|---|
 | A09 | "WAEMU Just Ran a Regulatory Selection Exercise on Your Portfolio" | 14/18 | Queued | |
 | A10 | "Wave in Cameroon Is Not a Fintech Story" | 14/18 | Queued | May overlap with A01 — routine to check before developing |
-| A11 | Copia Global War Games Retrospective | 14/18 | Queued | HTML file exists in repo (`copia-global-war-games-retrospective-index.html`) — confirm if already published |
+| A11 | Copia Global War Games Retrospective | 14/18 | Published | HTML file exists in repo (`copia-global-war-games-retrospective-index.html`) — confirm if already published |
 | A12 | "The App You Can't Delete" (iGaming/web vs native) | 13/18 | Queued | |
 | A13 | "CEMAC Is Not WAEMU With Oil" | 13/18 | Queued | |
 
