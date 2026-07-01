@@ -110,3 +110,5 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+
+Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
