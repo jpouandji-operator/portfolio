@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>What Lucca's Pricing Page Promises, and What Its Reviews Remember | Teardowns</title>
   <meta name="description" content="A product marketing teardown of Lucca's modular HR software pricing. What the homepage promises about pay-only-for-what-you-use, and what Capterra and Trustpilot reviewers say happens after the sale." />
-  <meta name="keywords" content="Lucca HR software review, modular pricing SaaS, B2B SaaS pricing strategy, product marketing teardown, GTM motion analysis" />
+  <meta name="keywords" content="Lucca HR software review, modular pricing SaaS, B2B SaaS pricing strategy, product marketing teardown, GTM motion analysis, PayFit vs Lucca, SIRH France" />
   <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" />
 
   <meta property="og:type" content="article" />
@@ -21,6 +21,7 @@
     "description": "A product marketing teardown testing Lucca's modular pricing pitch against verified Capterra and Trustpilot reviews.",
     "author": {"@type": "Person", "name": "Jean-Philippe Ouandji"},
     "datePublished": "2026-06-24",
+    "dateModified": "2026-07-07",
     "publisher": {"@type": "Organization", "name": "Growth Operator Notes"},
     "mainEntityOfPage": "https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/"
   }
@@ -31,7 +32,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-CWB7VQ56XE');
     window.addEventListener('load', function() {
       var scrollDepths = [25, 50, 75, 100];
       var firedDepths = [];
@@ -85,21 +85,32 @@
     .article-full h1 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.5rem; }
     .article-deck { font-size: 1rem; font-style: italic; color: var(--muted); margin-top: 0.5rem; }
 
-    .screenshot-frame {
-      width: calc(100% + 2rem);
-      margin-left: -1rem; margin-right: -1rem; margin-bottom: 1.5rem;
-      border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    .header-image { width: calc(100% + 2rem); margin-left: -1rem; margin-right: -1rem; margin-bottom: 1.5rem; display: block; }
+    .header-image img { width: 100%; height: auto; display: block; }
+
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      margin: 1.5rem -1rem;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
       background: var(--surface);
-      padding: 2.5rem 1.5rem;
-      text-align: center;
+      overflow: hidden;
     }
-    .screenshot-frame .ph-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); border: 1px dashed var(--rule); padding: 0.5rem 1rem; display: inline-block; }
+    .stat-item {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+      border-right: 1px solid var(--rule);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--ink); display: block; }
+    .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-top: 0.2rem; }
 
     .article-full h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin: 1.75rem 0 0.75rem 0; }
     .article-full p { margin-bottom: 1rem; font-size: 0.96rem; line-height: 1.75; }
     .article-full strong { font-weight: 700; color: var(--ink); }
 
-    /* SIGNATURE PULL-QUOTE - the Teardowns-only component */
     .review-pull {
       margin: 1.75rem -1rem;
       padding: 1.25rem 1.5rem;
@@ -122,7 +133,7 @@
       align-items: center;
       gap: 0.4rem;
     }
-    .review-pull-source::before { content: "\\201C"; font-family: 'Playfair Display', serif; font-size: 1rem; }
+    .review-pull-source::before { content: "\201C"; font-family: 'Playfair Display', serif; font-size: 1rem; }
     .review-pull blockquote {
       font-family: 'Playfair Display', serif;
       font-style: italic;
@@ -131,10 +142,43 @@
       color: var(--paper);
     }
 
+    .competitor-grid {
+      margin: 1.5rem -1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--rule);
+    }
+    .competitor-cell {
+      padding: 0.9rem 1rem;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+    .competitor-cell:nth-child(even) { border-right: none; }
+    .competitor-cell:nth-last-child(-n+2) { border-bottom: none; }
+    .competitor-name { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); display: block; margin-bottom: 0.3rem; }
+    .competitor-angle { font-size: 0.82rem; line-height: 1.5; color: var(--ink); }
+
     .insight-box { background: var(--ink); color: var(--paper); padding: 1rem; margin: 1.5rem -1rem; border-left: 3px solid var(--accent); }
     .insight-box::before { content: "OPERATOR READ"; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--accent); display: block; margin-bottom: 0.5rem; }
     .insight-box p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0; color: var(--paper); }
     .insight-box strong { color: var(--paper); font-weight: 700; }
+
+    .funnel-gap {
+      margin: 1.5rem -1rem;
+      background: var(--surface);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 1.25rem 1.5rem;
+    }
+    .funnel-gap-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem; }
+    .funnel-steps { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+    .funnel-step { text-align: center; flex: 1; min-width: 80px; }
+    .funnel-step-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); display: block; margin-bottom: 0.3rem; }
+    .funnel-step-dot { width: 32px; height: 32px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; font-weight: 500; }
+    .funnel-step-dot.filled { background: var(--ink); color: var(--paper); }
+    .funnel-step-dot.broken { background: var(--surface); border: 2px dashed var(--accent); color: var(--accent); }
+    .funnel-arrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--rule); flex-shrink: 0; padding: 0 0.25rem; align-self: center; margin-top: 1rem; }
 
     .sources { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.85rem; }
 
@@ -153,9 +197,12 @@
     @media (min-width: 768px) {
       .article-full { padding: 2.5rem 2rem; }
       .article-full h1 { font-size: 2rem; }
-      .screenshot-frame { width: 100%; margin-left: 0; margin-right: 0; }
+      .header-image { width: 100%; margin-left: 0; margin-right: 0; }
+      .stat-strip { margin-left: 0; margin-right: 0; }
       .review-pull { margin-left: 0; margin-right: 0; }
       .insight-box { margin-left: 0; margin-right: 0; }
+      .competitor-grid { margin-left: 0; margin-right: 0; }
+      .funnel-gap { margin-left: 0; margin-right: 0; }
       .contact { padding: 3rem 2rem; }
       .contact-buttons { flex-direction: row; justify-content: center; }
     }
@@ -182,11 +229,31 @@
       <p class="article-deck">Lucca's modular pricing is a genuine point of difference in a category trained to expect bloated suites. The reviews show what happens once a buyer starts actually choosing modules.</p>
     </div>
 
-    <div class="screenshot-frame">
-      <span class="ph-label">Screenshot placeholder - Lucca pricing page, module selector</span>
+    <div class="header-image">
+      <!-- Replace src with the DALL-E image once generated -->
+      <!-- <img src="lucca-header.png" alt="Lucca modular HR software pricing teardown" /> -->
     </div>
 
-    <p>I found Lucca through their homepage, where the pitch is simple: pick the modules you need, skip the rest, stop paying for software you'll never open. Smart positioning. French HR software has spent years training buyers to expect bloated all-in-one suites, so "pay only for what you use" is a real point of difference. I wanted to know if it held up once you got past the homepage and into what people who'd actually bought the thing said about it afterward. It is the same question I keep coming back to in <a href="https://jpouandji-operator.github.io/portfolio/ai-africa-platform-economics/" target="_blank" rel="noopener">how platform economics plays out once a product scales past its pitch</a>: the moat that looks clean in a deck is rarely the moat that survives contact with real usage.</p>
+    <div class="stat-strip">
+      <div class="stat-item">
+        <span class="stat-number">20+</span>
+        <span class="stat-label">Years in market</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">7,800</span>
+        <span class="stat-label">Clients, 130+ countries</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">50-5k</span>
+        <span class="stat-label">Employee sweet spot</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">4.3/5</span>
+        <span class="stat-label">Market rating, 2026</span>
+      </div>
+    </div>
+
+    <p>I found Lucca through their homepage, where the pitch is simple: pick the modules you need, skip the rest, stop paying for software you'll never open. Smart positioning. French HR software has spent years training buyers to expect bloated all-in-one suites, so "pay only for what you use" is a real point of difference in a market where Lucca has been operating for over twenty years and serves more than 7,800 clients across 130 countries. I wanted to know if that pitch held up once you got past the homepage and into what people who'd actually bought the thing said about it. It is the same question I keep coming back to in <a href="https://jpouandji-operator.github.io/portfolio/ai-africa-platform-economics/" target="_blank" rel="noopener">how platform economics plays out once a product scales past its pitch</a>: the moat that looks clean in a deck is rarely the moat that survives contact with real usage.</p>
 
     <p>Mostly it does. But there's one thing reviewers keep saying that the marketing never mentions, and it's worth slowing down on.</p>
 
@@ -203,7 +270,34 @@
 
     <p>Lucca is also, functionally, two products talking to two different people. The website greets a buyer with cost language: reduce the tasks that cost you money, build the HR environment that fits your needs. That's a pitch aimed at whoever has to justify this purchase to a finance director. The app store listing drops all of that. It talks about supporting your daily working life, your HR tasks at your fingertips. No cost framing, no builder language, just reassurance for an employee who didn't choose this software and might not love using it.</p>
 
-    <p>You can see that second audience again in the five screenshots Lucca chose for its app store page: check your leave balance, book time off, log your hours, expense a receipt, look up a payslip. None of these happen daily. None are complicated once you're in the app. What they have in common is that they're the handful of moments an employee actually worries about: am I getting paid right, is my leave actually booked, did that expense go through. That's a deliberate choice about what to put in front of a skeptical user, and it's a smart one.</p>
+    <p>You can see that second audience again in the five screenshots Lucca chose for its app store page: check your leave balance, book time off, log your hours, expense a receipt, look up a payslip. None of these happen daily. None are complicated once you're in the app. What they share is that they're the handful of moments an employee actually worries about: am I getting paid right, is my leave actually booked, did that expense go through. That's a deliberate choice about what to put in front of a skeptical user, and it's a smart one.</p>
+
+    <h2>Squeezed from Both Ends: the Competitive Reality</h2>
+
+    <p>The modularity pitch that built Lucca over twenty years is now being flanked from two directions at once. Lucca sits in a defined sweet spot, companies of 50 to 5,000 employees that need structured HR processes but aren't large enough to justify an enterprise-grade SIRH. The problem is that this sweet spot is increasingly competitive on both sides.</p>
+
+    <p>On the smaller end, <a href="https://www.payfit.com/fr/" target="_blank" rel="noopener">PayFit</a> and Factorial offer tighter, more predictable all-in-one pricing that removes the module selection anxiety entirely. On the larger end, Personio and Cegid Talentsoft serve companies that have outgrown Lucca's depth on talent management and complex payroll rules. The four direct named competitors in the French PME/ETI SIRH market, Factorial, Personio, Eurécia, and BambooHR, each win on at least one criterion that Lucca either doesn't lead on or actively struggles with.</p>
+
+    <div class="competitor-grid">
+      <div class="competitor-cell">
+        <span class="competitor-name">PayFit</span>
+        <span class="competitor-angle">Wins on native payroll integration. Predictable per-user pricing removes the module-selection anxiety that drives Lucca's most common complaint.</span>
+      </div>
+      <div class="competitor-cell">
+        <span class="competitor-name">Factorial</span>
+        <span class="competitor-angle">Wins on breadth and entry-level pricing. Recruitement, onboarding, and performance management in one subscription, without the modular cost build-up.</span>
+      </div>
+      <div class="competitor-cell">
+        <span class="competitor-name">Personio</span>
+        <span class="competitor-angle">Wins on European mid-market completeness. Broader functional coverage at a competitive all-in rate for companies between 50 and 2,000 employees.</span>
+      </div>
+      <div class="competitor-cell">
+        <span class="competitor-name">Cegid Talentsoft</span>
+        <span class="competitor-angle">Wins above 300 employees on talent and GPEC depth. Lucca's own sweet spot ceiling, once headcount rises and HR complexity demands more.</span>
+      </div>
+    </div>
+
+    <p>None of this means Lucca is losing. Their reputation for UI quality and module coherence remains genuinely strong, and one independent 2026 review rated Poplee Entretiens and Figgo as the best products in their category in France without a real competitor at the same level. But "the incumbent with a solid reputation" and "the incumbent under competitive pressure from both ends" can both be true at the same time.</p>
 
     <h2>Where the Modularity Pitch Meets Its Own Reviews</h2>
 
@@ -221,19 +315,54 @@
       <blockquote>The OCR flags weekend expenses as errors, even for teams that travel as part of the job.</blockquote>
     </div>
 
+    <h2>The Acquisition Gap, Tested Directly</h2>
+
+    <p>The same tension shows up one stage earlier in the funnel, before anyone has even signed. I submitted a demo request through Lucca's homepage as a small business, less than 50,000 euros in monthly revenue. No confirmation email arrived. No size-based routing redirected me to a self-serve path. No timeline was set. The form collected my name, company, email, and revenue band, and went quiet.</p>
+
+    <div class="funnel-gap">
+      <p class="funnel-gap-label">Observed acquisition flow</p>
+      <div class="funnel-steps">
+        <div class="funnel-step">
+          <span class="funnel-step-label">Homepage</span>
+          <span class="funnel-step-dot filled">01</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">Demo CTA</span>
+          <span class="funnel-step-dot filled">02</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">Form (incl. revenue)</span>
+          <span class="funnel-step-dot filled">03</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">Follow-up</span>
+          <span class="funnel-step-dot broken">?</span>
+        </div>
+      </div>
+    </div>
+
+    <p>Lucca's own research and positioning material is clear that the product is designed for companies with 50 or more employees. A sub-threshold prospect filling in the demo form would logically end up in a low-priority queue, or not be contacted at all. That's a rational sales triage decision. But the problem is that this threshold is invisible on the homepage. There is no self-serve path signposted for smaller companies, no upfront size filter that redirects before the form is filled, no automated confirmation that sets expectations for when a response might arrive.</p>
+
+    <p>The result is a prospect who invested time, handed over contact details, and received silence. For a small business owner evaluating payment or HR tools, the natural response is to open the next tab. This is the same pattern that shows up in the pricing complaints, a well-designed marketing motion that breaks down at the handoff point.</p>
+
     <div class="insight-box">
-      <p><strong>Operator read:</strong> None of this breaks the product. Lucca's reputation for being easy to use holds up everywhere I looked, and it's earned. What both examples point to is a sales conversation that runs slightly ahead of what gets delivered at the point someone signs. The fix isn't abandoning modular pricing, it's a genuine strength. The fix is timing: show a prospective buyer, at the point they're choosing modules, roughly what a company their size typically ends up paying for that combination. Turn the biggest complaint into proof there was nothing to hide in the first place. This is the same due-diligence instinct behind the <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" target="_blank" rel="noopener">distribution economics test in the Africa IC Checklist</a>: the gap between what a sales motion promises and what a product delivers at scale is exactly where risk hides.</p>
+      <p><strong>Operator read:</strong> None of this breaks the product. Lucca's reputation for being easy to use holds up everywhere I looked, and it's earned. What the pricing complaints, the integration gap, the OCR errors, and the acquisition silence all share is a sales motion that runs slightly ahead of what gets delivered at the point of contact. The fix is not abandoning modular pricing, which is a genuine and defensible position in this market. It is making the implicit visible: show a prospective buyer what a company their size typically ends up paying across a given module combination, and surface the size threshold before someone fills in a form. These two changes would address the most common post-sale regret and the most avoidable pre-sale friction at the same time. This is the same due-diligence logic behind the <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" target="_blank" rel="noopener">distribution economics test in the Africa IC Checklist</a>: the gap between what a sales motion promises and what a product delivers at contact is exactly where risk hides, whether the market is French HR software or African fintech infrastructure.</p>
     </div>
 
     <h2>What I Did Not Verify</h2>
 
-    <p>One thing I couldn't verify: the actual onboarding flow, step by step. Some pages suggest it's short. I'm not turning that into a claim I haven't checked.</p>
+    <p>The exact onboarding step count for a qualified prospect completing a full demo and activation flow remains unverified from publicly available material. The acquisition experience described above reflects a sub-threshold submission and cannot be taken as representative of the full onboarding journey for a company in Lucca's actual target segment.</p>
 
     <div class="sources">
       <strong>Sources:</strong><br>
       - <a href="https://www.capterra.fr/" target="_blank" rel="noopener">Capterra - Lucca reviews</a><br>
       - <a href="https://www.trustpilot.com/" target="_blank" rel="noopener">Trustpilot - Lucca reviews</a><br>
-      - <a href="https://www.lucca.fr/" target="_blank" rel="noopener">Lucca - pricing and product pages</a>
+      - <a href="https://www.lucca.fr/" target="_blank" rel="noopener">Lucca - pricing and product pages</a><br>
+      - <a href="https://meilleur-logiciel-rh.fr/avis/lucca.html" target="_blank" rel="noopener">Meilleur Logiciel RH - Lucca 2026 independent review</a><br>
+      - <a href="https://www.lafabriquedunet.fr/logiciels/alternatives/alternative-lucca" target="_blank" rel="noopener">La Fabrique du Net - Alternatives to Lucca</a>
     </div>
   </article>
 
@@ -242,7 +371,7 @@
       <h2>Building or hiring for product marketing?</h2>
       <p class="contact-sub">This is one teardown in an ongoing series testing pricing pages against real customer reviews. If you want the same pass run on your product, or you're hiring for product marketing, let's talk.</p>
       <div class="contact-buttons">
-        <a href="mailto:jpouandji@gmail.com" class="btn btn-primary" onclick="gtag('event', 'teardown_email_click');">&#x2709; Email Jean-Philippe</a>
+        <a href="mailto:jpouandji@gmail.com" class="btn btn-primary" onclick="gtag('event', 'teardown_email_click'); return true;">&#x2709; Email Jean-Philippe</a>
         <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'teardown_linkedin_click');">LinkedIn Profile</a>
         <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'teardown_gon_click');">Growth Operator Notes</a>
       </div>
@@ -254,19 +383,6 @@
   </footer>
 
   <script>
-    (function() {
-      var emailBtn = document.getElementById('email-btn');
-      if (emailBtn) {
-        emailBtn.onclick = function(e) {
-          e.preventDefault();
-          window.location.href = 'mailto:' + 'jpouandji' + '@' + 'gmail.com';
-          if (typeof gtag !== 'undefined') { gtag('event', 'teardown_email_click'); }
-          return false;
-        };
-      }
-    })();
-
-    // Scroll-triggered pull-quote animation - signature Teardowns element
     (function() {
       var pulls = document.querySelectorAll('.review-pull');
       if (!('IntersectionObserver' in window)) {
