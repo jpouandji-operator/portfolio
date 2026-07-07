@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What LumApps Gets Right About Enterprise Selling, and Where the Seams Show | Teardowns</title>
+  <meta name="description" content="A product marketing teardown of LumApps's GTM motion, competitive position, and the gap between analyst recognition and practitioner satisfaction." />
+  <meta name="keywords" content="LumApps review, employee experience platform, intranet SaaS, B2B SaaS GTM, product marketing teardown, Microsoft Viva alternative, Staffbase vs LumApps" />
+  <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="What LumApps Gets Right About Enterprise Selling, and Where the Seams Show" />
+  <meta property="og:description" content="A product marketing teardown of LumApps's GTM motion, competitive position, and the gap between analyst recognition and practitioner satisfaction." />
+  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What LumApps Gets Right About Enterprise Selling, and Where the Seams Show",
+    "description": "A product marketing teardown testing LumApps's GTM motion against G2 reviews, competitive positioning, and first-hand acquisition research.",
+    "author": {"@type": "Person", "name": "Jean-Philippe Ouandji"},
+    "datePublished": "2026-07-07",
+    "publisher": {"@type": "Organization", "name": "Growth Operator Notes"},
+    "mainEntityOfPage": "https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/"
+  }
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    window.addEventListener('load', function() {
+      var scrollDepths = [25, 50, 75, 100];
+      var firedDepths = [];
+      window.addEventListener('scroll', function() {
+        var scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+        scrollDepths.forEach(function(depth) {
+          if (scrollPercent >= depth && !firedDepths.includes(depth)) {
+            gtag('event', 'scroll', {'event_category': 'Engagement', 'event_label': depth + '% scrolled'});
+            firedDepths.push(depth);
+          }
+        });
+      });
+    });
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
+
+  <style>
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --surface: #edeae2;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--paper); }
+    body { font-family: 'Georgia', serif; font-size: 16px; line-height: 1.7; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+    a:hover { opacity: 0.7; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    .site-nav { border-bottom: 2px solid var(--ink); padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--paper); z-index: 100; }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--ink); border: none; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border: none; }
+    .nav-links a:hover { color: var(--accent); opacity: 1; }
+    .nav-links a.active { color: var(--ink); }
+
+    .breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); max-width: 700px; margin: 1.25rem auto 0; padding: 0 1rem; }
+    .breadcrumb a { border: none; color: var(--muted); }
+    .breadcrumb a:hover { color: var(--accent); opacity: 1; }
+
+    .article-full { padding: 1rem 1rem 1.5rem; max-width: 700px; margin: 0 auto; }
+    .article-full-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+    .article-meta { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.5rem; }
+    .article-full h1 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.5rem; }
+    .article-deck { font-size: 1rem; font-style: italic; color: var(--muted); margin-top: 0.5rem; }
+
+    .header-image { width: calc(100% + 2rem); margin-left: -1rem; margin-right: -1rem; margin-bottom: 1.5rem; display: block; }
+    .header-image img { width: 100%; height: auto; display: block; }
+
+    .stat-strip { display: flex; gap: 0; margin: 1.5rem -1rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--surface); overflow: hidden; }
+    .stat-item { flex: 1; padding: 1rem; text-align: center; border-right: 1px solid var(--rule); }
+    .stat-item:last-child { border-right: none; }
+    .stat-number { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--ink); display: block; }
+    .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-top: 0.2rem; }
+
+    .article-full h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin: 1.75rem 0 0.75rem 0; }
+    .article-full p { margin-bottom: 1rem; font-size: 0.96rem; line-height: 1.75; }
+    .article-full strong { font-weight: 700; color: var(--ink); }
+
+    .review-pull { margin: 1.75rem -1rem; padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent); background: var(--ink); color: var(--paper); opacity: 0; transform: translateX(-12px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .review-pull.in-view { opacity: 1; transform: translateX(0); }
+    .review-pull-source { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
+    .review-pull-source::before { content: "\201C"; font-family: 'Playfair Display', serif; font-size: 1rem; }
+    .review-pull blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; line-height: 1.5; color: var(--paper); }
+
+    .competitor-table { margin: 1.5rem -1rem; border: 1px solid var(--rule); border-collapse: collapse; width: calc(100% + 2rem); }
+    .competitor-table thead { background: var(--ink); color: var(--paper); }
+    .competitor-table th { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.6rem 1rem; text-align: left; color: var(--accent); font-weight: 500; border-right: 1px solid #2a2824; }
+    .competitor-table th:last-child { border-right: none; }
+    .competitor-table td { font-size: 0.82rem; line-height: 1.5; padding: 0.75rem 1rem; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); vertical-align: top; }
+    .competitor-table td:last-child { border-right: none; }
+    .competitor-table tr:last-child td { border-bottom: none; }
+    .competitor-table td:first-child { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500; color: var(--accent); white-space: nowrap; }
+
+    .score-compare { margin: 1.5rem -1rem; background: var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 1.25rem 1.5rem; }
+    .score-compare-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1rem; }
+    .score-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .score-row:last-child { margin-bottom: 0; }
+    .score-company { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; width: 80px; flex-shrink: 0; color: var(--ink); }
+    .score-bar-wrap { flex: 1; background: var(--rule); height: 8px; border-radius: 0; }
+    .score-bar { height: 8px; background: var(--ink); }
+    .score-bar.accent { background: var(--accent); }
+    .score-value { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; }
+
+    .insight-box { background: var(--ink); color: var(--paper); padding: 1rem; margin: 1.5rem -1rem; border-left: 3px solid var(--accent); }
+    .insight-box::before { content: "OPERATOR READ"; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--accent); display: block; margin-bottom: 0.5rem; }
+    .insight-box p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0; color: var(--paper); }
+    .insight-box strong { color: var(--paper); font-weight: 700; }
+
+    .sources { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.85rem; }
+
+    .contact { padding: 2rem 1rem; text-align: center; border-top: 2px solid var(--ink); }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    .contact h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .contact-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    .contact-buttons { display: flex; flex-direction: column; gap: 0.75rem; }
+    .btn { display: block; padding: 0.75rem 1.5rem; background: var(--ink); color: var(--paper); border: 2px solid var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .btn:hover { background: var(--paper); color: var(--ink); opacity: 1; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); }
+    .btn-primary:hover { background: var(--paper); color: var(--accent); }
+
+    footer { padding: 1rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--rule); }
+
+    @media (min-width: 768px) {
+      .article-full { padding: 2.5rem 2rem; }
+      .article-full h1 { font-size: 2rem; }
+      .header-image { width: 100%; margin-left: 0; margin-right: 0; }
+      .stat-strip { margin-left: 0; margin-right: 0; }
+      .review-pull { margin-left: 0; margin-right: 0; }
+      .insight-box { margin-left: 0; margin-right: 0; }
+      .competitor-table { width: 100%; margin-left: 0; margin-right: 0; }
+      .score-compare { margin-left: 0; margin-right: 0; }
+      .contact { padding: 3rem 2rem; }
+      .contact-buttons { flex-direction: row; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="https://jpouandji-operator.github.io/portfolio/" class="nav-brand">Growth Operator Notes</a>
+    <ul class="nav-links">
+      <li><a href="https://jpouandji-operator.github.io/portfolio/">Portfolio</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/teardowns/" class="active">Teardowns</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Tools</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <p class="breadcrumb"><a href="https://jpouandji-operator.github.io/portfolio/teardowns/">Teardowns</a> / LumApps</p>
+
+  <article class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Teardown 02 - B2B SaaS - Employee Experience - 07 July 2026</div>
+      <h1>What LumApps Gets Right About Enterprise Selling, and Where the Seams Show</h1>
+      <p class="article-deck">A Gartner Leader with a G2 satisfaction gap. A deliberate acquisition funnel that filters before it sells. And a competitive position that is genuinely hard to replicate, for now.</p>
+    </div>
+
+    <div class="header-image">
+      <!-- Replace src with DALL-E generated image once available -->
+      <img src="lumapps-header.png" alt="LumApps enterprise GTM teardown - Growth Operator Notes" />
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-item">
+        <span class="stat-number">$650M</span>
+        <span class="stat-label">Valuation, May 2024</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">7M+</span>
+        <span class="stat-label">Active users, 750+ clients</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">99%</span>
+        <span class="stat-label">Customer renewal rate</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">$63M</span>
+        <span class="stat-label">Est. ARR, 2024</span>
+      </div>
+    </div>
+
+    <p>There is a detail on LumApps's demo registration form that most people scroll past. The form rejects Gmail addresses. You discover this after filling in your name, company, and revenue band and clicking submit. No explanation. Just a field error.</p>
+
+    <p>That single UX decision carries more strategic information than the entire homepage. A micro-entrepreneur or freelancer curious about the product gets filtered out before anyone's calendar is touched. A Chief People Officer at a 2,000-person multinational arrives with a corporate domain and sails straight through. The form knows which one it is talking to, and it acts accordingly.</p>
+
+    <p>This is what intentional GTM design looks like at the acquisition layer: friction placed precisely where it protects sales capacity. Compare it to the <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" target="_blank" rel="noopener">Lucca teardown in this series</a>, where the demo form accepts anyone and routes by revenue band silently after submission, leaving the wrong-fit prospect waiting for a call that never arrives. Two different bets about lead quality, two different moments where the bet becomes visible to the prospect.</p>
+
+    <h2>One platform. Two completely different jobs.</h2>
+
+    <p>The homepage addresses whoever is justifying this purchase to a CFO: less time navigating between tools, more time moving work forward, from the frontline to headquarters. That is a C-suite anxiety about productivity fragmentation, and it is the right problem to lead with at that level of the buying committee.</p>
+
+    <p>The product that gets deployed is used daily by employees who were not in that room. Their question is simpler: can I find the policy document, check my leave balance, or submit an expense without asking anyone for help. That is a different brief, and it requires different design decisions. LumApps builds for both. The tension between them is where the most useful competitive signal in this teardown lives.</p>
+
+    <h2>The position that is genuinely hard to replicate</h2>
+
+    <table class="competitor-table">
+      <thead>
+        <tr>
+          <th>Competitor</th>
+          <th>Where they win</th>
+          <th>Where LumApps wins instead</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Microsoft Viva</td>
+          <td>Microsoft 365-native organizations; essentially bundled for existing shops</td>
+          <td>Mixed ecosystems and Google Workspace; organizations that have not standardized on Microsoft</td>
+        </tr>
+        <tr>
+          <td>Staffbase</td>
+          <td>Mobile-first frontline communication, newsletter tooling, strategic comms planning</td>
+          <td>Intranet depth, AI content personalization, enterprise governance and customization</td>
+        </tr>
+        <tr>
+          <td>Simpplr</td>
+          <td>Implementation speed, ease of use for content managers, G2 Leader classification</td>
+          <td>Integration breadth, dual-ecosystem support, enterprise-scale deployment</td>
+        </tr>
+        <tr>
+          <td>Workvivo</td>
+          <td>Post-Workplace Meta migrations; recommended by Meta as the default replacement</td>
+          <td>Enterprise clients who want more depth than a social-first platform delivers</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The rarest capability in LumApps's product is not a feature. It is the clean, deep integration with both Google Workspace and Microsoft 365 simultaneously. Most competitors in this space pick a side. For a multinational that has not standardized on a single suite, that capability removes a trade-off that every other option forces. The Beekeeper acquisition in July 2025 closed the frontline gap that Staffbase had been exploiting most effectively. The Workspace from Meta shutdown in August 2025 created a wave of enterprise organizations needing a replacement platform, and LumApps has been explicit about positioning itself as the destination for those with more complex needs than Workvivo covers.</p>
+
+    <h2>The number that explains the most</h2>
+
+    <p>Gartner named LumApps a Magic Quadrant Leader for the third consecutive year in October 2025. Three months earlier, G2's Spring 2026 Grid Report for Employee Intranet classified it as a Niche product. Both are right. They are measuring different things.</p>
+
+    <div class="score-compare">
+      <p class="score-compare-label">G2 Spring 2026 - Employee Intranet - Recommendation rate</p>
+      <div class="score-row">
+        <span class="score-company">Simpplr</span>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:92%"></div></div>
+        <span class="score-value">92%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-company">LumApps</span>
+        <div class="score-bar-wrap"><div class="score-bar accent" style="width:85%"></div></div>
+        <span class="score-value">85%</span>
+      </div>
+    </div>
+
+    <p>Gartner measures what the CIO sees: integration breadth, security posture, roadmap ambition, global deployment capability. LumApps is strong on all of these. G2 measures what the Internal Communications manager experiences on a Tuesday morning when she is trying to publish a campaign to 8,000 employees. At that level, two things come up consistently in independent reviews: feature rollout pace that felt like momentum in the demo becomes a governance challenge in production, and capabilities described as base-package during the sales process become line items at renewal.</p>
+
+    <div class="review-pull">
+      <p class="review-pull-source">Review - G2, February 2026, verified current user</p>
+      <blockquote>Great but overall some features should be base, not paid.</blockquote>
+    </div>
+
+    <p>The buyers are renewing at 99%. The practitioners are 7 points less enthusiastic than they are at the competitor that leads on simplicity. That gap is not a product failure. It is a sales-to-delivery alignment gap, and it lives squarely inside a PMM's scope.</p>
+
+    <div class="insight-box">
+      <p><strong>Operator read:</strong> The fix is not simplifying the product, which would cost LumApps its enterprise positioning. It is building the assets that sit between the demo and the signature: an implementation effort guide calibrated by company size and deployment scope, realistic time-to-value benchmarks, and a cost model that makes the full picture visible during the sales conversation rather than at renewal. These assets do not reduce complexity. They make complexity legible. In enterprise software, that distinction is the difference between a buyer who feels informed and a practitioner who feels misled. That is a specific job, and it is the kind of work that <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/" target="_blank" rel="noopener">structured pre-decision intelligence</a> is built to support.</p>
+    </div>
+
+    <h2>What I could not verify</h2>
+
+    <p>LumApps does not publish pricing. Figures referenced above are drawn from third-party sources and may not reflect the combined entity following the Beekeeper merger in July 2025.</p>
+
+    <p>This teardown is part of an ongoing series applying the same analytical pass to B2B SaaS products I want to understand properly. The gap between how LumApps is recognized by analysts and how it is experienced by practitioners is the kind of signal that only becomes visible when you look at both sources at the same time rather than trusting either one alone. That is the exercise. That is why I do it.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      - <a href="https://www.g2.com/products/lumapps/reviews" target="_blank" rel="noopener">G2 - LumApps reviews and Spring 2026 Grid Report</a><br>
+      - <a href="https://www.lumapps.com" target="_blank" rel="noopener">LumApps - product and positioning pages</a><br>
+      - <a href="https://www.gartner.com/reviews/market/intranet-packaged-solutions/vendor/lumapps" target="_blank" rel="noopener">Gartner Magic Quadrant for Intranet Packaged Solutions 2025</a><br>
+      - <a href="https://staffbase.com/blog/best-employee-experience-platform" target="_blank" rel="noopener">ClearBox Consulting - Intranet and Employee Experience Platforms V5.1, May 2026</a><br>
+      - <a href="https://getlatka.com/companies/lumapps" target="_blank" rel="noopener">GetLatka - LumApps revenue and growth data</a>
+    </div>
+  </article>
+
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <h2>Building or hiring for product marketing?</h2>
+      <p class="contact-sub">This is one teardown in an ongoing series testing GTM motions against real customer and market data. If you want the same pass run on your product, or you're hiring for product marketing, let's talk.</p>
+      <div class="contact-buttons">
+        <a href="mailto:jpouandji@gmail.com" class="btn btn-primary" onclick="gtag('event', 'teardown_email_click'); return true;">&#x2709; Email Jean-Philippe</a>
+        <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'teardown_linkedin_click');">LinkedIn Profile</a>
+        <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener" onclick="gtag('event', 'teardown_gon_click');">Growth Operator Notes</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Jean-Philippe Ouandji - Growth Operator Notes - Paris, France - 2026</p>
+  </footer>
+
+  <script>
+    (function() {
+      var pulls = document.querySelectorAll('.review-pull');
+      if (!('IntersectionObserver' in window)) {
+        pulls.forEach(function(p) { p.classList.add('in-view'); });
+        return;
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      pulls.forEach(function(p) { observer.observe(p); });
+    })();
+  </script>
+
+</body>
+</html>
