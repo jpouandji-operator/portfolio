@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payplug's Acquisition Machine Is Working. The Handoff Is Not. | Teardowns</title>
+  <meta name="description" content="A product marketing teardown of Payplug's dual GTM motion, the gap between its PPC and self-serve acquisition paths, and what ten days of silence after a demo request reveals about sales-marketing alignment." />
+  <meta name="keywords" content="Payplug review, solution paiement France, B2B SaaS GTM teardown, product marketing, payment processing France, Payplug vs Stripe, BPCE fintech" />
+  <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Payplug's Acquisition Machine Is Working. The Handoff Is Not." />
+  <meta property="og:description" content="A product marketing teardown of Payplug's dual GTM motion and the gap between its PPC and self-serve acquisition paths." />
+  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/" />
+  <meta property="og:image" content="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/payplug-header.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Payplug's Acquisition Machine Is Working. The Handoff Is Not.",
+    "description": "A product marketing teardown of Payplug's dual GTM motion tested against first-party acquisition research and independent customer reviews.",
+    "author": {"@type": "Person", "name": "Jean-Philippe Ouandji"},
+    "datePublished": "2026-07-08",
+    "publisher": {"@type": "Organization", "name": "Growth Operator Notes"},
+    "mainEntityOfPage": "https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/"
+  }
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    window.addEventListener('load', function() {
+      var scrollDepths = [25, 50, 75, 100];
+      var firedDepths = [];
+      window.addEventListener('scroll', function() {
+        var scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+        scrollDepths.forEach(function(depth) {
+          if (scrollPercent >= depth && !firedDepths.includes(depth)) {
+            gtag('event', 'scroll', {'event_category': 'Engagement', 'event_label': depth + '% scrolled'});
+            firedDepths.push(depth);
+          }
+        });
+      });
+    });
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
+
+  <style>
+    :root { --paper: #f5f0e8; --ink: #0f0e0c; --accent: #c8320a; --muted: #7a7060; --rule: #d4cfc4; --surface: #edeae2; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--paper); }
+    body { font-family: 'Georgia', serif; font-size: 16px; line-height: 1.7; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+    a:hover { opacity: 0.7; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    .site-nav { border-bottom: 2px solid var(--ink); padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--paper); z-index: 100; }
+    .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--ink); border: none; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border: none; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); opacity: 1; }
+
+    .breadcrumb { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); max-width: 700px; margin: 1.25rem auto 0; padding: 0 1rem; }
+    .breadcrumb a { border: none; color: var(--muted); }
+    .breadcrumb a:hover { color: var(--accent); opacity: 1; }
+
+    .article-full { padding: 1rem 1rem 1.5rem; max-width: 700px; margin: 0 auto; }
+    .article-full-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+    .article-meta { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.5rem; }
+    .article-full h1 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.5rem; }
+    .article-deck { font-size: 1rem; font-style: italic; color: var(--muted); margin-top: 0.5rem; }
+
+    .header-image { width: calc(100% + 2rem); margin-left: -1rem; margin-right: -1rem; margin-bottom: 1.5rem; }
+    .header-image img { width: 100%; height: auto; display: block; }
+
+    .stat-strip { display: flex; gap: 0; margin: 1.5rem -1rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--surface); overflow: hidden; }
+    .stat-item { flex: 1; padding: 1rem; text-align: center; border-right: 1px solid var(--rule); }
+    .stat-item:last-child { border-right: none; }
+    .stat-number { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: var(--ink); display: block; }
+    .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-top: 0.2rem; }
+
+    .article-full h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin: 1.75rem 0 0.75rem 0; }
+    .article-full p { margin-bottom: 1rem; font-size: 0.96rem; line-height: 1.75; }
+    .article-full strong { font-weight: 700; color: var(--ink); }
+
+    .review-pull { margin: 1.75rem -1rem; padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent); background: var(--ink); color: var(--paper); opacity: 0; transform: translateX(-12px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .review-pull.in-view { opacity: 1; transform: translateX(0); }
+    .review-pull-source { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.6rem; }
+    .review-pull-source::before { content: "\201C"; font-family: 'Playfair Display', serif; font-size: 1rem; margin-right: 0.3rem; }
+    .review-pull blockquote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; line-height: 1.5; color: var(--paper); }
+
+    .dual-path { margin: 1.5rem -1rem; border: 1px solid var(--rule); overflow: hidden; }
+    .dual-path-header { background: var(--ink); padding: 0.6rem 1.25rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+    .dual-path-row { display: flex; border-bottom: 1px solid var(--rule); }
+    .dual-path-row:last-child { border-bottom: none; }
+    .dual-path-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; color: var(--ink); padding: 0.8rem 1rem; width: 130px; flex-shrink: 0; border-right: 1px solid var(--rule); display: flex; align-items: center; }
+    .dual-path-ppc { flex: 1; padding: 0.8rem 1rem; font-size: 0.82rem; line-height: 1.5; border-right: 1px solid var(--rule); background: var(--surface); }
+    .dual-path-main { flex: 1; padding: 0.8rem 1rem; font-size: 0.82rem; line-height: 1.5; }
+    .dual-path-col-header { font-family: 'IBM Plex Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); display: block; margin-bottom: 0.3rem; }
+
+    .pricing-strip { margin: 1.5rem -1rem; display: flex; border: 1px solid var(--rule); overflow: hidden; }
+    .pricing-tier { flex: 1; padding: 1rem; border-right: 1px solid var(--rule); text-align: center; }
+    .pricing-tier:last-child { border-right: none; }
+    .pricing-tier-name { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); display: block; margin-bottom: 0.4rem; }
+    .pricing-tier-price { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 900; color: var(--ink); display: block; }
+    .pricing-tier-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.52rem; color: var(--muted); display: block; margin-top: 0.2rem; }
+
+    .funnel-gap { margin: 1.5rem -1rem; background: var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 1.25rem 1.5rem; }
+    .funnel-gap-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1rem; }
+    .funnel-steps { display: flex; align-items: center; flex-wrap: wrap; }
+    .funnel-step { text-align: center; flex: 1; min-width: 60px; }
+    .funnel-step-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); display: block; margin-bottom: 0.3rem; }
+    .funnel-step-dot { width: 30px; height: 30px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; font-weight: 500; }
+    .funnel-step-dot.filled { background: var(--ink); color: var(--paper); }
+    .funnel-step-dot.broken { background: var(--surface); border: 2px dashed var(--accent); color: var(--accent); }
+    .funnel-arrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--rule); flex-shrink: 0; padding: 0 0.15rem; align-self: center; margin-top: 1rem; }
+
+    .insight-box { background: var(--ink); color: var(--paper); padding: 1rem; margin: 1.5rem -1rem; border-left: 3px solid var(--accent); }
+    .insight-box::before { content: "OPERATOR READ"; font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--accent); display: block; margin-bottom: 0.5rem; }
+    .insight-box p { font-size: 0.9rem; line-height: 1.6; margin-bottom: 0; color: var(--paper); }
+    .insight-box a { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .sources { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.85rem; }
+
+    .contact { padding: 2rem 1rem; text-align: center; border-top: 2px solid var(--ink); }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    .contact h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .contact-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    .contact-buttons { display: flex; flex-direction: column; gap: 0.75rem; }
+    .btn { display: block; padding: 0.75rem 1.5rem; background: var(--ink); color: var(--paper); border: 2px solid var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .btn:hover { background: var(--paper); color: var(--ink); opacity: 1; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); }
+    .btn-primary:hover { background: var(--paper); color: var(--accent); }
+
+    footer { padding: 1rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--rule); }
+
+    @media (min-width: 768px) {
+      .article-full { padding: 2.5rem 2rem; }
+      .article-full h1 { font-size: 2rem; }
+      .header-image, .stat-strip, .review-pull, .insight-box, .dual-path, .pricing-strip, .funnel-gap { margin-left: 0; margin-right: 0; width: 100%; }
+      .contact { padding: 3rem 2rem; }
+      .contact-buttons { flex-direction: row; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="https://jpouandji-operator.github.io/portfolio/" class="nav-brand">Growth Operator Notes</a>
+    <ul class="nav-links">
+      <li><a href="https://jpouandji-operator.github.io/portfolio/">Portfolio</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/teardowns/" class="active">Teardowns</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Tools</a></li>
+      <li><a href="https://jpouandji-operator.github.io/portfolio/#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <p class="breadcrumb"><a href="https://jpouandji-operator.github.io/portfolio/teardowns/">Teardowns</a> / Payplug</p>
+
+  <article class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Teardown 03 - Fintech - Payment Processing - 08 July 2026</div>
+      <h1>Payplug's Acquisition Machine Is Working. The Handoff Is Not.</h1>
+      <p class="article-deck">A dual GTM motion, a ten-day silence after a demo request, and a retargeting budget generating leads faster than the sales queue can absorb them.</p>
+    </div>
+
+    <div class="header-image">
+      <img src="payplug-header.png" alt="Payplug dual GTM motion teardown - Growth Operator Notes" />
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-item">
+        <span class="stat-number">EUR 10B+</span>
+        <span class="stat-label">Annual transaction volume</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">20,000</span>
+        <span class="stat-label">Merchants</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">92.5%</span>
+        <span class="stat-label">Avg net acceptance rate</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">BPCE</span>
+        <span class="stat-label">Parent group since 2016</span>
+      </div>
+    </div>
+
+    <p>One Trustpilot reviewer summarized Payplug's product marketing challenge more precisely than anything on the homepage does: "tres presents pour vous vendre leur solution de paiement, aux abonnes absents quand vous avez un probleme technique." Present when selling, absent when needed. It lands because it describes something structural rather than a one-off bad experience. And once you see the pattern in the data, it is hard to unsee.</p>
+
+    <p>What makes this teardown more interesting than a straightforward critical review is that Payplug is actually doing several things well, and understanding what it is doing well is necessary to understand where the gaps matter. This is also the third teardown in an <a href="https://jpouandji-operator.github.io/portfolio/teardowns/" target="_blank" rel="noopener">ongoing series</a> applying the same analytical pass to B2B SaaS and fintech products, and the pattern that keeps appearing is the same: a well-designed marketing motion that breaks down at a specific, identifiable handoff point.</p>
+
+    <h2>What Payplug actually is</h2>
+
+    <p>Payplug is not a scrappy fintech. It is an ACPR-licensed payment institution, regulated by the French banking authority since October 2016, processing over ten billion euros in annual transaction volume for approximately 20,000 merchants. It sits inside the BPCE banking group following a majority acquisition in 2016 and a merger with sister fintech Dalenys in 2022. Its product architecture is layered and comprehensive: an Accept layer for deployment and checkout customization, a Convert layer for fraud management and acceptance rate optimization, and a Centralise layer for reconciliation and reporting. It integrates natively with PrestaShop, WooCommerce, Shopify, and Magento. Pricing is public across three tiers.</p>
+
+    <div class="pricing-strip">
+      <div class="pricing-tier">
+        <span class="pricing-tier-name">Starter</span>
+        <span class="pricing-tier-price">Gratuit</span>
+        <span class="pricing-tier-sub">Transaction fees only</span>
+      </div>
+      <div class="pricing-tier">
+        <span class="pricing-tier-name">Pro</span>
+        <span class="pricing-tier-price">30 EUR</span>
+        <span class="pricing-tier-sub">HT/month, no commitment</span>
+      </div>
+      <div class="pricing-tier">
+        <span class="pricing-tier-name">Premium</span>
+        <span class="pricing-tier-price">80 EUR</span>
+        <span class="pricing-tier-sub">HT/month, no commitment</span>
+      </div>
+    </div>
+
+    <p>The customer logos on the main site include Veepee, Back Market, Maisons du Monde, and Allopneus. This is a serious payment infrastructure product for French e-commerce, not a simple payment button for micro-entrepreneurs. Knowing what it actually is makes the gaps more visible, not less.</p>
+
+    <h2>Two GTM motions running in parallel</h2>
+
+    <p>Payplug is running two completely different acquisition strategies simultaneously, and they produce two very different first-contact experiences.</p>
+
+    <div class="dual-path">
+      <div class="dual-path-header">Two paths into the same product</div>
+      <div class="dual-path-row">
+        <div class="dual-path-label"></div>
+        <div class="dual-path-ppc"><span class="dual-path-col-header">PPC / Retargeting path</span></div>
+        <div class="dual-path-main"><span class="dual-path-col-header">Main site / Organic path</span></div>
+      </div>
+      <div class="dual-path-row">
+        <div class="dual-path-label">Pricing visible</div>
+        <div class="dual-path-ppc">No</div>
+        <div class="dual-path-main">Yes - three public tiers</div>
+      </div>
+      <div class="dual-path-row">
+        <div class="dual-path-label">Signup path</div>
+        <div class="dual-path-ppc">Demo request form only</div>
+        <div class="dual-path-main">Direct self-serve signup with TEST mode</div>
+      </div>
+      <div class="dual-path-row">
+        <div class="dual-path-label">Developer docs</div>
+        <div class="dual-path-ppc">Not present</div>
+        <div class="dual-path-main">Technical documentation available</div>
+      </div>
+      <div class="dual-path-row">
+        <div class="dual-path-label">Time to first use</div>
+        <div class="dual-path-ppc">Depends on sales queue</div>
+        <div class="dual-path-main">Immediate via TEST mode</div>
+      </div>
+    </div>
+
+    <p>The PPC landing page is a conversion-optimized strip: one message, one call to action, no navigation to distract. It routes high-intent visitors into a sales-assisted conversation. The main site at <a href="https://www.payplug.com/fr/" target="_blank" rel="noopener">payplug.com/fr</a> serves a broader audience with public pricing, a direct signup path, and technical documentation. These are two defensible strategies for two different audience segments. The problem is what happens in between.</p>
+
+    <h2>The first-party finding</h2>
+
+    <p>I submitted a demo request through the PPC landing page. The retargeting system responded within days: ads appeared on YouTube with two distinct calls to action, one for pricing, one for offers. The marketing engine had correctly identified a warm lead and was investing budget to stay visible. Ten days later, no sales representative had made contact. No automated acknowledgment had arrived. No timeline had been set.</p>
+
+    <div class="funnel-gap">
+      <p class="funnel-gap-label">PPC path - observed flow</p>
+      <div class="funnel-steps">
+        <div class="funnel-step">
+          <span class="funnel-step-label">Google search</span>
+          <span class="funnel-step-dot filled">01</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">PPC landing page</span>
+          <span class="funnel-step-dot filled">02</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">Demo form</span>
+          <span class="funnel-step-dot filled">03</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">Retargeting ads</span>
+          <span class="funnel-step-dot filled">04</span>
+        </div>
+        <span class="funnel-arrow">-&gt;</span>
+        <div class="funnel-step">
+          <span class="funnel-step-label">Sales contact</span>
+          <span class="funnel-step-dot broken">?</span>
+        </div>
+      </div>
+    </div>
+
+    <p>This is the core tension. The PPC path routes what are probably the highest-intent leads in the entire funnel into a sales-assisted queue. The retargeting system then spends budget to keep those leads warm. But if the sales queue cannot respond within 24 to 48 hours, the retargeting spend is buying time with leads who have already moved on to a competitor. Meanwhile, a lower-intent visitor who arrived organically could have signed up, accessed TEST mode, and started integrating the product before the PPC prospect received a first response.</p>
+
+    <div class="review-pull">
+      <p class="review-pull-source">Review - Trustpilot</p>
+      <blockquote>Tres presents pour vous vendre leur solution de paiement, aux abonnes absents quand vous avez un probleme technique.</blockquote>
+    </div>
+
+    <h2>What the reviews say</h2>
+
+    <p>The positive pattern is consistent and earned: easy integration with French e-commerce platforms, clean dashboard, French-language support, a 92.5% average net acceptance rate. For a French merchant selling primarily to French customers, Payplug works well and the reviews reflect that clearly.</p>
+
+    <p>Two friction points appear independently across enough reviews to be structural. The first is fund-blocking and account management during compliance reviews. When Payplug freezes funds or closes an account, its response consistently references regulatory obligations and financial partner recommendations. This is not deflection: the ACPR license imposes KYC and anti-money laundering obligations that explain both the heavy document requirements at onboarding and the compliance-driven account actions that upset long-standing merchants. One Capterra reviewer described being a client since 2019 with over 146,000 euros in annual revenue across two sites, only to have their account closed mid-year with funds blocked and no clear explanation. The regulatory floor is real and applies to every licensed payment institution in France. The communication around compliance actions is where improvement is possible without touching the regulatory constraints themselves.</p>
+
+    <p>The second is the gap between sales presence and support presence that the Trustpilot reviewer identified. It appears in enough independent accounts, across enough different situations, to be a pattern rather than a coincidence.</p>
+
+    <div class="insight-box">
+      <p>The retargeting budget and the PPC spend are generating high-intent leads. The self-serve path on the main site is converting a different segment efficiently. The gap is in the middle: a prospect who came through the paid path needs either a faster human follow-up or an automated bridge to the self-serve path if the sales queue cannot absorb them within 24 to 48 hours. An automated acknowledgment on form submission, with a clear timeline and a link to the self-serve signup as an immediate alternative, would retain the leads the paid acquisition budget is already paying to generate. The cost of that automation is a fraction of the retargeting spend it would protect. This is the same handoff discipline that runs through every teardown in this series: from <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" target="_blank" rel="noopener">Lucca's consultant follow-up gap</a> to <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/" target="_blank" rel="noopener">LumApps's sales-to-delivery alignment problem</a>. The marketing motion and the delivery motion need to be connected at the point that matters.</p>
+    </div>
+
+    <h2>What I could not verify</h2>
+
+    <p>Payplug's per-transaction fee structure at each tier was not confirmed from the pricing page directly at time of writing. Figures referenced in this teardown are drawn from public support documentation and independent review sites. The specific revenue segmentation logic applied to demo form submissions was not publicly documented.</p>
+
+    <p>This teardown is the third in an ongoing series. What Lucca, LumApps, and Payplug share is a recurring pattern: a well-designed marketing motion that breaks down at a specific, identifiable handoff point. In each case the fix is not a product change. It is a process change that a PMM owns.</p>
+
+    <div class="sources">
+      <strong>Sources:</strong><br>
+      - <a href="https://fr.trustpilot.com/review/payplug.com" target="_blank" rel="noopener">Trustpilot - Payplug reviews</a><br>
+      - <a href="https://www.capterra.com/p/275790/Payplug/reviews/" target="_blank" rel="noopener">Capterra - Payplug reviews</a><br>
+      - <a href="https://www.payplug.com/fr/" target="_blank" rel="noopener">Payplug - main site, pricing and product pages</a><br>
+      - <a href="https://support.payplug.com/hc/fr" target="_blank" rel="noopener">Payplug support documentation</a><br>
+      - <a href="https://www.payplug.com/fr/blog/frais-transaction-carte/" target="_blank" rel="noopener">Payplug blog - transaction fee structure and pricing models</a>
+    </div>
+  </article>
+
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <h2>Building or hiring for product marketing?</h2>
+      <p class="contact-sub">This is one teardown in an ongoing series testing GTM motions against real customer and market data. If you want the same pass run on your product, or you're hiring for product marketing, let's talk.</p>
+      <div class="contact-buttons">
+        <a href="mailto:jpouandji@gmail.com" class="btn btn-primary" onclick="gtag('event', 'teardown_email_click'); return true;">&#x2709; Email Jean-Philippe</a>
+        <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener">LinkedIn Profile</a>
+        <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener">Growth Operator Notes</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Jean-Philippe Ouandji - Growth Operator Notes - Paris, France - 2026</p>
+  </footer>
+
+  <script>
+    (function() {
+      var pulls = document.querySelectorAll('.review-pull');
+      if (!('IntersectionObserver' in window)) { pulls.forEach(function(p) { p.classList.add('in-view'); }); return; }
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('in-view'); observer.unobserve(entry.target); }
+        });
+      }, { threshold: 0.3 });
+      pulls.forEach(function(p) { observer.observe(p); });
+    })();
+  </script>
+
+</body>
+</html>
