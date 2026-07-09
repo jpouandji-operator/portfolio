@@ -7,7 +7,7 @@
   <meta name="description" content="Product marketing teardowns of B2B SaaS tools. What the pricing page promises versus what the reviews remember, written by a growth operator, not a copywriter." />
   <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/teardowns/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Teardowns - Product Marketing Reviews of B2B SaaS Tools | Growth Operator Notes" />
+  <meta property="og:title" content="Teardowns - Growth Operator Notes" />
   <meta property="og:description" content="Product marketing teardowns of B2B SaaS tools. What the pricing page promises versus what the reviews remember." />
   <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/teardowns/" />
 
@@ -24,51 +24,129 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
 
   <style>
-    :root { --paper: #f5f0e8; --ink: #0f0e0c; --accent: #c8320a; --muted: #7a7060; --rule: #d4cfc4; --surface: #edeae2; }
+    :root {
+      --paper: #f5f0e8;
+      --ink: #0f0e0c;
+      --accent: #c8320a;
+      --muted: #7a7060;
+      --rule: #d4cfc4;
+      --surface: #edeae2;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { background: var(--paper); }
     body { font-family: 'Georgia', serif; font-size: 16px; line-height: 1.7; color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; }
     a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
     a:hover { opacity: 0.7; }
 
+    /* NAV */
     .site-nav { border-bottom: 2px solid var(--ink); padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--paper); z-index: 100; }
     .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 900; color: var(--ink); border: none; }
     .nav-links { display: flex; gap: 1.5rem; list-style: none; }
     .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border: none; }
     .nav-links a:hover, .nav-links a.active { color: var(--ink); opacity: 1; }
 
-    .page-header { max-width: 700px; margin: 0 auto; padding: 2.5rem 1rem 1.5rem; border-bottom: 2px solid var(--ink); }
-    .page-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem; }
-    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; line-height: 1.2; margin-bottom: 0.75rem; }
-    .page-intro { font-size: 0.96rem; color: var(--muted); line-height: 1.7; max-width: 560px; }
+    /* PAGE HEADER */
+    .page-header { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 2rem; }
+    .page-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 1rem; display: block; }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem; }
+    .page-intro { font-size: 0.95rem; color: var(--muted); line-height: 1.75; max-width: 560px; }
+    .page-rule { border: none; border-top: 2px solid var(--ink); margin: 2rem 0 0; }
 
-    .teardown-list { max-width: 700px; margin: 0 auto; padding: 0 1rem; }
+    /* DIALOGUE BOX CARDS */
+    .teardowns-grid { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; display: grid; gap: 1.5rem; }
 
-    .teardown-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 1.5rem 0 1rem; border-bottom: 1px solid var(--rule); }
+    .dialogue-card { border: 1px solid var(--ink); overflow: hidden; transition: box-shadow 0.2s ease; }
+    .dialogue-card:hover { box-shadow: 4px 4px 0 var(--ink); }
 
-    .teardown-card { padding: 1.75rem 0; border-bottom: 1px solid var(--rule); }
-    .teardown-card-meta { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.5rem; }
-    .teardown-card h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.5rem; }
-    .teardown-card h2 a { color: var(--ink); border: none; }
-    .teardown-card h2 a:hover { color: var(--accent); opacity: 1; }
-    .teardown-card-deck { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
-    .teardown-card-link { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .dialogue-card-bar {
+      background: var(--ink);
+      padding: 0.55rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .dialogue-card-dots {
+      display: flex;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+    .dialogue-card-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      opacity: 0.5;
+    }
+    .dialogue-card-dot.accent { background: var(--accent); opacity: 1; }
+    .dialogue-card-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      flex: 1;
+    }
+    .dialogue-card-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--muted);
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
 
-    .next-up { padding: 1.75rem 0 2.5rem; }
-    .next-up-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; }
-    .next-up h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem; }
-    .next-up p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+    .dialogue-card-body { padding: 1.25rem 1rem 1rem; background: var(--paper); }
+    .dialogue-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+    }
+    .dialogue-card-title a { color: var(--ink); border: none; }
+    .dialogue-card-title a:hover { color: var(--accent); opacity: 1; }
+    .dialogue-card-deck { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
 
-    .method-box { background: var(--surface); border-top: 1px solid var(--rule); padding: 1.5rem 1rem 2rem; margin-top: 0; }
-    .method-inner { max-width: 700px; margin: 0 auto; }
-    .method-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem; }
-    .method-box p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+    .dialogue-card-footer {
+      border-top: 1px solid var(--rule);
+      padding: 0.6rem 1rem;
+      background: var(--surface);
+      display: flex;
+      justify-content: flex-end;
+    }
+    .dialogue-card-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      border: none;
+    }
+    .dialogue-card-link:hover { opacity: 0.7; }
 
-    footer { padding: 1rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--rule); }
+    /* NEXT UP */
+    .next-up-section { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+    .next-up-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.5rem; display: block; }
+    .next-up-inner p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+    .next-up-inner strong { color: var(--ink); }
+
+    /* METHOD */
+    .method-section { background: var(--ink); color: var(--paper); padding: 1.5rem; }
+    .method-inner { max-width: 760px; margin: 0 auto; }
+    .method-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem; display: block; }
+    .method-section p { font-size: 0.88rem; color: #c8c4bc; line-height: 1.75; }
+
+    footer { padding: 1rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); border-top: 1px solid var(--rule); background: var(--paper); }
+
+    /* NEXT UP SHADED */
+    .next-up-inner { border: 1px dashed var(--rule); padding: 1.25rem 1rem; opacity: 0.55; }
 
     @media (min-width: 768px) {
       .page-header { padding: 3rem 2rem 2rem; }
-      .teardown-list { padding: 0 2rem; }
+      .teardowns-grid { padding: 2rem 2rem; grid-template-columns: 1fr 1fr 1fr; }
+      .next-up-section { padding: 0 2rem 3rem; }
+      .method-inner { padding: 0 0.5rem; }
     }
   </style>
 </head>
@@ -85,53 +163,98 @@
   </nav>
 
   <div class="page-header">
-    <p class="page-label">Teardowns</p>
+    <span class="page-label">Teardowns - 3 Published</span>
     <h1>What the Pricing Page Promises, and What the Reviews Remember</h1>
     <p class="page-intro">A series of product marketing teardowns on B2B SaaS tools. Marketing materials reveal strategic intent. Reviews reveal whether that intent gets delivered. The gap between the two is where the actual analysis lives.</p>
+    <hr class="page-rule" />
   </div>
 
-  <div class="teardown-list">
+  <div class="teardowns-grid">
 
-    <p class="teardown-count">Teardowns - 3 Published</p>
-
-    <div class="teardown-card">
-      <p class="teardown-card-meta">Teardown 03 - Fintech - Payment Processing - 08 Jul 2026</p>
-      <h2><a href="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/">Payplug's Acquisition Machine Is Working. The Handoff Is Not.</a></h2>
-      <p class="teardown-card-deck">A dual GTM motion, a ten-day silence after a demo request, and a retargeting budget generating leads faster than the sales queue can absorb them.</p>
-      <a href="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/" class="teardown-card-link">Read the Teardown &rarr;</a>
+    <!-- TEARDOWN 03 -->
+    <div class="dialogue-card">
+      <div class="dialogue-card-bar">
+        <div class="dialogue-card-dots">
+          <span class="dialogue-card-dot accent"></span>
+          <span class="dialogue-card-dot"></span>
+          <span class="dialogue-card-dot"></span>
+        </div>
+        <span class="dialogue-card-meta">Teardown 03 &mdash; Fintech &mdash; Payment Processing &mdash; 08 Jul 2026</span>
+        <span class="dialogue-card-num">03</span>
+      </div>
+      <div class="dialogue-card-body">
+        <h2 class="dialogue-card-title">
+          <a href="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/">Payplug's Acquisition Machine Is Working. The Handoff Is Not.</a>
+        </h2>
+        <p class="dialogue-card-deck">A dual GTM motion, a ten-day silence after a demo request, and a retargeting budget generating leads faster than the sales queue can absorb them.</p>
+      </div>
+      <div class="dialogue-card-footer">
+        <a href="https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/" class="dialogue-card-link">Read the Teardown &rarr;</a>
+      </div>
     </div>
 
-    <div class="teardown-card">
-      <p class="teardown-card-meta">Teardown 02 - B2B SaaS - Employee Experience - 07 Jul 2026</p>
-      <h2><a href="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/">What LumApps Gets Right About Enterprise Selling, and Where the Seams Show</a></h2>
-      <p class="teardown-card-deck">A Gartner Leader with a G2 satisfaction gap. A deliberate acquisition funnel that filters before it sells. And a competitive position that is genuinely hard to replicate, for now.</p>
-      <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/" class="teardown-card-link">Read the Teardown &rarr;</a>
+    <!-- TEARDOWN 02 -->
+    <div class="dialogue-card">
+      <div class="dialogue-card-bar">
+        <div class="dialogue-card-dots">
+          <span class="dialogue-card-dot accent"></span>
+          <span class="dialogue-card-dot"></span>
+          <span class="dialogue-card-dot"></span>
+        </div>
+        <span class="dialogue-card-meta">Teardown 02 &mdash; B2B SaaS &mdash; Employee Experience &mdash; 07 Jul 2026</span>
+        <span class="dialogue-card-num">02</span>
+      </div>
+      <div class="dialogue-card-body">
+        <h2 class="dialogue-card-title">
+          <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/">What LumApps Gets Right About Enterprise Selling, and Where the Seams Show</a>
+        </h2>
+        <p class="dialogue-card-deck">A Gartner Leader with a G2 satisfaction gap. A deliberate acquisition funnel that filters before it sells. And a competitive position that is genuinely hard to replicate, for now.</p>
+      </div>
+      <div class="dialogue-card-footer">
+        <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lumapps-enterprise-selling/" class="dialogue-card-link">Read the Teardown &rarr;</a>
+      </div>
     </div>
 
-    <div class="teardown-card">
-      <p class="teardown-card-meta">Teardown 01 - B2B SaaS - HR Tech - 24 Jun 2026</p>
-      <h2><a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/">What Lucca's Pricing Page Promises, and What Its Reviews Remember</a></h2>
-      <p class="teardown-card-deck">Lucca sells modular pricing as the alternative to bloated HR suites. The reviews tell a more complicated story about what happens once a buyer actually starts adding modules.</p>
-      <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" class="teardown-card-link">Read the Teardown &rarr;</a>
-    </div>
-
-    <div class="next-up">
-      <p class="next-up-label">Next Up</p>
-      <h2>Pluxee, Spendesk, Aircall</h2>
-      <p>Next teardowns in the series. Same method: pricing page claims tested against Capterra, Trustpilot, and G2 reviews, written from a product-marketing lens, not a GTM-only one.</p>
+    <!-- TEARDOWN 01 -->
+    <div class="dialogue-card">
+      <div class="dialogue-card-bar">
+        <div class="dialogue-card-dots">
+          <span class="dialogue-card-dot accent"></span>
+          <span class="dialogue-card-dot"></span>
+          <span class="dialogue-card-dot"></span>
+        </div>
+        <span class="dialogue-card-meta">Teardown 01 &mdash; B2B SaaS &mdash; HR Tech &mdash; 24 Jun 2026</span>
+        <span class="dialogue-card-num">01</span>
+      </div>
+      <div class="dialogue-card-body">
+        <h2 class="dialogue-card-title">
+          <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/">What Lucca's Pricing Page Promises, and What Its Reviews Remember</a>
+        </h2>
+        <p class="dialogue-card-deck">Lucca sells modular pricing as the alternative to bloated HR suites. The reviews tell a more complicated story about what happens once a buyer actually starts adding modules.</p>
+      </div>
+      <div class="dialogue-card-footer">
+        <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" class="dialogue-card-link">Read the Teardown &rarr;</a>
+      </div>
     </div>
 
   </div>
 
-  <div class="method-box">
+  <div class="next-up-section">
+    <div class="next-up-inner">
+      <span class="next-up-label">Next Up</span>
+      <p><strong>Pluxee, Spendesk, Aircall.</strong> Same method: pricing page claims tested against Capterra, Trustpilot, and G2 reviews, written from a product-marketing lens, not a GTM-only one.</p>
+    </div>
+  </div>
+
+  <div class="method-section">
     <div class="method-inner">
-      <p class="method-label">About this series</p>
+      <span class="method-label">About this series</span>
       <p>Each teardown follows the same analytical pass: identify the buyer when they differ from the user, read the GTM motion for what it signals about positioning, name one specific product-level friction or strength without guessing at what cannot be verified, and propose one concrete recommendation. It is the same operator discipline behind the rest of Growth Operator Notes, applied one product at a time.</p>
     </div>
   </div>
 
   <footer>
-    <p>Jean-Philippe Ouandji - Growth Operator Notes - Paris, France - 2026</p>
+    <p>Jean-Philippe Ouandji &mdash; Growth Operator Notes &mdash; Paris, France &mdash; 2026</p>
   </footer>
 
 </body>
