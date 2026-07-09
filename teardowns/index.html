@@ -55,7 +55,7 @@
     /* DIALOGUE BOX CARDS */
     .teardowns-grid { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem; display: grid; gap: 1.5rem; }
 
-    .dialogue-card { border: 1px solid var(--ink); overflow: hidden; transition: box-shadow 0.2s ease; }
+    .dialogue-card { border: 1px solid var(--ink); overflow: hidden; transition: box-shadow 0.2s ease; display: flex; flex-direction: column; }
     .dialogue-card:hover { box-shadow: 4px 4px 0 var(--ink); }
 
     .dialogue-card-bar {
@@ -95,7 +95,7 @@
       flex-shrink: 0;
     }
 
-    .dialogue-card-body { padding: 1.25rem 1rem 1rem; background: var(--paper); }
+    .dialogue-card-body { padding: 1.25rem 1rem 1rem; background: var(--paper); flex: 1; }
     .dialogue-card-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
