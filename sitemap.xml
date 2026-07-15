@@ -20,7 +20,7 @@
   <!-- Teardowns index -->
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/teardowns/</loc>
-    <lastmod>2026-07-09</lastmod>
+    <lastmod>2026-07-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -45,6 +45,14 @@
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/teardowns/payplug-acquisition-gap/</loc>
     <lastmod>2026-07-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Teardown 04 - Pluxee -->
+  <url>
+    <loc>https://jpouandji-operator.github.io/portfolio/teardowns/pluxee-world-of-opportunities/</loc>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
