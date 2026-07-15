@@ -4,7 +4,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/</loc>
-    <lastmod>2026-07-09</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -51,6 +51,13 @@
 
   <!-- GON Articles -->
   <url>
+    <loc>https://jpouandji-operator.github.io/portfolio/bceao-pi-spi-wave-regulatory-navigation-africa/</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://jpouandji-operator.github.io/portfolio/canal-multichoice-platform-economics-africa/</loc>
     <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
@@ -80,7 +87,7 @@
 
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/world-bank-tenders-africa-distribution/</loc>
-    <lastmod>2026-03-05</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -88,6 +95,20 @@
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/jumia-pudo-ecommerce-africa/</loc>
     <lastmod>2026-02-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://jpouandji-operator.github.io/portfolio/airtel-infrastructure-pivot/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://jpouandji-operator.github.io/portfolio/vas-telcos-investment-delegation/</loc>
+    <lastmod>2026-01-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -100,19 +121,10 @@
     <priority>0.7</priority>
   </url>
 
-  <url>
-    <loc>https://jpouandji-operator.github.io/portfolio/lipa-later-war-games-retrospective/</loc>
-    <lastmod>2026-05-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  <!-- lipa-later-war-games-retrospective intentionally omitted:
+       gated pending resolution of the Isaac Hunja sensitivity, not yet built.
+       Re-add only once JP confirms the hold is lifted and the page is live. -->
 
-  <!-- Africa market entry -->
-  <url>
-    <loc>https://jpouandji-operator.github.io/portfolio/africa-market-entry/</loc>
-    <lastmod>2026-02-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  <!-- africa-market-entry intentionally omitted: drafted, never published, removed per JP -->
 
 </urlset>
