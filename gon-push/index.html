@@ -122,6 +122,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'Courier New',monospace;min-he
         <button class="table-btn" onclick="setTable('Theses',this)">Theses</button>
         <button class="table-btn" onclick="setTable('Gap Map',this)">Gap Map</button>
         <button class="table-btn" onclick="setTable('Intelligence Network',this)">Intel Network</button>
+        <button class="table-btn" onclick="setTable('Articles',this)">Articles</button>
       </div>
     </div>
     <div class="card" style="margin-bottom:0;">
@@ -241,6 +242,18 @@ const NETWORK_MAP = {
 };
 const NETWORK_MULTI = new Set(["Market","Dimension"]);
 
+const ARTICLES_MAP = {
+  "Slug":"Slug",
+  "Title":"Title",
+  "Content Type":"Content Type",
+  "Sector":"Sector",
+  "Field-Note Stat":"Field-Note Stat",
+  "Verdict":"Verdict",
+  "Journey Snag Stage":"Journey Snag Stage",
+  "Published Date":"Published Date",
+};
+const ARTICLES_MULTI = new Set([]);
+
 const NORMALISE = {
 
   // Capital structure values
@@ -268,6 +281,7 @@ function getFieldMap() {
   if (currentTable === 'Theses') return { map: THESES_MAP, multi: new Set() };
   if (currentTable === 'Gap Map') return { map: GAPMAP_MAP, multi: GAPMAP_MULTI };
   if (currentTable === 'Intelligence Network') return { map: NETWORK_MAP, multi: NETWORK_MULTI };
+  if (currentTable === 'Articles') return { map: ARTICLES_MAP, multi: ARTICLES_MULTI };
   return { map: BENCHMARK_MAP, multi: BENCHMARK_MULTI };
 }
 
@@ -337,10 +351,12 @@ function parseInput() {
     const isBenchSection = /###\s+(?:ENTRY\s+)?GON-[A-Z]+-\d{3}/.test(section);
     const isThesisSection = /###\s+(?:ENTRY\s+)?THX-\d{3}/.test(section);
     const isNetworkSection = /###\s+(?:CONTACT\s+)?NET-\d{3}/.test(section);
+    const isArticleSection = /###\s+ARTICLE\s*-/.test(section);
     if (currentTable === 'Gap Map' && !isGapSection) return;
     if (currentTable === 'Benchmarks' && !isBenchSection) return;
     if (currentTable === 'Theses' && !isThesisSection) return;
     if (currentTable === 'Intelligence Network' && !isNetworkSection) return;
+    if (currentTable === 'Articles' && !isArticleSection) return;
     const rec = {};
     const lines = section.split('\n');
     for (const line of lines) {
@@ -359,13 +375,17 @@ function parseInput() {
       }
     }
     // Extract ID from heading
-    if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID'] && !rec['Contact ID']) {
+    if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID'] && !rec['Contact ID'] && !rec['Slug']) {
       const m = section.match(/###\s+(?:ENTRY\s+|GAP\s+|CONTACT\s+)?(GON-[A-Z]+-\d{3}|GAP-\d{3}|NET-\d{3})/) || section.match(/###\s+([\w-]+\d{3})/);
       if (m) {
         if (currentTable === 'Theses') { /* Theses use Thesis Statement as primary */ }
         else if (currentTable === 'Gap Map') rec['Gap ID'] = m[1];
         else if (currentTable === 'Intelligence Network') rec['Contact ID'] = m[1];
-        else rec['Entry ID'] = m[1];
+        else if (currentTable !== 'Articles') rec['Entry ID'] = m[1];
+      }
+      if (currentTable === 'Articles') {
+        const sm = section.match(/###\s+ARTICLE\s*-\s*(.+)/);
+        if (sm) rec['Slug'] = sm[1].trim();
       }
     }
     // Extract name from heading
@@ -414,8 +434,8 @@ function renderRecords() {
 
   list.innerHTML = records.map(r => {
     const f = r.fields;
-    const id = f['Entry ID'] || f['Gap ID'] || f['Contact ID'] || f['Thesis ID'] || '?';
-    const name = f['Metric Name'] || f['Thesis Statement'] || f['Gap Description'] || f['Name'] || 'Unknown';
+    const id = f['Entry ID'] || f['Gap ID'] || f['Contact ID'] || f['Thesis ID'] || f['Slug'] || '?';
+    const name = f['Metric Name'] || f['Thesis Statement'] || f['Gap Description'] || f['Name'] || f['Title'] || 'Unknown';
     const market = Array.isArray(f['Market']) ? f['Market'].join(', ') : (f['Market'] || '');
     const st = statuses[r.index];
     const err = errors[r.index];
@@ -479,11 +499,11 @@ async function pushSelected() {
       const result = await airtablePush(token, currentTable, rec.fields);
       setStatus(rec.index, 'success');
       pushCount++;
-      addLog((rec.fields['Entry ID']||rec.fields['Gap ID']||(rec.fields['Thesis Statement']||'').substring(0,30)||'Record') + ' — ID: ' + result.id, 'success');
+      addLog((rec.fields['Entry ID']||rec.fields['Gap ID']||rec.fields['Slug']||(rec.fields['Thesis Statement']||'').substring(0,30)||'Record') + ' — ID: ' + result.id, 'success');
     } catch(e) {
       setStatus(rec.index, 'error', e.message);
       failCount++;
-      addLog((rec.fields['Entry ID']||rec.fields['Gap ID']||(rec.fields['Thesis Statement']||'').substring(0,30)||'Record') + ' FAILED: ' + e.message, 'error');
+      addLog((rec.fields['Entry ID']||rec.fields['Gap ID']||rec.fields['Slug']||(rec.fields['Thesis Statement']||'').substring(0,30)||'Record') + ' FAILED: ' + e.message, 'error');
     }
     await new Promise(r => setTimeout(r, 350));
   }
@@ -550,6 +570,18 @@ function buildSingleForm() {
         ${sf('Priority',['High','Medium','Low'])}
         ${sf('Status',['Open gap','In progress','Closed','Superseded'])}
         ${tf('Notes','textarea','full')}
+      </div>`;
+  } else if (currentTable === 'Articles') {
+    label.textContent = 'Single Article Entry';
+    form.innerHTML = `
+      <div class="single-form">
+        ${tf('Slug','text')}${tf('Title','text')}
+        ${sf('Content Type',['Article','Teardown','War Games'])}
+        ${sf('Sector',['Telecom','Fintech','Energy','Media','Agriculture','E-commerce','Cross-sector'])}
+        ${tf('Field-Note Stat','text')}
+        ${tf('Verdict','text')}
+        ${sf('Journey Snag Stage',['Search','Landing','Activation','Support','Renewal','None'])}
+        ${tf('Published Date','text')}
       </div>`;
   } else {
     label.textContent = 'Single Benchmark Entry';
