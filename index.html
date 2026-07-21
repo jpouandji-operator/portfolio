@@ -528,6 +528,7 @@
     var chips = document.querySelectorAll('#sectorFilters .chip');
     var cards = document.querySelectorAll('#articleGrid .card');
     var noResults = document.getElementById('noResults');
+    var siteHeader = document.querySelector('header.site');
     chips.forEach(function(chip) {
       chip.addEventListener('click', function() {
         chips.forEach(function(c) { c.classList.remove('active'); });
@@ -540,6 +541,14 @@
           if (show) visibleCount++;
         });
         noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+
+        // Scroll the results into view under the sticky header, since filtering
+        // changes content but the page otherwise stays put where the user was.
+        var headerHeight = siteHeader ? siteHeader.offsetHeight : 0;
+        var target = document.getElementById('articleGrid');
+        var targetTop = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
+        window.scrollTo({ top: Math.max(targetTop, 0), behavior: 'smooth' });
+
         if (typeof gtag !== 'undefined') {
           gtag('event', 'sector_filter_click', {'sector': sector});
         }
