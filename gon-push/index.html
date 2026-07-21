@@ -401,6 +401,8 @@ function parseInput() {
         rec['Gap Description'] = nameMatch[1].trim();
       } else if (currentTable === 'Intelligence Network') {
         // Name field already parsed from "Name: ..." line - don't set Metric Name
+      } else if (currentTable === 'Articles') {
+        // Title field already parsed from "Title: ..." line - don't set Metric Name
       } else if (!rec['Metric Name'] && currentTable !== 'Gap Map') {
         rec['Metric Name'] = nameMatch[1].trim();
       }
