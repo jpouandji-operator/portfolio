@@ -1,1572 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GON Intelligence - African Private Capital</title>
-<meta name="description" content="Operator intelligence for Africa-focused VC and PE investors. Not a database. A point of view." />
-<link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/gon-intelligence/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="GON Intelligence - Operator Intelligence for African Private Capital" />
-  <meta property="og:description" content="Pressure-test Africa market assumptions before the IC. Built from 12 years inside the distribution stack across WAEMU and CEMAC." />
-  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/gon-intelligence/" />
-  <meta property="og:image" content="https://jpouandji-operator.github.io/portfolio/og-image.jpg" />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CWB7VQ56XE');</script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GON Intelligence | Growth Operator Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
 <style>
-:root{--paper:#f5f0e8;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--paper2:#ede8df;--paper3:#e6e0d6;}
+:root{--paper:#f5f0e8;--paper-card:#fbf7ef;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--green:#2a6b4f;--amber:#c98a1a;}
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{background:var(--paper);font-family:'Georgia',serif;font-size:16px;line-height:1.7;color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;}
-a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);}
-a:hover{opacity:0.7;}
+body{font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.7;}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+a{color:inherit;}
+header.site{border-bottom:2px solid var(--ink);padding:24px 0 18px;}
+.site-top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;}
+.wordmark{font-family:'Playfair Display',serif;font-weight:900;font-size:19px;text-decoration:none;}
+.wordmark span{color:var(--accent);}
+.site-nav-links{font-size:14px;font-style:italic;color:var(--muted);}
+.site-nav-links a{text-decoration:none;margin-left:18px;}
+.site-nav-links a.active{color:var(--accent);font-style:normal;}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
-@keyframes dotPulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
-@keyframes progressRun{from{width:0%}to{width:100%}}
-@keyframes typewriter{from{opacity:0}to{opacity:1}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* HEADER */
-.header{padding:1.5rem 1rem;border-bottom:2px solid var(--ink);animation:fadeIn 0.4s ease;}
-.header-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;}
-.header h1{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;line-height:1.2;}
-.header-sub{font-size:0.85rem;color:var(--muted);font-style:italic;margin-top:0.2rem;}
-.header-nav{display:flex;gap:1.25rem;align-items:center;padding-top:0.3rem;}
-.header-nav a{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border:none;transition:color 0.2s;}
-.header-nav a:hover{color:var(--accent);opacity:1;}
-.token-btn{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border:1px solid var(--rule);padding:3px 9px;cursor:pointer;background:none;transition:all 0.2s;}
-.token-btn:hover{border-color:var(--ink);color:var(--ink);}
-.token-btn.active{color:var(--accent);border-color:var(--accent);}
-
-/* TOKEN PANEL */
-.token-panel{background:var(--paper2);border-bottom:1px solid var(--rule);overflow:hidden;max-height:0;transition:max-height 0.3s ease,padding 0.3s ease;}
-.token-panel.open{max-height:200px;padding:1rem;}
-.token-panel-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem;}
-.token-row{display:flex;gap:8px;}
-.token-input{flex:1;background:var(--paper);border:1px solid var(--rule);padding:7px 10px;font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--ink);outline:none;transition:border-color 0.2s;}
+/* TOKEN BAR */
+.token-bar{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);flex-wrap:wrap;}
+.token-status{display:flex;align-items:center;gap:7px;font-size:12.5px;font-style:italic;color:var(--muted);}
+.token-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);flex:none;}
+.token-dot.connected{background:var(--green);}
+.token-toggle{font-size:12.5px;font-style:italic;color:var(--accent);cursor:pointer;text-decoration:none;border-bottom:1px solid var(--accent);margin-left:auto;}
+.token-panel{display:none;padding:16px 18px;background:var(--paper-card);border:1px solid var(--rule);margin-top:12px;}
+.token-panel.open{display:block;}
+.token-panel p{font-size:13.5px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+.token-panel p b{font-family:'Playfair Display',serif;color:var(--ink);}
+.token-row{display:flex;gap:10px;flex-wrap:wrap;}
+.token-input{flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--rule);background:var(--paper);font-family:Georgia,serif;font-size:14px;color:var(--ink);outline:none;}
 .token-input:focus{border-color:var(--ink);}
-.token-save{background:var(--ink);color:var(--paper);border:none;padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:background 0.2s;}
-.token-save:hover{background:var(--accent);}
+.token-save{background:var(--ink);color:var(--paper);border:none;padding:10px 22px;font-family:Georgia,serif;font-size:14px;cursor:pointer;border-radius:2px;}
+.token-note{font-size:12px;font-style:italic;color:var(--muted);margin-top:10px;}
 
-/* PROGRESS */
-.progress-bar{height:2px;background:var(--rule);position:relative;overflow:hidden;opacity:0;transition:opacity 0.2s;}
-.progress-bar.active{opacity:1;}
-.progress-bar::after{content:'';position:absolute;top:0;left:0;height:100%;width:0%;background:var(--accent);animation:progressRun 1.8s ease-in-out infinite;}
+.tool-header{padding:36px 0 0;}
+.tool-eyebrow{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.tool-eyebrow::before{content:'';width:22px;height:1px;background:var(--accent);}
+h1.tool-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(30px,4.5vw,42px);line-height:1.08;}
+.tool-sub{font-size:17px;color:var(--muted);max-width:640px;margin-top:14px;line-height:1.6;}
+.db-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--ink);margin:28px 0 0;}
+.db{background:var(--paper-card);padding:14px 16px;}
+.db .n{font-family:'Playfair Display',serif;font-weight:900;font-size:21px;color:var(--accent);line-height:1.1;}
+.db .l{font-size:11.5px;font-style:italic;color:var(--muted);margin-top:2px;}
+.db .l sup{color:var(--accent);font-style:normal;}
+.db-meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:10px;}
+.db-live{display:flex;align-items:center;gap:6px;font-size:12px;font-style:italic;color:var(--green);}
+.db-live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);}
+.db-coverage{font-size:12px;font-style:italic;color:var(--muted);}
 
-/* MAIN */
-.main{max-width:700px;margin:0 auto;padding:0 1rem 5rem;}
+.builder{margin:32px 0 0;border:1px solid var(--ink);background:var(--paper-card);}
+.builder-head{background:var(--ink);color:var(--paper);padding:13px 20px;font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.builder-head .step{font-family:Georgia,serif;font-size:12.5px;font-style:italic;letter-spacing:0;text-transform:none;color:#c9c2b3;}
+.param-group{padding:18px 20px;border-bottom:1px solid var(--rule);}
+.param-label{font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.param-label span{font-family:Georgia,serif;font-size:12px;font-style:italic;letter-spacing:0;text-transform:none;}
+.param-opts{display:flex;gap:8px;flex-wrap:wrap;}
+.popt{font-size:13.5px;font-family:Georgia,serif;padding:7px 15px;border:1px solid var(--rule);background:var(--paper);color:var(--muted);cursor:pointer;border-radius:2px;transition:all .12s;}
+.popt:hover{border-color:var(--ink);color:var(--ink);}
+.popt.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.popt.thin{border-style:dashed;}
+.popt .cnt{font-size:11px;opacity:.6;margin-left:5px;}
 
-/* STEP FLOW */
-.step-flow{padding:2rem 0 1rem;animation:fadeUp 0.5s ease 0.1s both;}
-.step-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:1.5rem;}
+/* cross-dimension note */
+.xdim{margin:0 20px 18px;padding:12px 16px;background:var(--paper);border-left:3px solid var(--accent);font-size:13.5px;font-style:italic;color:#4a4438;line-height:1.6;}
+.xdim b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
 
-/* STEP INDICATORS */
-.step-indicators{display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid var(--rule);}
-.step-ind{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;padding:0.5rem 0;margin-right:2rem;color:var(--rule);border-bottom:2px solid transparent;transition:all 0.3s;}
-.step-ind.active{color:var(--ink);border-bottom-color:var(--accent);}
-.step-ind.done{color:var(--muted);}
+.builder-foot{padding:16px 20px;background:var(--paper);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+.query-preview{font-size:14px;font-style:italic;color:var(--muted);flex:1;min-width:200px;}
+.query-preview b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
+.record-count{font-size:12.5px;font-style:italic;color:var(--muted);}
+.record-count .exact{color:var(--green);}
+.record-count .adj{color:var(--amber);}
+.run-btn{background:var(--accent);color:#fff;border:none;padding:13px 30px;font-family:Georgia,serif;font-size:15px;cursor:pointer;white-space:nowrap;border-radius:2px;}
+.run-btn:hover{background:#a82808;}
+.run-btn:disabled{background:var(--rule);color:var(--muted);cursor:not-allowed;}
 
-/* STEP PANELS */
-.step-panel{display:none;animation:fadeUp 0.3s ease both;}
-.step-panel.active{display:block;}
-.step-headline{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;line-height:1.2;margin-bottom:0.5rem;}
-.step-headline em{font-style:italic;color:var(--accent);}
-.step-sub{font-size:0.88rem;color:var(--muted);font-style:italic;line-height:1.6;margin-bottom:1.5rem;}
+.result{margin:36px 0 0;border:1px solid var(--rule);background:var(--paper-card);}
+.result-head{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--ink);color:var(--paper);flex-wrap:wrap;}
+.result-head b{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#f2b990;}
+.result-query{flex:1;font-size:14px;font-style:italic;color:#c9c2b3;}
+.result-back{font-size:12.5px;font-style:italic;color:#c9c2b3;text-decoration:none;border-bottom:1px solid #6a6355;}
+.result-body{padding:22px 24px;}
+.rb-section{margin-bottom:22px;}
+.rb-label{font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+.rb-label::after{content:'';flex:1;height:1px;background:var(--rule);}
+.rb-text{font-size:15.5px;color:#2f2b24;line-height:1.7;margin-bottom:12px;}
+.cited{border-bottom:1px dotted var(--accent);}
+.record-chip{display:inline-block;font-family:'Playfair Display',serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:#e4dccf;color:#5a5040;padding:2px 7px;border-radius:2px;margin-left:5px;vertical-align:1px;}
 
-/* MARKET GRID */
-.market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin-bottom:1rem;}
-.market-tile{padding:10px 12px;border:1px solid var(--rule);cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
-.market-tile:hover{border-color:var(--muted);}
-.market-tile.selected{border-color:var(--accent);background:var(--paper2);}
-.market-tile.selected::after{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);}
-.market-tile-name{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--ink);}
-.market-tile-sub{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-top:2px;}
-.market-tile.coverage-deep .market-tile-sub{color:var(--accent);}
+/* comparison mode */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:10px;}
+.cmp{background:var(--paper);padding:16px 18px;}
+.cmp h5{font-family:'Playfair Display',serif;font-size:15px;margin-bottom:8px;}
+.cmp p{font-size:13.5px;color:#4a4438;line-height:1.6;margin:0;}
+.cmp-verdict{grid-column:1/-1;background:var(--ink);color:var(--paper);padding:14px 18px;font-size:14px;line-height:1.6;}
+.cmp-verdict b{font-family:'Playfair Display',serif;color:#f2b990;display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
 
-/* SECTOR GRID */
-.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-bottom:1rem;}
-.sector-tile{padding:10px 14px;border:1px solid var(--rule);cursor:pointer;transition:all 0.15s;position:relative;}
-.sector-tile:hover{border-color:var(--muted);}
-.sector-tile.selected{border-color:var(--accent);background:var(--paper2);}
-.sector-tile.selected::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--accent);}
-.sector-tile-name{font-size:0.88rem;color:var(--ink);font-style:italic;}
+.evidence{border:1px solid var(--rule);margin-top:10px;}
+.ev-row{display:grid;grid-template-columns:1fr auto auto auto;gap:14px;padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--paper);align-items:baseline;}
+.ev-row:last-child{border-bottom:none;}
+.ev-row.head{background:var(--paper-card);font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.ev-row.adjacent{background:#faf6ee;}
+.ev-claim{font-size:13.5px;color:#2f2b24;}
+.ev-mkt{font-size:11.5px;font-style:italic;color:var(--muted);white-space:nowrap;}
+.ev-val{font-family:'Playfair Display',serif;font-weight:700;font-size:13.5px;color:var(--accent);white-space:nowrap;}
+.ev-tier{font-family:'Playfair Display',serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;}
+.tier-a{background:#d5e6dd;color:#1d4c38;}
+.tier-b{background:#f3e6cc;color:#7a5410;}
+.match-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 14px;background:var(--paper-card);border-bottom:1px solid var(--rule);}
 
-/* QUESTION STEP */
-.question-context{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--rule);}
-.question-context span{color:var(--muted);}
-.question-set{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;}
-.question-card{padding:12px 16px;border:1px solid var(--rule);cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
-.question-card::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.25s;}
-.question-card:hover{border-color:var(--muted);background:var(--paper2);}
-.question-card:hover::after{width:100%;}
-.question-card.selected{border-color:var(--accent);background:var(--paper2);}
-.question-card.selected::after{width:100%;}
-.q-text{font-size:0.9rem;color:var(--ink);line-height:1.5;}
-.q-dimension{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-top:4px;}
+.gap-note{background:var(--paper);border-left:3px solid var(--muted);padding:12px 16px;margin-top:10px;font-size:13.5px;font-style:italic;color:var(--muted);}
+.gap-note b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
+.result-actions{display:flex;gap:10px;padding:16px 24px;border-top:1px solid var(--rule);flex-wrap:wrap;}
+.ra{font-size:13px;padding:9px 18px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);cursor:pointer;border-radius:2px;font-family:Georgia,serif;}
+.ra:hover{border-color:var(--ink);}
+.ra.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
 
-/* OR DIVIDER */
-.or-divider{display:flex;align-items:center;gap:1rem;margin:1rem 0;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;}
-.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--rule);}
-
-/* FREE INPUT */
-.free-row{display:flex;border:1px solid var(--rule);margin-bottom:1rem;transition:border-color 0.2s;}
-.free-row:focus-within{border-color:var(--ink);}
-.free-input{flex:1;background:transparent;border:none;padding:10px 14px;font-family:'Georgia',serif;font-size:0.88rem;color:var(--ink);outline:none;}
-.free-input::placeholder{color:var(--muted);font-style:italic;}
-
-/* NAV BUTTONS */
-.step-nav{display:flex;gap:8px;align-items:center;margin-top:0.5rem;}
-.btn-next{background:var(--ink);color:var(--paper);border:none;padding:10px 24px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;}
-.btn-next:hover:not(:disabled){background:var(--accent);}
-.btn-next:disabled{background:var(--rule);color:var(--muted);cursor:not-allowed;}
-.btn-back-step{background:none;border:1px solid var(--rule);color:var(--muted);padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:all 0.2s;}
-.btn-back-step:hover{border-color:var(--ink);color:var(--ink);}
-.dots{display:none;}
-.dots span{width:4px;height:4px;background:var(--paper);border-radius:50%;display:inline-block;margin:0 1px;animation:dotPulse 1.2s ease-in-out infinite;}
-.dots span:nth-child(2){animation-delay:0.15s;}
-.dots span:nth-child(3){animation-delay:0.3s;}
-.searching .dots{display:inline-flex;align-items:center;}
-.searching .btn-text{display:none;}
-
-/* EXECUTIVE READ */
-.exec-read{margin:1.25rem 0 0.5rem;animation:fadeUp 0.4s ease both;}
-.exec-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
-.exec-eyebrow::after{content:'';flex:1;height:1px;background:var(--rule);}
-.exec-headline{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;line-height:1.3;color:var(--ink);margin-bottom:0.75rem;}
-.exec-body{font-size:0.92rem;line-height:1.75;color:var(--ink);margin-bottom:1rem;}
-.exec-body em{font-style:italic;}
-.exec-signal-row{display:flex;gap:1rem;align-items:center;padding:0.75rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:1rem;flex-wrap:wrap;gap:1.5rem;}
-.exec-signal{display:flex;flex-direction:column;gap:2px;}
-.exec-signal-label{font-family:'IBM Plex Mono',monospace;font-size:0.52rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);}
-.exec-signal-val{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;font-weight:500;color:var(--ink);}
-.exec-signal-val.amber{color:#b07d00;}
-.exec-signal-val.red{color:var(--accent);}
-.exec-signal-val.green{color:#2d6a4f;}
-.exec-divider{height:1px;background:var(--rule);margin:1.25rem 0;}
-
-/* ARGUMENT SECTION */
-.argument-section{margin-bottom:1.5rem;}
-.argument-toggle{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;padding:0.5rem 0;border:none;background:none;transition:color 0.2s;}
-.argument-toggle:hover{color:var(--ink);}
-.argument-toggle::before{content:'';width:8px;height:8px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);transition:transform 0.2s;margin-bottom:2px;}
-.argument-toggle.open::before{transform:rotate(-135deg);margin-bottom:-2px;}
-.argument-body{overflow:hidden;max-height:0;transition:max-height 0.4s ease;}
-.argument-body.open{max-height:800px;}
-
-/* EVIDENCE - lighter treatment */
-.evidence-label{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:0.75rem 0 0.5rem;border-top:1px solid var(--rule);margin-top:0.5rem;}
-
-/* FILTERS - compact */
-.filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:0.5rem;}
-.filter-chip{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.05em;padding:3px 8px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;transition:all 0.15s;background:transparent;}
-.filter-chip:hover{border-color:var(--muted);color:var(--ink);}
-.filter-chip.active{border-color:var(--ink);color:var(--ink);background:var(--paper2);}
-
-/* EXAMPLES */
-.examples-section{padding:0.75rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.2s both;}
-.examples-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.5rem;}
-.example-pills{display:flex;flex-wrap:wrap;gap:5px;}
-.ex-pill{font-size:0.78rem;padding:4px 12px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;font-style:italic;transition:all 0.15s;position:relative;overflow:hidden;}
-.ex-pill::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.2s;}
-.ex-pill:hover{border-color:var(--ink);color:var(--ink);}
-.ex-pill:hover::after{width:100%;}
-.scope-note{padding:0.75rem 0;font-size:0.8rem;color:var(--muted);font-style:italic;line-height:1.6;animation:fadeUp 0.5s ease 0.4s both;}
-.scope-note strong{font-style:normal;color:var(--ink);}
-
-/* FLAGS */
-.flag{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;display:inline-block;}
-.flag-red{background:var(--accent);color:var(--paper);}
-.flag-amber{background:var(--ink);color:var(--paper);}
-.flag-green{border:1px solid var(--rule);color:var(--muted);}
-.flag-neutral{border:1px solid var(--rule);color:var(--muted);}
-.flag-adjacent{border:1px solid var(--muted);color:var(--muted);font-style:italic;background:var(--paper2);}
-
-/* SKELETON */
-.skeleton-line{border-radius:2px;background:linear-gradient(90deg,var(--rule) 25%,var(--paper2) 50%,var(--rule) 75%);background-size:400px 100%;animation:shimmer 1.4s ease-in-out infinite;margin-bottom:8px;}
-
-/* RESULTS TOPBAR */
-.results-topbar{padding:0.75rem 0;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;animation:fadeIn 0.3s ease;}
-.results-context{font-size:0.85rem;color:var(--muted);font-style:italic;}
-.results-context strong{color:var(--ink);font-style:normal;}
-.back-btn{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);background:none;border:1px solid var(--rule);padding:4px 12px;cursor:pointer;transition:all 0.2s;}
-.back-btn:hover{border-color:var(--ink);color:var(--ink);}
-
-/* ── OPERATOR BRIEF ─────────────────────────────────────────────────────── */
-.brief-block{
-  border-left:3px solid var(--accent);
-  padding:1.25rem 1.25rem;
-  margin:1rem 0;
-  background:var(--paper2);
-  animation:fadeUp 0.4s ease both;
-}
-.brief-generating{
-  border-left:3px solid var(--rule);
-  padding:1.25rem;
-  margin:1rem 0;
-  background:var(--paper2);
-}
-.brief-eyebrow{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:0.6rem;
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  color:var(--accent);
-  margin-bottom:0.75rem;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.brief-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--accent);
-  animation:blink 1s ease-in-out infinite;
-  display:inline-block;
-}
-.brief-section{margin-bottom:0.9rem;}
-.brief-section:last-child{margin-bottom:0;}
-.brief-section-label{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:0.58rem;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  color:var(--muted);
-  margin-bottom:0.3rem;
-}
-.brief-section-text{
-  font-size:0.9rem;
-  line-height:1.7;
-  color:var(--ink);
-}
-.brief-questions{
-  list-style:none;
-  margin-top:0.3rem;
-}
-.brief-questions li{
-  font-size:0.88rem;
-  color:var(--ink);
-  line-height:1.6;
-  padding:0.3rem 0;
-  border-bottom:1px solid var(--rule);
-  display:flex;
-  gap:0.5rem;
-}
-.brief-questions li:last-child{border-bottom:none;}
-.brief-questions li::before{
-  content:'—';
-  color:var(--accent);
-  flex-shrink:0;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:0.8rem;
-}
-.brief-confidence{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:0.58rem;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:0.06em;
-  margin-top:0.75rem;
-  padding-top:0.6rem;
-  border-top:1px solid var(--rule);
-}
-.brief-confidence span{color:var(--ink);}
-
-/* GENERATING STATE */
-.generating-text{
-  font-size:0.88rem;
-  color:var(--muted);
-  font-style:italic;
-  line-height:1.7;
-}
-.cursor{
-  display:inline-block;
-  width:2px;height:14px;
-  background:var(--accent);
-  margin-left:2px;
-  animation:blink 0.8s ease-in-out infinite;
-  vertical-align:middle;
-}
-
-/* EVIDENCE DIVIDER */
-.evidence-divider{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:0.58rem;
-  text-transform:uppercase;
-  letter-spacing:0.1em;
-  color:var(--muted);
-  padding:0.6rem 0;
-  border-bottom:1px solid var(--rule);
-  margin-top:0.5rem;
-  display:flex;
-  align-items:center;
-  gap:0.75rem;
-}
-.evidence-count{
-  border:1px solid var(--rule);
-  padding:1px 7px;
-  font-size:0.55rem;
-}
-
-/* INTEL CARD */
-.intel-card{
-  border-bottom:1px solid var(--rule);
-  padding:1rem 0;
-  opacity:0;
-  transform:translateY(10px);
-  transition:opacity 0.35s ease,transform 0.35s ease;
-}
-.intel-card.visible{opacity:1;transform:translateY(0);}
-.intel-card.red{border-left:3px solid var(--accent);padding-left:1rem;}
-.intel-card.amber{border-left:3px solid var(--ink);padding-left:1rem;}
-.intel-card.adjacent{border-left:3px solid var(--rule);padding-left:1rem;opacity:0.8;}
-.card-flags{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:0.5rem;}
-.implication{font-family:'Playfair Display',serif;font-size:0.98rem;font-weight:700;font-style:italic;line-height:1.35;margin-bottom:0.5rem;color:var(--ink);}
-.bench-inline{font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem;display:flex;align-items:baseline;gap:0.5rem;flex-wrap:wrap;}
-.bench-val-sm{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--ink);}
-.bench-src-sm{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
-
-/* EVIDENCE BAR */
-.ev-bar{display:flex;gap:0;border:1px solid var(--rule);margin-top:0.5rem;overflow:hidden;}
-.ev-cell{flex:1;padding:4px 8px;border-right:1px solid var(--rule);}
-.ev-cell:last-child{border-right:none;}
-.ev-key{font-family:'IBM Plex Mono',monospace;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);display:block;margin-bottom:1px;}
-.ev-val{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
-.ev-val.medium{color:var(--muted);}
-.ev-val.contested{color:var(--accent);}
-
-/* EXPAND */
-.expand-trigger{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;transition:opacity 0.2s;margin-top:0.3rem;}
-.expand-trigger:hover{opacity:0.7;}
-.card-layer2{max-height:0;overflow:hidden;transition:max-height 0.4s ease,opacity 0.3s ease;opacity:0;}
-.card-layer2.open{max-height:600px;opacity:1;}
-.op-note{font-size:0.85rem;line-height:1.75;color:var(--muted);border-top:1px solid var(--rule);padding-top:0.75rem;margin-top:0.75rem;}
-.not-mean-block{background:var(--paper2);border-left:2px solid var(--rule);padding:0.6rem 0.75rem;margin-top:0.75rem;font-size:0.82rem;color:var(--muted);line-height:1.6;font-style:italic;}
-.not-mean-lbl{font-style:normal;font-weight:700;color:var(--ink);}
-.ic-q-block{background:var(--ink);color:var(--paper);padding:0.75rem 1rem;margin-top:0.75rem;}
-.ic-q-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:5px;}
-.ic-q-text{font-size:0.85rem;line-height:1.6;font-style:italic;}
-.src-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:0.75rem;}
-.src-tag{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;color:var(--muted);border:1px solid var(--rule);padding:2px 7px;text-transform:uppercase;letter-spacing:0.04em;}
-
-/* ADJACENT GROUP */
-.group-header{padding:0.6rem 0;border-bottom:1px solid var(--rule);margin-top:0.5rem;display:flex;align-items:center;gap:0.75rem;}
-.group-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);}
-.group-rationale{font-size:0.78rem;color:var(--muted);font-style:italic;padding:0.4rem 0 0.6rem;border-bottom:1px solid var(--rule);line-height:1.5;}
-
-/* GAP CARD */
-.gap-card{border-bottom:1px solid var(--rule);padding:1rem 0;display:flex;gap:1rem;opacity:0;transform:translateY(10px);transition:opacity 0.35s ease,transform 0.35s ease;}
-.gap-card.visible{opacity:1;transform:translateY(0);}
-.gap-marker{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted);flex-shrink:0;margin-top:3px;}
-.gap-inner{flex:1;}
-.gap-title{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;margin-bottom:0.35rem;}
-.gap-why{font-size:0.82rem;color:var(--muted);line-height:1.7;}
-.gap-ic{font-size:0.8rem;color:var(--muted);font-style:italic;border-left:2px solid var(--rule);padding-left:0.75rem;line-height:1.6;margin-top:0.5rem;}
-.gap-ic-lbl{font-style:normal;font-weight:700;color:var(--ink);}
-.gap-badge{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border:1px solid var(--rule);padding:2px 7px;display:inline-block;margin-top:0.5rem;}
-
-/* ACTIONS */
-.actions-row{display:flex;gap:7px;flex-wrap:wrap;padding:1rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.4s ease both;}
-.action-btn{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;padding:7px 14px;border:1px solid var(--rule);background:var(--paper);color:var(--muted);cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
-.action-btn::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:2px;background:var(--accent);transition:width 0.2s;}
-.action-btn:hover{border-color:var(--ink);color:var(--ink);}
-.action-btn:hover::after{width:100%;}
-.action-btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-.action-btn.primary:hover{background:var(--accent);border-color:var(--accent);}
-.action-btn.primary::after{display:none;}
-.action-btn:active{transform:scale(0.97);}
-
-/* ERROR */
-.error-block{background:var(--paper2);border-left:3px solid var(--accent);padding:0.75rem 1rem;font-size:0.85rem;color:var(--accent);margin:1rem 0;display:none;animation:fadeIn 0.3s ease;}
-
-/* PDF OVERLAY */
-.pdf-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,14,12,0.85);z-index:500;display:none;align-items:center;justify-content:center;}
-.pdf-overlay.show{display:flex;}
-.pdf-modal{background:var(--paper);border:2px solid var(--ink);max-width:640px;width:90%;max-height:80vh;overflow-y:auto;padding:1.5rem;position:relative;}
-.pdf-modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--rule);}
-.pdf-modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;}
-.pdf-close{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;background:none;border:1px solid var(--rule);color:var(--muted);padding:3px 10px;cursor:pointer;}
-.pdf-close:hover{border-color:var(--ink);color:var(--ink);}
-.pdf-preview{font-size:0.82rem;color:var(--muted);line-height:1.7;white-space:pre-wrap;font-family:'IBM Plex Mono',monospace;background:var(--paper2);padding:1rem;max-height:300px;overflow-y:auto;margin-bottom:1rem;border:1px solid var(--rule);}
-.pdf-actions{display:flex;gap:8px;}
-.pdf-note{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:0.6rem;}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--paper);padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.06em;opacity:0;transform:translateY(8px);transition:opacity 0.25s,transform 0.25s;pointer-events:none;z-index:999;}
-.toast.show{opacity:1;transform:translateY(0);}
-
-/* FOOTER */
-.footer{padding:1.5rem 1rem;border-top:2px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;}
-
-/* SCREENS */
-.screen{display:none;}
-.screen.active{display:block;}
-
-@media(max-width:600px){
-  .main{padding:0 1rem 4rem;}
-  .search-headline{font-size:1.2rem;}
-  .header-nav{display:none;}
-  .actions-row{gap:5px;}
-  .action-btn{font-size:0.55rem;padding:6px 10px;}
-  .brief-block{padding:1rem;}
-  .ev-bar{flex-wrap:wrap;}
-  .ev-cell{min-width:45%;}
-}
-
-/* CHARTS */
-.chart-row{display:flex;gap:1rem;margin:1.25rem 0;flex-wrap:wrap;}
-.chart-block{flex:1;min-width:200px;background:var(--paper2);border:1px solid var(--rule);padding:1rem;}
-.chart-title{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem;}
-.chart-canvas{width:100%;height:120px;position:relative;}
-.bar-chart{display:flex;align-items:flex-end;gap:4px;height:90px;padding-bottom:4px;}
-.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.bar-fill{width:100%;background:var(--ink);border-radius:1px 1px 0 0;transition:height 0.6s ease;min-height:2px;}
-.bar-fill.accent{background:var(--accent);}
-.bar-fill.muted{background:var(--rule);}
-.bar-label{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;color:var(--muted);text-align:center;}
-.bar-val{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--ink);font-weight:500;text-align:center;}
-.donut-wrap{display:flex;align-items:center;gap:1rem;}
-.donut-svg{flex-shrink:0;}
-.donut-legend{display:flex;flex-direction:column;gap:0.4rem;}
-.donut-item{display:flex;align-items:center;gap:0.4rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);}
-.donut-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.reg-bar{margin-bottom:0.5rem;}
-.reg-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);margin-bottom:3px;}
-.reg-track{height:12px;background:var(--rule);border-radius:2px;overflow:hidden;position:relative;}
-.reg-fill{height:100%;border-radius:2px;transition:width 0.6s ease;}
-.reg-fill.stat{background:var(--ink);}
-.reg-fill.oper{background:var(--accent);}
-.reg-gap-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--accent);margin-top:3px;}
-.no-data-chart{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:center;padding:2rem 0;border:1px dashed var(--rule);}
-.capital-flag{background:var(--ink);color:var(--paper);padding:0.75rem 1rem;margin:1rem 0;border-left:3px solid var(--accent);font-size:0.85rem;line-height:1.6;}
-.capital-flag-label{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:0.3rem;}
+.footnotes{margin:44px 0 0;padding:20px 22px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted);}
+.fn{display:flex;gap:10px;margin-bottom:10px;line-height:1.65;}
+.fn sup{color:var(--accent);font-family:'Playfair Display',serif;flex:none;}
+.fn b{font-family:'Playfair Display',serif;color:var(--ink);font-style:normal;}
+footer.contact{margin-top:60px;background:var(--ink);color:var(--paper);padding:48px 0;}
+.contact-inner{max-width:760px;margin:0 auto;padding:0 24px;text-align:center;}
+.contact-inner h3{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;}
+.contact-inner p{font-size:15px;color:#c9c2b3;margin-bottom:22px;}
+.btn{display:inline-block;font-size:14px;text-decoration:none;padding:11px 26px;margin:0 6px 10px;border:1px solid #6a6355;color:var(--paper);border-radius:2px;}
+.btn-primary{background:var(--accent);border-color:var(--accent);}
+@media(max-width:760px){.db-strip{grid-template-columns:repeat(2,1fr);}.ev-row,.compare{grid-template-columns:1fr;}.builder-foot{flex-direction:column;align-items:stretch;}.run-btn{width:100%;}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-row">
-    <div>
-      <h1>GON Intelligence</h1>
-      <div class="header-sub">Growth Operator Notes - African Private Capital</div>
+<header class="site"><div class="wrap"><div class="site-top">
+  <a class="wordmark" href="https://jpouandji-operator.github.io/portfolio/">Growth Operator <span>Notes</span></a>
+  <nav class="site-nav-links"><a href="https://jpouandji-operator.github.io/portfolio/">Analysis</a><a href="https://jpouandji-operator.github.io/portfolio/teardowns/">Teardowns</a><a href="https://jpouandji-operator.github.io/portfolio/retrospectives/">Retrospectives</a><a href="#" class="active">Intelligence</a></nav>
+</div></div></header>
+
+<div class="wrap">
+
+  <div class="token-bar">
+    <div class="token-status"><span class="token-dot" id="tdot"></span><span id="tstatus">Database not connected</span></div>
+    <a class="token-toggle" id="ttoggle">Connect database</a>
+  </div>
+  <div class="token-panel" id="tpanel">
+    <p><b>Airtable personal access token.</b> This tool reads directly from the GON database. Paste a token with read scope on the base to connect. The token is stored in your browser only, never transmitted anywhere except Airtable, and never written to the page source.</p>
+    <div class="token-row">
+      <input class="token-input" type="password" id="tinput" placeholder="pat..." autocomplete="off"/>
+      <button class="token-save" id="tsave">Connect</button>
     </div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
-      <nav class="header-nav">
-        <a href="../africa-ic-checklist/">IC Checklist</a>
-        <a href="../">Portfolio</a>
-        <a href="mailto:jpouandji@gmail.com">Contact</a>
-        <button class="token-btn" id="tokenBtn" onclick="toggleToken()">&#9675; Token</button>
-      </nav>
+    <div class="token-note">Read-only tokens are sufficient. Clear the token at any time by saving an empty field.</div>
+  </div>
+
+  <div class="tool-header">
+    <div class="tool-eyebrow">Operator Intelligence &middot; Live Database</div>
+    <h1 class="tool-title">Ask the database, not the model.</h1>
+    <p class="tool-sub">Every answer is assembled from primary regulatory instruments, operator network signals, and benchmarks that passed a three-test standard. Where the database has nothing, it says so rather than filling the gap.</p>
+
+    <div class="db-strip">
+      <div class="db"><div class="n">84</div><div class="l">benchmarks, three-test verified <sup>1</sup></div></div>
+      <div class="db"><div class="n">23</div><div class="l">primary regulatory instruments <sup>2</sup></div></div>
+      <div class="db"><div class="n">17</div><div class="l">operator network signals <sup>3</sup></div></div>
+      <div class="db"><div class="n">2</div><div class="l">war games with scored outcomes</div></div>
+    </div>
+    <div class="db-meta">
+      <div class="db-live">Database last updated 21 July 2026</div>
+      <div class="db-coverage">Coverage: 9 markets across WAEMU, CEMAC and East Africa <sup style="color:var(--accent);">4</sup></div>
     </div>
   </div>
-</div>
 
-<div class="token-panel" id="tokenPanel">
-  <div class="token-panel-label">Airtable Personal Access Token</div>
-  <div class="token-row">
-    <input type="password" class="token-input" id="tokenInput" placeholder="pat..."/>
-    <button class="token-save" onclick="saveToken()">Save</button>
+  <div class="builder">
+    <div class="builder-head">
+      <span>Build your query</span>
+      <span class="step">Step 1 of 2 &middot; select parameters</span>
+    </div>
+
+    <div class="param-group" data-multi="1">
+      <div class="param-label">Market <span>select one, or two to compare</span></div>
+      <div class="param-opts">
+        <button class="popt on">Senegal <span class="cnt">14</span></button>
+        <button class="popt">Cote d'Ivoire <span class="cnt">11</span></button>
+        <button class="popt">Cameroun <span class="cnt">9</span></button>
+        <button class="popt">Nigeria <span class="cnt">12</span></button>
+        <button class="popt">Kenya <span class="cnt">10</span></button>
+        <button class="popt on">Rwanda <span class="cnt">6</span></button>
+        <button class="popt">Ghana <span class="cnt">5</span></button>
+        <button class="popt thin">Uganda <span class="cnt">3</span></button>
+        <button class="popt thin">Tanzania <span class="cnt">2</span></button>
+      </div>
+    </div>
+    <div class="xdim"><b>Two markets selected.</b> The read will return a structural comparison rather than two separate answers. This is the highest-value output the database produces, because the contrast between how two markets solve the same problem is not published anywhere.</div>
+
+    <div class="param-group">
+      <div class="param-label">Sector</div>
+      <div class="param-opts">
+        <button class="popt on">Fintech &amp; payments</button>
+        <button class="popt">Telecom</button>
+        <button class="popt">Energy</button>
+        <button class="popt">E-commerce &amp; logistics</button>
+        <button class="popt">Agriculture</button>
+        <button class="popt thin">Media</button>
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-label">IC dimension <span>what you are testing</span></div>
+      <div class="param-opts">
+        <button class="popt on">Distribution economics</button>
+        <button class="popt">Capital structure</button>
+        <button class="popt">Demand validation</button>
+        <button class="popt">Regulatory risk</button>
+        <button class="popt">Team &amp; governance</button>
+        <button class="popt">Exit dynamics</button>
+      </div>
+    </div>
+
+    <div class="param-group">
+      <div class="param-label">Output <span>what you get back</span></div>
+      <div class="param-opts">
+        <button class="popt on">Operator read</button>
+        <button class="popt">Raw records</button>
+        <button class="popt">Benchmarks only</button>
+        <button class="popt">Gap map</button>
+      </div>
+    </div>
+
+    <div class="builder-foot">
+      <div class="query-preview">
+        <b>Senegal + Rwanda</b> &middot; fintech and payments &middot; distribution economics &middot; operator read
+        <div class="record-count"><span class="exact">7 exact matches</span> &middot; <span class="adj">4 adjacent</span> &middot; 11 records total</div>
+      </div>
+      <button class="run-btn">Run query &rarr;</button>
+    </div>
   </div>
-  <div class="token-panel-label" style="margin-top:0.5rem;">Anthropic API Key</div>
-  <div class="token-row">
-    <input type="password" class="token-input" id="claudeKeyInput" placeholder="sk-ant-..."/>
-    <button class="token-save" onclick="saveClaudeKey()">Save</button>
-    <span id="claudeKeyStatus" style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);margin-left:0.5rem;"></span>
-  </div>
-</div>
 
-<div class="progress-bar" id="progressBar"></div>
+  <div class="result">
+    <div class="result-head">
+      <b>Comparison read</b>
+      <span class="result-query">Senegal + Rwanda &middot; fintech and payments &middot; distribution economics</span>
+      <a class="result-back" href="#">&larr; Change parameters</a>
+    </div>
+    <div class="result-body">
 
-<div class="main">
-
-  <!-- EMPTY STATE - THREE STEP FLOW -->
-  <div id="screenEmpty" class="screen active">
-    <div class="step-flow">
-      <div class="step-eyebrow">Operator intelligence for African private capital</div>
-
-      <div class="step-indicators">
-        <div class="step-ind active" id="ind-1">01 Market</div>
-        <div class="step-ind" id="ind-2">02 Sector</div>
-        <div class="step-ind" id="ind-3">03 Angle</div>
-      </div>
-
-      <!-- STEP 1: MARKET -->
-      <div class="step-panel active" id="step1">
-        <div class="step-headline">Which market <em>are you looking at?</em></div>
-        <div class="step-sub">Our research is deepest in WAEMU and CEMAC. Coverage in East and Southern Africa is sourced from primary institutional sources.</div>
-        <div class="market-grid">
-          <div class="market-tile coverage-deep" onclick="selectMarket('WAEMU',this)">
-            <div class="market-tile-name">WAEMU</div>
-            <div class="market-tile-sub">Deep coverage</div>
+      <div class="rb-section">
+        <div class="rb-label">The structural contrast</div>
+        <div class="compare">
+          <div class="cmp">
+            <h5>Senegal</h5>
+            <p><span class="cited">BCEAO Instruction n.001-01-2024 Article 18 prohibits exclusivity clauses in telco-fintech partnerships across WAEMU</span><span class="record-chip">REG-009</span>. Contractual lock-in is removed by regulation. Distribution depth has to be earned operationally.</p>
           </div>
-          <div class="market-tile coverage-deep" onclick="selectMarket('Cameroun',this)">
-            <div class="market-tile-name">Cameroun</div>
-            <div class="market-tile-sub">Deep coverage</div>
+          <div class="cmp">
+            <h5>Rwanda</h5>
+            <p><span class="cited">Full interoperability achieved between MTN Mobile Money and Airtel Money, creating a single payment infrastructure</span><span class="record-chip">REG-021</span>. Lock-in is removed by infrastructure. The network itself stopped being the moat.</p>
           </div>
-          <div class="market-tile coverage-deep" onclick="selectMarket('Senegal',this)">
-            <div class="market-tile-name">Senegal</div>
-            <div class="market-tile-sub">Deep coverage</div>
+          <div class="cmp-verdict">
+            <b>What this means for a deal</b>
+            Two markets, two mechanisms, same investment consequence: distribution defensibility cannot be modelled as contractual in either. If a deck claims exclusive partnerships as the moat in Senegal, Article 18 makes it unenforceable. If it claims network lock-in in Rwanda, interoperability makes it irrelevant. The moat has to be operational depth: agent liquidity, float management, and merchant density.
           </div>
-          <div class="market-tile coverage-deep" onclick="selectMarket('Ivory Coast',this)">
-            <div class="market-tile-name">Ivory Coast</div>
-            <div class="market-tile-sub">Deep coverage</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('Nigeria',this)">
-            <div class="market-tile-name">Nigeria</div>
-            <div class="market-tile-sub">Institutional sources</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('Kenya',this)">
-            <div class="market-tile-name">Kenya</div>
-            <div class="market-tile-sub">Institutional sources</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('Ghana',this)">
-            <div class="market-tile-name">Ghana</div>
-            <div class="market-tile-sub">Institutional sources</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('Egypt',this)">
-            <div class="market-tile-name">Egypt</div>
-            <div class="market-tile-sub">Institutional sources</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('South Africa',this)">
-            <div class="market-tile-name">South Africa</div>
-            <div class="market-tile-sub">Institutional sources</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('Rwanda',this)">
-            <div class="market-tile-name">Rwanda</div>
-            <div class="market-tile-sub">Institutional sources</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('CEMAC',this)">
-            <div class="market-tile-name">CEMAC</div>
-            <div class="market-tile-sub">Deep coverage</div>
-          </div>
-          <div class="market-tile" onclick="selectMarket('Sub Saharan Africa',this)">
-            <div class="market-tile-name">Pan-Africa</div>
-            <div class="market-tile-sub">Aggregate signals</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2: SECTOR -->
-      <div class="step-panel" id="step2">
-        <div class="step-headline">Which sector <em>is the deal in?</em></div>
-        <div class="step-sub">Select the sector that most closely matches the business model.</div>
-        <div class="sector-grid" id="sectorGrid">
-          <div class="sector-tile" onclick="selectSector('Fintech / Mobile money',this)"><div class="sector-tile-name">Fintech / Mobile money</div></div>
-          <div class="sector-tile" onclick="selectSector('Telecoms',this)"><div class="sector-tile-name">Telecoms</div></div>
-          <div class="sector-tile" onclick="selectSector('E-commerce / Logistics',this)"><div class="sector-tile-name">E-commerce / Logistics</div></div>
-          <div class="sector-tile" onclick="selectSector('Agritech',this)"><div class="sector-tile-name">Agritech</div></div>
-          <div class="sector-tile" onclick="selectSector('Energy / Cleantech',this)"><div class="sector-tile-name">Energy / Cleantech</div></div>
-          <div class="sector-tile" onclick="selectSector('Healthtech',this)"><div class="sector-tile-name">Healthtech</div></div>
-          <div class="sector-tile" onclick="selectSector('SaaS / B2B',this)"><div class="sector-tile-name">SaaS / B2B</div></div>
-          <div class="sector-tile" onclick="selectSector('Entertainment / Media',this)"><div class="sector-tile-name">Entertainment / Media</div></div>
-        </div>
-        <div class="step-nav">
-          <button class="btn-back-step" onclick="goToStep(1)">Back</button>
-        </div>
-      </div>
-
-      <!-- STEP 3: ANGLE / QUESTION -->
-      <div class="step-panel" id="step3">
-        <div class="question-context" id="questionContext"></div>
-        <div class="step-headline">What do you want <em>to pressure test?</em></div>
-        <div class="step-sub">Our research sometimes surfaces things that don't show up in the standard read. Pick the angle that matters most for your IC.</div>
-        <div class="question-set" id="questionSet"></div>
-        <div class="or-divider">or frame it yourself</div>
-        <div class="free-row">
-          <input type="text" class="free-input" id="freeInput" placeholder="e.g. what happens to agent loyalty when commissions compress..."/>
-        </div>
-        <div class="step-nav">
-          <button class="btn-back-step" onclick="goToStep(2)">Back</button>
-          <button class="btn-next" id="runBtn" onclick="runFromStep3()">
-            <span class="btn-text">Get operator read</span>
-            <span class="dots"><span></span><span></span><span></span></span>
-          </button>
         </div>
       </div>
 
-    </div>
+      <div class="rb-section">
+        <div class="rb-label">Evidence</div>
+        <div class="evidence">
+          <div class="match-label">Exact matches &middot; all three parameters</div>
+          <div class="ev-row head"><span>Claim</span><span>Market</span><span>Value</span><span>Tier</span></div>
+          <div class="ev-row">
+            <span class="ev-claim">Exclusivity clauses prohibited, telco-fintech partnerships</span>
+            <span class="ev-mkt">WAEMU</span><span class="ev-val">Article 18</span><span class="ev-tier tier-a">A</span>
+          </div>
+          <div class="ev-row">
+            <span class="ev-claim">MTN MoMo and Airtel Money full interoperability</span>
+            <span class="ev-mkt">Rwanda</span><span class="ev-val">Achieved</span><span class="ev-tier tier-a">A</span>
+          </div>
+          <div class="ev-row">
+            <span class="ev-claim">Agent commission on deposit volume, not transaction count</span>
+            <span class="ev-mkt">Senegal</span><span class="ev-val">Inverted</span><span class="ev-tier tier-b">B</span>
+          </div>
+          <div class="match-label">Adjacent &middot; match two of three parameters, shown because the database is thin here</div>
+          <div class="ev-row adjacent">
+            <span class="ev-claim">PI-SPI compliance deadline extended from June</span>
+            <span class="ev-mkt">WAEMU</span><span class="ev-val">30 Sep 2026</span><span class="ev-tier tier-a">A</span>
+          </div>
+          <div class="ev-row adjacent">
+            <span class="ev-claim">BNR regulatory sandbox, active intake for PSPs</span>
+            <span class="ev-mkt">Rwanda</span><span class="ev-val">Open</span><span class="ev-tier tier-a">A</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="scope-note" id="scopeNote" style="display:none;">
-      <strong>Coverage note:</strong> GON's deepest operator validation is WAEMU and CEMAC, built from 12 years inside the distribution stack. East Africa and North Africa are covered through primary institutional sources. Gaps are named explicitly - the absence of data is itself a signal.
+      <div class="rb-section">
+        <div class="rb-label">What the database does not have</div>
+        <div class="gap-note"><b>Gap:</b> no verified agent churn or float-cost figures for either market. The operational-depth argument above rests on network signal, not measured benchmarks. Treat as directional. Logged as GAP-017 and GAP-024.</div>
+      </div>
+
+    </div>
+    <div class="result-actions">
+      <button class="ra primary">Generate IC brief</button>
+      <button class="ra">Export DD questions</button>
+      <button class="ra">View all 11 records</button>
+      <button class="ra">Flag a correction</button>
     </div>
   </div>
 
-  <!-- RESULTS STATE -->
-  <div id="screenResults" class="screen">
-    <div class="results-topbar">
-      <div class="results-context" id="resultsContext"></div>
-      <button class="back-btn" onclick="goBack()">&#8592; New query</button>
-    </div>
-
-    <!-- EXECUTIVE READ (primary output) -->
-    <div id="execReadContainer"></div>
-
-    <!-- OPERATOR BRIEF (argument layer - collapsible) -->
-    <div id="briefContainer"></div>
-
-    <!-- EVIDENCE (secondary - lighter) -->
-    <div class="evidence-label" id="evidenceLabel" style="display:none;">Supporting evidence</div>
-    <div class="filters" id="evidenceFilters" style="display:none;">
-      <button class="filter-chip active" onclick="setFilter(this,'')">All signals</button>
-      <button class="filter-chip" onclick="setFilter(this,'Distribution economics')">Distribution</button>
-      <button class="filter-chip" onclick="setFilter(this,'Regulatory environment')">Regulatory</button>
-      <button class="filter-chip" onclick="setFilter(this,'Demand validation')">Demand</button>
-      <button class="filter-chip" onclick="setFilter(this,'Unit economics')">Unit economics</button>
-      <button class="filter-chip" onclick="setFilter(this,'Exit dynamics')">Exit</button>
-    </div>
-    <div id="resultsContainer"></div>
-
-    <div class="error-block" id="errorBlock"></div>
-
-    <div class="actions-row" id="actionsRow" style="display:none;">
-      <button class="action-btn primary" onclick="showPdf()">Generate IC brief PDF</button>
-      <button class="action-btn" onclick="copyFounderQs()">Export DD questions</button>
-      <button class="action-btn" onclick="flagPartner()">Flag for partner review</button>
-      <button class="action-btn" onclick="window.location.href='../africa-ic-checklist/'">Run IC checklist</button>
-    </div>
-
-    <div id="copiaLink" style="display:none;margin:1.5rem 0 0;padding:1rem 1.25rem;border-left:3px solid var(--accent);background:var(--surface);">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;">War Games Retrospective</div>
-      <div style="font-family:'Georgia',serif;font-size:0.9rem;line-height:1.7;margin-bottom:0.5rem;"><strong>See this tool applied to a real deal.</strong> Copia Global raised $120M, built 50,000 agents, and ended with $20,300 in the bank. The signals were in the public record.</div>
-      <a href="../copia-global-war-games-retrospective/" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent);border-bottom:1px solid var(--accent);">Read the retrospective &rarr;</a>
-      <div style="font-family:'Georgia',serif;font-size:0.8rem;color:var(--muted);margin-top:0.5rem;">What the operator intelligence layer would have flagged before the Series C - using only information available at the time.</div>
-    </div>
+  <div class="footnotes">
+    <div class="fn"><sup>1</sup><div><b>Three-test verified.</b> Every quantitative claim passes three tests before it is stored as a benchmark: recency (within 24 months or explicitly flagged), specificity (tied to the exact market and sector, not a continental average), and operator interpretability (I can explain what the figure means for capital deployment). All three pass: stored as a benchmark. Two of three: stored with a named caveat. One or fewer: directional only, never presented as a benchmark.</div></div>
+    <div class="fn"><sup>2</sup><div><b>Primary regulatory instruments.</b> Source documents from central banks and sector regulators, read in the original language of publication. Currently covering BCEAO, BEAC, COBAC, ARTCI and ARTP in Francophone markets, and BNR, CBK, CBN and Bank of Ghana in Anglophone markets. Secondary summaries and law firm commentary are logged separately and never counted here.</div></div>
+    <div class="fn"><sup>3</sup><div><b>Operator network signals.</b> Observations from practitioners inside the distribution stack that have not been published anywhere. Each carries a confidence tag: primary experience, secondhand, or directional. These are the entries most likely to be wrong and most likely to be useful, which is why the tag is mandatory.</div></div>
+    <div class="fn"><sup>4</sup><div><b>Coverage and its limits.</b> Depth is uneven and stated rather than hidden. WAEMU and CEMAC are covered at operator depth: I have worked in these markets and can interpret what a regulation means in practice. East African markets are covered at institutional depth: the regulatory record is complete but not operator-validated to the same standard. Anglophone West Africa is currently the thinnest part of the database and is being actively expanded. Markets shown with a dashed border have fewer than five records and will return limited results.</div></div>
   </div>
 
 </div>
 
-<div class="footer">
-  <span>GON Intelligence - Growth Operator Notes</span>
-  <span><a href="mailto:jpouandji@gmail.com" style="border:none;color:var(--muted);">jpouandji@gmail.com</a></span>
-</div>
-
-<!-- PDF OVERLAY -->
-<div class="pdf-overlay" id="pdfOverlay" onclick="closePdfOverlay(event)">
-  <div class="pdf-modal">
-    <div class="pdf-modal-header">
-      <div class="pdf-modal-title">IC Diligence Brief</div>
-      <button class="pdf-close" onclick="closePdf()">Close</button>
-    </div>
-    <div class="pdf-preview" id="pdfPreview"></div>
-    <div class="pdf-actions">
-      <button class="action-btn primary" onclick="downloadPdf()">Download PDF</button>
-      <button class="action-btn" onclick="copyBrief()">Copy as text</button>
-    </div>
-    <div class="pdf-note">PDF opens print dialog. Save as PDF from print settings.</div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
+<footer class="contact"><div class="contact-inner">
+  <h3>Testing an assumption on a live deal?</h3>
+  <p>Coverage is deepest in WAEMU and CEMAC. If your question sits outside that, the tool will tell you rather than guess.</p>
+  <a class="btn btn-primary" href="mailto:jpouandji@gmail.com">Email Jean-Philippe</a>
+  <a class="btn" href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Open the IC Checklist</a>
+  <a class="btn" href="https://www.linkedin.com/company/growth-operator-notes/" target="_blank" rel="noopener">Follow GON</a>
+</div></footer>
 
 <script>
-const BASE_ID='appAr4TpVGHSoh9CU';
-let currentFilter='';
-let currentResults=[];
-let currentQuery='';
-let currentGeo='';
-let currentBrief='';
-let selectedMarket='';
-let selectedSector='';
+var KEY='gon_airtable_pat';
+var dot=document.getElementById('tdot'),st=document.getElementById('tstatus'),
+    tog=document.getElementById('ttoggle'),pan=document.getElementById('tpanel'),
+    inp=document.getElementById('tinput'),sav=document.getElementById('tsave');
 
-// ── STEP FLOW ──────────────────────────────────────────────────────────────
-const QUESTIONS = {
-  'Fintech / Mobile money': [
-    {q:'The agent network numbers look right on paper. What does our research say about what actually happens to agent loyalty when commission economics shift?', dim:'Distribution economics'},
-    {q:'Regulatory approval timelines in the pitch deck - how do they compare to what operators actually experienced getting licensed in this market?', dim:'Regulatory environment'},
-    {q:'The demand figures cite user growth. Our research pulls out something less visible: what the retention picture looks like when subsidised pricing is removed.', dim:'Demand validation'},
-    {q:'Unit economics at Series A look clean. There is an aspect of margin compression at scale that tends to be underreported in this market.', dim:'Unit economics'},
-    {q:'Exit thesis assumes a trade sale or IPO. What does the actual exit track record in this market tell us about how realistic that timeline is?', dim:'Exit dynamics'},
-  ],
-  'Telecoms': [
-    {q:'Infrastructure depth versus geographic breadth - our research surfaces a pattern in this market that complicates the standard coverage story.', dim:'Distribution economics'},
-    {q:'Spectrum and licensing - the statutory timelines look one way. What the data shows about operational reality is worth examining before IC.', dim:'Regulatory environment'},
-    {q:'ARPU projections assume a certain trajectory. There is a currency and inflation dynamic in this market that tends to get modelled away.', dim:'Unit economics'},
-    {q:'The exit pathway assumes a regional consolidation play. Our research flags something about the acquirer landscape that narrows that assumption.', dim:'Exit dynamics'},
-  ],
-  'E-commerce / Logistics': [
-    {q:'Last-mile unit economics are presented as improving with scale. There is an aspect of the agent commission stack in this market that complicates that trajectory.', dim:'Distribution economics'},
-    {q:'Demand is validated by order volumes. What the data does not always surface is whether that demand holds when delivery costs are passed to the consumer.', dim:'Demand validation'},
-    {q:'The logistics moat thesis rests on network density. Our research pulls out a structural question about whether that density is contractually defensible.', dim:'Distribution economics'},
-    {q:'The exit multiple assumes a strategic acquirer. There is a pattern in African e-commerce acquisitions that is worth examining against this specific cap table.', dim:'Exit dynamics'},
-  ],
-  'Agritech': [
-    {q:'Data network effects are the moat argument. Our research surfaces a question about how proprietary that data layer actually is in this market.', dim:'Distribution economics'},
-    {q:'Smallholder adoption curves look compelling in the deck. There is a behavioural and seasonal dynamic that tends to be underweighted in African agritech models.', dim:'Demand validation'},
-    {q:'The regulatory picture for agritech in this market is less settled than it appears. There are licensing and data sovereignty questions that have not been priced in.', dim:'Regulatory environment'},
-    {q:'Unit economics depend on input cost assumptions. Our research flags a supply chain fragility in this market that affects the model more than the headline numbers suggest.', dim:'Unit economics'},
-  ],
-  'Energy / Cleantech': [
-    {q:'The CAPEX model assumes a certain financing stack. Our research surfaces a question about how DFI and commercial capital actually combine in this market in practice.', dim:'Unit economics'},
-    {q:'Grid connection timelines are modelled on statutory frameworks. The operational reality in this market tends to look different.', dim:'Regulatory environment'},
-    {q:'Demand is validated by willingness-to-pay surveys. There is a question our research flags about how that translates to actual payment behaviour at the agent level.', dim:'Demand validation'},
-    {q:'The infrastructure ownership thesis is compelling. Our research pulls out a dependency question about grid stability that affects the unit economics more than the deck acknowledges.', dim:'Distribution economics'},
-  ],
-  'Healthtech': [
-    {q:'The B2B health sales cycle is modelled on comparable markets. Our research surfaces a question about institutional buyer behaviour in this market that affects the revenue timeline.', dim:'Demand validation'},
-    {q:'Data and regulatory compliance is presented as manageable. There are health data sovereignty provisions in this market that have not been fully priced into the operational cost model.', dim:'Regulatory environment'},
-    {q:'The distribution model assumes health system partnerships. Our research flags a question about what those partnerships actually look like when budget cycles are constrained.', dim:'Distribution economics'},
-    {q:'Margins look strong at Series A. There is a pattern of margin compression as health distribution scales in African markets that is worth examining against this model.', dim:'Unit economics'},
-  ],
-  'SaaS / B2B': [
-    {q:'Enterprise sales cycles are modelled on global benchmarks. Our research surfaces something about procurement timelines and budget authority in this specific market.', dim:'Demand validation'},
-    {q:'The pricing model assumes USD or EUR contracts. There is a currency exposure in this market that tends to appear later than the model suggests.', dim:'Unit economics'},
-    {q:'The platform stickiness argument is sound. Our research pulls out a question about what replaceability actually looks like when a dominant local player enters.', dim:'Distribution economics'},
-    {q:'Exit assumes a strategic or financial acquirer at a growth multiple. The regional SaaS acquisition track record surfaces a question about how that plays out in this geography.', dim:'Exit dynamics'},
-  ],
-  'Entertainment / Media': [
-    {q:'Subscriber acquisition costs are benchmarked against global streaming comps. Our research surfaces a question about what those numbers actually look like in this market at scale.', dim:'Unit economics'},
-    {q:'The content moat argument rests on local production. There is a structural question about regulatory content obligations in this market that changes the cost model.', dim:'Regulatory environment'},
-    {q:'Demand projections assume a certain trajectory of data cost reduction. Our research flags something about the pace of that trajectory in this specific market.', dim:'Demand validation'},
-    {q:'The acquisition or exit thesis assumes a regional consolidation buyer. There is a cap table and return structure question that affects how realistic that buyer is at the required multiple.', dim:'Exit dynamics'},
-  ],
-};
-
-const DEFAULT_QUESTIONS = [
-  {q:'The distribution model looks viable at current scale. Our research surfaces a structural question about what happens to unit economics as the network grows.', dim:'Distribution economics'},
-  {q:'Regulatory approval is modelled on statutory timelines. The operational reality in African markets tends to diverge from those ceilings in ways that affect the runway model.', dim:'Regulatory environment'},
-  {q:'Demand validation is based on early cohort data. There is a question our research flags about whether that demand holds under different pricing conditions.', dim:'Demand validation'},
-  {q:'The exit pathway assumes a known buyer type. Our research pulls out a question about how realistic that assumption is given the current liquidity environment in this market.', dim:'Exit dynamics'},
-];
-
-function goToStep(n) {
-  [1,2,3].forEach(i => {
-    document.getElementById('step'+i).classList.remove('active');
-    document.getElementById('ind-'+i).classList.remove('active');
-    if (i < n) document.getElementById('ind-'+i).classList.add('done');
-    else document.getElementById('ind-'+i).classList.remove('done');
-  });
-  document.getElementById('step'+n).classList.add('active');
-  document.getElementById('ind-'+n).classList.add('active');
-  if (n === 3) {
-    document.getElementById('scopeNote').style.display = 'block';
-    buildQuestions();
-  }
+function refresh(){
+  var t=localStorage.getItem(KEY);
+  if(t&&t.length>10){dot.classList.add('connected');st.textContent='Database connected';tog.textContent='Manage token';}
+  else{dot.classList.remove('connected');st.textContent='Database not connected';tog.textContent='Connect database';}
 }
-
-function selectMarket(m, el) {
-  selectedMarket = m;
-  document.querySelectorAll('.market-tile').forEach(t => t.classList.remove('selected'));
-  el.classList.add('selected');
-  setTimeout(() => goToStep(2), 220);
-}
-
-function selectSector(s, el) {
-  selectedSector = s;
-  document.querySelectorAll('.sector-tile').forEach(t => t.classList.remove('selected'));
-  el.classList.add('selected');
-  setTimeout(() => goToStep(3), 220);
-}
-
-function buildQuestions() {
-  const ctx = document.getElementById('questionContext');
-  ctx.innerHTML = `<span>${selectedMarket}</span> &nbsp;/&nbsp; <span>${selectedSector}</span>`;
-
-  const qs = QUESTIONS[selectedSector] || DEFAULT_QUESTIONS;
-  const container = document.getElementById('questionSet');
-  container.innerHTML = qs.map((item, i) => `
-    <div class="question-card" id="qcard-${i}" onclick="selectQuestion(${i})">
-      <div class="q-text">${item.q}</div>
-      <div class="q-dimension">${item.dim}</div>
-    </div>
-  `).join('');
-}
-
-let selectedQuestion = -1;
-function selectQuestion(i) {
-  selectedQuestion = i;
-  document.querySelectorAll('.question-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById('qcard-'+i).classList.add('selected');
-  document.getElementById('freeInput').value = '';
-}
-
-function runFromStep3() {
-  const free = document.getElementById('freeInput').value.trim();
-  const qs = QUESTIONS[selectedSector] || DEFAULT_QUESTIONS;
-  let questionText = '';
-  
-  if (free) {
-    questionText = free;
-  } else if (selectedQuestion >= 0) {
-    questionText = qs[selectedQuestion].q;
-    currentFilter = qs[selectedQuestion].dim;
-  } else {
-    questionText = selectedSector + ' ' + selectedMarket;
-  }
-  
-  const query = selectedMarket + ' ' + selectedSector + ' ' + questionText;
-  runSearch(query);
-}
-
-// ── TOKEN ──────────────────────────────────────────────────────────────────
-function getToken(){return localStorage.getItem('gon_tok')||'';}
-function saveClaudeKey(){
-  const k=document.getElementById('claudeKeyInput');
-  if(k&&k.value.trim()){
-    localStorage.setItem('gon_claude_key',k.value.trim());
-    k.value='';
-    document.getElementById('claudeKeyStatus').textContent='Claude key active';
-    document.getElementById('claudeKeyStatus').style.color='var(--accent)';
-  }
-}
-function initToken(){
-  const t=getToken(),btn=document.getElementById('tokenBtn');
-  if(t){btn.textContent='● Token active';btn.classList.add('active');}
-  else{btn.textContent='○ Add token';document.getElementById('tokenPanel').classList.add('open');}
-  const ck=localStorage.getItem('gon_claude_key');
-  const cs=document.getElementById('claudeKeyStatus');
-  if(ck&&cs){cs.textContent='Claude key active';cs.style.color='var(--accent)';}
-}
-function toggleToken(){document.getElementById('tokenPanel').classList.toggle('open');}
-function saveToken(){
-  const v=document.getElementById('tokenInput').value.trim();
-  if(!v)return;
-  localStorage.setItem('gon_tok',v);
-  const btn=document.getElementById('tokenBtn');
-  btn.textContent='● Token active';btn.classList.add('active');
-  document.getElementById('tokenPanel').classList.remove('open');
-  showToast('Token saved');
-}
-
-// ── FILTER / SEARCH ────────────────────────────────────────────────────────
-function setFilter(el,val){
-  currentFilter=val;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-}
-function quickSearch(q){runSearch(q);}
-
-function renderCharts(chartData, container) {
-  if (!chartData) return;
-  const {funding_trend, capital_structure, regulatory_gap} = chartData;
-  
-  const hasFunding = funding_trend && funding_trend.some(d => d.value > 0);
-  const hasCapital = capital_structure && (capital_structure.equity_pct > 0 || capital_structure.debt_pct > 0);
-  const hasReg = regulatory_gap && (regulatory_gap.statutory_weeks > 0 || regulatory_gap.operational_weeks > 0);
-
-  if (!hasFunding && !hasCapital && !hasReg) return;
-
-  let html = '<div class="chart-row">';
-
-  // Funding trend bar chart
-  if (hasFunding) {
-    const vals = funding_trend.map(d => d.value);
-    const max = Math.max(...vals) || 1;
-    html += '<div class="chart-block"><div class="chart-title">Sector funding trend ($M)</div><div class="bar-chart">';
-    funding_trend.forEach(d => {
-      const pct = Math.round((d.value / max) * 90);
-      const isLatest = d.year === '2026' || d.year === funding_trend[funding_trend.length-1].year;
-      html += `<div class="bar-item">
-        <div class="bar-val">${d.value > 0 ? d.value : ''}</div>
-        <div class="bar-fill${isLatest ? ' accent' : ''}" style="height:${pct}px"></div>
-        <div class="bar-label">${d.year}</div>
-      </div>`;
-    });
-    html += '</div></div>';
-  }
-
-  // Capital structure donut
-  if (hasCapital) {
-    const eq = capital_structure.equity_pct || 0;
-    const dt = capital_structure.debt_pct || 0;
-    const bl = capital_structure.blended_pct || 0;
-    const total = eq + dt + bl || 1;
-    const eqN = Math.round((eq/total)*100);
-    const dtN = Math.round((dt/total)*100);
-    const blN = 100 - eqN - dtN;
-    // Simple SVG donut
-    const r = 40; const cx = 50; const cy = 50; const sw = 18;
-    function arc(pct, offset, color) {
-      if (pct <= 0) return '';
-      const a = (pct / 100) * 2 * Math.PI;
-      const x1 = cx + r * Math.sin(offset * 2 * Math.PI / 100);
-      const y1 = cy - r * Math.cos(offset * 2 * Math.PI / 100);
-      const x2 = cx + r * Math.sin((offset + pct) * 2 * Math.PI / 100);
-      const y2 = cy - r * Math.cos((offset + pct) * 2 * Math.PI / 100);
-      const lg = pct > 50 ? 1 : 0;
-      return `<path d="M ${x1} ${y1} A ${r} ${r} 0 ${lg} 1 ${x2} ${y2}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="butt"/>`;
-    }
-    const svg = `<svg class="donut-svg" width="100" height="100" viewBox="0 0 100 100">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--rule)" stroke-width="${sw}"/>
-      ${arc(eqN, 0, 'var(--ink)')}
-      ${arc(dtN, eqN, 'var(--accent)')}
-      ${arc(blN, eqN+dtN, 'var(--muted)')}
-    </svg>`;
-    html += `<div class="chart-block"><div class="chart-title">Capital structure (this sector)</div>
-      <div class="donut-wrap">${svg}
-      <div class="donut-legend">
-        <div class="donut-item"><div class="donut-dot" style="background:var(--ink)"></div>Equity ${eqN}%</div>
-        <div class="donut-item"><div class="donut-dot" style="background:var(--accent)"></div>Debt ${dtN}%</div>
-        ${blN > 0 ? `<div class="donut-item"><div class="donut-dot" style="background:var(--muted)"></div>Blended ${blN}%</div>` : ''}
-      </div></div></div>`;
-  }
-
-  // Regulatory gap bars
-  if (hasReg) {
-    const stat = regulatory_gap.statutory_weeks || 0;
-    const oper = regulatory_gap.operational_weeks || 0;
-    const max = Math.max(stat, oper) || 1;
-    const statPct = Math.round((stat/max)*100);
-    const operPct = Math.round((oper/max)*100);
-    const gap = oper - stat;
-    html += `<div class="chart-block"><div class="chart-title">Regulatory timeline gap</div>
-      <div class="reg-bar">
-        <div class="reg-label">Statutory (${stat}w)</div>
-        <div class="reg-track"><div class="reg-fill stat" style="width:${statPct}%"></div></div>
-      </div>
-      <div class="reg-bar">
-        <div class="reg-label">Operational (${oper}w)</div>
-        <div class="reg-track"><div class="reg-fill oper" style="width:${operPct}%"></div></div>
-      </div>
-      ${gap > 0 ? `<div class="reg-gap-label">+${gap}w operator gap</div>` : ''}
-    </div>`;
-  }
-
-  html += '</div>';
-  container.insertAdjacentHTML('beforeend', html);
-}
-
-function renderCapitalFlag(brief, container) {
-  if (!brief.capital_structure_flag || brief.capital_structure_flag === 'null' || !brief.capital_structure_flag.trim()) return;
-  const html = `<div class="capital-flag">
-    <div class="capital-flag-label">Capital structure signal</div>
-    ${brief.capital_structure_flag}
-  </div>`;
-  container.insertAdjacentHTML('beforeend', html);
-}
-
-function renderExecRead(brief, directCount) {
-  const container = document.getElementById('execReadContainer');
-  if (!brief || !brief.market_reality) { container.innerHTML = ''; return; }
-
-  const riskLevel = brief.risk_level || 'AMBER';
-  const riskCls = riskLevel === 'RED' ? 'red' : riskLevel === 'GREEN' ? 'green' : 'amber';
-  const confCount = directCount >= 3 ? 'High' : directCount >= 1 ? 'Medium' : 'Low';
-  const deepMarkets = ['WAEMU','Cameroun','Senegal','Ivory Coast','CEMAC'];
-  const isDeep = deepMarkets.includes(selectedMarket);
-  const isOperatorRead = isDeep && directCount >= 3;
-  const readLabel = isOperatorRead ? 'Operator read' : 'Directional read';
-  const coverageDepth = isDeep ? 'Primary operator' : 'Institutional sources';
-
-  // Extrapolation ratio: what % of the brief is inference vs direct data
-  const extrapolationNote = directCount === 0
-    ? 'This brief is based entirely on adjacent market patterns. No direct validated data exists for this market/sector combination.'
-    : directCount < 3
-    ? `This brief is inferring across gaps. ${directCount} direct signal${directCount !== 1 ? 's' : ''} validated. Treat quantitative assumptions as directional until confirmed by primary sources.`
-    : `Based on ${directCount} validated signals. Synthesis may still extrapolate where direct data is absent - check evidence cards below.`;
-
-  container.innerHTML = `
-    <div class="exec-read">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;">
-        <span style="color:${isOperatorRead ? 'var(--accent)' : 'var(--muted)'};">${readLabel}</span>
-        <span style="flex:1;height:1px;background:var(--rule);display:block;"></span>
-        <span style="color:var(--muted);">${confCount} confidence</span>
-      </div>
-      ${!isOperatorRead ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);background:var(--surface);border-left:2px solid var(--muted);padding:0.5rem 0.75rem;margin-bottom:0.75rem;line-height:1.6;">${extrapolationNote}</div>` : directCount < 5 ? `<div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);border-left:2px solid var(--rule);padding:0.4rem 0.75rem;margin-bottom:0.75rem;line-height:1.6;">${extrapolationNote}</div>` : ''}
-      <div class="exec-headline">${brief.exec_headline || brief.market_reality.split('.')[0] + '.'}</div>
-      <div class="exec-body">${brief.exec_body || brief.market_reality}</div>
-      <div class="exec-signal-row">
-        <div class="exec-signal">
-          <div class="exec-signal-label">IC signal</div>
-          <div class="exec-signal-val ${riskCls}">${riskLevel}</div>
-        </div>
-        <div class="exec-signal">
-          <div class="exec-signal-label">Direct signals</div>
-          <div class="exec-signal-val">${directCount}</div>
-        </div>
-        <div class="exec-signal">
-          <div class="exec-signal-label">Confidence</div>
-          <div class="exec-signal-val">${confCount}</div>
-        </div>
-        <div class="exec-signal">
-          <div class="exec-signal-label">Coverage</div>
-          <div class="exec-signal-val">${coverageDepth}</div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function renderBriefAsArgument(brief, directCount, adjacentCount) {
-  const container = document.getElementById('briefContainer');
-  if (!brief) { container.innerHTML = ''; return; }
-
-  const qs = Array.isArray(brief.ic_questions) ? brief.ic_questions : [];
-
-  container.innerHTML = `
-    <div class="argument-section">
-      <button class="argument-toggle" id="argToggle" onclick="toggleArgument()">The argument behind this read</button>
-      <div class="argument-body" id="argBody">
-        <div class="brief-block" style="border-left:none;padding:0;margin:0.75rem 0 0;">
-
-          ${brief.what_investors_underestimate ? `
-          <div class="brief-section">
-            <div class="brief-section-label">What the research pulled out</div>
-            <div class="brief-section-text">${brief.what_investors_underestimate}</div>
-          </div>` : ''}
-
-          ${brief.what_this_changes ? `
-          <div class="brief-section">
-            <div class="brief-section-label">What this means for the deal</div>
-            <div class="brief-section-text">${brief.what_this_changes}</div>
-          </div>` : ''}
-
-          ${qs.length ? `
-          <div class="brief-section">
-            <div class="brief-section-label">Ask the founder</div>
-            <ul class="brief-questions">
-              ${qs.map(q => `<li>${q}</li>`).join('')}
-            </ul>
-          </div>` : ''}
-
-          <div class="brief-confidence">${brief.confidence_note || ''}</div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function toggleArgument() {
-  const toggle = document.getElementById('argToggle');
-  const body = document.getElementById('argBody');
-  toggle.classList.toggle('open');
-  body.classList.toggle('open');
-}
-
-function goBack(){
-  document.getElementById('screenResults').classList.remove('active');
-  document.getElementById('screenEmpty').classList.add('active');
-  document.getElementById('evidenceLabel').style.display='none';
-  document.getElementById('evidenceFilters').style.display='none';
-  document.getElementById('execReadContainer').innerHTML='';
-  document.getElementById('briefContainer').innerHTML='';
-  selectedMarket=''; selectedSector=''; selectedQuestion=-1;
-  goToStep(1);
-}
-
-// ── GEO / SECTOR EXTRACTION ────────────────────────────────────────────────
-const GEO_MAP={
-  'senegal':'Senegal','nigeria':'Nigeria','kenya':'Kenya','ghana':'Ghana',
-  'cameroun':'Cameroun','cameroon':'Cameroun','ivory coast':'Ivory Coast',
-  'ivoire':'Ivory Coast','cote d\'ivoire':'Ivory Coast',
-  'south africa':'South Africa','egypt':'Egypt','tanzania':'Tanzania',
-  'rwanda':'Rwanda','uganda':'Uganda','ethiopia':'Ethiopia','mali':'Mali',
-  'angola':'Angola','mozambique':'Mozambique','zambia':'Zambia',
-  'chad':'Chad','gabon':'Gabon','morocco':'Morocco','benin':'Benin',
-  'togo':'Togo','drc':'DRC','congo':'Congo','waemu':'WAEMU','cemac':'CEMAC',
-  'uemoa':'WAEMU','east africa':'East Africa','west africa':'West Africa',
-};
-
-const SECTOR_MAP={
-  'mobile money':'Fintech / Mobile money','fintech':'Fintech / Mobile money',
-  'payment':'Fintech / Mobile money','energy':'Energy / Cleantech',
-  'solar':'Energy / Cleantech','cleantech':'Energy / Cleantech',
-  'agritech':'Agritech','agriculture':'Agritech',
-  'health':'Healthtech','saas':'SaaS / B2B','b2b':'SaaS / B2B',
-  'ecommerce':'E-commerce / Logistics','logistics':'E-commerce / Logistics',
-  'media':'Entertainment / Media','entertainment':'Entertainment / Media',
-  'telecom':'Telecoms','telco':'Telecoms',
-};
-
-function extractGeo(query){
-  const q=query.toLowerCase();
-  for(const[k,v] of Object.entries(GEO_MAP)){if(q.includes(k))return v;}
-  return null;
-}
-function extractSector(query){
-  const q=query.toLowerCase();
-  for(const[k,v] of Object.entries(SECTOR_MAP)){if(q.includes(k))return v;}
-  return null;
-}
-
-// ── MAIN SEARCH ────────────────────────────────────────────────────────────
-async function runSearch(queryOverride){
-  const query=queryOverride||document.getElementById('freeInput')&&document.getElementById('freeInput').value.trim()||'';
-  if(!query){showToast('Select a question or describe your angle');return;}
-  const token=getToken();
-  if(!token){document.getElementById('tokenPanel').classList.add('open');showToast('Please save your Airtable token first');return;}
-
-  currentQuery=query;
-  currentGeo=extractGeo(query);
-
-  document.getElementById('screenEmpty').classList.remove('active');
-  document.getElementById('screenResults').classList.add('active');
-  document.getElementById('actionsRow').style.display='none';
-  document.getElementById('errorBlock').style.display='none';
-
-  const btn=document.getElementById('runBtn');
-  if(btn){btn.classList.add('searching');btn.disabled=true;}
-  document.getElementById('progressBar').classList.add('active');
-  document.getElementById('resultsContext').innerHTML=`<strong>${selectedMarket||geo}</strong>&nbsp;&nbsp;/&nbsp;&nbsp;<strong>${selectedSector||sector}</strong>`;
-
-  // Show brief generating state immediately
-  document.getElementById('briefContainer').innerHTML=`
-    <div class="brief-generating">
-      <div class="brief-eyebrow"><span class="brief-dot"></span> Generating operator brief...</div>
-      <div class="generating-text">Reading what we know about this market<span class="cursor"></span></div>
-    </div>`;
-
-  // Show evidence skeleton
-  document.getElementById('resultsContainer').innerHTML=`
-    <div style="padding:0.6rem 0;border-bottom:1px solid var(--rule);margin-top:0.5rem;">
-      <div class="skeleton-line" style="height:10px;width:25%;margin-bottom:10px;"></div>
-      ${[1,2,3].map(()=>`<div style="padding:1rem 0;border-bottom:1px solid var(--rule);">
-        <div class="skeleton-line" style="height:10px;width:20%;margin-bottom:8px;"></div>
-        <div class="skeleton-line" style="height:18px;width:80%;margin-bottom:6px;"></div>
-        <div class="skeleton-line" style="height:14px;width:50%;margin-bottom:10px;"></div>
-        <div class="skeleton-line" style="height:12px;width:100%;margin-bottom:4px;"></div>
-      </div>`).join('')}
-    </div>`;
-
-  try{
-    // Fetch Airtable records
-    const {direct,adjacent}=await fetchAll(token,query);
-    currentResults=[...direct,...adjacent];
-
-    // Generate operator brief via Claude API
-    await generateBriefAndRender(query,direct,adjacent);
-
-    // Render evidence cards
-    renderEvidence(direct,adjacent);
-    document.getElementById('actionsRow').style.display='flex';
-  document.getElementById('copiaLink').style.display='block';
-  }catch(e){
-    showError(e.message);
-  }finally{
-    if(btn){btn.classList.remove('searching');btn.disabled=false;}
-    document.getElementById('progressBar').classList.remove('active');
-  }
-}
-
-// ── AIRTABLE FETCH ─────────────────────────────────────────────────────────
-async function fetchAll(token,query){
-  const geo=extractGeo(query);
-  const sector=extractSector(query);
-  const direct=await fetchDirect(token,geo,sector);
-  let adjacent=[];
-  if(sector){adjacent=await fetchAdjacent(token,geo,sector,direct);}
-  return{direct,adjacent};
-}
-
-async function fetchDirect(token,geo,sector){
-  const parts=[];
-  if(geo)parts.push(`SEARCH("${geo}",{Market})`);
-  if(sector)parts.push(`{Sector}="${sector}"`);
-  let formula=parts.length===2?`AND(AND(${parts.join(',')}),{Entry Status}="Active")`:
-    parts.length===1?`AND(${parts[0]},{Entry Status}="Active")`:`{Entry Status}="Active"`;
-  if(currentFilter)formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;
-  return await airtableFetch(token,formula,10);
-}
-
-async function fetchAdjacent(token,geo,sector,existing){
-  const ids=new Set(existing.map(r=>r.id));
-  let formula=`AND({Sector}="${sector}",{Entry Status}="Active")`;
-  if(currentFilter)formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;
-  const all=await airtableFetch(token,formula,6);
-  return all.filter(r=>!ids.has(r.id)).slice(0,3);
-}
-
-async function airtableFetch(token,formula,max){
-  const url=`https://api.airtable.com/v0/${BASE_ID}/Benchmarks?filterByFormula=${encodeURIComponent(formula)}&maxRecords=${max}`;
-  const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
-  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`API error ${res.status}`);}
-  const d=await res.json();
-  return d.records||[];
-}
-
-// ── CLAUDE API - OPERATOR BRIEF ────────────────────────────────────────────
-async function generateBriefAndRender(query,direct,adjacent){
-  const geo=extractGeo(query)||'the target market';
-  const sector=extractSector(query)||'this sector';
-
-  // Build context from Airtable records
-  const recordContext=direct.map(r=>{
-    const f=r.fields;
-    const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
-    return `- ${f['Metric Name']||''}: ${(f['Value']||'').substring(0,200)} (Source: ${f['Source Name']||''} ${f['Source Date']||''}, Market: ${market}, IC dimension: ${f['IC Dimension']||''}, Operator note: ${(f['Operator Note']||'').substring(0,300)})`;
-  }).join('\n');
-
-  const hasData=direct.length>0;
-  const confidenceLevel=direct.length>=3?'High':direct.length>=1?'Medium':'Low - limited validated data for this market';
-
-  const systemPrompt=`You are Jean-Philippe Ouandji, a digital marketing and growth operator with 12 years inside African distribution networks, particularly WAEMU and CEMAC. You write GON Intelligence briefs for VC and PE investors doing Africa due diligence.
-
-CRITICAL CONSTRAINT: Synthesise ONLY from the database records provided below. Every claim must trace to a provided record. Do not draw on outside knowledge. A brief built from insufficient data that says so honestly is more valuable than a confident brief built from assumptions.
-
-Your voice: direct, skeptical, human. You have been gut-punched by the industry and lived to tell the tale. You think three moves ahead of the obvious trend. You say what you actually think.
-
-COVERAGE DEPTH RULE: If fewer than 3 direct records are available, lead with the gap as the primary finding. The absence of data in a specific African market is itself an operator signal - most models borrow assumptions from better-documented markets without adjustment. Never bury thin coverage at the end.
-
-SIX IC DIMENSIONS - address where data supports it:
-1. Distribution economics - agent costs, CAC, last-mile reach, moat durability
-2. Demand validation - real vs modelled demand signals
-3. Regulatory risk - licensing timelines, compliance costs, enforcement gaps. WAEMU: BCEAO PI-SPI June 30 2026 deadline. COBAC Agrement Unique: statutory 3-6 months, operational 9-12 months.
-4. Currency and FX - exposure, hedging, local currency dynamics
-5. Exit pathway - comparables, acquirer landscape. NOTE: Airtel Money pre-IPO implied $7-10B at $1.3B revenue = ~6x revenue multiple. This is the current Africa fintech exit benchmark. Flag where deals diverge.
-6. Capital structure - CRITICAL AND UNDERCOVERED. In Q1 2026, 70% of Africa tech capital was debt or hybrid, not equity. Cleantech is ~85% debt-structured. Any deal modelled as pure equity in a debt-dominant sector must be flagged. Ask: is this an equity business or a receivables/infrastructure business dressed as equity?
-
-For chart_data: populate ONLY from provided records. Set to 0 if no data. Zero values render as "insufficient data" - that is correct behaviour. Never invent chart values.
-
-Return JSON only, no preamble, no markdown fences:
-{
-  "exec_headline": "One sentence, 15-20 words. A reframe, not a conclusion. Never start with the market name.",
-  "exec_body": "2-3 sentences. What the data shows that the standard read walks past. Direct, slightly skeptical.",
-  "risk_level": "RED or AMBER or GREEN",
-  "what_investors_underestimate": "1-2 sentences. Surface vs actual reality.",
-  "what_this_changes": "1-2 sentences. Concrete consequence for the deal model.",
-  "market_reality": "2-3 sentences. Operational picture. Specific, not generic.",
-  "capital_structure_flag": "null if not applicable. Otherwise: one sentence on whether this deal looks like equity but functions like debt or infrastructure finance.",
-  "ic_questions": ["question 1", "question 2", "question 3 - at least one must probe capital structure or financing stack"],
-  "confidence_note": "One sentence. Evidence basis and caveats.",
-  "chart_data": {
-    "funding_trend": [{"year":"2022","value":0},{"year":"2023","value":0},{"year":"2024","value":0},{"year":"2025","value":0},{"year":"2026","value":0}],
-    "capital_structure": {"equity_pct":0,"debt_pct":0,"blended_pct":0},
-    "regulatory_gap": {"statutory_weeks":0,"operational_weeks":0}
-  }
-}`;
-
-  const userPrompt=`Query: "${query}"
-Market: ${geo}
-Sector: ${sector}
-Data available: ${hasData?recordContext:'No validated benchmarks found in GON database for this specific market/sector combination.'}
-${adjacent.length>0?`Adjacent market signals: ${adjacent.map(r=>`${r.fields['Market']} - ${r.fields['Metric Name']}`).join(', ')}`:''}
-
-Write an operator brief. The exec_headline and exec_body should sound like the opening of a Canal+ article - inquisitive, reframing, something the research pulled out that the standard read misses. Not a verdict delivered but a finding surfaced.`;
-
-  try{
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true','x-api-key':localStorage.getItem('gon_claude_key')||''},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:systemPrompt,
-        messages:[{role:'user',content:userPrompt}]
-      })
-    });
-
-    const data=await response.json();
-    const text=data.content?.[0]?.text||'';
-
-    let brief;
-    try{
-      brief=JSON.parse(text);
-    }catch(e){
-      // Try to extract JSON from text
-      const match=text.match(/\{[\s\S]*\}/);
-      if(match)brief=JSON.parse(match[0]);
-      else throw new Error('Could not parse operator brief');
-    }
-
-    currentBrief=brief;
-    renderExecRead(brief,direct.length);
-    renderCapitalFlag(brief, document.getElementById('screenResults'));
-    renderCharts(brief.chart_data, document.getElementById('screenResults'));
-    renderBriefAsArgument(brief,direct.length,adjacent.length);
-
-  }catch(e){
-    const fallback={
-      exec_headline:`The data we have on this market points to something worth examining before the IC meeting.`,
-      exec_body:`Our validated coverage for this specific combination is limited. That absence is itself worth noting - it means most models for this market are borrowing assumptions from better-documented markets without adjusting for local conditions.`,
-      risk_level:'AMBER',
-      market_reality:`GON's validated data coverage for ${geo} ${sector} is limited at this stage.`,
-      what_investors_underestimate:`The tendency to import assumptions from better-documented African markets into less-documented ones without adjusting for local distribution, regulatory context, and customer behavior.`,
-      what_this_changes:`Due diligence should rely more heavily on primary founder data and direct operator interviews rather than published benchmarks.`,
-      capital_structure_flag:`Capital structure data is not available for this market/sector combination. Verify independently whether the deal is being structured as equity, debt, or blended finance - this materially changes the IC framework.`,
-      ic_questions:[
-        `Show me your actual CAC and LTV from the last 6 months - not projections, actual data from this market.`,
-        `What is the main reason comparable businesses have struggled in this market, and what specifically makes your model different?`,
-        `Is this deal being modelled as equity or does the underlying business function as a receivables or infrastructure business? What does the capital structure look like at exit?`
-      ],
-      confidence_note:`Limited validated data for this specific market. Treat as directional only.`
-    };
-    currentBrief=fallback;
-    renderExecRead(fallback,direct.length);
-    renderCapitalFlag(fallback, document.getElementById('screenResults'));
-    renderBriefAsArgument(fallback,direct.length,adjacent.length);
-  }
-}
-
-function renderBrief(){} // kept for PDF compatibility
-
-// ── RENDER EVIDENCE ────────────────────────────────────────────────────────
-function getSeverity(r){
-  const dim=r.fields['IC Dimension']||'';
-  const conf=r.fields['Confidence Level']||'';
-  const ts=r.fields['Three-Test Status']||'';
-  if(dim==='Regulatory environment')return'red';
-  if(ts==='Pass'&&conf==='High')return'red';
-  if(ts==='Pass with caveat'||conf==='Medium')return'amber';
-  return'green';
-}
-
-function getImplication(r){
-  const note=r.fields['Operator Note']||'';
-  const m=note.match(/Core claim:\s*([^.]+\.)/i)||note.match(/Assumption invalidated:\s*([^.]+\.)/i);
-  if(m)return`&#8220;${m[1].trim()}&#8221;`;
-  const first=note.split('.')[0];
-  if(first&&first.length>20)return`&#8220;${first.trim()}.&#8221;`;
-  return r.fields['Metric Name']||'';
-}
-
-function getICQ(r){
-  const ic=r.fields['IC Checklist Implication']||'';
-  if(ic.length>20)return ic;
-  return'';
-}
-
-function getNotMean(r,isAdjacent){
-  if(isAdjacent)return'';
-  const dim=r.fields['IC Dimension']||'';
-  const market=Array.isArray(r.fields['Market'])?r.fields['Market'].join(', '):(r.fields['Market']||'');
-  if(dim==='Regulatory environment')return`regulatory compliance appears impossible in ${market}. It means the timeline and cost assumptions require validation against operational reality, not statutory ceilings.`;
-  if(dim==='Distribution economics')return`distribution appears inaccessible. It means the cost structure and moat assumptions require explicit operator-level validation before IC.`;
-  if(dim==='Demand validation')return`demand does not exist. It means demand assumptions require cohort-level evidence rather than top-down market sizing.`;
-  return'';
-}
-
-function buildEvBar(r,isAdjacent){
-  const conf=r.fields['Confidence Level']||'Medium';
-  const ts=r.fields['Three-Test Status']||'';
-  const sd=r.fields['Source Date']||'Unknown';
-  const market=Array.isArray(r.fields['Market'])?r.fields['Market'].join(', '):(r.fields['Market']||'');
-  const strength=(!isAdjacent&&conf==='High'&&ts==='Pass')?'High':isAdjacent?'Analogy':'Medium';
-  const strengthCls=strength==='High'?'':'medium';
-  const opNote=r.fields['Operator Note']||'';
-  const contested=opNote.toLowerCase().includes('contest')||opNote.toLowerCase().includes('fragmented')||ts==='Pass with caveat';
-  const coverage=isAdjacent?`Analogy - ${market}`:market;
-  const fresh=sd.includes('2026')?'2026':sd.includes('2025')?'2025':sd||'Unknown';
-  return`<div class="ev-bar">
-    <div class="ev-cell"><span class="ev-key">Evidence</span><span class="ev-val ${strengthCls}">${strength}</span></div>
-    <div class="ev-cell"><span class="ev-key">Coverage</span><span class="ev-val ${isAdjacent?'medium':''}">${coverage}</span></div>
-    <div class="ev-cell"><span class="ev-key">Updated</span><span class="ev-val">${fresh}</span></div>
-    <div class="ev-cell"><span class="ev-key">Signal</span><span class="ev-val ${contested?'contested':''}">${contested?'Contested':'Consistent'}</span></div>
-  </div>`;
-}
-
-function renderCard(r,idx,isAdjacent){
-  const f=r.fields;
-  const sev=isAdjacent?'green':getSeverity(r);
-  const flagLabels={red:['flag-red','Critical gap'],amber:['flag-amber','Watch closely'],green:['flag-green','Adequately covered']};
-  const[flagCls,flagLabel]=isAdjacent?['flag-adjacent','Comparable market']:flagLabels[sev];
-  const implication=getImplication(r);
-  const icq=getICQ(r);
-  const notMean=getNotMean(r,isAdjacent);
-  const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
-  const value=(f['Value']||'').substring(0,80);
-  const cleanNote=(f['Operator Note']||'').replace(/Core claim:.*$/ms,'').replace(/Assumption invalidated:.*$/ms,'').replace(/Predicted effect:.*$/ms,'').trim().substring(0,500);
-
-  return`<div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
-    <div class="card-flags">
-      <span class="flag ${flagCls}">${flagLabel}</span>
-      <span class="flag flag-neutral">${f['IC Dimension']||''}</span>
-      ${isAdjacent&&market?`<span class="flag flag-neutral">${market}</span>`:''}
-    </div>
-    <div class="implication">${implication}</div>
-    <div class="bench-inline">
-      <span class="bench-val-sm">${value}</span>
-      <span class="bench-src-sm">${f['Source Name']||''}${f['Source Date']?' &middot; '+f['Source Date']:''}</span>
-    </div>
-    ${buildEvBar(r,isAdjacent)}
-    <button class="expand-trigger" id="expandBtn-${idx}" onclick="toggleExpand(${idx})">+ Full operator note + IC question</button>
-    <div class="card-layer2" id="layer2-${idx}">
-      ${cleanNote?`<div class="op-note">${cleanNote}</div>`:''}
-      ${notMean?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> ${notMean}</div>`:''}
-      ${icq?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
-      <div class="src-row">
-        ${f['Entry ID']?`<span class="src-tag">${f['Entry ID']}</span>`:''}
-        ${!isAdjacent&&market?`<span class="src-tag">${market}</span>`:''}
-        ${f['Three-Test Status']?`<span class="src-tag">${f['Three-Test Status']}</span>`:''}
-      </div>
-    </div>
-  </div>`;
-}
-
-function toggleExpand(idx){
-  const layer=document.getElementById(`layer2-${idx}`);
-  const btn=document.getElementById(`expandBtn-${idx}`);
-  layer.classList.toggle('open');
-  btn.textContent=layer.classList.contains('open')?'- Collapse':'+ Full operator note + IC question';
-}
-
-function renderEvidence(direct,adjacent){
-  if(direct.length > 0 || adjacent.length > 0){
-    document.getElementById('evidenceLabel').style.display='block';
-    document.getElementById('evidenceFilters').style.display='flex';
-  }
-  const container=document.getElementById('resultsContainer');
-  if(!direct.length&&!adjacent.length){container.innerHTML='';return;}
-
-  let html='';
-
-  if(direct.length){
-    html+=`<div class="evidence-divider">Supporting evidence <span class="evidence-count">${direct.length} direct signal${direct.length!==1?'s':''}</span></div>`;
-    html+=direct.map((r,i)=>renderCard(r,i,false)).join('');
-  }
-
-  if(adjacent.length){
-    const adjMarkets=[...new Set(adjacent.map(r=>Array.isArray(r.fields['Market'])?r.fields['Market'][0]:(r.fields['Market']||'')).filter(Boolean))].join(', ');
-    html+=`<div class="group-header" style="margin-top:0.5rem;"><span class="group-label">Comparable market signals</span><span class="evidence-count">${adjacent.length}</span></div>`;
-    html+=`<div class="group-rationale">These signals come from different markets but share relevant structural patterns. They are analogies, not direct evidence.</div>`;
-    html+=adjacent.map((r,i)=>renderCard(r,direct.length+i,true)).join('');
-  }
-
-  // Gap card
-  const geo=currentGeo||'this market';
-  html+=renderGapCard(geo,extractSector(currentQuery));
-
-  container.innerHTML=html;
-
-  requestAnimationFrame(()=>{
-    document.querySelectorAll('.intel-card,.gap-card').forEach((el,i)=>{
-      setTimeout(()=>el.classList.add('visible'),i*70);
+tog.addEventListener('click',function(e){e.preventDefault();pan.classList.toggle('open');});
+sav.addEventListener('click',function(){
+  var v=inp.value.trim();
+  if(v){localStorage.setItem(KEY,v);}else{localStorage.removeItem(KEY);}
+  inp.value='';pan.classList.remove('open');refresh();
+});
+refresh();
+
+document.querySelectorAll('.param-group').forEach(function(g){
+  var multi=g.dataset.multi==='1';
+  g.querySelectorAll('.popt').forEach(function(o){
+    o.addEventListener('click',function(){
+      if(!multi)g.querySelectorAll('.popt').forEach(function(x){x.classList.remove('on');});
+      o.classList.toggle('on');
     });
   });
-}
-
-function renderGapCard(geo,sector){
-  let title,why,impl;
-  if(geo==='Senegal'||geo==='WAEMU'){
-    title='Post-Wave acquisition economics in WAEMU are not reliably benchmarked yet';
-    why="Wave restructured the market from 2020 onward. Pre-Wave CAC data doesn't transfer cleanly to where things stand today.";
-    impl='Ask the founder for cohort data from the last 18 months specifically. Pre-2022 benchmarks will mislead you.';
-  }else if(geo==='Nigeria'){
-    title='Agent economics post-single-principal mandate are still being figured out';
-    why='The CBN April 2026 rule forced agents to choose a single principal. The new cost and loyalty dynamics have not been captured in any published benchmark yet.';
-    impl='Any agent banking model using pre-April 2026 data is modelling a market that no longer exists. Push the founder for post-April operating data.';
-  }else if(geo==='South Africa'){
-    title='South Africa energy sector has thin primary coverage in GON at this stage';
-    why='GON\'s deepest operator validation is in WAEMU and CEMAC. South Africa energy benchmarks are based on institutional sources, not direct operator experience.';
-    impl='Supplement with primary South African sources: NERSA, REIPPPP procurement data, Eskom annual reports. Treat adjacent signals as structural analogies only.';
-  }else if(geo==='Egypt'){
-    title='Egypt consumer finance appears closed to new entrants as of early 2026';
-    why='FRA Decree No 43 (February 2026) suspended new consumer finance applications under the FinTech Law. Earlier freezes in 2024 and 2025 compound this.';
-    impl='Any Egypt consumer lending deal needs to verify that licensing status predates October 2024. If unlicensed, this is not a compliance gap - it is a market access problem.';
-  }else{
-    title=`Validated benchmarks for "${currentQuery}" are limited in GON at this stage`;
-    why='GON coverage is deepest in WAEMU and CEMAC. This query either falls outside current database depth or in a market where primary data is genuinely sparse.';
-    impl='Treat any quantitative assumption without a primary source as directional only. The absence of benchmark data is itself worth noting in the IC memo.';
-  }
-
-  return`<div class="gap-card">
-    <div class="gap-marker">&#9651;</div>
-    <div class="gap-inner">
-      <div class="gap-title">${title}</div>
-      <div class="gap-why">${why}</div>
-      <div class="gap-ic"><span class="gap-ic-lbl">IC implication: </span>${impl}</div>
-      <span class="gap-badge">Visible only through operator networks</span>
-    </div>
-  </div>`;
-}
-
-function showError(msg){
-  document.getElementById('briefContainer').innerHTML='';
-  document.getElementById('resultsContainer').innerHTML='';
-  const err=document.getElementById('errorBlock');
-  err.style.display='block';
-  err.textContent=`Error: ${msg}. Check your Airtable token has data.records:read scope.`;
-}
-
-// ── PDF ────────────────────────────────────────────────────────────────────
-function generateFullBrief(){
-  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  let text=`GON INTELLIGENCE BRIEF\n${'='.repeat(50)}\nQuery: ${currentQuery}\nDate: ${date}\n\n`;
-
-  if(currentBrief){
-    text+=`OPERATOR BRIEF\n${'-'.repeat(40)}\n\n`;
-    text+=`What is actually going on:\n${currentBrief.market_reality}\n\n`;
-    text+=`What most investors underestimate:\n${currentBrief.what_investors_underestimate}\n\n`;
-    text+=`What this means for the deal:\n${currentBrief.what_this_changes}\n\n`;
-    if(currentBrief.ic_questions?.length){
-      text+=`Ask the founder:\n${currentBrief.ic_questions.map((q,i)=>`${i+1}. ${q}`).join('\n')}\n\n`;
-    }
-    text+=`${currentBrief.confidence_note}\n\n`;
-  }
-
-  if(currentResults.length){
-    text+=`SUPPORTING EVIDENCE\n${'-'.repeat(40)}\n\n`;
-    currentResults.forEach((r,i)=>{
-      const f=r.fields;
-      text+=`${i+1}. ${f['Metric Name']||''}\n`;
-      text+=`   ${f['IC Dimension']||''} | ${Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'')} | ${f['Source Name']||''} (${f['Source Date']||''})\n`;
-      text+=`   ${(f['Value']||'').substring(0,150)}\n`;
-      if(f['IC Checklist Implication'])text+=`   Ask founder: ${f['IC Checklist Implication']}\n`;
-      text+='\n';
-    });
-  }
-
-  text+=`${'='.repeat(50)}\nGON Intelligence - Growth Operator Notes\njpouandji@gmail.com\njpouandji-operator.github.io/portfolio/gon-intelligence/\n\nOperator-sourced intelligence. Not investment advice.`;
-  return text;
-}
-
-function showPdf(){
-  document.getElementById('pdfPreview').textContent=generateFullBrief();
-  document.getElementById('pdfOverlay').classList.add('show');
-}
-function closePdf(){document.getElementById('pdfOverlay').classList.remove('show');}
-function closePdfOverlay(e){if(e.target===document.getElementById('pdfOverlay'))closePdf();}
-function downloadPdf(){
-  const brief=generateFullBrief();
-  const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>GON Brief - ${currentQuery}</title>
-<style>body{font-family:Georgia,serif;font-size:12px;line-height:1.7;color:#0f0e0c;background:#f5f0e8;padding:40px;max-width:700px;margin:0 auto;}
-h1{font-size:18px;font-weight:900;margin-bottom:4px;}
-.meta{font-family:'Courier New',monospace;font-size:10px;color:#7a7060;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:20px;}
-.section-title{font-family:'Courier New',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#7a7060;margin:16px 0 6px;border-bottom:1px solid #d4cfc4;padding-bottom:4px;}
-.brief-item{margin-bottom:14px;}
-.brief-label{font-family:'Courier New',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:#7a7060;margin-bottom:3px;}
-.brief-text{font-size:12px;line-height:1.7;}
-.q{background:#0f0e0c;color:#f5f0e8;padding:6px 10px;margin:4px 0;font-size:11px;}
-.signal{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #d4cfc4;}
-.sig-title{font-weight:700;margin-bottom:3px;}
-.sig-meta{font-family:'Courier New',monospace;font-size:9px;color:#7a7060;text-transform:uppercase;margin-bottom:4px;}
-.footer{margin-top:32px;font-family:'Courier New',monospace;font-size:9px;color:#7a7060;text-transform:uppercase;border-top:2px solid #0f0e0c;padding-top:12px;}
-@media print{body{background:white;}}</style></head><body>
-<h1>GON Intelligence Brief</h1>
-<div class="meta">Query: ${currentQuery} &nbsp;|&nbsp; ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div>
-${currentBrief?`
-<div class="section-title">Operator Brief</div>
-<div class="brief-item"><div class="brief-label">What is actually going on</div><div class="brief-text">${currentBrief.market_reality}</div></div>
-<div class="brief-item"><div class="brief-label">What most investors underestimate</div><div class="brief-text">${currentBrief.what_investors_underestimate}</div></div>
-<div class="brief-item"><div class="brief-label">What this means for the deal</div><div class="brief-text">${currentBrief.what_this_changes}</div></div>
-${currentBrief.ic_questions?.length?`<div class="brief-item"><div class="brief-label">Ask the founder</div>${currentBrief.ic_questions.map(q=>`<div class="q">${q}</div>`).join('')}</div>`:''}
-<div style="font-family:'Courier New',monospace;font-size:9px;color:#7a7060;margin-top:10px;">${currentBrief.confidence_note}</div>`:''}
-${currentResults.length?`<div class="section-title">Supporting Evidence (${currentResults.length} signals)</div>
-${currentResults.map(r=>{const f=r.fields;return`<div class="signal">
-<div class="sig-title">${f['Metric Name']||''}</div>
-<div class="sig-meta">${f['IC Dimension']||''} &nbsp;|&nbsp; ${Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'')} &nbsp;|&nbsp; ${f['Source Name']||''}</div>
-<div>${(f['Value']||'').substring(0,200)}</div>
-${f['IC Checklist Implication']?`<div class="q">Ask: ${f['IC Checklist Implication']}</div>`:''}
-</div>`;}).join('')}`:''}
-<div class="footer">GON Intelligence - Growth Operator Notes - jpouandji@gmail.com<br>Not investment advice. Operator-sourced intelligence.</div>
-</body></html>`);
-  win.document.close();
-  setTimeout(()=>win.print(),500);
-}
-
-function copyFounderQs(){
-  const qs=[
-    ...(currentBrief?.ic_questions||[]),
-    ...currentResults.map(r=>r.fields['IC Checklist Implication']||'').filter(Boolean)
-  ];
-  if(!qs.length){showToast('No founder questions found');return;}
-  navigator.clipboard.writeText(`FOUNDER QUESTIONS - GON Intelligence\nQuery: ${currentQuery}\n\n${qs.map((q,i)=>`${i+1}. ${q}`).join('\n\n')}`)
-    .then(()=>showToast('DD questions copied')).catch(()=>showToast('Copy failed'));
-}
-function copyBrief(){
-  navigator.clipboard.writeText(generateFullBrief())
-    .then(()=>{showToast('Brief copied');closePdf();}).catch(()=>showToast('Copy failed'));
-}
-function flagPartner(){showToast('Flagged for partner review');}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-  initToken();
-  const fi=document.getElementById('freeInput');if(fi)fi.addEventListener('keydown',e=>{if(e.key==='Enter')runFromStep3();});
 });
 </script>
+
 </body>
 </html>
