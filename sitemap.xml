@@ -72,6 +72,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <!-- IFC Africa investment access channels -->
+  <url>
+    <loc>https://jpouandji-operator.github.io/portfolio/ifc-africa-investment-access/</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 
   <url>
     <loc>https://jpouandji-operator.github.io/portfolio/canal-multichoice-platform-economics-africa/</loc>
