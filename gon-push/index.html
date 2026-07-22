@@ -269,6 +269,16 @@ const NORMALISE = {
   "Directional Only":"Directional only","Pan-African":"Pan African",
   "Sub-Saharan Africa":"Sub Saharan Africa","DR Congo":"DRC",
   "Cameroon":"Cameroun","Announced":"Announced",
+  "Enacted, short-window renewal":"Enacted, short-window renewal",
+  "Measured":"Measured",
+  "Operational":"Operational",
+  "Enacted / Coalition launched":"Enacted / Coalition launched",
+  "Enacted / Under construction":"Enacted / Under construction",
+  "Under construction":"Under construction",
+  "Measured / Operational":"Measured",
+  "Measured / Comparative":"Measured",
+  "Draft / In transition":"Draft / In transition",
+  "FMCG / Manufacturing":"FMCG / Manufacturing",
 };
 
 const MARKETS = ["Algeria","Angola","Benin","Botswana","Burkina Faso","Cameroun","CAR",
@@ -595,13 +605,13 @@ function buildSingleForm() {
           <div class="field-label">Market</div>
           <div class="market-grid">${MARKETS.map(m=>`<span class="market-tag" onclick="toggleMarket(this,'${m}')">${m}</span>`).join('')}</div>
         </div>
-        ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','Cross-sector'])}
+        ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','Cross-sector','FMCG / Manufacturing'])}
         ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability','Capital structure and financing'])}
-        ${sf('Value Type',['Point','Range','Directional','Regulatory provision','Announced','Narrative only','Operator estimate'])}
+        ${sf('Value Type',['Point','Range','Directional','Regulatory provision','Announced','Narrative only','Operator estimate','Measured','Operational','Enacted','Enacted, short-window renewal','Enacted / Under construction','Enacted / Coalition launched','Measured / Operational','Measured / Comparative','Under construction'])}
         ${sf('Data Tier',['Tier A - Cited Source','Tier B - Operator network','Tier B - Operator estimate'])}
         ${tf('Source Name','text')}${tf('Source URL','text')}${tf('Source Date','text')}
         ${sf('Decay Class',['Structural (36 months)','Market dynamics (12 months)','Regulatory (6 months)','Operator signal (quarterly)'])}
-        ${sf('Entry Status',['Active','Announced','Flagged for review','Superseded','Broken promise','Implementation success','Killed'])}
+        ${sf('Entry Status',['Active','Announced','Enacted','Operational','Under construction','Draft / In transition','Flagged for review','Superseded','Broken promise','Implementation success','Killed'])}
         ${sf('Recency Test',['Pass','Pass with flag','Fail'])}
         ${sf('Specificity Test',['Pass','Pass with caveat','Fail'])}
         ${sf('Interpretability Test',['Pass','Fail'])}
