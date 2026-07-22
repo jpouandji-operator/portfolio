@@ -37,7 +37,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT — PREMISE FLAGGED, DO NOT DRAFT AS-IS** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. **13 Jul 2026 routine run:** search-snippet research (WebFetch was down all-domains this session, could not independently verify) suggests the headline premise conflates two separate BCEAO instruments — "PI-SPI" appears to mean "Plateforme Interopérable du Système de Paiement Instantané" (an interoperability rail with its own connection deadline, currently ~Sept 30 2026), not a PSP-licensing instruction. The actual licensing change (ending mandatory bank-sponsorship for fintechs, ~30 new fintechs licensed) is under Instruction N°001-01-2024, a separate track. Multiple sources (Jeune Afrique, SenePlus, unverified this session) suggest Wave may currently be *absent* from PI-SPI rather than newly subjected to it — the opposite mechanism from "BCEAO ended Wave's moat." Needs a primary-source pass directly on bceao.int (and resolution of the pre-existing Article 18 vs Article 14 discrepancy already flagged in GON_Benchmark_Repository_v3.md line ~1017) before this is drafted. Do not treat prior 17/18 score as validated until re-scored against corrected facts. |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
@@ -102,6 +102,27 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 13 Jul 2026 | — | — | — | — | GA4 still not connected (no Analytics connector in workspace — only Gmail connected). Airtable unreachable this run (proxy returned 403 policy denial on api.airtable.com). WebFetch returned 403 on every URL tested this session, including control domains (example.com) — systemic tool outage, not a site block. No article drafted this run; see A01 note above and CHANGELOG. |
+
+---
+
+## RECONCILIATION FLAGS (13 Jul 2026 routine run)
+
+**Unregistered in sitemap.xml but live in repo (folders exist, pages render):**
+- `airtel-infrastructure-pivot/` — published per GON_Master_Session_State.md (23 Feb 2026), not in sitemap.xml
+- `vas-telcos-investment-delegation/` — published per GON_Master_Session_State.md (13 Jan 2026), not in sitemap.xml
+- `gon-intelligence/` — internal tool page ("GON Intelligence"), not an article, not in sitemap
+- `gon-push/` — internal tool page ("GON Push Tool"), not an article, not in sitemap
+
+**Registered in sitemap.xml but NOT found as a repo folder (broken/missing):**
+- `lipa-later-war-games-retrospective/` — listed in sitemap.xml, no matching folder in repo root (queue lists A26 as `[HOLD — sources pending]`, consistent with not-yet-published, but the sitemap entry implies it's live — discrepancy)
+- `africa-market-entry/` — listed in sitemap.xml, no matching folder in repo root (Master Session State lists this as "Draft only — Not published")
+
+**Queue items marked HOLD — confirm published (A23 IFC, A24 Agentforce, A25 AI agents/database layer):** no matching folders found in repo for any of the three — still unconfirmed, remain on HOLD.
+
+**A11 Copia Global War Games Retrospective:** folder exists (`copia-global-war-games-retrospective/`), matches sitemap entry — confirmed live, queue status "Published" is consistent.
+
+JP to review and resolve — routine does not auto-resolve per protocol.
 
 ---
 
@@ -110,5 +131,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 13 Jul 2026 | Routine run: no article drafted. Blocked on (1) Airtable unreachable — proxy 403 policy denial, (2) WebFetch returning 403 on all tested URLs this session including control domains — systemic outage, no live primary-source research possible, (3) GA4 still not connected. Independent research (search-snippets only, not fetched/verified) raised a material accuracy concern on A01's premise — see note under A01 above. Reconciliation flags from Step 1 logged above. No files pushed to main; PR opened against claude/ branch with these notes only, no article. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
