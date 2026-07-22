@@ -12,6 +12,13 @@
 <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/retrospectives/"/>
 <meta property="og:site_name" content="Growth Operator Notes"/>
 <meta name="twitter:card" content="summary_large_image"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CWB7VQ56XE');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -165,7 +172,7 @@ footer.contact{margin-top:70px;background:var(--ink);color:var(--paper);padding:
 
   <div class="retro-grid" id="grid">
 
-    <article class="retro featured" data-tags="failure fintech waemu eastafrica">
+    <article class="retro featured" data-tags="failure fintech eastafrica">
       <div class="verdict-bar">
         <span class="vb-signal vb-red">IC Signal: Red</span>
         <span class="vb-frozen">Verdict frozen on January 2022 inputs</span>
@@ -248,6 +255,7 @@ footer.contact{margin-top:70px;background:var(--ink);color:var(--paper);padding:
     </article>
 
   </div>
+  <p id="noResults" style="display:none;color:var(--muted);font-style:italic;padding:20px 0;">Nothing in this category yet - check back as the series grows.</p>
 
   <div class="section-label">The Full Ledger</div>
   <div>
@@ -294,9 +302,14 @@ document.querySelectorAll('.fchip').forEach(function(c){
     document.querySelectorAll('.fchip').forEach(function(x){x.classList.remove('active');});
     c.classList.add('active');
     var f = c.dataset.filter;
+    var visibleCount = 0;
     document.querySelectorAll('.retro').forEach(function(r){
-      r.style.display = (f === 'all' || r.dataset.tags.indexOf(f) !== -1) ? 'flex' : 'none';
+      var show = (f === 'all' || r.dataset.tags.indexOf(f) !== -1);
+      r.style.display = show ? 'flex' : 'none';
+      if (show) visibleCount++;
     });
+    document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+    if (typeof gtag !== 'undefined') { gtag('event', 'filter_click', {'filter': f}); }
   });
 });
 </script>
