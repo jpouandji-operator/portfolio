@@ -1,384 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sociabble Earns Its 4.7. The Interesting Question Is What Gets Sold Next. | Teardowns</title>
-  <meta name="description" content="A product marketing teardown of Sociabble's feature portfolio - AI Knowledge Agents, Sites and Pages, Rewards - mapped against market growth, GTM motion, and buyer journey simulation." />
-  <meta name="keywords" content="Sociabble review, employee advocacy platform, AI knowledge agents, internal communications SaaS, product marketing teardown, Poppulo Sociabble, employee experience platform" />
-  <link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/teardowns/sociabble-feature-portfolio/" />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Sociabble Earns Its 4.7. The Interesting Question Is What Gets Sold Next." />
-  <meta property="og:description" content="A BCG-lens teardown of Sociabble's feature portfolio, its GTM motion, and what a simulated buyer journey reveals." />
-  <meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/teardowns/sociabble-feature-portfolio/" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Sociabble Earns Its 4.7. The Interesting Question Is What Gets Sold Next.",
-    "author": {"@type": "Person", "name": "Jean-Philippe Ouandji"},
-    "datePublished": "2026-07-16",
-    "publisher": {"@type": "Organization", "name": "Growth Operator Notes"},
-    "mainEntityOfPage": "https://jpouandji-operator.github.io/portfolio/teardowns/sociabble-feature-portfolio/"
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Teardown Article Mockup v2 - Sociabble</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --paper:#f5f0e8; --paper-card:#fbf7ef; --ink:#0f0e0c; --accent:#c8320a;
+    --muted:#7a7060; --rule:#d4cfc4;
+    --s-telecom:#1c4b82; --s-fintech:#2a6b4f; --s-energy:#a66a0a;
+    --s-media:#5c3a7a; --s-agri:#5c6b1f; --s-ecom:#8a4a1f;
   }
-  </script>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+  .wrap-article{max-width:760px;margin:0 auto;padding:0 24px;}
+  a{color:inherit;}
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CWB7VQ56XE');</script>
+  .mockup-note{background:var(--ink);color:var(--paper);font-style:italic;font-size:13px;padding:9px 24px;text-align:center;}
+  .mockup-note b{color:#f2b990;font-style:normal;}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" /></noscript>
+  header.site{border-bottom:2px solid var(--ink);padding:24px 0 18px;}
+  .site-top{display:flex;justify-content:space-between;align-items:baseline;}
+  .wordmark{font-family:'Playfair Display',serif;font-weight:900;font-size:19px;text-decoration:none;}
+  .wordmark span{color:var(--accent);}
+  .site-nav-links{font-size:14px;font-style:italic;color:var(--muted);}
+  .site-nav-links a{text-decoration:none;margin-left:18px;}
+  .site-nav-links a:hover{color:var(--accent);}
+  .site-nav-links a.active{color:var(--accent);font-style:normal;}
 
-  <style>
-    :root{--paper:#f5f0e8;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--surface:#edeae2;}
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html{background:var(--paper);}
-    body{font-family:'Georgia',serif;font-size:16px;line-height:1.7;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;}
-    a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);}
-    a:hover{opacity:0.7;}
-    img{max-width:100%;height:auto;display:block;}
+  .sector-chip{display:inline-block;font-size:12px;color:#fff;padding:4px 12px;border-radius:2px;}
+  .sc-tel{background:var(--s-telecom);} .sc-fin{background:var(--s-fintech);}
+  .sc-nrg{background:var(--s-energy);} .sc-med{background:var(--s-media);}
+  .sc-agr{background:var(--s-agri);} .sc-eco{background:var(--s-ecom);}
 
-    .site-nav{border-bottom:2px solid var(--ink);padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--paper);z-index:100;}
-    .nav-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:var(--ink);border:none;}
-    .nav-links{display:flex;gap:1.5rem;list-style:none;}
-    .nav-links a{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);border:none;}
-    .nav-links a:hover,.nav-links a.active{color:var(--ink);opacity:1;}
+  .section-label{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin:52px 0 20px;display:flex;align-items:center;gap:14px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--rule);}
 
-    .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);max-width:700px;margin:1.25rem auto 0;padding:0 1rem;}
-    .breadcrumb a{border:none;color:var(--muted);}
-    .breadcrumb a:hover{color:var(--accent);opacity:1;}
+  .pullquote{margin:40px 0;padding:30px 34px;background:var(--ink);color:var(--paper);display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;}
+  .pullquote .mark{font-family:'Playfair Display',serif;font-size:58px;color:var(--accent);line-height:.8;}
+  .pullquote p{font-family:'Playfair Display',serif;font-style:italic;font-size:21px;line-height:1.45;}
 
-    .article-full{padding:1rem 1rem 1.5rem;max-width:700px;margin:0 auto;}
-    .article-full-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
-    .article-meta{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:0.5rem;}
-    .article-full h1{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;line-height:1.25;margin-bottom:0.5rem;}
-    .article-deck{font-size:1rem;font-style:italic;color:var(--muted);margin-top:0.5rem;}
+  .insight-box{margin:36px 0;padding:22px 26px;background:var(--paper-card);border-left:4px solid var(--accent);font-family:'Playfair Display',serif;font-style:italic;font-size:18px;line-height:1.5;}
 
-    .header-image{width:calc(100% + 2rem);margin-left:-1rem;margin-right:-1rem;margin-bottom:1.5rem;}
-    .header-image img{width:100%;height:auto;display:block;}
+  footer.contact{margin-top:70px;background:var(--ink);color:var(--paper);padding:48px 0;}
+  .contact-inner{max-width:760px;margin:0 auto;padding:0 24px;text-align:center;}
+  .contact-inner h3{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;}
+  .contact-inner p{font-size:15px;color:#c9c2b3;margin-bottom:22px;}
+  .btn{display:inline-block;font-size:14.5px;text-decoration:none;padding:11px 26px;margin:0 6px 10px;border:1px solid #6a6355;color:var(--paper);border-radius:2px;}
+  .btn-primary{background:var(--accent);border-color:var(--accent);}
+  .btn:hover{border-color:var(--paper);}
 
-    .tldr{margin:1.5rem -1rem;border:1px solid var(--ink);background:var(--paper);padding:1.1rem 1.25rem;}
-    .tldr-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:0.6rem;}
-    .tldr ul{list-style:none;margin:0;padding:0;}
-    .tldr li{font-size:0.9rem;line-height:1.65;padding-left:1.1rem;position:relative;margin-bottom:0.5rem;}
-    .tldr li:last-child{margin-bottom:0;}
-    .tldr li::before{content:"\2022";color:var(--accent);position:absolute;left:0;font-family:'IBM Plex Mono',monospace;}
-    .toc{margin:0 0 1.5rem;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.03em;line-height:2;color:var(--muted);}
-    .toc a{color:var(--muted);border-bottom:none;}
-    .toc a:hover{color:var(--accent);opacity:1;}
-    .toc-sep{color:var(--rule);padding:0 0.4rem;}
-    @media(min-width:768px){.tldr{margin-left:0;margin-right:0;}}
+  .breadcrumb{font-size:13.5px;font-style:italic;color:var(--muted);padding-top:34px;}
+  .breadcrumb a{text-decoration:none;}
+  .t-header{padding:20px 0 6px;}
+  .t-meta-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+  .tchip{display:inline-block;font-size:11.5px;padding:3px 10px;border:1px solid var(--muted);border-radius:2px;color:var(--muted);}
+  .t-num{font-family:'Playfair Display',serif;font-weight:900;font-size:15px;color:var(--accent);}
+  h1.t-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(28px,4.2vw,40px);line-height:1.12;}
+  .t-deck{font-size:18px;color:var(--muted);margin-top:16px;line-height:1.55;}
 
-    .stat-strip{display:flex;flex-wrap:wrap;gap:0;margin:1.5rem -1rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--surface);overflow:hidden;}
-    .stat-item{flex:1 1 50%;min-width:50%;padding:1rem;text-align:center;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);}
-    .stat-item:nth-child(even){border-right:none;}
-    .stat-item:nth-last-child(-n+2){border-bottom:none;}
-    @media(min-width:600px){
-      .stat-item{flex:1;min-width:0;border-bottom:none;}
-      .stat-item:nth-child(even){border-right:1px solid var(--rule);}
-      .stat-item:last-child{border-right:none;}
-    }
-    .stat-number{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--ink);display:block;}
-    .stat-label{font-family:'IBM Plex Mono',monospace;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);display:block;margin-top:0.2rem;}
+  .stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:28px 0 0;}
+  .stat{background:var(--paper-card);padding:16px;}
+  .stat .n{font-family:'Playfair Display',serif;font-weight:900;font-size:22px;color:var(--accent);line-height:1.15;}
+  .stat .l{font-size:12px;font-style:italic;color:var(--muted);margin-top:3px;}
 
-    .article-full h2{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin:1.75rem 0 0.75rem 0;padding-top:0.75rem;border-top:1px solid var(--rule);}
-    .article-full h2::before{content:"\2022";color:var(--accent);margin-right:0.5rem;}
-    .article-full h3{font-family:'Playfair Display',serif;font-size:1.02rem;font-weight:700;margin:1.4rem 0 0.5rem 0;}
-    .article-full p{margin-bottom:1rem;font-size:0.96rem;line-height:1.75;}
-    .article-full strong{font-weight:700;color:var(--ink);}
+  .tldr{margin:36px 0;background:var(--ink);color:var(--paper);padding:26px 30px;}
+  .tldr h3{font-family:'Playfair Display',serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#f2b990;margin-bottom:12px;}
+  .tldr li{font-size:15.5px;margin:0 0 10px 18px;line-height:1.55;}
 
-    .review-pull{margin:1.75rem -1rem;padding:1.25rem 1.5rem;border-left:4px solid var(--accent);background:var(--ink);color:var(--paper);opacity:0;transform:translateX(-12px);transition:opacity 0.6s ease,transform 0.6s ease;}
-    .review-pull.in-view{opacity:1;transform:translateX(0);}
-    .review-pull-source{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:0.6rem;}
-    .review-pull-source::before{content:"\201C";font-family:'Playfair Display',serif;font-size:1rem;margin-right:0.3rem;}
-    .review-pull blockquote{font-family:'Playfair Display',serif;font-style:italic;font-size:1.05rem;line-height:1.55;color:var(--paper);}
+  .t-body p{font-size:16.5px;margin-bottom:22px;}
+  .t-body h2{font-family:'Playfair Display',serif;font-weight:700;font-size:25px;line-height:1.25;margin:52px 0 20px;}
+  .t-body a.inline{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);}
 
-    .bcg-grid{margin:1.5rem -1rem;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink);overflow:hidden;}
-    .bcg-cell{padding:1.1rem 1rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);}
-    .bcg-cell:nth-child(even){border-right:none;}
-    .bcg-cell:nth-last-child(-n+2){border-bottom:none;}
-    .bcg-cell.star{background:var(--ink);}
-    .bcg-cell.star .bcg-label{color:var(--accent);}
-    .bcg-cell.star .bcg-title{color:var(--paper);}
-    .bcg-cell.star .bcg-desc{color:#c8c4bc;}
-    .bcg-cell.question{background:var(--surface);}
-    .bcg-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:0.4rem;}
-    .bcg-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);display:block;margin-bottom:0.4rem;}
-    .bcg-desc{font-size:0.82rem;line-height:1.55;color:var(--muted);}
+  /* ════ THE JOURNEY MAP: interactive centerpiece ════ */
+  .journey{margin:40px 0;background:var(--paper-card);border:1px solid var(--rule);padding:30px 26px 26px;}
+  .journey-title{font-family:'Playfair Display',serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+  .journey-sub{font-size:13.5px;font-style:italic;color:var(--muted);margin-bottom:26px;}
+  .jmap{display:flex;align-items:flex-start;}
+  .jstage{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+  .jnode{width:40px;height:40px;border-radius:50%;border:2px solid var(--muted);background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:15px;color:var(--muted);transition:all .18s;}
+  .jstage.active .jnode{border-color:var(--accent);background:var(--accent);color:#fff;transform:scale(1.18);}
+  .jstage:hover .jnode{border-color:var(--accent);color:var(--accent);}
+  .jstage.active:hover .jnode{color:#fff;}
+  .jlabel{font-size:12.5px;font-style:italic;color:var(--muted);margin-top:9px;text-align:center;}
+  .jstage.active .jlabel{color:var(--ink);font-style:normal;}
+  .jconnect{height:2px;background:var(--rule);flex:1;margin-top:19px;min-width:16px;position:relative;top:0;}
+  .jpanel{margin-top:24px;border-top:1px dashed var(--rule);padding-top:20px;min-height:120px;}
+  .jpanel-stage{display:none;}
+  .jpanel-stage.on{display:block;animation:fadein .25s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+  .jpanel-obs{font-size:15.5px;color:#2f2b24;margin-bottom:10px;}
+  .jpanel-note{font-size:13.5px;font-style:italic;color:var(--muted);}
+  .jpanel-note b{font-style:normal;color:var(--accent);}
 
-    .feature-focus{margin:1.5rem -1rem;border:1px solid var(--ink);overflow:hidden;}
-    .feature-focus-header{background:var(--ink);padding:0.6rem 1.25rem;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);}
-    .feature-row{border-bottom:1px solid var(--rule);padding:1.1rem 1.25rem;}
-    .feature-row:last-child{border-bottom:none;}
-    .feature-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);display:block;margin-bottom:0.15rem;}
-    .feature-position{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);display:block;margin-bottom:0.5rem;}
-    .feature-desc{font-size:0.85rem;line-height:1.6;color:var(--muted);margin-bottom:0.6rem;}
-    .feature-gtm{font-size:0.8rem;line-height:1.55;color:var(--ink);background:var(--surface);padding:0.6rem 0.8rem;border-left:2px solid var(--accent);}
-    .feature-gtm-label{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);display:block;margin-bottom:0.25rem;}
+  /* ════ PORTFOLIO 2x2: the BCG grid, drawn ════ */
+  .bcg{margin:40px 0;}
+  .bcg-frame{position:relative;border-left:2px solid var(--ink);border-bottom:2px solid var(--ink);height:340px;margin:14px 8px 8px 34px;}
+  .bcg-axis-y{position:absolute;left:-30px;top:50%;transform:rotate(-90deg) translateX(50%);transform-origin:left;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+  .bcg-axis-x{text-align:center;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+  .bcg-quad{position:absolute;width:50%;height:50%;display:flex;align-items:flex-start;justify-content:flex-end;padding:10px 14px;}
+  .bcg-quad span{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--rule);}
+  .q-tl{top:0;left:0;border-right:1px dashed var(--rule);border-bottom:1px dashed var(--rule);}
+  .q-tr{top:0;right:0;border-bottom:1px dashed var(--rule);}
+  .q-bl{bottom:0;left:0;border-right:1px dashed var(--rule);}
+  .q-br{bottom:0;right:0;}
+  .bcg-item{position:absolute;transform:translate(-50%,-50%);padding:7px 14px;border-radius:2px;font-size:13px;color:#fff;white-space:nowrap;box-shadow:0 2px 10px rgba(15,14,12,.18);cursor:default;transition:transform .15s;}
+  .bcg-item:hover{transform:translate(-50%,-50%) scale(1.06);}
+  .bcg-item small{display:block;font-size:10.5px;font-style:italic;opacity:.85;}
+  .bcg-star{background:var(--accent);}
+  .bcg-cow{background:var(--s-fintech);}
+  .bcg-q{background:var(--s-energy);}
+  .bcg-outside{margin:16px 8px 0 34px;font-size:13.5px;font-style:italic;color:var(--muted);border:1px dashed var(--muted);padding:10px 16px;}
+  .bcg-outside b{font-style:normal;color:var(--ink);}
 
-    .insight-box{background:var(--ink);color:var(--paper);padding:1rem 1.25rem;margin:1.5rem -1rem;border-left:3px solid var(--accent);}
-    .insight-box::before{content:"OPERATOR READ";font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:0.6rem;}
-    .insight-box ul{list-style:none;margin:0;padding:0;}
-    .insight-box li{font-size:0.88rem;line-height:1.6;color:var(--paper);padding-left:1.1rem;position:relative;margin-bottom:0.6rem;}
-    .insight-box li:last-child{margin-bottom:0;}
-    .insight-box li::before{content:"\2022";color:var(--accent);position:absolute;left:0;font-family:'IBM Plex Mono',monospace;}
+  /* ════ FEATURE SCREENS: browser windows ════ */
+  .fscreen{margin:30px 0;border:1px solid var(--rule);background:var(--paper-card);}
+  .fbar{display:flex;align-items:center;gap:12px;background:var(--ink);padding:9px 16px;}
+  .fdots{display:flex;gap:5px;}
+  .fdot{width:8px;height:8px;border-radius:50%;background:#4a453c;}
+  .fdot.accent{background:var(--accent);}
+  .furl{flex:1;font-size:12px;font-style:italic;color:#c9c2b3;background:#1d1b17;border-radius:3px;padding:3px 12px;}
+  .fpos{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#f2b990;}
+  .fcontent{padding:20px 22px;}
+  .fcontent h3{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:8px;}
+  .fcontent p{font-size:14.5px;color:#4a4438;margin-bottom:0;}
+  .fgtm{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border-top:1px solid var(--rule);}
+  .fgtm > div{background:var(--paper-card);padding:14px 22px;font-size:13.5px;}
+  .fgtm b{display:block;font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
 
-    .transition-list{list-style:none;margin:0 0 1rem 0;padding:0;}
-    .transition-list li{font-size:0.93rem;line-height:1.7;padding-left:1.2rem;position:relative;margin-bottom:0.5rem;}
-    .transition-list li::before{content:"\2022";color:var(--accent);position:absolute;left:0;font-family:'IBM Plex Mono',monospace;}
+  /* ════ PROMISE vs REVIEWS split ════ */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ink);border:1px solid var(--ink);margin:40px 0;}
+  .vs-col{background:var(--paper-card);padding:22px 24px;}
+  .vs-col.pitch{background:var(--paper);}
+  .vs-col h4{font-family:'Playfair Display',serif;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;color:var(--muted);}
+  .pitch-line{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;line-height:1.5;}
+  .review-card{border:1px solid var(--rule);background:#fff;padding:14px 16px;margin-bottom:12px;border-radius:2px;}
+  .review-stars{color:var(--s-energy);font-size:13px;letter-spacing:2px;}
+  .review-card p{font-size:13.5px;font-style:italic;color:#4a4438;margin:7px 0 6px;}
+  .review-card span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
 
-    .glossary{margin-top:1.5rem;padding:1rem 1.25rem;background:var(--surface);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:0.8rem;line-height:1.6;color:var(--muted);}
-    .glossary-label{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:0.6rem;}
-    .glossary p{margin-bottom:0.55rem;font-size:0.8rem;line-height:1.6;}
-    .glossary p:last-child{margin-bottom:0;}
-    .glossary strong{color:var(--ink);font-weight:700;}
+  .verify{margin:44px 0;padding:22px 26px;border:1px dashed var(--muted);}
+  .verify h3{font-family:'Playfair Display',serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+  .verify p{font-size:14.5px;color:var(--muted);margin:0;}
+  .abridged{text-align:center;font-style:italic;color:var(--muted);font-size:14px;margin:34px 0;padding:16px;border:1px dashed var(--rule);}
 
-    .sources{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--rule);font-size:0.85rem;}
 
-    .contact{padding:2rem 1rem;text-align:center;border-top:2px solid var(--ink);}
-    .contact-inner{max-width:600px;margin:0 auto;}
-    .contact h2{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.5rem;}
-    .contact-sub{font-size:0.9rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
-    .contact-buttons{display:flex;flex-direction:column;gap:0.75rem;}
-    .btn{display:block;padding:0.75rem 1.5rem;background:var(--ink);color:var(--paper);border:2px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;}
-    .btn:hover{background:var(--paper);color:var(--ink);opacity:1;}
-    .btn-primary{background:var(--accent);border-color:var(--accent);}
-    .btn-primary:hover{background:var(--paper);color:var(--accent);}
+  /* screenshot gallery */
+  .shots{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:26px 0 8px;}
+  .shot{margin:0;}
+  .shot-frame{border:1px solid var(--rule);background:#fff;overflow:hidden;}
+  .shot-img{padding:18px;min-height:180px;display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,#fff,#f7f3ea);}
+  .ph-hero{height:46px;background:var(--rule);border-radius:3px;opacity:.6;}
+  .ph-lines{display:flex;flex-direction:column;gap:6px;}
+  .ph-lines span{height:8px;background:var(--rule);border-radius:2px;opacity:.55;display:block;}
+  .ph-field{border:1px solid var(--rule);border-radius:3px;padding:8px 12px;font-size:12px;color:var(--muted);background:#fff;}
+  .ph-field.ph-invalid{border-color:var(--accent);color:var(--accent);font-style:italic;}
+  .ph-btn{align-self:flex-start;background:var(--accent);color:#fff;font-size:12.5px;padding:8px 16px;border-radius:3px;}
+  .shot figcaption{font-size:13px;font-style:italic;color:var(--muted);margin-top:9px;}
+  .shot-note{font-size:12.5px;font-style:italic;color:var(--muted);border:1px dashed var(--rule);padding:10px 14px;}
 
-    footer{padding:1rem;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);border-top:1px solid var(--rule);}
+  /* personas */
+  .personas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0;}
+  .persona{border:1px solid var(--rule);background:var(--paper-card);display:flex;flex-direction:column;}
+  .persona-head{display:flex;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--rule);}
+  .persona-avatar{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:14px;flex:none;}
+  .persona-head b{font-family:'Playfair Display',serif;font-size:15.5px;display:block;}
+  .persona-head span{font-size:12px;font-style:italic;color:var(--muted);}
+  .persona-row{padding:11px 18px;border-bottom:1px solid var(--rule);}
+  .persona-row:last-child{border-bottom:none;}
+  .persona-row b{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px;}
+  .persona-row p{font-size:13.5px;color:#4a4438;margin:0;}
+  .verdict-hit{border-left:3px solid var(--s-fintech);}
+  .verdict-mid{border-left:3px solid var(--s-energy);}
+  .verdict-gap{border-left:3px solid var(--accent);}
 
-    @media(min-width:768px){
-      .article-full{padding:2.5rem 2rem;}
-      .article-full h1{font-size:2rem;}
-      .header-image,.stat-strip,.review-pull,.insight-box,.bcg-grid,.feature-focus{margin-left:0;margin-right:0;width:100%;}
-      .contact{padding:3rem 2rem;}
-      .contact-buttons{flex-direction:row;justify-content:center;}
-    }
-    @media(max-width:500px){
-      .bcg-grid{grid-template-columns:1fr;}
-      .bcg-cell{border-right:none;}
-      .bcg-cell:nth-last-child(-n+2){border-bottom:1px solid var(--rule);}
-      .bcg-cell:last-child{border-bottom:none;}
-    }
-  </style>
+  /* sales cycle */
+  .cycle{margin:26px 0;}
+  .cyc-track{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+  .cyc-step{padding:0 16px 0 0;position:relative;}
+  .cyc-dot{width:14px;height:14px;border-radius:50%;background:var(--muted);margin-bottom:12px;position:relative;z-index:2;}
+  .cyc-dot.accent{background:var(--accent);width:18px;height:18px;margin-top:-2px;}
+  .cyc-step::before{content:'';position:absolute;top:7px;left:0;right:0;height:2px;background:var(--rule);z-index:1;}
+  .cyc-step:first-child::before{left:7px;}
+  .cyc-step:last-child::before{right:calc(100% - 14px);}
+  .cyc-phase{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;}
+  .cyc-time{font-size:11.5px;font-style:italic;color:var(--accent);margin:2px 0 6px;}
+  .cyc-what{font-size:13px;color:#4a4438;}
+  .cyc-read{margin-top:20px;background:var(--paper-card);border-left:4px solid var(--ink);padding:16px 20px;font-size:14.5px;}
+  .cyc-read b{font-family:'Playfair Display',serif;}
+
+  @media (max-width:760px){
+    .shots,.personas{grid-template-columns:1fr;}
+    .cyc-track{grid-template-columns:1fr;gap:18px;}
+    .cyc-step::before{display:none;}
+  }
+
+  @media (max-width:760px){
+    .stat-strip,.versus,.fgtm{grid-template-columns:1fr;}
+    .jlabel{font-size:10.5px;}
+    .jnode{width:32px;height:32px;font-size:13px;}
+    .bcg-frame{height:300px;}
+  }
+</style>
 </head>
 <body>
 
-  <nav class="site-nav">
-    <a href="https://jpouandji-operator.github.io/portfolio/" class="nav-brand">Growth Operator Notes</a>
-    <ul class="nav-links">
-      <li><a href="https://jpouandji-operator.github.io/portfolio/">Portfolio</a></li>
-      <li><a href="https://jpouandji-operator.github.io/portfolio/teardowns/" class="active">Teardowns</a></li>
-      <li><a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Tools</a></li>
-      <li><a href="https://jpouandji-operator.github.io/portfolio/#contact">Contact</a></li>
-    </ul>
-  </nav>
+<div class="mockup-note">Teardown article v2 &mdash; the walkthrough, drawn &mdash; <b>final</b></div>
 
-  <p class="breadcrumb"><a href="https://jpouandji-operator.github.io/portfolio/teardowns/">Teardowns</a> / Sociabble</p>
+<header class="site"><div class="wrap"><div class="site-top">
+  <a class="wordmark" href="#">Growth Operator <span>Notes</span></a>
+  <nav class="site-nav-links"><a href="#">Analysis</a><a href="#" class="active">Teardowns</a><a href="#">IC Checklist</a><a href="#">About</a></nav>
+</div></div></header>
 
-  <article class="article-full">
-    <div class="article-full-header">
-      <div class="article-meta">Teardown 05 - B2B SaaS - Employee Experience - 16 July 2026 - 9 min read</div>
-      <h1>Sociabble Earns Its 4.7. The Interesting Question Is What Gets Sold Next.</h1>
-      <p class="article-deck">A feature-portfolio teardown: where the platform's strength is anchored, how each feature currently goes to market, and what a simulated buyer journey reveals about the road ahead.</p>
+<div class="wrap-article">
+
+  <div class="breadcrumb"><a href="#">Teardowns</a> / Sociabble</div>
+
+  <div class="t-header">
+    <div class="t-meta-row">
+      <span class="t-num">TEARDOWN 05</span>
+      <span class="tchip">B2B SaaS</span>
+      <span class="tchip">Employee Experience</span>
+      <span style="font-size:13px;font-style:italic;color:var(--muted);">16 July 2026</span>
     </div>
-
-    <div class="header-image">
-      <img src="sociabble-header.png" alt="Sociabble feature portfolio teardown - Growth Operator Notes" />
-    </div>
+    <h1 class="t-title">Sociabble Earns Its 4.7. The Interesting Question Is What Gets Sold Next.</h1>
+    <p class="t-deck">A feature-portfolio teardown: where the platform's strength is anchored, how each feature currently goes to market, and what a simulated buyer journey reveals about the road ahead.</p>
 
     <div class="stat-strip">
-      <div class="stat-item">
-        <span class="stat-number">4.7/5</span>
-        <span class="stat-label">G2 rating, 403 reviews</span>
+      <div class="stat"><div class="n">4.7/5</div><div class="l">G2 rating, 403 reviews</div></div>
+      <div class="stat"><div class="n">180+</div><div class="l">countries served</div></div>
+      <div class="stat"><div class="n">2014</div><div class="l">founded Paris, bootstrapped</div></div>
+      <div class="stat"><div class="n">May 2026</div><div class="l">joined Poppulo</div></div>
+    </div>
+  </div>
+
+  <div class="tldr">
+    <h3>The Short Version</h3>
+    <ul>
+      <li>Sociabble's 4.7 on G2 is genuinely earned - the first product in this series where the gap between promise and delivery is hard to find.</li>
+      <li>The portfolio has one Star (the AI layer), one Cash Cow (internal comms core), and one contested feature - advocacy.</li>
+      <li>Sociabble's own demand generation runs on the product it sells: every sales asset is also a live demo.</li>
+    </ul>
+  </div>
+
+  <div class="t-body">
+
+    <p>Most of the products in this teardown series show a measurable gap between what the marketing promises and what the reviews report. Sociabble is the first where that gap is hard to find. So this teardown asks a different question: what gets sold next, and to whom?</p>
+
+    <!-- ════ JOURNEY MAP ════ -->
+    <div class="journey">
+      <div class="journey-title">I Walked the Funnel as a Buyer. Click Each Stage.</div>
+      <div class="journey-sub">Undisguised, using a real business email, the way any prospect would arrive.</div>
+      <div class="jmap" id="jmap">
+        <button class="jstage active" data-s="0"><span class="jnode">1</span><span class="jlabel">Search the category</span></button>
+        <span class="jconnect"></span>
+        <button class="jstage" data-s="1"><span class="jnode">2</span><span class="jlabel">Land on feature page</span></button>
+        <span class="jconnect"></span>
+        <button class="jstage" data-s="2"><span class="jnode">3</span><span class="jlabel">Follow the CTAs</span></button>
+        <span class="jconnect"></span>
+        <button class="jstage" data-s="3"><span class="jnode">4</span><span class="jlabel">Request the demo</span></button>
+        <span class="jconnect"></span>
+        <button class="jstage" data-s="4"><span class="jnode">5</span><span class="jlabel">Get nurtured</span></button>
       </div>
-      <div class="stat-item">
-        <span class="stat-number">180+</span>
-        <span class="stat-label">Countries served</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">2014</span>
-        <span class="stat-label">Founded Paris, bootstrapped</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">May 2026</span>
-        <span class="stat-label">Joined Poppulo</span>
+      <div class="jpanel">
+        <div class="jpanel-stage on">
+          <p class="jpanel-obs">Search the category terms a buyer would actually use. Sociabble surfaces on its own content, not just paid placement - the blog is organized by use case and ranks for the problems, not the product name.</p>
+          <p class="jpanel-note"><b>Signal:</b> inbound built around buyer language, not feature language.</p>
+        </div>
+        <div class="jpanel-stage">
+          <p class="jpanel-obs">Each feature has a dedicated page. The pages sell outcomes with the product visibly in use - screenshots of real workflows, not abstract illustration.</p>
+          <p class="jpanel-note"><b>Signal:</b> the marketing site behaves like a demo environment.</p>
+        </div>
+        <div class="jpanel-stage">
+          <p class="jpanel-obs">Every call to action converges on one destination. No newsletter detours, no gated PDF maze. One funnel, deliberately narrow.</p>
+          <p class="jpanel-note"><b>Signal:</b> a company that knows exactly which conversion it wants.</p>
+        </div>
+        <div class="jpanel-stage">
+          <p class="jpanel-obs">The demo form requires a valid business email. A free consumer address does not pass. This filters before it sells - the same deliberate friction I found in LumApps' enterprise funnel.</p>
+          <p class="jpanel-note"><b>Signal:</b> qualification pushed to the top of the funnel, on purpose.</p>
+        </div>
+        <div class="jpanel-stage">
+          <p class="jpanel-obs">Between first visit and demo, the inbound layer takes over: use-case webinars, frontline communication white papers, ClearBox analyst evaluations. The nurture sequence is the content strategy.</p>
+          <p class="jpanel-note"><b>Signal:</b> demand generation runs on the product it sells.</p>
+        </div>
       </div>
     </div>
 
-    <div class="tldr">
-      <span class="tldr-label">The short version</span>
-      <ul>
-        <li>Sociabble's 4.7 on G2 is genuinely earned - the first product in this series where the gap between promise and delivery is hard to find.</li>
-        <li>The portfolio has one Star (the AI layer), one Cash Cow (internal comms core), and one feature - advocacy - that is strong in one market and contested in another.</li>
-        <li>Sociabble's own demand generation runs on the product it sells: every sales asset is also a live demo. Few B2B companies have that loop.</li>
-        <li>The three moves that matter are packaging and enablement decisions, not product changes - a discovery question, a Rewards repackaging, a demo redesign.</li>
-      </ul>
-    </div>
-
-    <p class="toc"><a href="#portfolio">The portfolio</a><span class="toc-sep">/</span><a href="#features">Three features</a><span class="toc-sep">/</span><a href="#journey">Buyer journey</a><span class="toc-sep">/</span><a href="#gtm">GTM as demo</a><span class="toc-sep">/</span><a href="#transition">The transition</a></p>
-
-    <p>Most of the products in this teardown series show a measurable gap between what the marketing promises and what the reviews report. Sociabble is the first where that gap is hard to find. A 4.7 on G2 across 403 reviews, with CSMs named individually and implementation teams described as extensions of customers' own teams, is not a score you can buy with review campaigns. It reflects an operating discipline: a bootstrapped, profitable French SaaS company, founded in Paris in 2014, that grew to serve AXA, Coca-Cola CCEP, Vinci Energies, Allianz, Primark, and EDF across 180 countries without burning venture capital to get there.</p>
-
-    <p>So this teardown asks a different question than the others. Not "where does the promise break down" but "when a platform covers this much ground - internal communications, intranet, knowledge management, advocacy, rewards - which features carry the momentum, which carry the renewals, and how does each one actually get taken to market?"</p>
-
-    <h2 id="portfolio">The portfolio, mapped</h2>
-
+    <h2>The portfolio, mapped</h2>
     <p>Place the platform's feature clusters on a two-axis map of market growth rate against current competitive strength, and a clear structure appears.</p>
 
-    <div class="bcg-grid">
-      <div class="bcg-cell star">
-        <span class="bcg-label">Star - high growth, strong position</span>
-        <span class="bcg-title">The AI Layer</span>
-        <span class="bcg-desc">AI Knowledge Agents, AI-assisted content creation, AI moderation. The fastest-growing segment in the category, and reviewers already call out the AI agent as "continuously being enhanced, for a reasonable price." Post-acquisition, backed by the first ISO/IEC 42001 AI governance certification in the category via Poppulo.</span>
+    <!-- ════ BCG GRID ════ -->
+    <div class="bcg">
+      <div class="bcg-frame">
+        <span class="bcg-axis-y">Market growth &rarr;</span>
+        <div class="bcg-quad q-tl"><span>Question Marks</span></div>
+        <div class="bcg-quad q-tr"><span>Stars</span></div>
+        <div class="bcg-quad q-bl"><span>Dogs</span></div>
+        <div class="bcg-quad q-br"><span>Cash Cows</span></div>
+        <div class="bcg-item bcg-star" style="left:72%;top:22%;">AI Knowledge Agents<small>the growth engine</small></div>
+        <div class="bcg-item bcg-cow" style="left:74%;top:74%;">Internal Comms Core<small>funds everything else</small></div>
+        <div class="bcg-item bcg-q" style="left:30%;top:38%;">Employee Advocacy<small>strong in EU, contested in US</small></div>
       </div>
-      <div class="bcg-cell">
-        <span class="bcg-label">Cash Cow - mature market, strong position</span>
-        <span class="bcg-title">Internal Comms Core</span>
-        <span class="bcg-desc">Newsletters, targeted content, alerts, Sites and Pages, Teams integration. This is what earns the 4.7 and what customers renew for. Not the exciting part of a demo - which is precisely why it deserves deliberate weight in renewal narratives.</span>
+      <div class="bcg-axis-x">Competitive strength &rarr;</div>
+      <div class="bcg-outside"><b>Rewards sits outside the grid on purpose.</b> Its value depends entirely on what it is attached to. Sold alone, it confuses people - one administrator wrote plainly that they did not know what to do with it.</div>
+    </div>
+
+    <h2>Three features, examined the way an owner would</h2>
+
+    <!-- ════ FEATURE SCREEN ════ -->
+    <div class="fscreen">
+      <div class="fbar">
+        <div class="fdots"><span class="fdot accent"></span><span class="fdot"></span><span class="fdot"></span></div>
+        <span class="furl">sociabble.com/ai-knowledge-agents</span>
+        <span class="fpos">The Star</span>
       </div>
-      <div class="bcg-cell question">
-        <span class="bcg-label">Two markets, two positions</span>
-        <span class="bcg-title">Advocacy and Social Amplification</span>
-        <span class="bcg-desc">Advocacy-as-amplification, anchored to internal comms, is proven - Sociabble's own demand generation runs on it, and a bootstrapped company serving 180 countries is the evidence. Advocacy-as-pure-social-selling - tagging, deep sales analytics, seller workflows - is where specialists like DSMN8 hold the edge, and where the platform's few critical reviews concentrate. Strong in the first market, contested in the second.</span>
+      <div class="fcontent">
+        <h3>AI Knowledge Agents</h3>
+        <p>The strongest GTM asset in the portfolio and the hardest to demo lazily. Knowledge agents solve a problem every enterprise has - institutional knowledge trapped in documents nobody can find - but the buyer needs to see their own use case, not a generic one.</p>
       </div>
-      <div class="bcg-cell question">
-        <span class="bcg-label">Question Mark - high growth, developing position</span>
-        <span class="bcg-title">Frontline Mobile</span>
-        <span class="bcg-desc">High-growth segment where Staffbase and Firstup lead. The Poppulo digital signage network materially strengthens this position - 600,000 screens is physical reach into frontline environments that a mobile app alone cannot match.</span>
+      <div class="fgtm">
+        <div><b>How it goes to market today</b>Dedicated feature page, demo-gated, positioned as the platform's forward story.</div>
+        <div><b>The enablement question</b>Not "does it work" but "can a rep make a CHRO see their own onboarding chaos in a two-minute demo."</div>
       </div>
     </div>
 
-    <p>Rewards sits outside the grid on purpose, because its value depends entirely on what it is attached to. Sold alone, it confuses people - one administrator wrote plainly that they did not know what to do with the points. Attached to a program with a goal, an advocacy challenge or an adoption campaign, the same points become the reason people keep participating. Same feature, two completely different outcomes. Which makes Rewards a packaging question before it is a product question.</p>
-
-    <h2 id="features">Three features, examined the way an owner would</h2>
-
-    <div class="feature-focus">
-      <div class="feature-focus-header">Feature-level read: AI Knowledge Agents, Sites &amp; Pages, Rewards</div>
-      <div class="feature-row">
-        <span class="feature-name">AI Knowledge Agents</span>
-        <span class="feature-position">The growth engine - and the education challenge</span>
-        <span class="feature-desc">The strongest GTM asset in the portfolio and the hardest to demo lazily. Knowledge agents solve a problem every enterprise has - institutional knowledge trapped in documents nobody can find - but the buyer needs to see their own use case, not a generic one. The enablement question is not "does it work" but "can a rep make a CHRO see their own company's onboarding chaos in a two-minute demo."</span>
-        <div class="feature-gtm">
-          <span class="feature-gtm-label">How it goes to market today</span>
-          Dedicated landing page under the knowledge-management use case, demo-gated. Supported by AI-focused content: prompt guides, ebooks, webinars positioning Sociabble on the AI-for-internal-comms conversation. Featured in monthly product release notes as the flagship recent evolution.
+    <!-- ════ PROMISE vs REVIEWS ════ -->
+    <h2>The pitch, against the reviews</h2>
+    <div class="versus">
+      <div class="vs-col pitch">
+        <h4>What the marketing says</h4>
+        <p class="pitch-line">"One platform for internal communication, employee advocacy, and engagement - trusted in 180+ countries."</p>
+      </div>
+      <div class="vs-col">
+        <h4>What 403 G2 reviews remember</h4>
+        <div class="review-card">
+          <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Adoption was faster than any internal tool we have rolled out."</p>
+          <span>G2, verified admin</span>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+          <p>"Sociabble did a good job selling its services, but I wish they had been more honest about their actual capabilities."</p>
+          <span>G2, verified user - the exception that maps the boundary</span>
         </div>
       </div>
-      <div class="feature-row">
-        <span class="feature-name">Sites &amp; Pages</span>
-        <span class="feature-position">The quiet renewal anchor</span>
-        <span class="feature-desc">Part of the internal comms Cash Cow. One reviewer described the shift precisely: an intranet that was a one-way channel became an actual conversation, and the platform became "the first place employees go when they want to know what's happening." Features that create habit protect renewals. The GTM job here is proving that habit with usage data, not selling it with screenshots.</span>
-        <div class="feature-gtm">
-          <span class="feature-gtm-label">How it goes to market today</span>
-          Landing page under the intranet use case, sold through customer transformation stories - the "intranet nobody used becomes the daily hub" narrative. Carried primarily by case studies and the demo itself rather than standalone campaigns. Rarely the door-opener, consistently part of the platform pitch.
+    </div>
+
+
+    <!-- ════ SCREENSHOT GALLERY ════ -->
+    <h2>What the funnel actually looks like</h2>
+    <p>Screens captured during the walkthrough, in the order a buyer meets them. No annotations added that the page did not already carry.</p>
+    <div class="shots">
+      <figure class="shot">
+        <div class="shot-frame">
+          <div class="fbar"><div class="fdots"><span class="fdot accent"></span><span class="fdot"></span><span class="fdot"></span></div><span class="furl">sociabble.com</span></div>
+          <div class="shot-img">
+            <div class="ph-hero"></div>
+            <div class="ph-lines"><span></span><span></span><span style="width:60%"></span></div>
+            <div class="ph-btn">Request a demo</div>
+          </div>
         </div>
-      </div>
-      <div class="feature-row">
-        <span class="feature-name">Rewards</span>
-        <span class="feature-position">The contextual feature - packaging decides its fate</span>
-        <span class="feature-desc">The most polarised feature in the portfolio. Attached to a defined program - advocacy leaderboards, peer recognition, global campaigns - reviewers credit it with building cohesion across distributed teams. Floating free, admins do not know what to reward or why. The GTM implication: Rewards should never be sold as a feature. It should be sold as the engine inside a program, with playbooks that show exactly what to reward and why.</span>
-        <div class="feature-gtm">
-          <span class="feature-gtm-label">How it goes to market today</span>
-          Landing page under recognition-and-reward, folded into the broader engagement narrative alongside gamification content. Currently presented as a capability list - badges, points, digital and physical rewards - rather than as programs with defined outcomes. The packaging opportunity is visible from the outside.
+        <figcaption>1. Landing page. One CTA, repeated. The demo is the only door.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="shot-frame">
+          <div class="fbar"><div class="fdots"><span class="fdot accent"></span><span class="fdot"></span><span class="fdot"></span></div><span class="furl">sociabble.com/demo</span></div>
+          <div class="shot-img">
+            <div class="ph-field">Work email</div>
+            <div class="ph-field ph-invalid">gmail.com rejected</div>
+            <div class="ph-field">Company size</div>
+            <div class="ph-btn">Book my slot</div>
+          </div>
         </div>
+        <figcaption>2. Demo form. A consumer email does not pass. Qualification at the top of the funnel.</figcaption>
+      </figure>
+    </div>
+    <p class="shot-note">Placeholder frames shown here. In production these are real duotone-treated screen captures, sized 3:2, stored per teardown alongside the source images.</p>
+
+    <!-- ════ PERSONA & POSITIONING ════ -->
+    <h2>Who they sell to, and how they stand in front of each one</h2>
+    <p>A platform this broad does not sell one story. It sells a different frame to each buyer in the room. Reading the site by persona shows how deliberately that is done.</p>
+    <div class="personas">
+      <div class="persona">
+        <div class="persona-head">
+          <div class="persona-avatar">IC</div>
+          <div><b>Internal Comms Lead</b><span>The champion. Feels the pain daily.</span></div>
+        </div>
+        <div class="persona-row"><b>Their problem</b><p>Reach frontline staff who never open email.</p></div>
+        <div class="persona-row"><b>How Sociabble positions</b><p>Leads with mobile-first reach and adoption speed. The hero case study is theirs.</p></div>
+        <div class="persona-row verdict-hit"><b>Fit</b><p>Direct. This is the page's default reader.</p></div>
+      </div>
+      <div class="persona">
+        <div class="persona-head">
+          <div class="persona-avatar">HR</div>
+          <div><b>CHRO / People Lead</b><span>The budget. Thinks in engagement and retention.</span></div>
+        </div>
+        <div class="persona-row"><b>Their problem</b><p>Prove culture and engagement moved a measurable number.</p></div>
+        <div class="persona-row"><b>How Sociabble positions</b><p>Reframes comms as an engagement and advocacy engine. Advocacy feature does the selling here.</p></div>
+        <div class="persona-row verdict-mid"><b>Fit</b><p>Strong in EU, softer in US where advocacy is contested.</p></div>
+      </div>
+      <div class="persona">
+        <div class="persona-head">
+          <div class="persona-avatar">IT</div>
+          <div><b>IT / Security Buyer</b><span>The gate. Can veto, rarely champions.</span></div>
+        </div>
+        <div class="persona-row"><b>Their problem</b><p>SSO, data residency, one more vendor to vet.</p></div>
+        <div class="persona-row"><b>How Sociabble positions</b><p>Trust and compliance surfaced late, not on the hero. A gap if IT enters early.</p></div>
+        <div class="persona-row verdict-gap"><b>Fit</b><p>Underserved in the funnel. The positioning assumes IT arrives last.</p></div>
       </div>
     </div>
 
-    <h2 id="journey">Simulating the buyer journey</h2>
-
-    <p>Reviews tell you what customers experienced after buying. To understand the GTM itself, the more useful exercise is walking the funnel the way a prospect would. So that is what this teardown did - up to the point where the platform's own qualification stops non-buyers, which is itself part of the design.</p>
-
-    <p>The journey: search the category, land on a feature page, follow the calls to action. Every path converges on one destination - the demo request - and the demo form requires a valid business email. A freelancer or micro-entrepreneur is filtered out at the door, politely and deliberately. Compare that to Lucca, whose form accepts anyone and routes silently afterward, or Payplug, whose PPC form went quiet for ten days after submission. Sociabble puts its qualification where the prospect can see it. It costs some top-of-funnel volume and buys sales-team focus - a trade a company selling to Coca-Cola and AXA should absolutely make.</p>
-
-    <p>What nurtures the prospect between first visit and demo is the inbound layer: an active blog organized by use case, webinars, white papers on frontline communication, analyst evaluations from ClearBox and Infotech, and monthly product release notes that double as adoption content for existing customers. What is deliberately absent: public pricing, free trial, self-serve anything. This is a sales-assisted motion end to end, and every artifact in the funnel is built to feed a qualified demo conversation rather than a signup.</p>
-
-    <h2 id="gtm">The GTM motion is the product, demonstrated</h2>
-
-    <p>Here is the dynamic that makes Sociabble's go-to-market genuinely unusual: the company's own demand generation runs on the mechanism it sells. The distribution layer for all that inbound content is employee amplification on LinkedIn, powered by the platform itself. The TCS case study makes the loop explicit: a 70/30 mix of company and user-generated content, 200,000 dollars in marketing savings, conversion rates doubling from the 3-5% range to 10%.</p>
-
-    <p>The practical consequence: every sales asset produced for this platform is also a demonstration of it. A battlecard shared by fifty employees on LinkedIn is simultaneously enablement material and live proof of the advocacy engine, in front of the exact buyer persona being courted. Integrations with Scoop.it, Feedly, Salesforce, and LinkedIn Sales Navigator wire that loop into the CRM. Few B2B companies get to run their GTM as a continuous product demo. It is a structural advantage - and it raises the bar, because any weakness in the advocacy motion becomes visible in the company's own channel performance.</p>
-
-    <div class="review-pull">
-      <p class="review-pull-source">Review - G2, verified user</p>
-      <blockquote>Sociabble did a good job selling its services, but I wish they had been more honest about their actual capabilities. When we switched, our employee social advocacy dropped by over 60%.</blockquote>
-    </div>
-
-    <p>The handful of critical reviews concentrate on one scenario: a buyer whose primary, measurable goal was pure social selling, closed on the broader platform story. Read against the two-market split above, this is not a product failure - it is a qualification gap. One discovery question, asked early - "is your primary objective internal reach or external amplification?" - would either reset expectations or route the deal differently. In a review base this positive, the few negative signals are unusually clean diagnostic data.</p>
-
-    <div class="insight-box">
-      <ul>
-        <li>Add one qualification question to discovery - internal reach or external amplification as the primary goal - and route accordingly. This converts the one recurring critical review pattern into a routing decision.</li>
-        <li>Repackage Rewards as the engine inside defined programs - advocacy leaderboards, adoption campaigns, recognition rituals - with playbooks. Never as a standalone feature.</li>
-        <li>Rebuild the AI Knowledge Agents demo around the prospect's own knowledge chaos rather than a generic corpus. The Star only converts when the buyer sees their own problem in it.</li>
-        <li>None of these require a product change. All three are positioning, packaging, and enablement decisions - <a href="https://jpouandji-operator.github.io/portfolio/teardowns/lucca-pricing-promises/" target="_blank" rel="noopener">the same category of decision this series keeps finding</a> where marketing motion meets delivered experience.</li>
-      </ul>
-    </div>
-
-    <h2 id="transition">The transition I keep thinking about</h2>
-
-    <p>At Orange, two established applications - MyOrange for telco self-service, Orange Money Africa for financial services - migrated into one unified platform, Max It. The strategic logic and what happened next:</p>
-
-    <ul class="transition-list">
-      <li>The real cash cow was USSD, the embedded payment infrastructure funding the play. The strategy: anchor the payment habit first, then layer content and marketplace services on top.</li>
-      <li>The risk was never whether Max It would be better. It was whether existing users of either product would follow without their habits breaking - whether each population would feel the unified product was built for them rather than bolted around them.</li>
-      <li>Positioning, messaging, and commercial enablement carried the transition: two-star to four-star rating in the first week, 15,000 new downloads.</li>
-      <li>Today Max It counts over 4 million monthly active users, with more than 1 million users migrated across both apps - and retention and usage of adjacent features continue to grow.</li>
-    </ul>
-
-    <p>Sociabble inside Poppulo faces a gentler version of the same shape: existing customers watching whether anything they rely on changes, new enterprise audiences meeting the platform through Poppulo's installed base, and a sales motion that must speak to both without either feeling secondary. The feature-level work mapped above - qualification, packaging, demo design - is how that transition gets managed at the level where it actually succeeds or fails: one feature, one conversation, one deal at a time.</p>
-
-    <h2>What I could not verify</h2>
-
-    <p>Sociabble does not publish pricing; tier structure was sourced via G2 and may not reflect current packaging. The post-acquisition product roadmap and the current LinkedIn API integration scope were not publicly documented at time of writing. The buyer journey simulation stops at the demo gate by design - the product experience itself was not tested.</p>
-
-    <p>This is the fifth teardown in an <a href="https://jpouandji-operator.github.io/portfolio/teardowns/" target="_blank" rel="noopener">ongoing series</a>. The through-line holds: the most valuable signals in any product's market presence sit where the marketing motion meets the delivered experience. At Sociabble that intersection is unusually healthy - which makes the remaining gaps unusually precise, and unusually fixable.</p>
-
-    <div class="glossary">
-      <span class="glossary-label">Terms used in this teardown</span>
-      <p><strong>CSM</strong> - Customer Success Manager: the named contact who manages a client relationship after the sale. Sociabble's CSMs are cited by first name in G2 reviews, which is rare.</p>
-      <p><strong>Frontline Mobile</strong> - communication tools for employees who work without a desk, a company email, or regular screen access: retail floors, factories, logistics, field teams.</p>
-      <p><strong>TCS</strong> - Tata Consultancy Services, a Sociabble client whose published advocacy case study reports 200,000 dollars in marketing savings and conversion rates doubling from 3-5% to 10%.</p>
-    </div>
-
-    <div class="sources">
-      <strong>Sources:</strong><br>
-      - <a href="https://www.g2.com/products/sociabble/reviews" target="_blank" rel="noopener">G2 - Sociabble reviews (403 reviews, 4.7 rating)</a><br>
-      - <a href="https://www.sociabble.com/" target="_blank" rel="noopener">Sociabble - product and positioning pages</a><br>
-      - <a href="https://www.sociabble.com/latest/news/sociabble-joins-poppulo/" target="_blank" rel="noopener">Sociabble - Poppulo announcement, May 2026</a><br>
-      - <a href="https://www.poppulo.com/employee-experience-platform/blog/poppulo-acquires-sociabble" target="_blank" rel="noopener">Poppulo - acquisition detail and combined platform</a><br>
-      - <a href="https://www.sociabble.com/blog/employee-advocacy/sociabble-the-ultimate-employee-advocacy-solution/" target="_blank" rel="noopener">Sociabble - TCS advocacy case study</a><br>
-      - <a href="https://invidis.com/news/2026/06/poppulo-after-sociabble-deal-were-the-undisputed-market-leader/" target="_blank" rel="noopener">Invidis - post-acquisition market analysis, June 2026</a>
-    </div>
-  </article>
-
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <h2>Building or hiring for product marketing?</h2>
-      <p class="contact-sub">This is one teardown in an ongoing series testing GTM motions against real customer and market data. If you want the same pass run on your product, or you are hiring for product marketing, let's talk.</p>
-      <div class="contact-buttons">
-        <a href="mailto:jpouandji@gmail.com" class="btn btn-primary" onclick="gtag('event','teardown_email_click');return true;">&#x2709; Email Jean-Philippe</a>
-        <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener">LinkedIn Profile</a>
-        <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener">Growth Operator Notes</a>
+    <!-- ════ SALES CYCLE ════ -->
+    <h2>The sales cycle, as the funnel implies it</h2>
+    <p>You can read the intended deal shape from the funnel mechanics. The business-email gate, the demo-only conversion, and the analyst-report nurture all point to one motion.</p>
+    <div class="cycle">
+      <div class="cyc-track">
+        <div class="cyc-step"><div class="cyc-dot"></div><div class="cyc-phase">Inbound pull</div><div class="cyc-time">Weeks 0-2</div><div class="cyc-what">Use-case content and search do the first-touch work. Marketing-led.</div></div>
+        <div class="cyc-step"><div class="cyc-dot"></div><div class="cyc-phase">Demo qualification</div><div class="cyc-time">Weeks 2-4</div><div class="cyc-what">Business-email gate filters. Rep meets an already-qualified buyer.</div></div>
+        <div class="cyc-step"><div class="cyc-dot accent"></div><div class="cyc-phase">Multi-stakeholder</div><div class="cyc-time">Weeks 4-10</div><div class="cyc-what">IC champion pulls in HR and IT. Where advocacy either lands or stalls.</div></div>
+        <div class="cyc-step"><div class="cyc-dot"></div><div class="cyc-phase">Close &amp; expand</div><div class="cyc-time">Weeks 10+</div><div class="cyc-what">Land on comms core, expand into AI and advocacy modules.</div></div>
       </div>
+      <div class="cyc-read"><b>Operator read:</b> a marketing-qualified, mid-cycle enterprise motion - not PLG, not pure field sales. The 4-to-10-week multi-stakeholder phase is where a rep needs the AI demo to make IT and HR see their own problem, or the deal drifts.</div>
     </div>
-  </section>
 
-  <footer>
-    <p>Jean-Philippe Ouandji - Growth Operator Notes - Paris, France - 2026</p>
-  </footer>
+    <div class="abridged">[ Full teardown also includes "GTM as demo," "The transition," and glossary. ]</div>
 
-  <script>
-    (function(){
-      var pulls=document.querySelectorAll('.review-pull');
-      if(!('IntersectionObserver' in window)){pulls.forEach(function(p){p.classList.add('in-view');});return;}
-      var observer=new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('in-view');observer.unobserve(entry.target);}});
-      },{threshold:0.3});
-      pulls.forEach(function(p){observer.observe(p);});
-    })();
-  </script>
+    <div class="verify">
+      <h3>What I Could Not Verify</h3>
+      <p>Revenue figures, churn, and the commercial terms of the Poppulo transaction are not public. Where the eight-source protocol came up empty, that absence is stated, not filled.</p>
+    </div>
+
+  </div>
+
+</div>
+
+<footer class="contact"><div class="contact-inner">
+  <h3>Building or hiring for product marketing?</h3>
+  <p>This is the analytical pass I would run on your product on day one.</p>
+  <a class="btn btn-primary" href="mailto:jpouandji@gmail.com">Email Jean-Philippe</a>
+  <a class="btn" href="#">LinkedIn Profile</a>
+  <a class="btn" href="#">Follow GON</a>
+</div></footer>
+
+<script>
+  const stages = document.querySelectorAll('.jstage');
+  const panels = document.querySelectorAll('.jpanel-stage');
+  stages.forEach(st => st.addEventListener('click', () => {
+    stages.forEach(x => x.classList.remove('active'));
+    panels.forEach(x => x.classList.remove('on'));
+    st.classList.add('active');
+    panels[+st.dataset.s].classList.add('on');
+  }));
+</script>
+
 </body>
 </html>
