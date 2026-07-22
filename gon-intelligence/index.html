@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GON Intelligence | Growth Operator Notes</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GON Intelligence: Africa Deal Research Database | Growth Operator Notes</title>
+<meta name="description" content="A research database of African regulatory instruments, market benchmarks and operator signals for investors running diligence on Africa deals."/>
+<link rel="canonical" href="https://jpouandji-operator.github.io/portfolio/gon-intelligence/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="GON Intelligence: Africa Deal Research Database"/>
+<meta property="og:description" content="Pick a market, a sector, and the question you are testing. The tool returns what is actually recorded, and says so when there is nothing."/>
+<meta property="og:url" content="https://jpouandji-operator.github.io/portfolio/gon-intelligence/"/>
+<meta property="og:site_name" content="Growth Operator Notes"/>
+<meta name="twitter:card" content="summary_large_image"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
-<style>
-:root{--paper:#f5f0e8;--paper-card:#fbf7ef;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--green:#2a6b4f;--amber:#c98a1a;}
+<style>:root{--paper:#f5f0e8;--paper-card:#fbf7ef;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--green:#2a6b4f;--amber:#c98a1a;--red:#b3341a;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.7;}
+body{font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
 a{color:inherit;}
 header.site{border-bottom:2px solid var(--ink);padding:24px 0 18px;}
@@ -16,107 +24,193 @@ header.site{border-bottom:2px solid var(--ink);padding:24px 0 18px;}
 .wordmark span{color:var(--accent);}
 .site-nav-links{font-size:14px;font-style:italic;color:var(--muted);}
 .site-nav-links a{text-decoration:none;margin-left:18px;}
+.site-nav-links a:hover{color:var(--accent);}
 .site-nav-links a.active{color:var(--accent);font-style:normal;}
-
-/* TOKEN BAR */
-.token-bar{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);flex-wrap:wrap;}
-.token-status{display:flex;align-items:center;gap:7px;font-size:12.5px;font-style:italic;color:var(--muted);}
+.tool-header{padding:44px 0 0;}
+.tool-eyebrow{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.tool-eyebrow::before{content:'';width:22px;height:1px;background:var(--accent);}
+h1.tool-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(30px,4.5vw,42px);line-height:1.08;}
+.tool-sub{font-size:18px;color:var(--muted);max-width:660px;margin-top:16px;line-height:1.6;}
+.orient{margin:30px 0 0;border:1px solid var(--ink);background:var(--paper-card);}
+.or-row{border-bottom:1px solid var(--rule);}
+.or-row:last-child{border-bottom:none;}
+.or-head{display:flex;align-items:center;gap:14px;padding:15px 20px;cursor:pointer;user-select:none;transition:background .12s;}
+.or-head:hover{background:#f0ebe0;}
+.or-row.open .or-head{background:var(--paper);}
+.or-q{font-family:'Playfair Display',serif;font-size:16.5px;font-weight:700;flex:1;}
+.or-row.open .or-q{color:var(--accent);}
+.or-tog{font-size:17px;color:var(--muted);transition:transform .25s;line-height:1;}
+.or-row.open .or-tog{transform:rotate(45deg);color:var(--accent);}
+.or-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.or-row.open .or-body{max-height:300px;}
+.or-inner{padding:0 20px 18px;font-size:15px;color:#2f2b24;line-height:1.7;}
+.or-inner b{font-family:'Playfair Display',serif;}
+.db-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--ink);margin:30px 0 0;}
+.db{background:var(--paper-card);padding:16px;cursor:pointer;transition:background .15s;position:relative;}
+.db:hover,.db.on{background:var(--paper);}
+.db .n{font-family:'Playfair Display',serif;font-weight:900;font-size:26px;color:var(--accent);line-height:1.05;}
+.db .l{font-size:12px;font-style:italic;color:var(--muted);margin-top:3px;}
+.db .bar{height:3px;background:var(--rule);margin-top:9px;overflow:hidden;}
+.db .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width 1.1s cubic-bezier(.2,.8,.3,1);}
+.db.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);}
+.db-detail{border:1px solid var(--ink);border-top:none;background:var(--paper);padding:16px 20px;font-size:14.5px;color:#2f2b24;line-height:1.7;}
+.db-detail b{font-family:'Playfair Display',serif;}
+.db-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:10px;}
+.db-live{display:flex;align-items:center;gap:6px;font-size:12px;font-style:italic;color:var(--muted);}
+.db-live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--amber);}
+.db-live.connected{color:var(--green);}
+.db-live.connected::before{background:var(--green);}
+.db-coverage{font-size:12px;font-style:italic;color:var(--muted);}
+.plain-note{margin:24px 0 0;padding:18px 22px;background:var(--paper-card);border-left:4px solid var(--accent);font-size:15px;line-height:1.75;color:#2f2b24;}
+.plain-note b{font-family:'Playfair Display',serif;}
+.token-bar{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--paper-card);border:1px solid var(--rule);margin-top:22px;flex-wrap:wrap;}
+.token-status{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#2f2b24;}
 .token-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);flex:none;}
-.token-dot.connected{background:var(--green);}
-.token-toggle{font-size:12.5px;font-style:italic;color:var(--accent);cursor:pointer;text-decoration:none;border-bottom:1px solid var(--accent);margin-left:auto;}
-.token-panel{display:none;padding:16px 18px;background:var(--paper-card);border:1px solid var(--rule);margin-top:12px;}
+.token-dot.ok{background:var(--green);}
+.token-note-inline{font-size:13px;font-style:italic;color:var(--muted);flex:1;min-width:220px;}
+.token-toggle{font-size:13px;font-style:italic;color:var(--accent);cursor:pointer;border-bottom:1px solid var(--accent);}
+.token-panel{display:none;padding:16px 18px;background:var(--paper);border:1px solid var(--rule);border-top:none;}
 .token-panel.open{display:block;}
 .token-panel p{font-size:13.5px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
 .token-panel p b{font-family:'Playfair Display',serif;color:var(--ink);}
 .token-row{display:flex;gap:10px;flex-wrap:wrap;}
-.token-input{flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--rule);background:var(--paper);font-family:Georgia,serif;font-size:14px;color:var(--ink);outline:none;}
-.token-input:focus{border-color:var(--ink);}
+.token-input{flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--rule);background:var(--paper);font-family:Georgia,serif;font-size:14px;outline:none;}
 .token-save{background:var(--ink);color:var(--paper);border:none;padding:10px 22px;font-family:Georgia,serif;font-size:14px;cursor:pointer;border-radius:2px;}
-.token-note{font-size:12px;font-style:italic;color:var(--muted);margin-top:10px;}
-
-.tool-header{padding:36px 0 0;}
-.tool-eyebrow{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.tool-eyebrow::before{content:'';width:22px;height:1px;background:var(--accent);}
-h1.tool-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(30px,4.5vw,42px);line-height:1.08;}
-.tool-sub{font-size:17px;color:var(--muted);max-width:640px;margin-top:14px;line-height:1.6;}
-.db-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--ink);margin:28px 0 0;}
-.db{background:var(--paper-card);padding:14px 16px;}
-.db .n{font-family:'Playfair Display',serif;font-weight:900;font-size:21px;color:var(--accent);line-height:1.1;}
-.db .l{font-size:11.5px;font-style:italic;color:var(--muted);margin-top:2px;}
-.db .l sup{color:var(--accent);font-style:normal;}
-.db-meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:10px;}
-.db-live{display:flex;align-items:center;gap:6px;font-size:12px;font-style:italic;color:var(--green);}
-.db-live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);}
-.db-coverage{font-size:12px;font-style:italic;color:var(--muted);}
-
-.builder{margin:32px 0 0;border:1px solid var(--ink);background:var(--paper-card);}
+.builder{margin:30px 0 0;border:1px solid var(--ink);background:var(--paper-card);}
 .builder-head{background:var(--ink);color:var(--paper);padding:13px 20px;font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
 .builder-head .step{font-family:Georgia,serif;font-size:12.5px;font-style:italic;letter-spacing:0;text-transform:none;color:#c9c2b3;}
 .param-group{padding:18px 20px;border-bottom:1px solid var(--rule);}
-.param-label{font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
-.param-label span{font-family:Georgia,serif;font-size:12px;font-style:italic;letter-spacing:0;text-transform:none;}
+.param-label{font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.param-help{font-size:13px;font-style:italic;color:var(--muted);margin-bottom:11px;line-height:1.55;}
 .param-opts{display:flex;gap:8px;flex-wrap:wrap;}
 .popt{font-size:13.5px;font-family:Georgia,serif;padding:7px 15px;border:1px solid var(--rule);background:var(--paper);color:var(--muted);cursor:pointer;border-radius:2px;transition:all .12s;}
 .popt:hover{border-color:var(--ink);color:var(--ink);}
 .popt.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-.popt.thin{border-style:dashed;}
 .popt .cnt{font-size:11px;opacity:.6;margin-left:5px;}
-
-/* cross-dimension note */
-.xdim{margin:0 20px 18px;padding:12px 16px;background:var(--paper);border-left:3px solid var(--accent);font-size:13.5px;font-style:italic;color:#4a4438;line-height:1.6;}
+.xdim{margin:0 20px 18px;padding:12px 16px;background:var(--paper);border-left:3px solid var(--accent);font-size:13.5px;font-style:italic;color:#4a4438;line-height:1.6;display:none;}
+.xdim.show{display:block;}
 .xdim b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
-
 .builder-foot{padding:16px 20px;background:var(--paper);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
 .query-preview{font-size:14px;font-style:italic;color:var(--muted);flex:1;min-width:200px;}
 .query-preview b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
 .record-count{font-size:12.5px;font-style:italic;color:var(--muted);}
-.record-count .exact{color:var(--green);}
-.record-count .adj{color:var(--amber);}
 .run-btn{background:var(--accent);color:#fff;border:none;padding:13px 30px;font-family:Georgia,serif;font-size:15px;cursor:pointer;white-space:nowrap;border-radius:2px;}
 .run-btn:hover{background:#a82808;}
 .run-btn:disabled{background:var(--rule);color:var(--muted);cursor:not-allowed;}
-
-.result{margin:36px 0 0;border:1px solid var(--rule);background:var(--paper-card);}
+#resultZone{margin:36px 0 0;}
+.result{border:1px solid var(--rule);background:var(--paper-card);}
 .result-head{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--ink);color:var(--paper);flex-wrap:wrap;}
 .result-head b{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#f2b990;}
 .result-query{flex:1;font-size:14px;font-style:italic;color:#c9c2b3;}
-.result-back{font-size:12.5px;font-style:italic;color:#c9c2b3;text-decoration:none;border-bottom:1px solid #6a6355;}
+.result-back{font-size:12.5px;font-style:italic;color:#c9c2b3;cursor:pointer;border-bottom:1px solid #6a6355;}
 .result-body{padding:22px 24px;}
-.rb-section{margin-bottom:22px;}
-.rb-label{font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+.rb-section{margin-bottom:24px;}
+.rb-label{font-family:'Playfair Display',serif;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
 .rb-label::after{content:'';flex:1;height:1px;background:var(--rule);}
-.rb-text{font-size:15.5px;color:#2f2b24;line-height:1.7;margin-bottom:12px;}
-.cited{border-bottom:1px dotted var(--accent);}
+.rb-help{font-size:12.5px;font-style:italic;color:var(--muted);margin-bottom:10px;}
 .record-chip{display:inline-block;font-family:'Playfair Display',serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:#e4dccf;color:#5a5040;padding:2px 7px;border-radius:2px;margin-left:5px;vertical-align:1px;}
-
-/* comparison mode */
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:10px;}
 .cmp{background:var(--paper);padding:16px 18px;}
 .cmp h5{font-family:'Playfair Display',serif;font-size:15px;margin-bottom:8px;}
 .cmp p{font-size:13.5px;color:#4a4438;line-height:1.6;margin:0;}
 .cmp-verdict{grid-column:1/-1;background:var(--ink);color:var(--paper);padding:14px 18px;font-size:14px;line-height:1.6;}
 .cmp-verdict b{font-family:'Playfair Display',serif;color:#f2b990;display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
-
-.evidence{border:1px solid var(--rule);margin-top:10px;}
-.ev-row{display:grid;grid-template-columns:1fr auto auto auto;gap:14px;padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--paper);align-items:baseline;}
-.ev-row:last-child{border-bottom:none;}
-.ev-row.head{background:var(--paper-card);font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
-.ev-row.adjacent{background:#faf6ee;}
-.ev-claim{font-size:13.5px;color:#2f2b24;}
-.ev-mkt{font-size:11.5px;font-style:italic;color:var(--muted);white-space:nowrap;}
-.ev-val{font-family:'Playfair Display',serif;font-weight:700;font-size:13.5px;color:var(--accent);white-space:nowrap;}
-.ev-tier{font-family:'Playfair Display',serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;}
+.single-read{background:var(--paper);border:1px solid var(--rule);padding:18px 20px;margin-top:10px;}
+.single-read p{font-size:15px;color:#2f2b24;line-height:1.7;margin-bottom:12px;}
+.single-read p:last-child{margin-bottom:0;}
+.ev-summary{display:flex;gap:0;border:1px solid var(--rule);background:var(--paper);margin-top:10px;flex-wrap:wrap;}
+.evs{flex:1;min-width:110px;padding:13px 16px;border-right:1px solid var(--rule);cursor:pointer;transition:background .12s;}
+.evs:last-child{border-right:none;}
+.evs:hover,.evs.on{background:var(--paper-card);}
+.evs .n{font-family:'Playfair Display',serif;font-weight:900;font-size:20px;color:var(--accent);line-height:1;}
+.evs .l{font-size:12px;font-style:italic;color:var(--muted);margin-top:3px;}
+.evs.on{box-shadow:inset 0 -2px 0 var(--accent);}
+.ev-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.evc{border:1px solid var(--rule);background:var(--paper);padding:14px 16px;cursor:pointer;transition:border-color .12s;}
+.evc:hover{border-color:var(--ink);}
+.evc.hidden{display:none;}
+.evc-top{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.evc-tier{font-family:'Playfair Display',serif;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;}
 .tier-a{background:#d5e6dd;color:#1d4c38;}
 .tier-b{background:#f3e6cc;color:#7a5410;}
-.match-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 14px;background:var(--paper-card);border-bottom:1px solid var(--rule);}
-
+.evc-mkt{font-size:11.5px;font-style:italic;color:var(--muted);}
+.evc-val{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--accent);margin-left:auto;}
+.evc-claim{font-size:13.5px;color:#2f2b24;line-height:1.55;}
+.evc-more{max-height:0;overflow:hidden;transition:max-height .28s ease;}
+.evc.open .evc-more{max-height:400px;}
+.evc-more p{font-size:12.5px;color:var(--muted);line-height:1.6;padding-top:9px;margin-top:9px;border-top:1px solid var(--rule);}
+.evc-more a{color:var(--accent);border-bottom:1px solid var(--accent);text-decoration:none;}
 .gap-note{background:var(--paper);border-left:3px solid var(--muted);padding:12px 16px;margin-top:10px;font-size:13.5px;font-style:italic;color:var(--muted);}
 .gap-note b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
 .result-actions{display:flex;gap:10px;padding:16px 24px;border-top:1px solid var(--rule);flex-wrap:wrap;}
 .ra{font-size:13px;padding:9px 18px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);cursor:pointer;border-radius:2px;font-family:Georgia,serif;}
 .ra:hover{border-color:var(--ink);}
 .ra.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
-
+.state-box{border:1px solid var(--rule);background:var(--paper-card);padding:34px 28px;text-align:center;}
+.state-box .icon{font-family:'Playfair Display',serif;font-size:34px;color:var(--rule);line-height:1;margin-bottom:12px;}
+.state-box h4{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:8px;}
+.state-box p{font-size:14.5px;color:var(--muted);max-width:480px;margin:0 auto 14px;line-height:1.65;}
+.state-box .sub{font-size:13px;font-style:italic;color:var(--muted);}
+.state-box.offline{border-left:4px solid var(--amber);text-align:left;}
+.state-box.offline .icon{font-size:15px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;font-family:'Playfair Display',serif;margin-bottom:8px;}
+.state-box.offline p{margin-left:0;}
+.fallback-list{text-align:left;max-width:560px;margin:16px 0 0;}
+.fb{display:flex;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--rule);font-size:14px;}
+.fb:last-child{border-bottom:none;}
+.fb b{font-family:'Playfair Display',serif;color:var(--accent);flex:none;}
+.fb a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);}
+.loading-bar{height:2px;background:var(--rule);margin-top:16px;overflow:hidden;position:relative;}
+.loading-bar::after{content:'';position:absolute;left:0;top:0;height:100%;width:35%;background:var(--accent);animation:sl 1.4s ease-in-out infinite;}
+@keyframes sl{0%{left:-35%}100%{left:100%}}
+.doc{border:1px solid var(--ink);background:#fff;margin-top:20px;}
+.doc-head{background:var(--ink);color:var(--paper);padding:20px 26px;}
+.doc-brand{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#f2b990;margin-bottom:10px;}
+.doc-head h2{font-family:'Playfair Display',serif;font-size:23px;line-height:1.25;font-weight:900;}
+.doc-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;font-style:italic;color:#c9c2b3;margin-top:10px;}
+.doc-body{padding:26px 28px;}
+.doc-sec{margin-bottom:26px;}
+.doc-sec:last-child{margin-bottom:0;}
+.doc-label{font-family:'Playfair Display',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:9px;}
+.doc-label::after{content:'';flex:1;height:1px;background:var(--rule);}
+.doc-body p{font-size:15.5px;color:#2f2b24;line-height:1.72;margin-bottom:13px;}
+.finding{background:var(--paper-card);border-left:4px solid var(--accent);padding:18px 22px;}
+.finding p{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;line-height:1.55;margin:0;color:var(--ink);}
+.src-line{display:flex;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule);font-size:14px;}
+.src-line:last-child{border-bottom:none;}
+.src-tier{font-family:'Playfair Display',serif;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;flex:none;}
+.src-txt{flex:1;color:#2f2b24;}
+.src-ref{font-size:11.5px;font-style:italic;color:var(--muted);white-space:nowrap;}
+.implication{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:baseline;}
+.implication:last-child{border-bottom:none;}
+.imp-flag{font-family:'Playfair Display',serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:2px;white-space:nowrap;}
+.f-check{background:#f2d9d2;color:#8a2513;}
+.f-model{background:#f3e6cc;color:#7a5410;}
+.f-ok{background:#d5e6dd;color:#1d4c38;}
+.imp-txt{font-size:14.5px;color:#2f2b24;line-height:1.62;}
+.limits{border:1px dashed var(--muted);padding:16px 20px;background:var(--paper-card);}
+.limits p{font-size:14px;color:var(--muted);font-style:italic;margin-bottom:9px;}
+.limits p:last-child{margin-bottom:0;}
+.limits b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
+.doc-foot{border-top:2px solid var(--ink);padding:16px 28px;background:var(--paper-card);}
+.foot-attr{font-size:12.5px;font-style:italic;color:var(--muted);}
+.foot-attr b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
+.q-group{margin-bottom:24px;}
+.q-who{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.q-who b{font-family:'Playfair Display',serif;font-size:16px;}
+.q-who span{font-size:12.5px;font-style:italic;color:var(--muted);}
+.q-item{border:1px solid var(--rule);background:var(--paper-card);margin-bottom:10px;}
+.q-head{padding:14px 18px;cursor:pointer;display:flex;gap:12px;align-items:baseline;}
+.q-num{font-family:'Playfair Display',serif;font-weight:900;font-size:15px;color:var(--accent);flex:none;}
+.q-text{flex:1;font-size:15px;color:#2f2b24;line-height:1.55;}
+.q-tog{font-size:15px;color:var(--muted);transition:transform .22s;}
+.q-item.open .q-tog{transform:rotate(45deg);color:var(--accent);}
+.q-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.q-item.open .q-body{max-height:340px;}
+.q-inner{padding:0 18px 16px 44px;}
+.q-why{font-size:13.5px;color:var(--muted);font-style:italic;line-height:1.6;margin-bottom:12px;}
+.q-bad{background:#fbeeea;border-left:3px solid var(--red);padding:11px 14px;}
+.q-bad b{font-family:'Playfair Display',serif;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:4px;}
+.q-bad p{font-size:13.5px;color:#2f2b24;margin:0;line-height:1.6;}
 .footnotes{margin:44px 0 0;padding:20px 22px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted);}
 .fn{display:flex;gap:10px;margin-bottom:10px;line-height:1.65;}
 .fn sup{color:var(--accent);font-family:'Playfair Display',serif;flex:none;}
@@ -127,228 +221,382 @@ footer.contact{margin-top:60px;background:var(--ink);color:var(--paper);padding:
 .contact-inner p{font-size:15px;color:#c9c2b3;margin-bottom:22px;}
 .btn{display:inline-block;font-size:14px;text-decoration:none;padding:11px 26px;margin:0 6px 10px;border:1px solid #6a6355;color:var(--paper);border-radius:2px;}
 .btn-primary{background:var(--accent);border-color:var(--accent);}
-@media(max-width:760px){.db-strip{grid-template-columns:repeat(2,1fr);}.ev-row,.compare{grid-template-columns:1fr;}.builder-foot{flex-direction:column;align-items:stretch;}.run-btn{width:100%;}}
+@media(max-width:760px){.db-strip,.compare,.ev-cards{grid-template-columns:1fr;}.implication{grid-template-columns:1fr;}.builder-foot{flex-direction:column;align-items:stretch;}.run-btn{width:100%;}}
+@media print{header.site,.builder,.token-bar,.token-panel,.orient,.db-strip,.db-detail,.plain-note,.result-actions,footer.contact,.footnotes,.tool-header{display:none!important;}.doc{border:none;}.doc-head{background:#fff!important;color:#000!important;border-bottom:2px solid #000;}.doc-brand,.doc-meta{color:#555!important;}}
 </style>
 </head>
 <body>
 
 <header class="site"><div class="wrap"><div class="site-top">
   <a class="wordmark" href="https://jpouandji-operator.github.io/portfolio/">Growth Operator <span>Notes</span></a>
-  <nav class="site-nav-links"><a href="https://jpouandji-operator.github.io/portfolio/">Analysis</a><a href="https://jpouandji-operator.github.io/portfolio/teardowns/">Teardowns</a><a href="https://jpouandji-operator.github.io/portfolio/retrospectives/">Retrospectives</a><a href="#" class="active">Intelligence</a></nav>
+  <nav class="site-nav-links">
+    <a href="https://jpouandji-operator.github.io/portfolio/">Analysis</a>
+    <a href="https://jpouandji-operator.github.io/portfolio/teardowns/">Teardowns</a>
+    <a href="https://jpouandji-operator.github.io/portfolio/retrospectives/">Retrospectives</a>
+    <a href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">IC Checklist</a>
+  </nav>
 </div></div></header>
 
 <div class="wrap">
 
-  <div class="token-bar">
-    <div class="token-status"><span class="token-dot" id="tdot"></span><span id="tstatus">Database not connected</span></div>
-    <a class="token-toggle" id="ttoggle">Connect database</a>
-  </div>
-  <div class="token-panel" id="tpanel">
-    <p><b>Airtable personal access token.</b> This tool reads directly from the GON database. Paste a token with read scope on the base to connect. The token is stored in your browser only, never transmitted anywhere except Airtable, and never written to the page source.</p>
-    <div class="token-row">
-      <input class="token-input" type="password" id="tinput" placeholder="pat..." autocomplete="off"/>
-      <button class="token-save" id="tsave">Connect</button>
-    </div>
-    <div class="token-note">Read-only tokens are sufficient. Clear the token at any time by saving an empty field.</div>
-  </div>
-
   <div class="tool-header">
-    <div class="tool-eyebrow">Operator Intelligence &middot; Live Database</div>
-    <h1 class="tool-title">Ask the database, not the model.</h1>
-    <p class="tool-sub">Every answer is assembled from primary regulatory instruments, operator network signals, and benchmarks that passed a three-test standard. Where the database has nothing, it says so rather than filling the gap.</p>
+    <div class="tool-eyebrow">Research Database</div>
+    <h1 class="tool-title">A research database for people putting money into African companies.</h1>
+    <p class="tool-sub">Pick a market, a sector, and the question you are trying to answer. The tool returns what is actually recorded about it: the regulation, the numbers, and what an operator who has worked there would tell you. Where there is no record, it says so.</p>
 
-    <div class="db-strip">
-      <div class="db"><div class="n">84</div><div class="l">benchmarks, three-test verified <sup>1</sup></div></div>
-      <div class="db"><div class="n">23</div><div class="l">primary regulatory instruments <sup>2</sup></div></div>
-      <div class="db"><div class="n">17</div><div class="l">operator network signals <sup>3</sup></div></div>
-      <div class="db"><div class="n">2</div><div class="l">war games with scored outcomes</div></div>
+    <div class="orient" id="orient">
+      <div class="or-row open">
+        <div class="or-head"><span class="or-q">Who is this for?</span><span class="or-tog">+</span></div>
+        <div class="or-body"><div class="or-inner">Anyone assessing an African company. Investors and lenders running diligence, founders checking whether a market works the way they assume, analysts who need the regulatory position before a call. You do not need to know the region already. The tool explains what it returns.</div></div>
+      </div>
+      <div class="or-row">
+        <div class="or-head"><span class="or-q">What does it give me?</span><span class="or-tog">+</span></div>
+        <div class="or-body"><div class="or-inner">Three things, always separated so you know which is which: <b>source documents</b> from central banks and regulators, read in full rather than summarised. <b>Verified figures</b> tied to a specific country and sector. And <b>operator observations</b>, things practitioners working inside these markets have said that are written down nowhere else. Every claim shows which record it came from.</div></div>
+      </div>
+      <div class="or-row">
+        <div class="or-head"><span class="or-q">What will it refuse to do?</span><span class="or-tog">+</span></div>
+        <div class="or-body"><div class="or-inner">Invent an answer. If there is no record covering your question, the tool returns nothing and logs the gap rather than producing something plausible. It will also tell you when a claim rests on a single conversation rather than measured data, so you know what weight to put on it.</div></div>
+      </div>
     </div>
+
+    <div class="db-strip" id="stats">
+      <div class="db on" data-i="0"><div class="n" data-to="84">0</div><div class="l">verified market figures</div><div class="bar"><i data-w="88"></i></div></div>
+      <div class="db" data-i="1"><div class="n" data-to="23">0</div><div class="l">regulations read in full</div><div class="bar"><i data-w="62"></i></div></div>
+      <div class="db" data-i="2"><div class="n" data-to="17">0</div><div class="l">unpublished operator signals</div><div class="bar"><i data-w="41"></i></div></div>
+      <div class="db" data-i="3"><div class="n" data-to="9">0</div><div class="l">markets covered</div><div class="bar"><i data-w="55"></i></div></div>
+    </div>
+    <div class="db-detail" id="statDetail"></div>
+
     <div class="db-meta">
-      <div class="db-live">Database last updated 21 July 2026</div>
-      <div class="db-coverage">Coverage: 9 markets across WAEMU, CEMAC and East Africa <sup style="color:var(--accent);">4</sup></div>
+      <div class="db-live" id="dbLive">Add an access key to query live records</div>
+      <div class="db-coverage">Growing weekly. Each new market makes the comparisons sharper.</div>
+    </div>
+
+    <div class="plain-note">
+      <b>How this gets built.</b> I use AI to push the search into places I would not have thought to look: adjacent regulators, filings in languages I do not read, market parallels I had not connected. It surfaces candidates fast and at a scale no individual could match. Then the part that cannot be automated: I read the source, decide whether it holds up, and write what it actually means for someone deploying capital. That judgment comes from twelve years operating in these markets. The method is designed to extend the same way into every market I add next, which is why coverage grows without the standard dropping.
+    </div>
+
+    <div class="token-bar">
+      <div class="token-status"><span class="token-dot"></span> Not connected</div>
+      <div class="token-note-inline">Reading the database requires an access key with read permission. Everything else on this site works without one.</div>
+      <span class="token-toggle" id="ttoggle">Add access key</span>
+    </div>
+    <div class="token-panel" id="tpanel">
+      <p><b>Access key.</b> This tool queries the database directly from your browser. The key is stored in your browser only, sent nowhere except the database, and never written into the page. A read-only key is sufficient.</p>
+      <div class="token-row">
+        <input class="token-input" type="password" id="tinput" placeholder="Paste access key" autocomplete="off"/>
+        <button class="token-save" id="tsave">Connect</button>
+      </div>
     </div>
   </div>
 
   <div class="builder">
     <div class="builder-head">
-      <span>Build your query</span>
-      <span class="step">Step 1 of 2 &middot; select parameters</span>
+      <span>Build your question</span>
+      <span class="step">Step 1 of 2 &middot; choose what you are asking about</span>
     </div>
-
-    <div class="param-group" data-multi="1">
-      <div class="param-label">Market <span>select one, or two to compare</span></div>
-      <div class="param-opts">
-        <button class="popt on">Senegal <span class="cnt">14</span></button>
-        <button class="popt">Cote d'Ivoire <span class="cnt">11</span></button>
-        <button class="popt">Cameroun <span class="cnt">9</span></button>
-        <button class="popt">Nigeria <span class="cnt">12</span></button>
-        <button class="popt">Kenya <span class="cnt">10</span></button>
-        <button class="popt on">Rwanda <span class="cnt">6</span></button>
-        <button class="popt">Ghana <span class="cnt">5</span></button>
-        <button class="popt thin">Uganda <span class="cnt">3</span></button>
-        <button class="popt thin">Tanzania <span class="cnt">2</span></button>
-      </div>
+    <div class="param-group" data-multi="1" data-field="market">
+      <div class="param-label">Market</div>
+      <div class="param-help">Which country. Pick two if you want them compared. The number beside each is how many records exist for it.</div>
+      <div class="param-opts"><button class="popt on" data-v="Senegal">Senegal <span class="cnt">14</span></button><button class="popt" data-v="Cote d'Ivoire">Cote d'Ivoire <span class="cnt">11</span></button><button class="popt" data-v="Cameroun">Cameroun <span class="cnt">9</span></button><button class="popt" data-v="Nigeria">Nigeria <span class="cnt">12</span></button><button class="popt" data-v="Kenya">Kenya <span class="cnt">10</span></button><button class="popt" data-v="Rwanda">Rwanda <span class="cnt">6</span></button><button class="popt" data-v="Ghana">Ghana <span class="cnt">5</span></button><button class="popt" data-v="Uganda">Uganda <span class="cnt">3</span></button><button class="popt" data-v="Tanzania">Tanzania <span class="cnt">2</span></button></div>
     </div>
-    <div class="xdim"><b>Two markets selected.</b> The read will return a structural comparison rather than two separate answers. This is the highest-value output the database produces, because the contrast between how two markets solve the same problem is not published anywhere.</div>
-
-    <div class="param-group">
+    <div class="xdim" id="xdim"><b>Two markets selected.</b> You will get a comparison rather than two separate answers, showing how each market solves the same problem differently. That contrast is not published anywhere else.</div>
+    <div class="param-group" data-field="sector">
       <div class="param-label">Sector</div>
-      <div class="param-opts">
-        <button class="popt on">Fintech &amp; payments</button>
-        <button class="popt">Telecom</button>
-        <button class="popt">Energy</button>
-        <button class="popt">E-commerce &amp; logistics</button>
-        <button class="popt">Agriculture</button>
-        <button class="popt thin">Media</button>
-      </div>
+      <div class="param-help">What the company does.</div>
+      <div class="param-opts"><button class="popt on" data-v="Fintech / Mobile money">Fintech</button><button class="popt" data-v="Telecoms">Telecoms</button><button class="popt" data-v="Energy / Cleantech">Energy</button><button class="popt" data-v="E-commerce / Logistics">E-commerce</button><button class="popt" data-v="Agritech">Agritech</button><button class="popt" data-v="Entertainment / Media">Entertainment</button></div>
     </div>
-
-    <div class="param-group">
-      <div class="param-label">IC dimension <span>what you are testing</span></div>
-      <div class="param-opts">
-        <button class="popt on">Distribution economics</button>
-        <button class="popt">Capital structure</button>
-        <button class="popt">Demand validation</button>
-        <button class="popt">Regulatory risk</button>
-        <button class="popt">Team &amp; governance</button>
-        <button class="popt">Exit dynamics</button>
-      </div>
+    <div class="param-group" data-field="dim">
+      <div class="param-label">The question you are testing</div>
+      <div class="param-help">The six things that decide whether a deal works. The same six used in the Africa IC Checklist on this site.</div>
+      <div class="param-opts"><button class="popt on" data-v="Distribution economics">Can it reach customers profitably?</button><button class="popt" data-v="Capital structure">Is it funded the right way?</button><button class="popt" data-v="Demand validation">Do people actually want it?</button><button class="popt" data-v="Regulatory environment">What could regulators do to it?</button><button class="popt" data-v="Team & governance">Can the team execute?</button><button class="popt" data-v="Exit dynamics">Can investors get their money out?</button></div>
     </div>
-
-    <div class="param-group">
-      <div class="param-label">Output <span>what you get back</span></div>
-      <div class="param-opts">
-        <button class="popt on">Operator read</button>
-        <button class="popt">Raw records</button>
-        <button class="popt">Benchmarks only</button>
-        <button class="popt">Gap map</button>
-      </div>
-    </div>
-
     <div class="builder-foot">
       <div class="query-preview">
-        <b>Senegal + Rwanda</b> &middot; fintech and payments &middot; distribution economics &middot; operator read
-        <div class="record-count"><span class="exact">7 exact matches</span> &middot; <span class="adj">4 adjacent</span> &middot; 11 records total</div>
+        <span id="qpText"></span>
+        <div class="record-count">Results are counted after the query runs, not estimated before it.</div>
       </div>
-      <button class="run-btn">Run query &rarr;</button>
+      <button class="run-btn" id="runBtn">Get the answer &rarr;</button>
     </div>
   </div>
 
-  <div class="result">
-    <div class="result-head">
-      <b>Comparison read</b>
-      <span class="result-query">Senegal + Rwanda &middot; fintech and payments &middot; distribution economics</span>
-      <a class="result-back" href="#">&larr; Change parameters</a>
-    </div>
-    <div class="result-body">
-
-      <div class="rb-section">
-        <div class="rb-label">The structural contrast</div>
-        <div class="compare">
-          <div class="cmp">
-            <h5>Senegal</h5>
-            <p><span class="cited">BCEAO Instruction n.001-01-2024 Article 18 prohibits exclusivity clauses in telco-fintech partnerships across WAEMU</span><span class="record-chip">REG-009</span>. Contractual lock-in is removed by regulation. Distribution depth has to be earned operationally.</p>
-          </div>
-          <div class="cmp">
-            <h5>Rwanda</h5>
-            <p><span class="cited">Full interoperability achieved between MTN Mobile Money and Airtel Money, creating a single payment infrastructure</span><span class="record-chip">REG-021</span>. Lock-in is removed by infrastructure. The network itself stopped being the moat.</p>
-          </div>
-          <div class="cmp-verdict">
-            <b>What this means for a deal</b>
-            Two markets, two mechanisms, same investment consequence: distribution defensibility cannot be modelled as contractual in either. If a deck claims exclusive partnerships as the moat in Senegal, Article 18 makes it unenforceable. If it claims network lock-in in Rwanda, interoperability makes it irrelevant. The moat has to be operational depth: agent liquidity, float management, and merchant density.
-          </div>
-        </div>
-      </div>
-
-      <div class="rb-section">
-        <div class="rb-label">Evidence</div>
-        <div class="evidence">
-          <div class="match-label">Exact matches &middot; all three parameters</div>
-          <div class="ev-row head"><span>Claim</span><span>Market</span><span>Value</span><span>Tier</span></div>
-          <div class="ev-row">
-            <span class="ev-claim">Exclusivity clauses prohibited, telco-fintech partnerships</span>
-            <span class="ev-mkt">WAEMU</span><span class="ev-val">Article 18</span><span class="ev-tier tier-a">A</span>
-          </div>
-          <div class="ev-row">
-            <span class="ev-claim">MTN MoMo and Airtel Money full interoperability</span>
-            <span class="ev-mkt">Rwanda</span><span class="ev-val">Achieved</span><span class="ev-tier tier-a">A</span>
-          </div>
-          <div class="ev-row">
-            <span class="ev-claim">Agent commission on deposit volume, not transaction count</span>
-            <span class="ev-mkt">Senegal</span><span class="ev-val">Inverted</span><span class="ev-tier tier-b">B</span>
-          </div>
-          <div class="match-label">Adjacent &middot; match two of three parameters, shown because the database is thin here</div>
-          <div class="ev-row adjacent">
-            <span class="ev-claim">PI-SPI compliance deadline extended from June</span>
-            <span class="ev-mkt">WAEMU</span><span class="ev-val">30 Sep 2026</span><span class="ev-tier tier-a">A</span>
-          </div>
-          <div class="ev-row adjacent">
-            <span class="ev-claim">BNR regulatory sandbox, active intake for PSPs</span>
-            <span class="ev-mkt">Rwanda</span><span class="ev-val">Open</span><span class="ev-tier tier-a">A</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="rb-section">
-        <div class="rb-label">What the database does not have</div>
-        <div class="gap-note"><b>Gap:</b> no verified agent churn or float-cost figures for either market. The operational-depth argument above rests on network signal, not measured benchmarks. Treat as directional. Logged as GAP-017 and GAP-024.</div>
-      </div>
-
-    </div>
-    <div class="result-actions">
-      <button class="ra primary">Generate IC brief</button>
-      <button class="ra">Export DD questions</button>
-      <button class="ra">View all 11 records</button>
-      <button class="ra">Flag a correction</button>
-    </div>
-  </div>
+  <div id="resultZone"></div>
 
   <div class="footnotes">
-    <div class="fn"><sup>1</sup><div><b>Three-test verified.</b> Every quantitative claim passes three tests before it is stored as a benchmark: recency (within 24 months or explicitly flagged), specificity (tied to the exact market and sector, not a continental average), and operator interpretability (I can explain what the figure means for capital deployment). All three pass: stored as a benchmark. Two of three: stored with a named caveat. One or fewer: directional only, never presented as a benchmark.</div></div>
-    <div class="fn"><sup>2</sup><div><b>Primary regulatory instruments.</b> Source documents from central banks and sector regulators, read in the original language of publication. Currently covering BCEAO, BEAC, COBAC, ARTCI and ARTP in Francophone markets, and BNR, CBK, CBN and Bank of Ghana in Anglophone markets. Secondary summaries and law firm commentary are logged separately and never counted here.</div></div>
-    <div class="fn"><sup>3</sup><div><b>Operator network signals.</b> Observations from practitioners inside the distribution stack that have not been published anywhere. Each carries a confidence tag: primary experience, secondhand, or directional. These are the entries most likely to be wrong and most likely to be useful, which is why the tag is mandatory.</div></div>
-    <div class="fn"><sup>4</sup><div><b>Coverage and its limits.</b> Depth is uneven and stated rather than hidden. WAEMU and CEMAC are covered at operator depth: I have worked in these markets and can interpret what a regulation means in practice. East African markets are covered at institutional depth: the regulatory record is complete but not operator-validated to the same standard. Anglophone West Africa is currently the thinnest part of the database and is being actively expanded. Markets shown with a dashed border have fewer than five records and will return limited results.</div></div>
+    <div class="fn"><sup>&#9679;</sup><div><b>How a figure qualifies.</b> Numbers enter the database only if they pass three checks: published within the last two years or flagged as older; specific to the exact country and sector rather than an Africa-wide average; and interpretable, meaning it can be explained in terms of what it means for deploying capital. All three: stored as a verified figure. Two: stored with a stated caveat. One or none: marked directional and never presented as fact.</div></div>
+    <div class="fn"><sup>&#9679;</sup><div><b>Coverage, and how it grows.</b> Senegal, Cote d'Ivoire and Cameroun are deepest because I have worked in them and can explain what a rule means in practice, not just what it says. Kenya, Rwanda, Nigeria and Ghana are covered from the official record. Uganda and Tanzania are thin. The method is deliberately repeatable, so each new market is added the same way rather than requiring a different approach, and the comparisons get sharper with every one.</div></div>
   </div>
 
 </div>
 
 <footer class="contact"><div class="contact-inner">
   <h3>Testing an assumption on a live deal?</h3>
-  <p>Coverage is deepest in WAEMU and CEMAC. If your question sits outside that, the tool will tell you rather than guess.</p>
+  <p>If your question sits outside what the database covers, I will tell you rather than guess. That is usually more useful than a confident answer.</p>
   <a class="btn btn-primary" href="mailto:jpouandji@gmail.com">Email Jean-Philippe</a>
   <a class="btn" href="https://jpouandji-operator.github.io/portfolio/africa-ic-checklist/">Open the IC Checklist</a>
   <a class="btn" href="https://www.linkedin.com/company/growth-operator-notes/" target="_blank" rel="noopener">Follow GON</a>
 </div></footer>
 
 <script>
-var KEY='gon_airtable_pat';
-var dot=document.getElementById('tdot'),st=document.getElementById('tstatus'),
-    tog=document.getElementById('ttoggle'),pan=document.getElementById('tpanel'),
-    inp=document.getElementById('tinput'),sav=document.getElementById('tsave');
+var BASE_ID='appAr4TpVGHSoh9CU', TBL='Benchmarks', KEY='gon_airtable_pat';
+var SITE='https://jpouandji-operator.github.io/portfolio/';
+var state={markets:['Senegal'],sector:'Fintech / Mobile money',dim:'Distribution economics',out:'read',records:[],lastQuery:null};
 
-function refresh(){
-  var t=localStorage.getItem(KEY);
-  if(t&&t.length>10){dot.classList.add('connected');st.textContent='Database connected';tog.textContent='Manage token';}
-  else{dot.classList.remove('connected');st.textContent='Database not connected';tog.textContent='Connect database';}
+var DIMS={'Distribution economics':'Can it reach customers profitably?','Capital structure':'Is it funded the right way?','Demand validation':'Do people actually want it?','Regulatory environment':'What could regulators do to it?','Team & governance':'Can the team execute?','Exit dynamics':'Can investors get their money out?'};
+
+function tok(){return localStorage.getItem(KEY)||'';}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function el(id){return document.getElementById(id);}
+
+function setConn(){
+  var t=tok(), d=document.querySelector('.token-dot'), s=document.querySelector('.token-status'), l=el('dbLive');
+  if(t){d.classList.add('ok');s.childNodes[1].nodeValue=' Connected to live database';l.classList.add('connected');l.textContent='Live database connected';}
+  else{d.classList.remove('ok');s.childNodes[1].nodeValue=' Not connected';l.classList.remove('connected');l.textContent='Add an access key to query live records';}
 }
-tog.addEventListener('click',function(e){e.preventDefault();pan.classList.toggle('open');});
-sav.addEventListener('click',function(){
-  var v=inp.value.trim();
-  if(v){localStorage.setItem(KEY,v);}else{localStorage.removeItem(KEY);}
-  inp.value='';pan.classList.remove('open');refresh();
-});
-refresh();
 
+function buildFormula(){
+  var parts=[];
+  if(state.markets.length){
+    var m=state.markets.map(function(x){return "FIND('"+x.replace(/'/g,"\\'")+"',{Market})";}).join(',');
+    parts.push(state.markets.length>1?'OR('+m+')':m);
+  }
+  if(state.sector) parts.push("FIND('"+state.sector.split(' /')[0].replace(/'/g,"\\'")+"',{Sector})");
+  if(state.dim) parts.push("FIND('"+state.dim.replace(/'/g,"\\'")+"',{IC Dimension})");
+  return parts.length?'AND('+parts.join(',')+')':'';
+}
+
+function tierOf(r){var d=r['Data Tier']||'';return d.indexOf('Tier A')>-1?'a':'b';}
+function isExact(r){
+  var mOK=state.markets.some(function(m){return (r.Market||'').indexOf(m)>-1;});
+  var sOK=(r.Sector||'').indexOf(state.sector.split(' /')[0])>-1;
+  var dOK=(r['IC Dimension']||'').indexOf(state.dim)>-1;
+  return mOK&&sOK&&dOK;
+}
+
+function updatePreview(){
+  var mk=state.markets.length?state.markets.join(' + '):'no market selected';
+  el('qpText').innerHTML='<b>'+esc(mk)+'</b> &middot; '+esc(state.sector.split(' /')[0].toLowerCase())+' &middot; '+esc((DIMS[state.dim]||state.dim).toLowerCase());
+  el('xdim').classList.toggle('show', state.markets.length>1);
+  el('runBtn').disabled = state.markets.length===0;
+}
+
+function runQuery(){
+  var t=tok();
+  var zone=el('resultZone');
+  if(!t){ zone.innerHTML=offlineHTML('No access key set.','This tool reads directly from the GON database and will not answer without a connection to it. A synthesised response without the underlying records would be indistinguishable from a general-purpose model, which is the one thing it is built not to be.'); zone.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+  zone.innerHTML='<div class="state-box"><div class="icon">&#9675;</div><h4>Reading the records.</h4><p>Matching your parameters against the database. Synthesis runs only on what comes back.</p><div class="loading-bar"></div></div>';
+  zone.scrollIntoView({behavior:'smooth',block:'start'});
+  var f=buildFormula();
+  var url='https://api.airtable.com/v0/'+BASE_ID+'/'+encodeURIComponent(TBL)+'?pageSize=50'+(f?'&filterByFormula='+encodeURIComponent(f):'');
+  fetch(url,{headers:{Authorization:'Bearer '+t}})
+    .then(function(r){ if(!r.ok) throw new Error(r.status===401||r.status===403?'auth':'http'); return r.json(); })
+    .then(function(d){ state.records=(d.records||[]).map(function(x){return x.fields;}); render(); })
+    .catch(function(e){
+      if(String(e.message)==='auth') zone.innerHTML=offlineHTML('Access key rejected.','The key was not accepted by the database. Check that it has read scope on the base and has not expired.');
+      else zone.innerHTML=offlineHTML('Database unreachable.','The intelligence layer cannot reach its source records right now, so it will not answer.');
+    });
+}
+
+function offlineHTML(title,body){
+  return '<div class="state-box offline"><div class="icon">'+esc(title)+'</div><p>'+esc(body)+'</p><div class="fallback-list">'+
+  '<div class="fb"><b>&rarr;</b><span><a href="'+SITE+'africa-ic-checklist/">Africa IC Checklist</a> runs entirely in your browser and is working normally.</span></div>'+
+  '<div class="fb"><b>&rarr;</b><span><a href="'+SITE+'retrospectives/">War Games retrospectives</a> and <a href="'+SITE+'">published analysis</a> are static and unaffected.</span></div>'+
+  '<div class="fb"><b>&rarr;</b><span>For a specific question, <a href="mailto:jpouandji@gmail.com">email directly</a> and it gets answered from the same records.</span></div>'+
+  '</div></div>';
+}
+
+function render(){
+  var recs=state.records, zone=el('resultZone');
+  if(!recs.length){
+    zone.innerHTML='<div class="state-box"><div class="icon">&mdash;</div><h4>Nothing in the database on this combination yet.</h4><p>These parameters return no matching records. Rather than generate a plausible answer from general knowledge, the tool returns nothing and logs the gap.</p><div class="sub">Added to the research queue. If it matters to a live deal, say so and it moves up.</div></div>';
+    return;
+  }
+  var exact=recs.filter(isExact), adj=recs.filter(function(r){return !isExact(r);});
+  var tA=recs.filter(function(r){return tierOf(r)==='a';}), tB=recs.filter(function(r){return tierOf(r)==='b';});
+  var mk=state.markets.join(' and ');
+  var h='<div class="result"><div class="result-head"><b>'+(state.markets.length>1?'Comparison':'Operator read')+'</b>'+
+    '<span class="result-query">'+esc(mk)+' &middot; '+esc(state.sector.split(' /')[0].toLowerCase())+' &middot; '+esc((DIMS[state.dim]||state.dim).toLowerCase())+'</span>'+
+    '<span class="result-back" onclick="document.querySelector(\'.builder\').scrollIntoView({behavior:\'smooth\'})">&larr; Change the question</span></div><div class="result-body">';
+
+  h+='<div class="rb-section"><div class="rb-label">The answer</div>';
+  if(state.markets.length>1){
+    h+='<div class="rb-help">How each market handles the same problem. The contrast is the finding.</div><div class="compare">';
+    state.markets.slice(0,2).forEach(function(m){
+      var mr=recs.filter(function(r){return (r.Market||'').indexOf(m)>-1;});
+      var top=mr.sort(function(a,b){return tierOf(a)==='a'?-1:1;})[0];
+      h+='<div class="cmp"><h5>'+esc(m)+'</h5><p>'+(top?esc((top['Operator Note']||top.Value||'').slice(0,260))+(top['Entry ID']?'<span class="record-chip">'+esc(top['Entry ID'])+'</span>':''):'<em>No records for this market under these parameters.</em>')+'</p></div>';
+    });
+    h+='<div class="cmp-verdict"><b>What this means if you are looking at a deal</b>Read the two columns against each other. Where the mechanisms differ but the consequence is the same, the moat a company claims in one market probably does not survive in the other. Where the consequence differs, the model needs rebuilding per market rather than ported across.</div></div>';
+  } else {
+    h+='<div class="rb-help">Assembled from '+recs.length+' record'+(recs.length===1?'':'s')+'. Every claim below traces to one of them.</div><div class="single-read">';
+    exact.slice(0,3).forEach(function(r){
+      h+='<p>'+esc((r['Operator Note']||r.Value||'').slice(0,420))+(r['Entry ID']?'<span class="record-chip">'+esc(r['Entry ID'])+'</span>':'')+'</p>';
+    });
+    if(!exact.length) h+='<p><em>No records match all three parameters. The related records below match your market and sector but not the exact question.</em></p>';
+    h+='</div>';
+  }
+  h+='</div>';
+
+  h+='<div class="rb-section"><div class="rb-label">Where this comes from</div><div class="rb-help">Click a category to filter, then any card to see the source.</div>'+
+     '<div class="ev-summary" id="evSummary">'+
+     '<div class="evs on" data-f="all"><div class="n">'+recs.length+'</div><div class="l">records behind this answer</div></div>'+
+     '<div class="evs" data-f="a"><div class="n">'+tA.length+'</div><div class="l">official documents</div></div>'+
+     '<div class="evs" data-f="b"><div class="n">'+tB.length+'</div><div class="l">operator observations</div></div>'+
+     '<div class="evs" data-f="adj"><div class="n">'+adj.length+'</div><div class="l">related, not exact</div></div>'+
+     '</div><div class="ev-cards" id="evCards">';
+  recs.forEach(function(r){
+    var t=tierOf(r), tags=t+(isExact(r)?'':' adj');
+    h+='<div class="evc" data-t="'+tags+'"><div class="evc-top">'+
+      '<span class="evc-tier tier-'+t+'">'+(t==='a'?'Official':'Operator')+'</span>'+
+      '<span class="evc-mkt">'+esc((r.Market||'').split(',')[0])+'</span>'+
+      '<span class="evc-val">'+esc((r['Value Type']||'').slice(0,18))+'</span></div>'+
+      '<div class="evc-claim">'+esc((r['Metric Name']||'').slice(0,150))+'</div>'+
+      '<div class="evc-more"><p>'+esc((r.Value||'').slice(0,320))+'<br/><br/>'+
+      esc(r['Source Name']||'Source not recorded')+(r['Source Date']?', '+esc(r['Source Date']):'')+
+      (r['Source URL']?' &middot; <a href="'+esc(r['Source URL'])+'" target="_blank" rel="noopener">Open source</a>':'')+
+      (r['Entry ID']?' &middot; '+esc(r['Entry ID']):'')+'</p></div></div>';
+  });
+  h+='</div></div>';
+
+  var gaps=recs.filter(function(r){return (r['Three-Test Status']||'').indexOf('caveat')>-1 || tierOf(r)==='b';});
+  h+='<div class="rb-section"><div class="rb-label">What is missing</div><div class="gap-note"><b>'+
+     (gaps.length? gaps.length+' of these '+recs.length+' records carry a caveat or rest on a single account.':'All records here passed the full three-test standard.')+
+     '</b> '+(gaps.length?'Claims drawn from them are directions to investigate, not figures to model on. Each is tagged in the cards above.':'Figures can be used as benchmarks. Operator interpretation still applies.')+'</div></div>';
+
+  h+='</div><div class="result-actions">'+
+     '<button class="ra primary" onclick="makeBrief()">Turn this into a diligence brief</button>'+
+     '<button class="ra" onclick="makeQuestions()">Get the questions to ask the company</button>'+
+     '<button class="ra" onclick="window.print()">Print or save as PDF</button>'+
+     '<button class="ra" onclick="location.href=\'mailto:jpouandji@gmail.com?subject=GON Intelligence correction\'">Tell me this is wrong</button>'+
+     '</div></div><div id="docZone"></div>';
+  zone.innerHTML=h;
+  wireEvidence();
+}
+
+function wireEvidence(){
+  document.querySelectorAll('#evSummary .evs').forEach(function(s){
+    s.addEventListener('click',function(){
+      document.querySelectorAll('#evSummary .evs').forEach(function(x){x.classList.remove('on');});
+      s.classList.add('on');
+      var f=s.dataset.f;
+      document.querySelectorAll('#evCards .evc').forEach(function(c){
+        c.classList.toggle('hidden', !(f==='all'||c.dataset.t.indexOf(f)>-1));
+      });
+    });
+  });
+  document.querySelectorAll('#evCards .evc').forEach(function(c){
+    c.addEventListener('click',function(){c.classList.toggle('open');});
+  });
+}
+
+function makeBrief(){
+  var recs=state.records, mk=state.markets.join(' and ');
+  var exact=recs.filter(isExact);
+  var lead=exact[0]||recs[0];
+  var h='<div class="doc"><div class="doc-head"><div class="doc-brand">Growth Operator Notes &middot; Diligence Brief</div>'+
+    '<h2>'+esc((DIMS[state.dim]||state.dim))+' &mdash; '+esc(mk)+' '+esc(state.sector.split(' /')[0].toLowerCase())+'</h2>'+
+    '<div class="doc-meta"><span>Generated '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'</span><span>&middot;</span><span>'+recs.length+' source records</span></div></div><div class="doc-body">';
+  h+='<div class="doc-sec"><div class="doc-label">Finding</div><div class="finding"><p>'+esc((lead&&(lead['Operator Note']||lead.Value)||'No lead record available.').slice(0,400))+'</p></div></div>';
+  h+='<div class="doc-sec"><div class="doc-label">What the record shows</div>';
+  recs.slice(0,6).forEach(function(r){
+    var t=tierOf(r);
+    h+='<div class="src-line"><span class="src-tier tier-'+t+'">'+(t==='a'?'Official':'Operator')+'</span>'+
+       '<span class="src-txt">'+esc((r['Metric Name']||'').slice(0,180))+'</span>'+
+       '<span class="src-ref">'+esc(r['Entry ID']||'')+'</span></div>';
+  });
+  h+='</div>';
+  h+='<div class="doc-sec"><div class="doc-label">What this changes about the deal</div>';
+  recs.slice(0,4).forEach(function(r){
+    var imp=r['IC Checklist Implication'];
+    if(!imp) return;
+    var flag=tierOf(r)==='a'?'f-check':'f-model';
+    h+='<div class="implication"><span class="imp-flag '+flag+'">'+(flag==='f-check'?'Verify':'Re-model')+'</span><span class="imp-txt">'+esc(imp)+'</span></div>';
+  });
+  h+='</div>';
+  var caveats=recs.filter(function(r){return (r['Three-Test Status']||'').indexOf('caveat')>-1||tierOf(r)==='b';});
+  h+='<div class="doc-sec"><div class="doc-label">Limits of this brief</div><div class="limits">';
+  if(caveats.length) h+='<p><b>'+caveats.length+' record'+(caveats.length===1?'':'s')+' carry a caveat.</b> Claims drawn from them are directions to investigate, not inputs to a model.</p>';
+  h+='<p><b>Coverage depth varies by market.</b> Senegal, Cote d\'Ivoire and Cameroun are operator-validated. Other markets are covered from the official record only.</p>';
+  h+='<p><b>This brief covers one of six assessment dimensions.</b> A clean reading here does not offset an unexamined weakness elsewhere.</p>';
+  h+='</div></div>';
+  h+='</div><div class="doc-foot"><span class="foot-attr">Assembled from the <b>GON Intelligence</b> database by Jean-Philippe Ouandji. Every claim traceable to a named record. Corrections welcome and acted on.</span></div></div>';
+  el('docZone').innerHTML=h;
+  el('docZone').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function makeQuestions(){
+  var recs=state.records, n=0;
+  var h='<div class="doc"><div class="doc-head"><div class="doc-brand">Growth Operator Notes &middot; Diligence Questions</div>'+
+    '<h2>What to put to the company, and what a weak answer sounds like</h2>'+
+    '<div class="doc-meta"><span>'+esc(state.markets.join(' and '))+'</span><span>&middot;</span><span>'+esc((DIMS[state.dim]||state.dim))+'</span></div></div><div class="doc-body">';
+  h+='<div class="q-group"><div class="q-who"><b>Ask the founders</b><span>in the meeting, expect an answer on the spot</span></div>';
+  recs.filter(function(r){return r['IC Checklist Implication'];}).slice(0,5).forEach(function(r){
+    n++;
+    h+='<div class="q-item"><div class="q-head"><span class="q-num">'+(n<10?'0'+n:n)+'</span><span class="q-text">'+esc(r['IC Checklist Implication'])+'</span><span class="q-tog">+</span></div>'+
+       '<div class="q-body"><div class="q-inner"><div class="q-why">'+esc((r['Operator Note']||'').slice(0,300))+'</div>'+
+       '<div class="q-bad"><b>What a weak answer sounds like</b><p>Any response that restates the claim without evidence, or that cites a total where the question asked for a breakdown. If the team cannot separate the number by market, one market is carrying it.</p></div></div></div></div>';
+  });
+  h+='</div>';
+  h+='<div class="q-group"><div class="q-who"><b>Verify independently</b><span>do not rely on the company for these</span></div>'+
+     '<div class="q-item"><div class="q-head"><span class="q-num">'+(n+1<10?'0'+(n+1):(n+1))+'</span><span class="q-text">Confirm the licence category actually held, and that it permits every activity in the revenue model.</span><span class="q-tog">+</span></div>'+
+     '<div class="q-body"><div class="q-inner"><div class="q-why">Licence categories restrict activity in ways founders routinely under-report. In several markets a payments licence does not permit holding customer funds, which removes float income from the model entirely.</div>'+
+     '<div class="q-bad"><b>Red flag</b><p>Revenue lines assuming float or interest income where the licence held does not permit fund custody. Both a revenue overstatement and a licence risk.</p></div></div></div></div></div>';
+  h+='<div class="q-group"><div class="q-who"><b>Ask a reference</b><span>an operator or agent, not a customer</span></div>'+
+     '<div class="q-item"><div class="q-head"><span class="q-num">'+(n+2<10?'0'+(n+2):(n+2))+'</span><span class="q-text">Ask an agent in the network what they are paid on, and whether they carry a competitor product too.</span><span class="q-tog">+</span></div>'+
+     '<div class="q-body"><div class="q-inner"><div class="q-why">The highest-value reference call available and almost nobody makes it. Agents will tell you plainly whether the economics work and whether they are exclusive in practice.</div>'+
+     '<div class="q-bad"><b>Red flag</b><p>Agents carrying two or three competing products with no preference. The clearest signal that the distribution moat does not exist on the ground, whatever the deck says.</p></div></div></div></div></div>';
+  h+='</div><div class="doc-foot"><span class="foot-attr">Generated from the <b>GON Intelligence</b> database. Questions derive from named records, not a generic checklist. The weak-answer notes come from twelve years operating in these markets.</span></div></div>';
+  el('docZone').innerHTML=h;
+  document.querySelectorAll('#docZone .q-head').forEach(function(hd){hd.addEventListener('click',function(){hd.parentElement.classList.toggle('open');});});
+  el('docZone').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.querySelectorAll('#orient .or-head').forEach(function(h){
+  h.addEventListener('click',function(){
+    var row=h.parentElement,was=row.classList.contains('open');
+    document.querySelectorAll('#orient .or-row').forEach(function(r){r.classList.remove('open');});
+    if(!was)row.classList.add('open');
+  });
+});
+var DETAIL=['<b>Verified market figures.</b> Each tied to a specific country and sector, checked against three tests before entry, traceable to a source you can open. Continental averages are excluded because they hide the variation that matters.','<b>Regulations read in full.</b> Source documents from central banks and sector regulators, in the language they were published in. Law firm summaries are logged separately and never counted here.','<b>Unpublished operator signals.</b> Things practitioners inside these markets have said that appear nowhere in writing. Each carries a confidence tag. Most likely to be wrong, most likely to be useful.','<b>Markets covered, unevenly and openly.</b> Depth varies and the tool says so. Markets with few records return limited results and the count beside each name tells you before you ask.'];
+function showDetail(i){el('statDetail').innerHTML=DETAIL[i];}
+showDetail(0);
+document.querySelectorAll('#stats .db').forEach(function(d){
+  d.addEventListener('click',function(){
+    document.querySelectorAll('#stats .db').forEach(function(x){x.classList.remove('on');});
+    d.classList.add('on');showDetail(+d.dataset.i);
+  });
+});
+setTimeout(function(){
+  document.querySelectorAll('#stats .n').forEach(function(e){
+    var to=+e.dataset.to,st=Math.max(1,Math.round(to/28)),c=0;
+    var t=setInterval(function(){c+=st;if(c>=to){c=to;clearInterval(t);}e.textContent=c;},28);
+  });
+  document.querySelectorAll('#stats .bar i').forEach(function(b){b.style.width=b.dataset.w+'%';});
+},180);
+el('ttoggle').addEventListener('click',function(){el('tpanel').classList.toggle('open');});
+el('tsave').addEventListener('click',function(){
+  var v=el('tinput').value.trim();
+  if(v)localStorage.setItem(KEY,v);else localStorage.removeItem(KEY);
+  el('tinput').value='';el('tpanel').classList.remove('open');setConn();
+});
 document.querySelectorAll('.param-group').forEach(function(g){
-  var multi=g.dataset.multi==='1';
+  var multi=g.dataset.multi==='1', field=g.dataset.field;
   g.querySelectorAll('.popt').forEach(function(o){
     o.addEventListener('click',function(){
       if(!multi)g.querySelectorAll('.popt').forEach(function(x){x.classList.remove('on');});
       o.classList.toggle('on');
+      var on=[].slice.call(g.querySelectorAll('.popt.on')).map(function(x){return x.dataset.v;});
+      if(field==='market')state.markets=on;
+      else if(field==='sector')state.sector=on[0]||'';
+      else if(field==='dim')state.dim=on[0]||'';
+      else if(field==='out')state.out=on[0]||'read';
+      updatePreview();
     });
   });
 });
+el('runBtn').addEventListener('click',runQuery);
+setConn();updatePreview();
 </script>
-
 </body>
 </html>
