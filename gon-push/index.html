@@ -206,8 +206,7 @@ const BENCHMARK_MAP = {
   "Three-Test Status":"Three-Test Status","Confidence Level":"Confidence Level","Capital Structure":"Capital Structure","Exit Multiple Comparable":"Exit Multiple Comparable","Funding Trend Data":"Funding Trend Data",
   "Operator Note":"Operator Note","IC Checklist Implication":"IC Checklist Implication",
   "Linked Articles":"Linked Articles","Linked Thesis ID":"Linked Thesis ID",
-  "Tier B Provenance":"Tier B Provenance","Notes":"Notes","Added By":"Added By",
-};
+  "Tier B Provenance":"Tier B Provenance","Notes":"Notes",};
 
 const THESES_MAP = {
   "Thesis Statement":"Thesis Statement",
@@ -279,6 +278,10 @@ const NORMALISE = {
   "Measured / Comparative":"Measured",
   "Draft / In transition":"Draft / In transition",
   "FMCG / Manufacturing":"FMCG / Manufacturing",
+  "Pass with caveat":"Pass with caveat",
+  "Pass with flag":"Pass with flag",
+  "Pass":"Pass",
+  "Fail":"Fail",
 };
 
 const MARKETS = ["Algeria","Angola","Benin","Botswana","Burkina Faso","Cameroun","CAR",
@@ -419,7 +422,6 @@ function parseInput() {
     }
     // Defaults for benchmarks
     if (currentTable === 'Benchmarks') {
-      if (!rec['Added By']) rec['Added By'] = 'GON Scan - auto-generated';
       if (!rec['Entry Status']) rec['Entry Status'] = 'Active';
     }
     // Defaults for Intelligence Network
@@ -612,7 +614,7 @@ function buildSingleForm() {
         ${tf('Source Name','text')}${tf('Source URL','text')}${tf('Source Date','text')}
         ${sf('Decay Class',['Structural (36 months)','Market dynamics (12 months)','Regulatory (6 months)','Operator signal (quarterly)'])}
         ${sf('Entry Status',['Active','Announced','Enacted','Operational','Under construction','Draft / In transition','Flagged for review','Superseded','Broken promise','Implementation success','Killed'])}
-        ${sf('Recency Test',['Pass','Pass with flag','Fail'])}
+        ${sf('Recency Test',['Pass','Pass with flag','Pass with caveat','Fail'])}
         ${sf('Specificity Test',['Pass','Pass with caveat','Fail'])}
         ${sf('Interpretability Test',['Pass','Fail'])}
         ${sf('Three-Test Status',['Pass','Pass with caveat','Directional only','Fail'])}
