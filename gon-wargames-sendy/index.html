@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sendy Raised $20M as a Marketplace. It Died as a Warehouse Company. | Growth Operator Notes</title>
+<meta name="description" content="Sendy's Series B checklist run comes back clean. Twenty-two months later, the company built a capital-intensive fulfillment business on the same balance sheet, with no new capital raised for it. A war games retrospective on drift, not day-one failure." />
+<meta name="keywords" content="Africa VC due diligence, Sendy Kenya, Africa logistics startup, capital structure drift, Africa IC checklist, operator intelligence Africa" />
+<meta name="author" content="Jean-Philippe Ouandji" />
+<link rel="canonical" href="https://jpouandji.com/gon-wargames-sendy/" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Sendy Raised $20M as a Marketplace. It Died as a Warehouse Company." />
+<meta property="og:description" content="The Series B checklist run comes back clean. The pivot twenty-two months later is where the flag should have fired." />
+<meta property="og:url" content="https://jpouandji.com/gon-wargames-sendy/" />
+<meta property="article:published_time" content="2026-07-23" />
+<meta property="article:author" content="Jean-Philippe Ouandji" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Sendy Raised $20M as a Marketplace. It Died as a Warehouse Company.",
+  "description": "A war games retrospective testing whether the Africa IC Checklist, re-applied at the moment of strategic drift rather than only at funding, would have flagged Sendy's collapse.",
+  "author": {"@type": "Person", "name": "Jean-Philippe Ouandji", "url": "https://jpouandji.com/"},
+  "publisher": {"@type": "Organization", "name": "Growth Operator Notes"},
+  "datePublished": "2026-07-23",
+  "url": "https://jpouandji.com/gon-wargames-sendy/",
+  "about": ["Africa VC due diligence", "Capital structure", "Logistics", "Corporate governance"]
+}
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CWB7VQ56XE');
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --paper:#f5f0e8; --paper-card:#fbf7ef; --ink:#0f0e0c; --accent:#c8320a;
+    --muted:#7a7060; --rule:#d4cfc4;
+    --fs-h1:clamp(30px,4.5vw,46px); --fs-h2:23px; --fs-lead:18px;
+    --fs-body:16.5px; --fs-sm:14px; --fs-xs:12px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+  .wrap-article{max-width:720px;margin:0 auto;padding:0 24px;}
+  a{color:inherit;}
+  header.site{border-bottom:2px solid var(--ink);padding:24px 0 18px;}
+  .site-top{display:flex;justify-content:space-between;align-items:baseline;}
+  .wordmark{font-family:'Playfair Display',serif;font-weight:900;font-size:19px;text-decoration:none;}
+  .wordmark span{color:var(--accent);}
+  .site-nav-links{font-size:var(--fs-sm);font-style:italic;color:var(--muted);}
+  .site-nav-links a{text-decoration:none;margin-left:18px;}
+  .site-nav-links a.active{color:var(--accent);font-style:normal;}
+  .breadcrumb{font-size:var(--fs-sm);font-style:italic;color:var(--muted);padding-top:30px;}
+  .breadcrumb a{text-decoration:none;}
+  .eyebrow{font-family:'Playfair Display',serif;font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
+  h1.wg-title{font-family:'Playfair Display',serif;font-weight:900;font-size:var(--fs-h1);line-height:1.05;}
+  h1.wg-title em{font-style:italic;color:var(--accent);}
+  h2{font-family:'Playfair Display',serif;font-weight:700;font-size:var(--fs-h2);line-height:1.25;margin:0 0 6px;}
+  .body p{font-size:var(--fs-body);margin-bottom:20px;}
+  .body p:last-child{margin-bottom:0;}
+  .wg-hero{padding:16px 0 0;}
+  .wg-series{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
+  .wg-series.eyebrow::before{content:'';width:22px;height:1px;background:var(--accent);}
+  .whatis{font-size:var(--fs-sm);font-style:italic;color:var(--muted);border-left:3px solid var(--rule);padding:2px 0 2px 14px;margin:0 0 20px;max-width:600px;}
+  .wg-hero-img{margin:24px 0 0;border:1px solid var(--rule);overflow:hidden;background:var(--paper-card);min-height:220px;display:flex;align-items:center;justify-content:center;}
+  .wg-hero-img img{width:100%;display:block;}
+  .wg-hero-img .placeholder{font-size:var(--fs-sm);font-style:italic;color:var(--muted);padding:40px;text-align:center;}
+  .standfirst{font-size:16px;color:var(--muted);line-height:1.6;margin-top:18px;}
+  .verdict{display:flex;align-items:center;gap:18px;margin:28px 0;padding:20px 24px;background:var(--ink);color:var(--paper);flex-wrap:wrap;}
+  .verdict-badge{font-family:'Playfair Display',serif;font-weight:900;font-size:var(--fs-xs);letter-spacing:.12em;padding:9px 18px;border-radius:2px;background:var(--accent);}
+  .verdict p{font-family:'Playfair Display',serif;font-style:italic;font-size:var(--fs-lead);line-height:1.4;flex:1;min-width:260px;}
+  .verdict .asof{display:block;font-family:Georgia,serif;font-size:var(--fs-xs);font-style:normal;color:#c9c2b3;margin-top:7px;letter-spacing:.05em;text-transform:uppercase;}
+  .rules{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 40px;}
+  .rule-chip{font-size:var(--fs-sm);font-style:italic;color:var(--muted);border:1px solid var(--rule);padding:6px 13px;border-radius:2px;background:var(--paper-card);}
+  .rule-chip b{font-style:normal;font-family:'Playfair Display',serif;color:var(--ink);}
+  section.block{margin:0 0 40px;}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 0;}
+  .stat-box{background:var(--paper-card);border:1px solid var(--rule);padding:16px 18px;text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-weight:900;font-size:22px;color:var(--accent);line-height:1;margin-bottom:5px;}
+  .stat-desc{font-size:11px;color:var(--muted);letter-spacing:.02em;line-height:1.4;}
+  .phase-divider{display:flex;align-items:center;gap:14px;margin:44px 0 24px;}
+  .phase-divider .num{font-family:'Playfair Display',serif;font-weight:900;font-size:34px;color:var(--rule);line-height:1;}
+  .phase-divider .txt .lbl{font-size:var(--fs-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
+  .phase-divider .txt h2{margin-top:2px;}
+  .flags{display:flex;flex-direction:column;gap:12px;}
+  .flag{border:1px solid var(--rule);background:var(--paper-card);overflow:hidden;}
+  .flag-head{display:flex;align-items:center;gap:13px;padding:14px 18px;cursor:pointer;user-select:none;}
+  .flag-dot{width:13px;height:13px;border-radius:50%;flex:none;}
+  .dot-red{background:#b3341a;} .dot-amber{background:#c98a1a;} .dot-green{background:#2a6b4f;}
+  .flag-q{font-family:'Playfair Display',serif;font-size:var(--fs-body);font-weight:700;flex:1;}
+  .flag-tag{font-family:'Playfair Display',serif;font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 9px;border-radius:2px;}
+  .flag-tag.red{background:#f2d9d2;color:#8a2513;}
+  .flag-tag.amber{background:#f3e6cc;color:#7a5410;}
+  .flag-tag.green{background:#d5e6dd;color:#1d4c38;}
+  .flag-toggle{font-size:17px;color:var(--muted);transition:transform .25s;line-height:1;}
+  .flag.open .flag-toggle{transform:rotate(45deg);}
+  .flag-body{max-height:0;overflow:hidden;transition:max-height .32s ease;}
+  .flag.open .flag-body{max-height:480px;}
+  .flag-inner{padding:0 18px 16px 44px;}
+  .flag-inner .known{font-size:var(--fs-sm);color:#4a4438;margin-bottom:11px;line-height:1.6;}
+  .flag-inner .known b{font-family:'Playfair Display',serif;color:var(--ink);}
+  .flag-inner .ask{font-size:var(--fs-sm);border-left:3px solid var(--accent);padding-left:13px;font-style:italic;color:#2f2b24;line-height:1.6;}
+  .flag-inner .ask b{font-style:normal;font-family:'Playfair Display',serif;color:var(--accent);display:block;font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+  .flag-inner .research-note{font-size:var(--fs-sm);font-style:normal;color:#3d5a5e;background:#eef3f2;border-left:3px solid #6a8f8a;padding:8px 12px;margin-top:10px;line-height:1.55;}
+  .flag-inner .research-note b{font-style:normal;font-family:'Playfair Display',serif;color:#3d5a5e;display:block;font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+  p.footnote{font-size:10.5px;color:var(--muted);margin:-4px 0 11px;line-height:1.5;}
+  .saidwas{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;}
+  .sw{border:1px solid var(--rule);padding:18px 20px;background:var(--paper-card);}
+  .sw.was{border-left:4px solid var(--accent);}
+  .sw h4{margin-bottom:10px;font-family:'Playfair Display',serif;font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+  .sw.was h4{color:var(--accent);}
+  .sw ul{list-style:none;}
+  .sw li{font-size:var(--fs-sm);padding:5px 0 5px 16px;position:relative;color:#4a4438;line-height:1.5;}
+  .sw li::before{content:'';position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--muted);}
+  .sw.was li::before{background:var(--accent);}
+  .timeline{margin:14px 0 0;}
+  .timeline-item{display:flex;gap:16px;padding:12px 0;border-top:1px solid var(--rule);}
+  .timeline-date{font-size:var(--fs-xs);color:var(--muted);white-space:nowrap;flex-shrink:0;min-width:96px;padding-top:2px;}
+  .timeline-content{font-size:var(--fs-sm);line-height:1.65;color:#2f2b24;}
+  .timeline-content b{color:var(--ink);font-family:'Playfair Display',serif;}
+  .assess-intro{background:var(--paper-card);border-left:4px solid var(--ink);padding:13px 18px;font-size:var(--fs-sm);font-style:italic;color:#4a4438;margin-bottom:16px;}
+  .score{margin:14px 0 0;border:1px solid var(--ink);}
+  .score-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);}
+  .score-row > div{background:var(--paper-card);padding:15px 18px;}
+  .score-head{background:var(--ink)!important;color:var(--paper);font-family:'Playfair Display',serif;font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;}
+  p.score-cell{font-size:var(--fs-sm);color:#2f2b24;line-height:1.55;}
+  .score-cell.pred{font-style:italic;color:#4a4438;}
+  .score-tag{display:inline-block;font-family:'Playfair Display',serif;font-size:var(--fs-xs);letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:2px;margin-bottom:6px;}
+  .tag-yes{background:#d5e6dd;color:#1d4c38;} .tag-out{background:#e4dccf;color:#5a5040;}
+  .honesty{margin:20px 0 0;padding:18px 22px;border:1px dashed var(--muted);}
+  .honesty h3{margin-bottom:8px;}
+  .honesty p{font-size:var(--fs-sm);color:var(--muted);margin:0 0 8px;line-height:1.6;}
+  .honesty p:last-child{margin:0;}
+  .controls-box{margin:20px 0 0;background:var(--paper-card);border:1px solid var(--rule);border-left:4px solid #2a6b4f;padding:20px 22px;}
+  .controls-box h3{margin-bottom:10px;}
+  .controls-box p{font-size:var(--fs-sm);color:#2f2b24;margin:0 0 10px;line-height:1.65;}
+  .controls-box ul{margin:8px 0 12px 18px;}
+  .controls-box li{font-size:var(--fs-sm);color:#2f2b24;line-height:1.65;margin-bottom:6px;}
+  .teaching{margin:14px 0 0;background:var(--paper-card);border:1px solid var(--rule);border-top:3px solid var(--accent);padding:22px 24px;}
+  .teach-item{display:flex;gap:15px;margin-bottom:14px;}
+  .teach-item:last-child{margin-bottom:0;}
+  .teach-num{font-family:'Playfair Display',serif;font-weight:900;font-size:var(--fs-h2);color:var(--accent);line-height:1;flex:none;}
+  .teach-item p{font-size:var(--fs-sm);margin:0;color:#2f2b24;line-height:1.6;}
+  .tool-cta{margin:0;background:var(--ink);color:var(--paper);padding:22px 26px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;}
+  .tool-cta b{font-family:'Playfair Display',serif;font-size:var(--fs-lead);display:block;margin-bottom:4px;}
+  .tool-cta span{font-size:var(--fs-sm);color:#c9c2b3;}
+  .tool-cta a{background:var(--accent);color:#fff;text-decoration:none;font-size:var(--fs-sm);padding:11px 22px;border-radius:2px;white-space:nowrap;}
+  .sources{margin-top:44px;font-size:13.5px;color:var(--muted);}
+  .sources h3{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;color:var(--ink);}
+  .sources li{margin-left:18px;margin-bottom:5px;}
+  footer.contact{margin-top:56px;background:var(--ink);color:var(--paper);padding:44px 0;}
+  .contact-inner{max-width:720px;margin:0 auto;padding:0 24px;text-align:center;}
+  .contact-inner h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;}
+  .contact-inner p{font-size:var(--fs-sm);color:#c9c2b3;margin-bottom:20px;}
+  .btn{display:inline-block;font-size:var(--fs-sm);text-decoration:none;padding:11px 24px;margin:0 5px 8px;border:1px solid #6a6355;color:var(--paper);border-radius:2px;}
+  .btn-primary{background:var(--accent);border-color:var(--accent);}
+  @media (max-width:760px){ .saidwas,.score-row,.stat-row{grid-template-columns:1fr;} .verdict{flex-direction:column;align-items:flex-start;} }
+</style>
+</head>
+<body>
+
+<header class="site"><div class="wrap"><div class="site-top">
+  <a class="wordmark" href="https://jpouandji.com/">Growth Operator <span>Notes</span></a>
+  <nav class="site-nav-links"><a href="https://jpouandji.com/">Analysis</a><a href="https://jpouandji.com/teardowns/">Teardowns</a><a href="https://jpouandji.com/retrospectives/" class="active">Retrospectives</a><a href="https://jpouandji.com/africa-ic-checklist/">IC Checklist</a></nav>
+</div></div></header>
+
+<div class="wrap-article">
+
+  <div class="breadcrumb"><a href="https://jpouandji.com/retrospectives/">Retrospectives</a> / Sendy</div>
+
+  <div class="wg-hero">
+    <div class="wg-series eyebrow">War Games Retrospective 03</div>
+    <h1 class="wg-title">Sendy raised $20M as a marketplace. It <em>died</em> as a warehouse company.</h1>
+    <p class="whatis">War Games: I take a company whose story has already played out, run it through a checklist I use to judge African deals, using only what was public at the time, and see whether the checklist would have caught the problem before the money went in. This one is different from the first two - the checklist run at funding comes back clean. The flag was somewhere else.</p>
+    <div class="wg-hero-img"><div class="placeholder">[Header image pending - prompt provided below]</div></div>
+    <p class="standfirst">Sendy's January 2020 Series B round funded an asset-light logistics marketplace that owned zero trucks. Twenty-two months later, the company opened a leased warehouse on Waiyaki Way and started holding other people's inventory. No new capital was raised to fund that shift. In September 2023, Sendy entered administration.</p>
+  </div>
+
+  <div class="verdict">
+    <div class="verdict-badge">SERIES B: GREEN</div>
+    <p>The January 2020 round was a sound bet on a genuinely asset-light business, correctly matched to its capital structure. The checklist run at funding does not flag this deal.
+    <span class="asof">Verdict frozen on January 2020 inputs</span></p>
+  </div>
+
+  <div class="rules">
+    <span class="rule-chip"><b>No hindsight.</b> Only what was public at each point in time.</span>
+    <span class="rule-chip"><b>The tool.</b> A six-part checklist for African deals.</span>
+    <span class="rule-chip"><b>The honesty.</b> Where the record goes quiet, I say so.</span>
+  </div>
+
+  <section class="block body">
+    <h2>Why this one is different</h2>
+    <p>Copia and Lipa Later were both flawed at the moment of funding - the capital structure mismatch was visible before the round closed, if anyone had looked. Sendy is not that story. Run the checklist on Sendy's January 2020 Series B and it comes back clean: a genuinely asset-light logistics marketplace, funded with equity appropriate to that model, with a coherent thesis and no major red flag on the public record.</p>
+    <p>The company that collapsed in September 2023 was not the company that raised the Series B. Somewhere in 2021, Sendy became a different business - one that leased warehouses, held inventory, and carried the fixed-cost structure of a fulfillment operator - without a matching capital raise for that different, more capital-intensive model. This is a story about drift, not day-one failure. That makes it a harder and more useful test of the tool: would it have caught a problem that developed after the money was already in, not before.</p>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">$20M</div>
+        <div class="stat-desc">Series B, January 2020, asset-light thesis</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">22 months</div>
+        <div class="stat-desc">From funding to a materially different business model</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">$0</div>
+        <div class="stat-desc">New capital raised specifically to fund the pivot</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="phase-divider">
+    <div class="num">01</div>
+    <div class="txt"><div class="lbl">Phase One</div><h2>The Series B checklist run, January 2020</h2></div>
+  </div>
+
+  <section class="block body">
+    <div class="assess-intro">Running the six dimensions on what was publicly known when the $20M round closed. Sendy was founded in 2014/2015 by Meshack Alloys, Evanson Biwott, Don Okoth, and Malaika Judd, operating an on-demand logistics marketplace connecting merchants and individuals with independent drivers - motorcycles, tuk-tuks, and trucks - on a commission model. Sendy owned no vehicles. The Series B was led by Atlantica Ventures, with Toyota Tsusho's venture arm Mobility 54 participating, and was explicitly earmarked for engineering, hiring, operational efficiency, and West African expansion, alongside an R&D and service-center collaboration with Toyota.</div>
+
+    <div class="flags" id="flags">
+
+      <div class="flag">
+        <div class="flag-head"><span class="flag-dot dot-green"></span><span class="flag-q">Capital structure</span><span class="flag-tag green">Green</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>Known in January 2020:</b> Sendy owned zero delivery vehicles. Every truck, motorcycle, and driver on the platform belonged to an independent operator paid on commission. The equity raised was being used to fund software, headcount, and market expansion - costs that scale with the business without creating fixed physical liabilities. This is the textbook match: an asset-light model funded with patient equity capital, not debt.</p>
+          <p class="ask"><b>IC question:</b> Does the company have any stated intention to move into owned infrastructure - fleet, warehousing - that would change this calculus?</p>
+          <p class="research-note"><b>Research finding</b> No public statement of that intention found as of January 2020.</p>
+        </div></div>
+      </div>
+
+      <div class="flag">
+        <div class="flag-head"><span class="flag-dot dot-amber"></span><span class="flag-q">Distribution economics</span><span class="flag-tag amber">Amber</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>Known in January 2020:</b> Sendy's enterprise freight product ("Sendy Freight") already counted Unilever, Safaricom, DHL, Jumia, and Maersk as clients by the time of the Series B. Named enterprise relationships with recognizable multinationals are a real distribution signal in this market.</p>
+          <p class="ask"><b>IC question:</b> What share of freight revenue comes from the largest three clients? Is any of this exclusive or contracted, or purely transactional and open to a better-funded competitor undercutting on price?</p>
+          <p class="research-note"><b>Research finding</b> Not disclosed publicly at the time. I could not find this in later reporting either.</p>
+        </div></div>
+      </div>
+
+      <div class="flag">
+        <div class="flag-head"><span class="flag-dot dot-amber"></span><span class="flag-q">Demand validation</span><span class="flag-tag amber">Amber</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>Known in January 2020:</b> Competing directly with Lori Systems (digital freight matching) and indirectly with informal boda-boda courier networks that have operated in Nairobi for years without any app. Sendy's pitch to both merchants and drivers was efficiency and reliability over the informal alternative.</p>
+          <p class="ask"><b>IC question:</b> What is the actual repeat-usage rate among merchants and drivers, not just total transaction volume?</p>
+          <p class="research-note"><b>Research finding</b> Never publicly disclosed at any point in the company's life, at Series B or after.</p>
+        </div></div>
+      </div>
+
+      <div class="flag">
+        <div class="flag-head"><span class="flag-dot dot-green"></span><span class="flag-q">Regulatory risk</span><span class="flag-tag green">Green</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>Known in January 2020:</b> Freight-matching and last-mile courier services in Kenya were not subject to a licensing regime comparable to digital lending's DCP* framework. The real friction in Kenyan road freight is structural rather than a licensing gate - inconsistent county-level cess fees, weighbridge enforcement, and cabotage restrictions on cross-border haulage - a persistent cost drag, not an existential approval risk.</p>
+          <p class="footnote">*Digital Credit Provider - the licensing category Kenya's central bank uses to regulate digital lending apps. Referenced here for comparison only; it does not apply to Sendy's freight-matching business.</p>
+          <p class="ask"><b>IC question:</b> Does the West Africa expansion named in this round introduce new cross-border customs or cabotage exposure? Worth asking, but not disqualifying - this is a cost line, not a gate.</p>
+        </div></div>
+      </div>
+
+      <div class="flag">
+        <div class="flag-head"><span class="flag-dot dot-green"></span><span class="flag-q">Team and governance</span><span class="flag-tag green">Green</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>Known in January 2020:</b> Four co-founders with five years of operating history at this point, an existing enterprise client roster, and no adverse public signal on culture or leadership. A later 2021 employee review from Kampala describes the business model, technology, and culture positively - consistent with a genuinely healthy operating environment at this stage, not a company already under strain.</p>
+          <p class="ask"><b>IC question:</b> None flagged. This is the one dimension across all three GON retrospectives so far with no negative signal at all at the funding stage.</p>
+        </div></div>
+      </div>
+
+      <div class="flag">
+        <div class="flag-head"><span class="flag-dot dot-green"></span><span class="flag-q">Exit dynamics</span><span class="flag-tag green">Green</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>Known in January 2020:</b> Too early to assess meaningfully at Series B stage for a five-year-old company with a clean cap table history (seed, seed extension, Series A, now Series B, each a reasonable step up). Nothing in the public record suggests exit pressure or a forced-timeline dynamic.</p>
+          <p class="ask"><b>IC question:</b> Standard Series B diligence question, not a Sendy-specific flag.</p>
+        </div></div>
+      </div>
+
+    </div>
+    <p style="margin-top:20px;">Zero reds, three greens, two ambers that are standard-diligence gaps rather than deal-breakers. On the information available in January 2020, this is a fundable deal. The checklist does not fail this round, and it should not - the business as pitched matched its capital structure.</p>
+  </section>
+
+  <div class="phase-divider">
+    <div class="num">02</div>
+    <div class="txt"><div class="lbl">Phase Two</div><h2>What changed - two decisions in 2021, only one on-thesis</h2></div>
+  </div>
+
+  <section class="block body">
+    <p>Two expansion moves happened within weeks of each other in late 2021, and they are easy to collapse into one story. They should not be - they carry opposite verdicts.</p>
+
+    <h2 style="margin-top:28px;">October 2021: Kamtar - on-thesis</h2>
+    <div class="saidwas">
+      <div class="sw">
+        <h4 class="label">What the Series B thesis said</h4>
+        <ul>
+          <li>West African expansion named explicitly as a use of Series B proceeds</li>
+          <li>Growth via the existing asset-light freight-matching model</li>
+          <li>Toyota Tsusho/Mobility 54 as a strategic partner for exactly this kind of move</li>
+        </ul>
+      </div>
+      <div class="sw was">
+        <h4 class="label">What actually happened</h4>
+        <ul>
+          <li>Equity investment in Kamtar, a Francophone freight-matching marketplace in Cote d'Ivoire, alongside Mobility 54, Toyota Tsusho, and CFAO</li>
+          <li>Framed explicitly around the Port of Abidjan trade corridor and West African truck-matching, not warehousing</li>
+          <li>Same asset-light model, new geography - a scaling move, not a pivot</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 style="margin-top:36px;">November 2021: Sendy Fulfillment - off-thesis</h2>
+    <div class="saidwas">
+      <div class="sw">
+        <h4 class="label">What the Series B thesis said</h4>
+        <ul>
+          <li>Nothing. Warehousing, dark stores, and inventory-holding do not appear anywhere in the January 2020 funding announcement or use-of-funds language</li>
+        </ul>
+      </div>
+      <div class="sw was">
+        <h4 class="label">What actually happened</h4>
+        <ul>
+          <li>Sendy Fulfillment launched, with a leased main fulfillment centre on Waiyaki Way in Nairobi plus smaller pickup points across the city</li>
+          <li>The company began taking physical possession of merchant inventory, managing picking and packing, and holding safety stock - a fundamentally different balance sheet from a commission marketplace</li>
+          <li>No new capital raise accompanied this shift. It was funded from the existing Series B balance</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;">This is the distinction the public record actually supports, and it matters: expanding an asset-light model into a new country is not the same decision as converting the model itself into an asset-heavy one. Sendy did both in the same six weeks, and only one of them was underwritten by the capital that was raised.</p>
+  </section>
+
+  <div class="phase-divider">
+    <div class="num">03</div>
+    <div class="txt"><div class="lbl">Phase Three</div><h2>Re-running capital structure at the pivot</h2></div>
+  </div>
+
+  <section class="block body">
+    <div class="flags">
+      <div class="flag open">
+        <div class="flag-head"><span class="flag-dot dot-red"></span><span class="flag-q">Capital structure, re-tested November 2021</span><span class="flag-tag red">Red</span><span class="flag-toggle">+</span></div>
+        <div class="flag-body"><div class="flag-inner">
+          <p class="known"><b>What changed:</b> A warehouse lease is a multi-year fixed obligation. Holding merchant inventory carries working-capital and spoilage risk a commission marketplace never had. Fulfillment staff, pick-and-pack operations, and inventory systems are ongoing operating costs that don't disappear if volume dips - unlike a marketplace's commission model, where costs scale down automatically with lower transaction volume. Sendy took on this fixed-cost structure using equity that had been raised, priced, and sized for a business that carried none of it.</p>
+          <p class="known">In early 2022, "Sendy Supply" extended this further - working capital credit and inventory sourcing for small retailers, adding a lending-adjacent risk on top of the warehousing risk, again with no dedicated capital raised for it.</p>
+          <p class="ask"><b>IC question, if re-asked in November 2021:</b> This is now a different business with a different cost structure than the one this board approved funding for eighteen months ago. What is the capital plan for this specific model - not the marketplace's capital plan, this one's - and who approved the shift from one to the other?</p>
+        </div></div>
+      </div>
+    </div>
+    <p style="margin-top:20px;">The August 2022 attempt to raise $100M for further expansion into Nigeria, Ghana, South Africa, and Egypt was, in effect, the company trying to retroactively fund a business model it had already built. It failed to close. What arrived instead, in late 2022, was reported by multiple outlets as "bail-out funds" from MOL PLUS - after the first round of layoffs had already happened, not before.</p>
+  </section>
+
+  <section class="block body">
+    <h2>The collapse</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-date">Jan 2020</div><div class="timeline-content"><b>$20M Series B closes.</b> Led by Atlantica Ventures, Toyota Tsusho/Mobility 54 participating. Asset-light thesis.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Oct 2021</div><div class="timeline-content"><b>Kamtar equity investment.</b> On-thesis West Africa expansion of the existing asset-light model.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Nov 2021</div><div class="timeline-content"><b>Sendy Fulfillment launches.</b> Leased warehouse on Waiyaki Way, Nairobi. Off-thesis pivot to asset-heavy fulfillment, funded from the existing Series B balance.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Early 2022</div><div class="timeline-content"><b>Sendy Supply launches.</b> Working capital credit and inventory sourcing for small retailers - a further capital-intensive extension.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Aug 2022</div><div class="timeline-content"><b>First layoffs.</b> 10% of the 300-person workforce cut, cited as a response to "current realities impacting tech companies globally." Fuel price inflation and the 2022 Kenyan election cycle also cited as pressure on freight volumes and margins.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Oct 2022</div><div class="timeline-content"><b>Second layoffs, Sendy Supply shut down.</b> 54 employees cut. The retailer-credit product is abandoned less than a year after launch.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Late 2022</div><div class="timeline-content"><b>MOL PLUS investment.</b> Reported by multiple outlets as "bail-out funds," undisclosed amount - arriving after the layoffs had already started, not before.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Feb 2023</div><div class="timeline-content"><b>Nigeria fulfillment operations exit.</b> The company frames it as "finding the right product for the market."</div></div>
+      <div class="timeline-item"><div class="timeline-date">Aug 2023</div><div class="timeline-content"><b>Shutdown and asset sale process begins.</b> TechCrunch reports the company ran out of funds roughly two months earlier. Valuation had fallen from over $80M in late 2022 to a $40-60M range during a failed raise attempt, after a key investor withdrew.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Sep 20, 2023</div><div class="timeline-content"><b>Administration.</b> Peter Kahi of PKF Consulting appointed administrator across the Sendy group of companies under Kenya's Insolvency Act. Reported monthly burn rate: approximately $1 million at the height of the fulfillment build-out.</div></div>
+      <div class="timeline-item"><div class="timeline-date">Oct 2025</div><div class="timeline-content"><b>Postscript.</b> A Kenyan court rules the collapsed company owes $635,000 in VAT, with implications for how Kenya taxes gig-economy and platform businesses more broadly - a live legal question still unfolding two years after the company itself stopped operating.</div></div>
+    </div>
+  </section>
+
+  <section class="block body">
+    <h2>Would the checklist have added value?</h2>
+    <p class="sub">I had no stake in this company and no inside information. The question that matters: would a checklist, applied not just at funding but re-applied at the moment of strategic change, have surfaced the risk in time to matter?</p>
+    <div class="score">
+      <div class="score-row"><div class="score-head">What the checklist would have flagged</div><div class="score-head">What happened</div></div>
+      <div class="score-row">
+        <div><p class="score-cell pred"><span class="score-tag tag-yes">Would have surfaced</span>Re-testing capital structure at the November 2021 pivot would have flagged a business fitting a materially different, more capital-intensive cost structure onto capital raised and sized for a different model.</p></div>
+        <div><p class="score-cell">The fulfillment build-out consumed the Series B balance, the $100M follow-on raise failed to close, and what arrived instead was reported as "bail-out" funding after layoffs had already begun.</p></div>
+      </div>
+      <div class="score-row">
+        <div><p class="score-cell pred"><span class="score-tag tag-out">Outside the tool</span>A one-time, pre-investment checklist run - the way it was used for Copia and Lipa Later - would not have caught this. The Series B itself was clean. The tool only catches drift if someone re-runs it.</p></div>
+        <div><p class="score-cell">Nothing in the public record shows the checklist-equivalent question - "does this still match what we funded" - being asked at any point between the Series B and the collapse.</p></div>
+      </div>
+    </div>
+    <div class="honesty">
+      <h3 class="label">What the checklist could not see</h3>
+      <p>The exact internal decision date for the fulfillment pivot was never made public - only the November 2021 launch, which necessarily came after months of lease negotiation, hiring, and inventory-system build-out. Distribution concentration (how much of Sendy Freight's revenue depended on its three or four largest enterprise clients) and repeat-usage rates were never disclosed at any point in the company's life, at Series B or after.</p>
+      <p>Governance and regulatory signals were both genuinely clean throughout - this is not a story about a bad team or a hidden compliance problem. It is narrowly and specifically a capital structure story.</p>
+    </div>
+  </section>
+
+  <section class="block body">
+    <h2>Diagnosis is not control</h2>
+    <div class="controls-box">
+      <h3 class="label">Where the tool's limits actually are</h3>
+      <p>A checklist that would have flagged the pivot in November 2021 is not the same claim as a checklist that would have stopped it. Flagging requires someone to be re-running the test; stopping requires that whoever is running it has the contractual authority to act on what it finds. Without that pairing, "the tool would have caught this" is a smaller and more honest claim than it sounds.</p>
+      <p>What actually gives a flag like this teeth, in standard institutional practice:</p>
+      <ul>
+        <li><b>Reserved matters</b> - a material change to the business's capital-intensity (a warehouse lease above some threshold, a shift into inventory-holding) requiring board approval before execution, not disclosure after.</li>
+        <li><b>A monitoring cadence tied to the original thesis</b>, not just general financials - something like capex-as-a-share-of-revenue, or an explicit asset-light ratio, reported quarterly, so drift shows up as a number crossing a line rather than a narrative someone has to notice on their own.</li>
+        <li><b>Milestone-based capital release</b> rather than a single lump sum, making it structurally harder to redeploy a full Series B balance into a different business model without a separate conversation.</li>
+      </ul>
+      <p>None of these existed here, as far as the public record shows. The board that funded an asset-light marketplace in January 2020 does not appear to have had a mechanism requiring it to re-approve the business it was actually funding by November 2021.</p>
+    </div>
+  </section>
+
+  <section class="block body">
+    <h2>What to take from this</h2>
+    <div class="teaching">
+      <div class="teach-item"><span class="teach-num">1</span><p>A clean Series B and a fatal capital structure mismatch are not mutually exclusive - they can both be true of the same company, eighteen months apart. Copia and Lipa Later were wrong from day one. Sendy was funded correctly and drifted. Both patterns kill a company the same way; they require different diligence responses.</p></div>
+      <div class="teach-item"><span class="teach-num">2</span><p>Not every dimension needs to be red for capital structure to be the whole story. Five of the six checked out clean here. A single fixed-cost mismatch was enough on its own to be fatal, and nothing in the public record points to a mechanism that would have caught it once it appeared.</p></div>
+      <div class="teach-item"><span class="teach-num">3</span><p>A checklist is a diagnostic instrument, not a control. It only creates value if something with actual authority is re-running it and has the contractual power to act on what it finds. GON's own IC Checklist is built as a pre-investment gate today. This retrospective is the first evidence in the series that its more valuable future form may be a recurring one.</p></div>
+    </div>
+  </section>
+
+  <div class="tool-cta">
+    <div><b>Run this on the deal on your desk.</b><span>The Africa IC Checklist, the same six questions.</span></div>
+    <a href="https://jpouandji.com/africa-ic-checklist/">Open the IC Checklist &rarr;</a>
+  </div>
+
+  <div class="sources">
+    <h3>Sources</h3>
+    <ul>
+      <li>TechCrunch - "Kenyan logistics startup Sendy raises $20M round backed by Toyota" - January 28, 2020</li>
+      <li>TechCrunch - "Kenyan logistics startup Sendy cuts 10% of its workforce" - August 2, 2022</li>
+      <li>TechCrunch - "Sendy conducts second round of layoffs, 20% of its remaining staff affected" - October 5, 2022</li>
+      <li>TechCrunch - "More job cuts loom as Sendy changes course in Nigeria" - February 3, 2023</li>
+      <li>TechCrunch - "Kenyan logistics startup Sendy shuts down, embarks on asset sale" - August 8, 2023</li>
+      <li>Business Daily Africa - "Logistics firm Sendy goes into administration" - September 27, 2023</li>
+      <li>Techweez / TechTrendsKE / Standard Media / Tuko - administration coverage, September 27, 2023</li>
+      <li>TechCabal - "Sendy has entered into administration" - September 26, 2023</li>
+      <li>Africa Business Communities / HapaKenya / TechMoran / Afrikan Heroes / Business Daily - Kamtar equity investment coverage, October 6-7, 2021</li>
+      <li>Kenyan Wall Street - "Sendy Fulfillment Onboards 1000+ Online Retailers" - March 14, 2022 (source for the November 2021 fulfillment launch date and Waiyaki Way location)</li>
+      <li>Glassdoor - Sendy company reviews (3.4/5, ~159-188 reviews)</li>
+      <li>TechCabal - "Kenyan court says collapsed Sendy must pay $635,000 VAT" - October 28, 2025</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer class="contact"><div class="contact-inner">
+  <h3>Assessing a deal in these markets?</h3>
+  <p>I read the same filings the investment committee does, from the operator's side.</p>
+  <a class="btn btn-primary" href="mailto:jpouandji@gmail.com">Email Jean-Philippe</a>
+  <a class="btn" href="https://linkedin.com/in/jean-philippe-ouandji" target="_blank" rel="noopener">LinkedIn Profile</a>
+  <a class="btn" href="https://www.linkedin.com/company/growth-operator-notes/" target="_blank" rel="noopener">Follow GON</a>
+</div></footer>
+
+<script>
+  document.querySelectorAll('.flag-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const flag = head.parentElement;
+      const grp = flag.closest('.flags');
+      const wasOpen = flag.classList.contains('open');
+      grp.querySelectorAll('.flag').forEach(f => f.classList.remove('open'));
+      if (!wasOpen) flag.classList.add('open');
+    });
+  });
+</script>
+
+</body>
+</html>
