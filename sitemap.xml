@@ -160,10 +160,13 @@
     <priority>0.7</priority>
   </url>
 
-
-  <!-- lipa-later-war-games-retrospective intentionally omitted:
-       gated pending resolution of the Isaac Hunja sensitivity, not yet built.
-       Re-add only once JP confirms the hold is lifted and the page is live. -->
+  <!-- War Games Retrospective 03 - Sendy -->
+  <url>
+    <loc>https://jpouandji.com/gon-wargames-sendy/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 
   <!-- africa-market-entry intentionally omitted: drafted, never published, removed per JP -->
 
