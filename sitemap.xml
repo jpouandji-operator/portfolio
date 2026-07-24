@@ -168,6 +168,14 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- War Games Retrospective 04 - Wave -->
+  <url>
+    <loc>https://jpouandji.com/gon-wargames-wave/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- africa-market-entry intentionally omitted: drafted, never published, removed per JP -->
 
 </urlset>
