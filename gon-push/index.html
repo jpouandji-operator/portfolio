@@ -402,14 +402,26 @@ function parseInput() {
       }
     }
     // Extract name from heading
+    // FIX 26/7/2026: the previous version used an if/else-if chain keyed on
+    // "currentTable === X && !rec[primary field]" for Gap Map and Theses,
+    // then an unconditional final else that wrote 'Metric Name'. Whenever the
+    // primary field (Gap Description, Thesis Statement) was already present
+    // from an explicit line in the pasted block - the normal case, since
+    // every real push block includes it - the middle conditions evaluated
+    // false and execution fell through to the final else, silently writing
+    // a 'Metric Name' field that doesn't exist on either table. Airtable
+    // then rejected the whole record with "Unknown field name: Metric Name".
+    // Fixed by branching on currentTable first, unconditionally, so there is
+    // no path that reaches the Benchmarks-only branch from another table.
     const nameMatch = section.match(/###\s+[\w-]+\d{3}\s*[-:]\s*(.+)/);
     if (nameMatch) {
-      if (currentTable === 'Theses' && !rec['Thesis Statement']) {
-        // Don't overwrite thesis statement with heading
-      } else if (currentTable === 'Gap Map' && !rec['Gap Description']) {
-        rec['Gap Description'] = nameMatch[1].trim();
-      } else if (!rec['Metric Name']) {
-        rec['Metric Name'] = nameMatch[1].trim();
+      if (currentTable === 'Theses') {
+        // Theses uses Thesis Statement as the primary field; the heading
+        // title is redundant and should never populate any field here.
+      } else if (currentTable === 'Gap Map') {
+        if (!rec['Gap Description']) rec['Gap Description'] = nameMatch[1].trim();
+      } else {
+        if (!rec['Metric Name']) rec['Metric Name'] = nameMatch[1].trim();
       }
     }
     // Defaults for benchmarks
