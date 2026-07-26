@@ -560,7 +560,16 @@ async function airtablePush(token, tableName, fields) {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fields })
+    // typecast:true added 26/7/2026 - without it, Airtable strictly rejects any
+    // value that doesn't already exactly match an existing Single Select option,
+    // or isn't already the correct JS type for a Number field, and returns
+    // "cannot accept the provided value" rather than coercing it. typecast
+    // tells Airtable to do the coercion (and auto-create new select options
+    // where needed) the way the Airtable web UI does when you type a new value
+    // into a cell. This does NOT fix a field that is genuinely computed
+    // (Formula, Rollup, Autonumber, Created time) - those reject writes
+    // regardless, and the fix there is to stop sending that field.
+    body: JSON.stringify({ fields, typecast: true })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error?.message || 'HTTP ' + res.status);
