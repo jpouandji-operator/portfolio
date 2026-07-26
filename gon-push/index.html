@@ -357,8 +357,20 @@ function parseInput() {
   const text = document.getElementById('scanInput').value.trim();
   if (!text) return;
   const { map, multi } = getFieldMap();
-  // Strip comment lines (lines starting with #) before parsing
-  const cleanText = text.split('\n').filter(line => !line.trim().startsWith('#')).join('\n');
+  // Strip comment lines (lines starting with a single # or a run of #'s that
+  // is NOT a record heading) before parsing.
+  // CRITICAL FIX 26/7/2026: the previous version of this line stripped ANY
+  // line starting with '#', which includes every "### Entry-ID - Title"
+  // record heading, since "###" also starts with "#". That collapsed every
+  // multi-record paste into a single blob with no section breaks, and
+  // because every record shares field names, later entries silently
+  // overwrote earlier ones - the tool would report "1 record" no matter how
+  // many were pasted. Fixed by explicitly exempting lines that start with
+  // "###" (the record heading marker) from being treated as comments.
+  const cleanText = text.split('\n').filter(line => {
+    const t = line.trim();
+    return !t.startsWith('#') || t.startsWith('###');
+  }).join('\n');
   const sections = cleanText.split(/(?=###\s+)/g).map(s => s.trim()).filter(s => s.length > 20);
 
   records = [];
@@ -405,14 +417,42 @@ function parseInput() {
       if (!rec['Added By']) rec['Added By'] = 'GON Scan - auto-generated';
       if (!rec['Entry Status']) rec['Entry Status'] = 'Active';
     }
-    records.push({ fields: rec, index: i });
+
+    // ── TABLE MISMATCH DETECTION (added 26/7/2026) ──
+    // Independent of which field map was active, sniff the raw section text
+    // for markers of each record type. If the pasted content looks like it
+    // belongs to a different table than the one currently selected, flag it
+    // rather than silently building a broken record. This is a defensive
+    // layer on top of the comment-stripping fix above, not a substitute for
+    // it - both bugs were contributing to "Unknown" records independently.
+    const looksLikeBenchmark = /\*\*Entry ID:\*\*/.test(section);
+    const looksLikeGapMap = /\*\*Gap ID:\*\*/.test(section);
+    const looksLikeThesis = /\*\*Thesis (Statement|ID):\*\*/.test(section);
+    let mismatch = null;
+    if (currentTable === 'Benchmarks' && (looksLikeGapMap || looksLikeThesis)) {
+      mismatch = looksLikeGapMap ? 'Gap Map' : 'Theses';
+    } else if (currentTable === 'Gap Map' && (looksLikeBenchmark || looksLikeThesis)) {
+      mismatch = looksLikeBenchmark ? 'Benchmarks' : 'Theses';
+    } else if (currentTable === 'Theses' && (looksLikeBenchmark || looksLikeGapMap)) {
+      mismatch = looksLikeBenchmark ? 'Benchmarks' : 'Gap Map';
+    }
+
+    const hasId = !!(rec['Entry ID'] || rec['Gap ID'] || rec['Thesis Statement']);
+    records.push({ fields: rec, index: i, mismatch, invalid: !hasId });
   });
 
-  selected = new Set(records.map(r => r.index));
+  // Only auto-select records that are neither flagged as a table mismatch
+  // nor missing their primary ID. Anything suspect starts unchecked so a
+  // stray click of "Push" can't send broken data to Airtable.
+  selected = new Set(records.filter(r => !r.mismatch && !r.invalid).map(r => r.index));
   statuses = {};
   errors = {};
   renderRecords();
+  const badCount = records.filter(r => r.mismatch || r.invalid).length;
   addLog('Parsed ' + records.length + ' record(s)', 'info');
+  if (badCount > 0) {
+    addLog(badCount + ' record(s) flagged - see warnings below, left unselected', 'error');
+  }
 }
 
 function renderRecords() {
@@ -431,6 +471,12 @@ function renderRecords() {
     const st = statuses[r.index];
     const err = errors[r.index];
     const sel = selected.has(r.index);
+    let warning = '';
+    if (r.mismatch) {
+      warning = `<div class="error-msg">This looks like a ${r.mismatch} entry (found the ${r.mismatch === 'Gap Map' ? '**Gap ID:**' : r.mismatch === 'Theses' ? '**Thesis Statement:**' : '**Entry ID:**'} marker) but Target Table is set to "${currentTable}". Switch the table selector and re-parse rather than pushing this as is. Left unselected.</div>`;
+    } else if (r.invalid) {
+      warning = `<div class="error-msg">No ${currentTable === 'Gap Map' ? 'Gap ID' : currentTable === 'Theses' ? 'Thesis Statement' : 'Entry ID'} found in this section. Check the pasted text matches the "${currentTable}" format. Left unselected.</div>`;
+    }
     return `
       <div class="record-card ${st||''}" id="rc-${r.index}">
         <div class="record-card-header" onclick="toggleSelect(${r.index})">
@@ -447,6 +493,7 @@ function renderRecords() {
             <button class="preview-btn" onclick="event.stopPropagation();togglePreview(${r.index})">Preview</button>
           </div>
         </div>
+        ${warning}
         ${err?`<div class="error-msg">Error: ${err}</div>`:''}
         <div class="record-preview" id="preview-${r.index}">
           <div class="preview-grid">
