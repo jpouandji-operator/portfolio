@@ -219,6 +219,10 @@ const BENCHMARK_MAP = {
   "Tier B Provenance":"Tier B Provenance",
   "Future Review":"Future Review","Notes":"Notes",
   "Version":"Version","Last Update":"Last Update","Added By":"Added By",
+  // "Enforcement Evidence" added 26/7/2026 - new field, not yet confirmed to exist
+  // on the live Airtable table. Verify the column exists before pushing entries
+  // that populate it, or Airtable will reject those records outright.
+  "Enforcement Evidence":"Enforcement Evidence",
 };
 // NOTE: "Capital Structure copy" exists as a column in the live Benchmarks
 // export but is not wired up here. It looks like an accidental duplicate of
