@@ -11,6 +11,12 @@
 
   <!-- Tools -->
   <url>
+    <loc>https://jpouandji.com/tools/</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://jpouandji.com/africa-ic-checklist/</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>monthly</changefreq>
@@ -177,5 +183,10 @@
   </url>
 
   <!-- africa-market-entry intentionally omitted: drafted, never published, removed per JP -->
+
+  <!-- door2-partner-checklist intentionally omitted: not yet deployed live, still a private
+       preview shared directly with one contact. Add this entry only after the page is actually
+       pushed to jpouandji.com/door2-partner-checklist/, not before, an entry pointing at a URL
+       that doesn't exist yet would create a real indexing error in Search Console. -->
 
 </urlset>
