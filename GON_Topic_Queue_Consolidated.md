@@ -38,7 +38,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
 | A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | [DRAFTED — pending JP review — 2026-07-27] | Published as "Egypt Closed the Consumer Finance Door in 2024. The Market Didn't Notice Until Now." — PR open. See routine close-out 2026-07-27 for reconciliation flags (A01 appears already covered by live bceao-pi-spi-wave-regulatory-navigation-africa article) and manual sourcing flags (WebFetch blocked this run; all facts sourced via search-snippet synthesis only). |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
@@ -102,6 +102,21 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-07-27 | — | — | — | — | GA4 connector not available in this session — see GON_Performance_Log.md |
+
+---
+
+## RECONCILIATION FLAGS — reported, not resolved (JP reviews)
+
+*Per Step 1 of the routine: repo vs. sitemap vs. this queue, cross-checked 2026-07-27. Flagged, not auto-corrected.*
+
+- **A01** ("BCEAO Just Ended Wave's Moat...", marked NEXT, 17/18) appears to already be covered by the live article at `/bceao-pi-spi-wave-regulatory-navigation-africa/` ("The BCEAO Blinked. Wave Didn't Move.", published 2026-07-13, in sitemap.xml) — same PI-SPI/Wave/BCEAO subject. Queue status was not updated after that article went live. Routine selected A02 instead this run rather than risk a duplicate. JP to confirm whether A01 should be marked PUBLISHED/superseded or whether a genuinely distinct angle remains.
+- **A23** (IFC "Four Doors", `[HOLD — confirm published]`) — `ifc-africa-investment-access/` is live in the repo and in sitemap.xml (lastmod 2026-07-22). Confirmed published; HOLD status appears stale.
+- **A21** (Energy article, `[HOLD — verification pending]`) — `mtn-ihs-towers-energy-africa/` is already live and in sitemap.xml, covering telecom-energy (MTN/IHS Towers). Unclear if A21 is a duplicate angle or a distinct energy topic — not resolved here.
+- **B02** (Payplug, "Queued — start here") and **B03** (Pluxee, "Queued") — both are already live: `teardowns/payplug-acquisition-gap/` and `teardowns/pluxee-world-of-opportunities/` are in the repo and in sitemap.xml. Track B status table is stale.
+- **teardowns/lumapps-enterprise-selling/** and **teardowns/sociabble-feature-portfolio/** — live in repo + sitemap, not referenced anywhere in this file's Track B table. Unregistered, live.
+- **gon-intelligence/** and **gon-push/** — folders live in repo, not in sitemap.xml, not in this queue. Appear to be tools/database pages rather than articles (titles: "GON Intelligence: Africa Deal Research Database", "GON Push Tool"), but flagged per protocol since they're unregistered.
+- **A24/A25** (Agentforce/Africa gap, AI agents database layer, both `[HOLD — confirm published]`) — no matching repo folders found. Registered, not confirmed live. Consistent with existing HOLD status.
 
 ---
 
@@ -110,5 +125,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 27 Jul 2026 | Routine run: A02 (Egypt consumer finance) drafted, PR opened. Added Reconciliation Flags section (Step 1 output). Airtable unreachable this run (network policy blocked api.airtable.com, HTTP 403 at the proxy) — Step 4/Step 10 skipped, see close-out report. GA4 connector not available this session. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
