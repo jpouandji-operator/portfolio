@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MOCKUP v2 - Africa Localization Checklist | Growth Operator Notes</title>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" /></noscript>
+<style>
+:root{--paper:#f5f0e8;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;--surface:#edeae2;--warn-bg:#fef9ec;--warn-text:#92660a;--green:#2d6a2d;--amber:#d4820a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--paper);color:var(--ink);font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+a{color:var(--accent);text-decoration:none;}a:hover{text-decoration:underline;}
+
+.mock-banner{background:var(--ink);color:var(--paper);padding:.6rem 2rem;font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-align:center;}
+.mock-banner span{color:#f2b990;}
+.site-nav{border-bottom:1px solid var(--ink);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);}
+.nav-back{font-size:12px;color:var(--muted);letter-spacing:.05em;}
+
+.hero{border-bottom:1px solid var(--ink);padding:3rem 2rem 2.5rem;max-width:860px;margin:0 auto;}
+.hero-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
+.hero-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;line-height:1.2;margin-bottom:1rem;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.7;max-width:620px;}
+.what-panel{background:var(--surface);border:1px solid var(--rule);padding:1.25rem 1.5rem;margin-top:1.5rem;}
+.what-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;}
+.what-body p{font-family:Georgia,'Times New Roman',serif;font-size:14px;line-height:1.75;margin-bottom:.75rem;}
+.what-body p:last-child{margin-bottom:0;font-style:italic;color:var(--muted);}
+
+.main{max-width:860px;margin:0 auto;padding:2rem;}
+.section-rule{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--ink);padding-bottom:.5rem;margin-bottom:1.25rem;}
+
+/* mode switch */
+.mode-bar{border:1px solid var(--ink);margin-bottom:2rem;}
+.mode-head{background:var(--ink);color:var(--paper);padding:.7rem 1.25rem;font-size:10px;letter-spacing:.1em;text-transform:uppercase;}
+.mode-opts{display:grid;grid-template-columns:1fr 1fr;}
+.mode-opt{padding:1rem 1.25rem;cursor:pointer;border-right:1px solid var(--rule);transition:background .15s;}
+.mode-opt:last-child{border-right:none;}
+.mode-opt:hover{background:var(--surface);}
+.mode-opt.on{background:var(--surface);box-shadow:inset 0 -3px 0 var(--accent);}
+.mode-opt b{font-family:'Playfair Display',serif;font-size:15px;display:block;margin-bottom:.2rem;}
+.mode-opt span{font-size:12px;color:var(--muted);line-height:1.55;display:block;}
+
+/* loop diagram */
+.loop{border:1px dashed var(--rule);padding:1.25rem 1.5rem;margin-bottom:2rem;background:var(--surface);}
+.loop-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;}
+.loop-chain{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;font-size:11px;margin-bottom:.75rem;}
+.loop-node{background:var(--paper);border:1px solid var(--rule);padding:3px 9px;white-space:nowrap;}
+.loop-arrow{color:var(--accent);font-size:13px;}
+.loop-note{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.7;font-style:italic;}
+
+/* layers */
+.layer{margin-bottom:2.5rem;border:1px solid var(--ink);}
+.layer-head{background:var(--ink);color:var(--paper);padding:1rem 1.5rem;}
+.layer-num{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#f2b990;margin-bottom:.25rem;}
+.layer-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;}
+.layer-logic{font-size:12px;color:#c9c2b3;margin-top:.4rem;line-height:1.6;}
+.layer-body{padding:1.25rem;}
+
+.dim-block{border:1px solid var(--rule);margin-bottom:1.25rem;background:var(--paper);}
+.dim-block:last-child{margin-bottom:0;}
+.dim-header{padding:1.1rem 1.25rem 0;}
+.dim-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.7rem;}
+.dim-number{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem;}
+.dim-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;}
+.dim-tags{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;}
+.dim-tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;white-space:nowrap;}
+.tag-op{background:var(--ink);color:var(--paper);}
+.tag-live{background:#e3ede3;color:var(--green);border:1px solid #bcd4bc;}
+.tag-partial{background:var(--warn-bg);color:var(--warn-text);border:1px solid #f0d99a;}
+.tag-pending{background:var(--surface);color:var(--muted);border:1px solid var(--rule);}
+.dim-quote{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.7;border-left:2px solid var(--accent);padding-left:1rem;margin-bottom:1.1rem;font-style:italic;}
+.dim-fields{padding:0 1.25rem 1.1rem;display:flex;flex-direction:column;gap:.75rem;}
+.fields-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.fields-row.full{grid-template-columns:1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field-label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.field-req{color:var(--accent);}
+select,input[type=text]{font-family:Georgia,'Times New Roman',serif;font-size:14px;padding:8px 10px;background:var(--paper);border:1px solid var(--rule);color:var(--ink);width:100%;appearance:none;-webkit-appearance:none;}
+select:focus,input:focus{outline:none;border-color:var(--ink);}
+.gate{display:none;font-size:12px;background:var(--warn-bg);color:var(--warn-text);border-top:1px solid #f0d99a;padding:.75rem 1.25rem;line-height:1.6;}
+.gate.on{display:block;}
+.gate.hard{background:#fbeae6;color:#8f2a12;border-top-color:#e8bcb0;}
+
+.coverage-note{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);border:1px dashed var(--rule);padding:1rem 1.25rem;margin-bottom:2rem;line-height:1.7;}
+.coverage-note strong{color:var(--ink);}
+
+.context-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2.5rem;}
+
+.run-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
+.btn-run{font-family:Georgia,'Times New Roman',serif;font-size:14.5px;font-weight:700;padding:11px 26px;background:var(--ink);color:var(--paper);border:none;cursor:pointer;letter-spacing:.01em;}
+.btn-run:hover{opacity:.85;}
+.run-note{font-size:12px;color:var(--muted);}
+
+.output{display:none;margin-top:2rem;}
+.output.on{display:block;}
+.memo-header{border-top:2px solid var(--ink);padding-top:1.5rem;}
+.memo-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;}
+.memo-meta{font-size:11px;color:var(--muted);letter-spacing:.04em;margin:.25rem 0 1.5rem;}
+
+.verdict{border:2px solid var(--ink);padding:1.25rem 1.5rem;margin-bottom:1.75rem;}
+.verdict-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.verdict-text{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;line-height:1.4;margin-bottom:.6rem;}
+.verdict-sub{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.7;}
+.verdict.stop{border-color:var(--accent);}
+.verdict.stop .verdict-text{color:var(--accent);}
+
+.layer-result{margin-bottom:1.5rem;border:1px solid var(--rule);}
+.lr-head{display:flex;align-items:center;gap:10px;padding:.8rem 1.15rem;background:var(--surface);border-bottom:1px solid var(--rule);}
+.lr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dot-red{background:var(--accent);}.dot-amber{background:var(--amber);}.dot-green{background:var(--green);}
+.lr-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;flex:1;}
+.lr-status{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
+.lr-body{padding:1rem 1.15rem;}
+.res-dim{padding:.75rem 0;border-bottom:1px solid var(--rule);}
+.res-dim:last-child{border-bottom:none;}
+.res-dim-top{display:flex;align-items:center;gap:8px;margin-bottom:.4rem;}
+.res-dim-name{font-size:12px;font-weight:500;flex:1;}
+.res-claim{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:.5rem;}
+.res-claim strong{color:var(--ink);}
+.res-bench{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.7;background:var(--surface);padding:.7rem .9rem;margin-bottom:.6rem;}
+.res-bench strong{color:var(--ink);}
+.bench-src{display:block;margin-top:.45rem;font-family:Georgia,'Times New Roman',serif;font-size:11px;font-style:italic;border-top:1px solid var(--rule);padding-top:.45rem;}
+.qs-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;}
+.ic-q{font-size:12px;line-height:1.7;padding:5px 0;border-top:1px solid var(--rule);}
+
+.monitor-panel{border:1px solid var(--ink);margin-top:1.75rem;}
+.monitor-head{background:var(--ink);color:var(--paper);padding:.85rem 1.25rem;font-size:10px;letter-spacing:.1em;text-transform:uppercase;}
+.monitor-intro{padding:1rem 1.25rem;font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.75;border-bottom:1px solid var(--rule);font-style:italic;}
+.mon-row{display:grid;grid-template-columns:1.1fr 1.3fr .6fr;gap:1rem;padding:.8rem 1.25rem;border-bottom:1px solid var(--rule);font-size:12px;}
+.mon-row:last-child{border-bottom:none;}
+.mon-row.hdr{background:var(--surface);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.mon-ind{color:var(--ink);}
+.mon-thr{color:var(--muted);line-height:1.6;}
+.mon-cad{color:var(--muted);}
+
+.missing-panel{margin-top:1.75rem;border:1px dashed var(--rule);padding:1.25rem;}
+.missing-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
+.missing-dim{margin-bottom:.75rem;padding-bottom:.75rem;border-bottom:1px solid var(--rule);}
+.missing-dim:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.missing-dim-name{font-size:12px;font-weight:500;margin-bottom:.25rem;}
+.missing-dim-impact{font-family:Georgia,'Times New Roman',serif;font-size:13px;color:var(--muted);line-height:1.6;}
+
+.cta-block{margin-top:2.5rem;border-top:1px solid var(--ink);padding-top:1.5rem;display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.cta-text{font-family:Georgia,'Times New Roman',serif;font-size:14px;color:var(--muted);line-height:1.7;max-width:440px;}
+.cta-text strong{color:var(--ink);}
+.cta-links{font-size:12px;line-height:2;text-align:right;}
+
+@media(max-width:760px){
+.context-grid,.fields-row,.mode-opts{grid-template-columns:1fr;}
+.mon-row{grid-template-columns:1fr;gap:.3rem;}
+.mon-row.hdr{display:none;}
+.hero{padding:2rem 1.25rem 1.75rem;}
+.main{padding:1.25rem;}
+.cta-block{flex-direction:column;}
+.cta-links{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<div class="mock-banner">Concept preview <span>/</span> built for your reaction, not yet live <span>/</span> Growth Operator Notes</div>
+
+<nav class="site-nav">
+  <span class="nav-brand">Growth Operator Notes</span>
+  <span class="nav-back">Back to analysis</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Localization and partner assessment</div>
+  <h1 class="hero-title">Should you build this, and will it still make sense in five years?</h1>
+  <p class="hero-sub">A ten-minute check for local production and distributor partnership decisions in Francophone African markets. Answer some questions about your deal, and get back what has to be true first, what makes it worth doing, and what usually breaks these projects later.</p>
+
+  <div class="what-panel">
+    <div class="what-title">What this is</div>
+    <div class="what-body">
+      <p>You'll answer questions in three short parts. Part 1 checks the things that have to be true before anything else matters, currency access, energy, that kind of thing. Part 2 checks whether the deal is actually worth doing. Part 3 checks whether it's likely to still make sense five years from now, which is where most of these projects actually fail.</p>
+      <p>Some of the background information behind each question is fully sourced today. Some is still being built. Where that's the case, we say so plainly next to the question, "Not yet sourced" means we're asking the right question but don't have a verified answer to compare yours against yet.</p>
+      <p>Ten to fifteen minutes. Nothing is stored. Nothing leaves your browser.</p>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+
+  <div class="mode-bar">
+    <div class="mode-head">Which question are you answering</div>
+    <div class="mode-opts">
+      <div class="mode-opt on" id="mode_p" onclick="setMode('p')">
+        <b>Should we build?</b>
+        <span>Prospective. Capital not yet committed. The assessment tests whether the project should proceed.</span>
+      </div>
+      <div class="mode-opt" id="mode_o" onclick="setMode('o')">
+        <b>Should we remain?</b>
+        <span>Operational. Plant is running or committed. The assessment tests whether to continue, restructure, or exit.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="loop-title">Why this is layered rather than listed</div>
+    <div class="loop-chain">
+      <span class="loop-node">FX shortage</span><span class="loop-arrow">&rarr;</span>
+      <span class="loop-node">imported inputs delayed</span><span class="loop-arrow">&rarr;</span>
+      <span class="loop-node">utilisation falls</span><span class="loop-arrow">&rarr;</span>
+      <span class="loop-node">unit cost rises</span><span class="loop-arrow">&rarr;</span>
+      <span class="loop-node">shelf price rises</span><span class="loop-arrow">&rarr;</span>
+      <span class="loop-node">demand falls</span><span class="loop-arrow">&rarr;</span>
+      <span class="loop-node">utilisation falls further</span>
+    </div>
+    <div class="loop-note">These questions aren't independent. A currency problem in Part 1 shows up as a cost problem in Part 2, and shows up again as a survival risk in Part 3. Answering them in order shows you where the chain actually breaks.</div>
+  </div>
+
+  <div class="coverage-note">
+    <strong>Where this is built out today:</strong> WAEMU and CEMAC. That's where our source records are already assembled from primary regulatory instruments. <strong>The DRC is not built into our records yet, but that's a backlog item, not a coverage gap.</strong> Its central bank publishes its foreign exchange regulation directly and keeps it current, we've confirmed the actual instruments, we just haven't assembled them into this tool. Treat any DRC answer here as unverified for now, and expect that to change. East Africa, Southern Africa and North Africa are the same story: not yet assembled, not confirmed unavailable.
+  </div>
+
+  <div class="section-rule">Deal context</div>
+  <div class="context-grid">
+    <div class="field">
+      <label class="field-label">Market <span class="field-req">*</span></label>
+      <select id="ctx_market">
+        <option value="">Select</option>
+        <option>Cameroun</option><option>Cote d'Ivoire</option><option>Senegal</option>
+        <option>Gabon</option><option>Burkina Faso</option><option>Mali</option>
+        <option>Togo</option><option>Benin</option><option>Congo-Brazzaville</option>
+        <option>DRC (not yet built)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Product category <span class="field-req">*</span></label>
+      <select id="ctx_cat">
+        <option value="">Select</option>
+        <option>Beverage</option><option>Packaged food</option>
+        <option>Home and personal care</option><option>Agri-processing</option>
+        <option>Building materials</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Structure</label>
+      <select id="ctx_struct">
+        <option value="">Select</option>
+        <option>Minority equity in partner entity</option>
+        <option>Technical service fee, no equity</option>
+        <option>Licensing only</option>
+        <option>Majority or controlling equity</option>
+        <option>Not yet decided</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Capital exposure</label>
+      <select id="ctx_size">
+        <option value="">Select</option>
+        <option>Under 10m EUR</option><option>10m to 50m EUR</option>
+        <option>Over 50m EUR</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ================= LAYER 1 ================= -->
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num">Part 1 of 3</div>
+      <div class="layer-name">Can this even be done?</div>
+      <div class="layer-logic">Four things that must all be true. If one fails, the project doesn't happen, no matter how attractive the numbers look elsewhere. We check these first so a bad answer here stops you early, not after the money is spent.</div>
+    </div>
+    <div class="layer-body">
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">N1</div><div class="dim-title">FX access and repatriation structure</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-partial">Partly sourced</span></div>
+          </div>
+          <div class="dim-quote">"A stable peg is not access to hard currency, and access is not permission to repatriate. Three separate questions, and most business cases answer only the first. In the CFA zone the peg holds and the risk is administrative. In a floating market the risk is price. Templates score them identically. They are not the same thing."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Hard currency share of cost base after localization <span class="field-req">*</span></div>
+              <select id="n1_a" onchange="g('n1')"><option value="">Select</option>
+                <option>Under 20 percent</option><option>20 to 50 percent</option>
+                <option>Over 50 percent, final assembly only</option><option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Repatriation mechanism</div>
+              <select id="n1_b" onchange="g('n1')"><option value="">Select</option>
+                <option>Dividend</option><option>Technical service fee or royalty</option>
+                <option>Management fee</option><option>Transfer pricing on supplied inputs</option>
+                <option>Not yet determined</option></select></div>
+          </div>
+          <div class="fields-row full">
+            <div class="field"><div class="field-label">Checked against the current central bank instrument?</div>
+              <select id="n1_c" onchange="g('n1')"><option value="">Select</option>
+                <option>Yes, current instrument and article identified</option>
+                <option>Assumed from another market</option><option>Not checked</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_n1"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">N2</div><div class="dim-title">Energy and water</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-pending">Not yet sourced</span></div>
+          </div>
+          <div class="dim-quote">"Every plant model I have seen assumes grid power at grid price. Almost none carry the real cost of running on backup for the share of the year the grid is not there. For beverage, water is the second half of this question and it is usually not asked at all until the borehole yield comes in below spec."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Grid reliability at the proposed site <span class="field-req">*</span></div>
+              <select id="n2_a" onchange="g('n2')"><option value="">Select</option>
+                <option>Reliable, backup for contingency only</option>
+                <option>Intermittent, backup required regularly</option>
+                <option>Unreliable, self-generation is the primary source</option>
+                <option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Is self-generation cost in the unit economics?</div>
+              <select id="n2_b" onchange="g('n2')"><option value="">Select</option>
+                <option>Yes, modelled at realistic outage hours</option>
+                <option>Yes, but at optimistic outage assumptions</option>
+                <option>No, grid tariff only</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Water availability and rights secured?</div>
+              <select id="n2_c" onchange="g('n2')"><option value="">Select</option>
+                <option>Secured, yield tested and permitted</option>
+                <option>Identified, not yet tested or permitted</option>
+                <option>Not assessed</option><option>Not applicable to this category</option></select></div>
+            <div class="field"><div class="field-label">Grid seasonality exposure</div>
+              <select id="n2_d" onchange="g('n2')"><option value="">Select</option>
+                <option>Grid is not hydro-dependent</option>
+                <option>Hydro-dependent, seasonality modelled</option>
+                <option>Hydro-dependent, seasonality not modelled</option>
+                <option>Unknown</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_n2"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">N3</div><div class="dim-title">Critical imported input availability</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-pending">Not yet sourced</span></div>
+          </div>
+          <div class="dim-quote">"This is not the FX question. FX asks whether you can obtain the currency. This asks whether you can physically obtain the item and get it through the port. Enzymes, concentrate, additives, control electronics, a specific spare part. One unavailable component idles the whole line, and the business case never lists it."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Have single-point-of-failure imported inputs been identified? <span class="field-req">*</span></div>
+              <select id="n3_a" onchange="g('n3')"><option value="">Select</option>
+                <option>Yes, listed with lead times and alternates</option>
+                <option>Partially, main inputs only</option>
+                <option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Spare parts and maintenance consumables</div>
+              <select id="n3_b" onchange="g('n3')"><option value="">Select</option>
+                <option>Stocking plan and local agent in place</option>
+                <option>Ordered as needed from OEM</option>
+                <option>Not addressed</option></select></div>
+          </div>
+          <div class="fields-row full">
+            <div class="field"><div class="field-label">Customs clearance time for critical inputs at the port of entry</div>
+              <select id="n3_c" onchange="g('n3')"><option value="">Select</option>
+                <option>Observed clearance time used in planning</option>
+                <option>Statutory clearance time used in planning</option>
+                <option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_n3"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">N4</div><div class="dim-title">Legal and regulatory feasibility</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-partial">Partly sourced</span></div>
+          </div>
+          <div class="dim-quote">"Regulatory timelines in African markets are legal ceilings, not operational commitments. The gap between the statutory period and the observed one is the intelligence. And the question nobody asks early enough is whether the structure itself needs a competition clearance that nobody has budgeted time for."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Production and operating licences identified <span class="field-req">*</span></div>
+              <select id="n4_a" onchange="g('n4')"><option value="">Select</option>
+                <option>Identified with observed timelines</option>
+                <option>Identified with statutory timelines only</option>
+                <option>Not fully mapped</option></select></div>
+            <div class="field"><div class="field-label">Competition or merger clearance required?</div>
+              <select id="n4_b" onchange="g('n4')"><option value="">Select</option>
+                <option>Assessed, not required</option>
+                <option>Assessed, required and timed into the plan</option>
+                <option>Not assessed</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Land tenure and site permits</div>
+              <select id="n4_c" onchange="g('n4')"><option value="">Select</option>
+                <option>Title secured and verified</option>
+                <option>Under negotiation</option><option>Not addressed</option>
+                <option>Not applicable, existing site</option></select></div>
+            <div class="field"><div class="field-label">Foreign ownership restrictions in this sector</div>
+              <select id="n4_d" onchange="g('n4')"><option value="">Select</option>
+                <option>None applicable</option><option>Applicable and structured for</option>
+                <option>Not checked</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_n4"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= LAYER 2 ================= -->
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num">Part 2 of 3</div>
+      <div class="layer-name">Is it actually worth doing?</div>
+      <div class="layer-logic">Five things that trade off against each other, a weak answer in one can be offset by a strong answer in another. This is usually the part a business case already covers well on paper. It's also the part least often checked against reality.</div>
+    </div>
+    <div class="layer-body">
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">E1</div><div class="dim-title">Consumer affordability and price point reality</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-pending">Not yet sourced</span></div>
+          </div>
+          <div class="dim-quote">"The binding constraint is not what the consumer can afford per month. It is what they can pay in a single cash transaction today. Pack size is the real variable, not price per litre. When a government exempts beer from an excise increase on the grounds that it is a mass-consumption product, that is the state telling you where the affordability line sits."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Target retail price, local currency <span class="field-req">*</span></div>
+              <input type="text" id="e1_a" placeholder="e.g. 500 FCFA" oninput="g('e1')"/></div>
+            <div class="field"><div class="field-label">Basis for the price point</div>
+              <select id="e1_b" onchange="g('e1')"><option value="">Select</option>
+                <option>Field-observed competitor pricing in traditional trade</option>
+                <option>Modern retail pricing extrapolated</option>
+                <option>Cost-plus from the production model</option>
+                <option>Not established</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Pack format strategy</div>
+              <select id="e1_c" onchange="g('e1')"><option value="">Select</option>
+                <option>Small format for single cash transaction</option>
+                <option>Returnable glass, affordability-led</option>
+                <option>Standard format carried from another market</option>
+                <option>Not determined</option></select></div>
+            <div class="field"><div class="field-label">Elasticity tested at the threshold?</div>
+              <select id="e1_d" onchange="g('e1')"><option value="">Select</option>
+                <option>Yes, field evidence</option><option>Assumed from another market</option>
+                <option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_e1"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">E2</div><div class="dim-title">Route to market and transport cost</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-partial">Partly sourced</span></div>
+          </div>
+          <div class="dim-quote">"Stated national coverage is the claim with the largest gap between what is said and what is true. A distributor present in ten regions may hold real depth in two. The question is never how many regions. It is what share of volume moves through the top two cities, and what cost per unit looks like once it leaves them."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Partner's stated national coverage <span class="field-req">*</span></div>
+              <input type="text" id="e2_a" placeholder="e.g. 85 percent, all 10 regions" oninput="g('e2')"/></div>
+            <div class="field"><div class="field-label">Volume concentration in the primary city</div>
+              <select id="e2_b" onchange="g('e2')"><option value="">Select</option>
+                <option>Under 40 percent</option><option>40 to 70 percent</option>
+                <option>Over 70 percent, effectively single-city</option><option>Not disclosed</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Transport cost per unit</div>
+              <select id="e2_c" onchange="g('e2')"><option value="">Select</option>
+                <option>Independently modelled</option>
+                <option>Partner-reported, sense-checked</option>
+                <option>Partner-reported, accepted as given</option><option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Corridor exposure</div>
+              <select id="e2_d" onchange="g('e2')"><option value="">Select</option>
+                <option>Coastal market, short haul to main demand</option>
+                <option>Serves landlocked markets via corridor</option>
+                <option>Landlocked, dependent on a single corridor</option>
+                <option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_e2"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">E3</div><div class="dim-title">Fiscal position: tax, tariff, excise, incentives</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-live">Fully sourced</span></div>
+          </div>
+          <div class="dim-quote">"The wedge that makes local production pay is almost never the headline rate. It is in the tax base, the input exemption, and the tariff line. In Cameroun the excise base for an import is the customs value plus the duty, while for local production it is the recommended price. Same nominal rate, different burden. That is the kind of thing a rate comparison misses entirely."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Duty on imported inputs after localization <span class="field-req">*</span></div>
+              <select id="e3_a" onchange="g('e3')"><option value="">Select</option>
+                <option>Modelled line by line against the tariff schedule</option>
+                <option>Estimated at a blended rate</option>
+                <option>Assumed negligible</option><option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Excise regime and base</div>
+              <select id="e3_b" onchange="g('e3')"><option value="">Select</option>
+                <option>Confirmed against current instrument, base understood</option>
+                <option>Rate known, base not examined</option>
+                <option>Assumed from a comparable market</option><option>Not assessed</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Packaging-specific taxes</div>
+              <select id="e3_c" onchange="g('e3')"><option value="">Select</option>
+                <option>Checked, including non-returnable packaging duty</option>
+                <option>Not checked</option><option>Not applicable</option></select></div>
+            <div class="field"><div class="field-label">Incentives relied on in the case</div>
+              <select id="e3_d" onchange="g('e3')"><option value="">Select</option>
+                <option>Named, with expiry and conditions documented</option>
+                <option>Named, conditions not verified</option>
+                <option>Case does not rely on incentives</option><option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_e3"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">E4</div><div class="dim-title">Local input and packaging supply economics</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-partial">Partly sourced</span></div>
+          </div>
+          <div class="dim-quote">"Localizing production while remaining structurally dependent on one imported component does not retire the risk. It relocates it. And where the only domestic supplier of your packaging is owned by the group that also owns your largest competitor, you have not solved a supply problem. You have created a strategic one."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Primary packaging: local availability <span class="field-req">*</span></div>
+              <select id="e4_a" onchange="g('e4')"><option value="">Select</option>
+                <option>Multiple domestic suppliers</option>
+                <option>Single domestic supplier</option>
+                <option>Single domestic supplier, competitor-affiliated</option>
+                <option>No domestic capacity, imported</option><option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Key raw input local sourcing</div>
+              <select id="e4_b" onchange="g('e4')"><option value="">Select</option>
+                <option>Established local supply, multiple sources</option>
+                <option>Local supply, concentrated or seasonal</option>
+                <option>No local supply, imported</option><option>Not assessed</option></select></div>
+          </div>
+          <div class="fields-row full">
+            <div class="field"><div class="field-label">After localization, what share of input cost is still imported?</div>
+              <select id="e4_c" onchange="g('e4')"><option value="">Select</option>
+                <option>Under 25 percent</option><option>25 to 60 percent</option>
+                <option>Over 60 percent</option><option>Not calculated</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_e4"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">E5</div><div class="dim-title">Demand scale, volatility and forecastability</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-pending">Not yet sourced</span></div>
+          </div>
+          <div class="dim-quote">"A plant is built around utilisation, and utilisation is built on a forecast. In markets where household income moves with a harvest, a commodity price, or an election cycle, the forecast error is not noise around a trend. It is the trend. Plants fail because demand was too volatile far more often than because it was too small."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Basis for the volume forecast <span class="field-req">*</span></div>
+              <select id="e5_a" onchange="g('e5')"><option value="">Select</option>
+                <option>Demonstrated historical sell-through, multi-year</option>
+                <option>Recent volume, single year</option>
+                <option>Market sizing and share assumption</option><option>Not established</option></select></div>
+            <div class="field"><div class="field-label">Demand volatility drivers assessed?</div>
+              <select id="e5_b" onchange="g('e5')"><option value="">Select</option>
+                <option>Yes, income cyclicality modelled</option>
+                <option>Acknowledged, not modelled</option><option>Not assessed</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Capacity versus demonstrated volume</div>
+              <select id="e5_c" onchange="g('e5')"><option value="">Select</option>
+                <option>Matched to demonstrated volume</option>
+                <option>Built ahead of demonstrated volume</option>
+                <option>Significantly ahead of any current demand</option><option>Not stated</option></select></div>
+            <div class="field"><div class="field-label">Customer concentration</div>
+              <select id="e5_d" onchange="g('e5')"><option value="">Select</option>
+                <option>Fragmented, many buyers</option>
+                <option>Moderate, top buyers under half of volume</option>
+                <option>Concentrated, few institutional buyers</option><option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_e5"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= LAYER 3 ================= -->
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num">Part 3 of 3</div>
+      <div class="layer-name">Will it still make sense in five years?</div>
+      <div class="layer-logic">This is where the biggest losses actually happen. A project that clears parts 1 and 2 gets approved, then fails years later on something nobody checked: a change in headquarters priorities, the partner's own capability, or a policy shift. So each question here comes with something to keep watching, not just a one-time answer.</div>
+    </div>
+    <div class="layer-body">
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">R1</div><div class="dim-title">Partner capability and claim verification</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-partial">Partly sourced</span></div>
+          </div>
+          <div class="dim-quote">"The partner is the counterparty and the primary source at the same time. But the asymmetry runs both ways: they know the informal channel, the practical customs position, and the labour relations better than headquarters ever will. The task is not to distrust them. It is to identify which claims are load bearing and check those specific ones."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row full">
+            <div class="field"><div class="field-label">Load-bearing claims originating solely with the partner <span class="field-req">*</span></div>
+              <select id="r1_a" onchange="g('r1')"><option value="">Select</option>
+                <option>None, all independently sourced</option>
+                <option>One or two, rest sourced independently</option>
+                <option>Most commercial assumptions</option>
+                <option>Effectively the entire business case</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Partner's category track record</div>
+              <select id="r1_b" onchange="g('r1')"><option value="">Select</option>
+                <option>Documented, independently verifiable</option>
+                <option>Claimed, not verifiable</option>
+                <option>No prior adjacent-category record</option><option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Partner's own risk exposure understood?</div>
+              <select id="r1_c" onchange="g('r1')"><option value="">Select</option>
+                <option>Yes, their capital and reputational exposure mapped</option>
+                <option>Partially</option><option>Not considered</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_r1"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">R2</div><div class="dim-title">Operational readiness and capability transfer</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-pending">Not yet sourced</span></div>
+          </div>
+          <div class="dim-quote">"This is not engineering, which is why it belongs here rather than with the consultants. It is whether maintenance culture, production planning, and quality systems arrive with the equipment. Plants rarely fail suddenly. They degrade, because the two expatriates who held the knowledge rotated out and nothing was written down."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Technical staffing plan <span class="field-req">*</span></div>
+              <select id="r2_a" onchange="g('r2')"><option value="">Select</option>
+                <option>Local hiring with defined transfer plan</option>
+                <option>Expatriate-led, transfer plan defined</option>
+                <option>Expatriate-led, no transfer plan</option><option>Not addressed</option></select></div>
+            <div class="field"><div class="field-label">Maintenance regime</div>
+              <select id="r2_b" onchange="g('r2')"><option value="">Select</option>
+                <option>Preventive regime with local capability</option>
+                <option>Reactive, OEM support contract</option>
+                <option>Not addressed</option></select></div>
+          </div>
+          <div class="fields-row full">
+            <div class="field"><div class="field-label">Work permit and expatriate quota position</div>
+              <select id="r2_c" onchange="g('r2')"><option value="">Select</option>
+                <option>Checked, quota and permits feasible</option>
+                <option>Assumed feasible</option><option>Not checked</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_r2"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">R3</div><div class="dim-title">Strategic commitment and exit cost</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-pending">Not yet sourced</span></div>
+          </div>
+          <div class="dim-quote">"The best partner in the market cannot compensate for headquarters deciding the region is no longer strategic. And the harder the asset is to exit, the higher the bar the decision should have cleared. A line that can only make one product, on land that cannot be repurposed, is a very different commitment from one that can be sold or redeployed."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Asset redeployability if the project is wound down <span class="field-req">*</span></div>
+              <select id="r3_a" onchange="g('r3')"><option value="">Select</option>
+                <option>Equipment redeployable, resale market exists</option>
+                <option>Partially, line could run adjacent products</option>
+                <option>Highly specific, no realistic resale</option><option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Corporate strategic horizon for this region</div>
+              <select id="r3_b" onchange="g('r3')"><option value="">Select</option>
+                <option>Named in current multi-year strategy</option>
+                <option>Supported but not formally anchored</option>
+                <option>Championed by an individual sponsor</option><option>Not clear</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Exit or unwind mechanism with the partner</div>
+              <select id="r3_c" onchange="g('r3')"><option value="">Select</option>
+                <option>Defined buy-out or step-in clause</option>
+                <option>Informal understanding only</option><option>Not addressed</option></select></div>
+            <div class="field"><div class="field-label">Local financing available for working capital?</div>
+              <select id="r3_d" onchange="g('r3')"><option value="">Select</option>
+                <option>Yes, at workable rates</option>
+                <option>Available but expensive</option>
+                <option>No local facility, group-funded</option><option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_r3"></div>
+      </div>
+
+      <div class="dim-block">
+        <div class="dim-header">
+          <div class="dim-top">
+            <div><div class="dim-number">R4</div><div class="dim-title">Political, policy and trade bloc stability</div></div>
+            <div class="dim-tags"><span class="dim-tag tag-op">Operator lens</span><span class="dim-tag tag-partial">Partly sourced</span></div>
+          </div>
+          <div class="dim-quote">"Trade bloc membership is treated as furniture until it moves. Three WAEMU states left ECOWAS and stayed in the monetary union, which means the currency assumption held and the customs assumption did not. Any case built before that change and not revisited is carrying an error nobody has looked for."</div>
+        </div>
+        <div class="dim-fields">
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Incumbent with documented regulator relationships? <span class="field-req">*</span></div>
+              <select id="r4_a" onchange="g('r4')"><option value="">Select</option>
+                <option>No dominant incumbent</option>
+                <option>Dominant incumbent, no evidence of influence</option>
+                <option>Dominant incumbent, vertically integrated into inputs</option>
+                <option>Not assessed</option></select></div>
+            <div class="field"><div class="field-label">Trade bloc and tariff regime verified as current?</div>
+              <select id="r4_b" onchange="g('r4')"><option value="">Select</option>
+                <option>Verified within the last 12 months</option>
+                <option>Assumed unchanged</option><option>Not checked</option></select></div>
+          </div>
+          <div class="fields-row">
+            <div class="field"><div class="field-label">Compliance and AML exposure of the jurisdiction</div>
+              <select id="r4_c" onchange="g('r4')"><option value="">Select</option>
+                <option>Checked, no elevated monitoring</option>
+                <option>Checked, jurisdiction under increased monitoring</option>
+                <option>Not checked</option></select></div>
+            <div class="field"><div class="field-label">Security exposure on the distribution corridor</div>
+              <select id="r4_d" onchange="g('r4')"><option value="">Select</option>
+                <option>No material exposure</option>
+                <option>Exposure identified and routed around</option>
+                <option>Material exposure, not mitigated</option><option>Not assessed</option></select></div>
+          </div>
+        </div>
+        <div class="gate" id="gate_r4"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="run-row">
+    <button class="btn-run" onclick="runAnalysis()">Run assessment</button>
+    <span class="run-note">Returns a layered memo and a monitoring schedule. Not a recommendation.</span>
+  </div>
+
+  <div class="output" id="output">
+    <div class="memo-header"><div class="memo-title" id="memoTitle">Localization assessment</div></div>
+    <div class="memo-meta" id="memoMeta"></div>
+    <div id="verdictZone"></div>
+    <div id="memoBody"></div>
+
+    <div class="monitor-panel">
+      <div class="monitor-head">Monitoring schedule</div>
+      <div class="monitor-intro">A point-in-time assessment cannot see the failures that matter, because they happen after approval. Each dimension below carries an indicator to track, a threshold that should trigger reassessment, and a cadence. This is the part of the output that has a life beyond the decision meeting.</div>
+      <div class="mon-row hdr"><div>Indicator</div><div>Reassessment trigger</div><div>Cadence</div></div>
+      <div id="monBody"></div>
+    </div>
+
+    <div class="missing-panel">
+      <div class="missing-title">What this assessment does not cover</div>
+      <div class="missing-dim">
+        <div class="missing-dim-name">Plant engineering, capacity design, equipment specification</div>
+        <div class="missing-dim-impact">Outside competence and deliberately excluded. Note the distinction from R2: whether the workforce can operate and maintain the plant is an investment question and is assessed. Whether the line is correctly specified is an engineering question and is not.</div>
+      </div>
+      <div class="missing-dim">
+        <div class="missing-dim-name">Legal structuring, tax opinion, contract drafting</div>
+        <div class="missing-dim-impact">Requires local counsel. This identifies what to ask them about, not what they should conclude.</div>
+      </div>
+      <div class="missing-dim">
+        <div class="missing-dim-name">Construction management and environmental impact assessment</div>
+        <div class="missing-dim-impact">Specialist disciplines with their own qualification requirements.</div>
+      </div>
+      <div class="missing-dim">
+        <div class="missing-dim-name">Development impact, additionality, and ESG safeguards</div>
+        <div class="missing-dim-impact">Relevant to a development finance institution rather than a corporate, and held as a separate module so that adding it does not dilute the commercial assessment.</div>
+      </div>
+    </div>
+
+    <div class="cta-block">
+      <div class="cta-text"><strong>If this surfaced something the business case had not tested,</strong> I would want to know which layer did it. If it missed something that matters at your level, that is more useful still.</div>
+      <div class="cta-links">
+        <a href="mailto:jpouandji@gmail.com">jpouandji@gmail.com</a><br/>
+        <a href="#">LinkedIn profile</a><br/>
+        <a href="#">Growth Operator Notes page</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+var MODE='p';
+function setMode(m){
+  MODE=m;
+  document.getElementById('mode_p').classList.toggle('on',m==='p');
+  document.getElementById('mode_o').classList.toggle('on',m==='o');
+  ['n1','n2','n3','n4','e1','e2','e3','e4','e5','r1','r2','r3','r4'].forEach(g);
+}
+function v(id){var e=document.getElementById(id);return e?e.value:'';}
+
+var DIMS=[
+ {k:'n1',layer:1,n:'FX access and repatriation structure'},
+ {k:'n2',layer:1,n:'Energy and water'},
+ {k:'n3',layer:1,n:'Critical imported input availability'},
+ {k:'n4',layer:1,n:'Legal and regulatory feasibility'},
+ {k:'e1',layer:2,n:'Consumer affordability and price point reality'},
+ {k:'e2',layer:2,n:'Route to market and transport cost'},
+ {k:'e3',layer:2,n:'Fiscal position'},
+ {k:'e4',layer:2,n:'Local input and packaging supply economics'},
+ {k:'e5',layer:2,n:'Demand scale, volatility and forecastability'},
+ {k:'r1',layer:3,n:'Partner capability and claim verification'},
+ {k:'r2',layer:3,n:'Operational readiness and capability transfer'},
+ {k:'r3',layer:3,n:'Strategic commitment and exit cost'},
+ {k:'r4',layer:3,n:'Political, policy and trade bloc stability'}
+];
+
+var FAIL={
+ n1:function(){return !v('n1_a')||v('n1_a')==='Not assessed'||v('n1_c')==='Not checked'||v('n1_c')==='Assumed from another market';},
+ n2:function(){return !v('n2_a')||v('n2_a')==='Not assessed'||v('n2_b')==='No, grid tariff only'||v('n2_c')==='Not assessed';},
+ n3:function(){return !v('n3_a')||v('n3_a')==='Not assessed'||v('n3_c')==='Not assessed';},
+ n4:function(){return !v('n4_a')||v('n4_a')==='Not fully mapped'||v('n4_b')==='Not assessed'||v('n4_d')==='Not checked';},
+ e1:function(){return !v('e1_a')||v('e1_b')==='Modern retail pricing extrapolated'||v('e1_b')==='Cost-plus from the production model'||v('e1_b')==='Not established'||v('e1_d')==='Not assessed';},
+ e2:function(){return !v('e2_a')||v('e2_b')==='Not disclosed'||v('e2_c')==='Partner-reported, accepted as given'||v('e2_c')==='Not assessed';},
+ e3:function(){return !v('e3_a')||v('e3_a')==='Assumed negligible'||v('e3_a')==='Not assessed'||v('e3_b')==='Not assessed'||v('e3_b')==='Rate known, base not examined';},
+ e4:function(){return !v('e4_a')||v('e4_a')==='Not assessed'||v('e4_c')==='Not calculated';},
+ e5:function(){return !v('e5_a')||v('e5_a')==='Not established'||v('e5_b')==='Not assessed'||v('e5_c')==='Significantly ahead of any current demand';},
+ r1:function(){return !v('r1_a')||v('r1_a')==='Most commercial assumptions'||v('r1_a')==='Effectively the entire business case';},
+ r2:function(){return !v('r2_a')||v('r2_a')==='Not addressed'||v('r2_a')==='Expatriate-led, no transfer plan'||v('r2_b')==='Not addressed';},
+ r3:function(){return !v('r3_a')||v('r3_a')==='Not assessed'||v('r3_b')==='Not clear'||v('r3_c')==='Not addressed';},
+ r4:function(){return !v('r4_a')||v('r4_a')==='Not assessed'||v('r4_b')==='Not checked'||v('r4_c')==='Not checked';}
+};
+
+var AMBER={
+ n1:function(){return v('n1_a')==='Over 50 percent, final assembly only';},
+ n2:function(){return v('n2_a')==='Unreliable, self-generation is the primary source'||v('n2_b')==='Yes, but at optimistic outage assumptions'||v('n2_d')==='Hydro-dependent, seasonality not modelled';},
+ n3:function(){return v('n3_a')==='Partially, main inputs only'||v('n3_b')==='Ordered as needed from OEM'||v('n3_c')==='Statutory clearance time used in planning';},
+ n4:function(){return v('n4_a')==='Identified with statutory timelines only'||v('n4_c')==='Under negotiation';},
+ e1:function(){return v('e1_c')==='Standard format carried from another market'||v('e1_d')==='Assumed from another market';},
+ e2:function(){return v('e2_b')==='Over 70 percent, effectively single-city'||v('e2_c')==='Partner-reported, sense-checked'||v('e2_d')==='Landlocked, dependent on a single corridor';},
+ e3:function(){return v('e3_c')==='Not checked'||v('e3_d')==='Named, conditions not verified';},
+ e4:function(){return v('e4_a')==='Single domestic supplier, competitor-affiliated'||v('e4_a')==='No domestic capacity, imported'||v('e4_b')==='Local supply, concentrated or seasonal'||v('e4_c')==='Over 60 percent';},
+ e5:function(){return v('e5_c')==='Built ahead of demonstrated volume'||v('e5_d')==='Concentrated, few institutional buyers'||v('e5_b')==='Acknowledged, not modelled';},
+ r1:function(){return v('r1_b')==='Claimed, not verifiable'||v('r1_c')==='Partially'||v('r1_c')==='Not considered';},
+ r2:function(){return v('r2_a')==='Expatriate-led, transfer plan defined'||v('r2_b')==='Reactive, OEM support contract'||v('r2_c')==='Assumed feasible';},
+ r3:function(){return v('r3_a')==='Highly specific, no realistic resale'||v('r3_b')==='Championed by an individual sponsor'||v('r3_d')==='Available but expensive';},
+ r4:function(){return v('r4_a')==='Dominant incumbent, vertically integrated into inputs'||v('r4_c')==='Checked, jurisdiction under increased monitoring'||v('r4_d')==='Material exposure, not mitigated';}
+};
+
+var GATES={
+ n1:'Currency exposure not assessed end to end. Peg stability, hard currency availability, and repatriation approval for the specific mechanism are three separate questions. Confirm all three against the current instrument.',
+ n2:'Energy or water not established as a necessary condition. A unit cost model built on grid tariff alone is not a cost model in a market with material outage hours. For beverage, untested water yield is a stop, not a caveat.',
+ n3:'Physical input availability not assessed. This is distinct from currency access. Identify the components that would idle the line and establish lead times and alternates before commitment.',
+ n4:'Regulatory feasibility incomplete. Map the licences against observed rather than statutory timelines, and establish whether the structure itself triggers a competition clearance.',
+ e1:'Affordability untested at the constraint level. A price extrapolated from modern retail or from another market is not an affordability assessment. Establish the single-transaction cash threshold for this market and category.',
+ e2:'Coverage and transport economics are partner-reported and unverified. Inflated transport and operating cost reporting is a documented failure pattern in this deal type.',
+ e3:'Fiscal comparison incomplete. Confirm the net position after localization, including the excise base and its treatment of imports versus local production, before treating avoided import duty as a saving.',
+ e4:'Input and packaging dependency not resolved. State which risk localization retires and which it relocates. Where the only domestic supplier is competitor-affiliated, that is a strategic exposure and not a procurement detail.',
+ e5:'Demand forecast not stress-tested. Capacity built ahead of demonstrated volume in a market with unmodelled income volatility is the most common single cause of stranded industrial assets.',
+ r1:'Load-bearing claims unverified. Identify which numbers would change the decision if wrong by thirty percent and verify those specific claims independently.',
+ r2:'Operational readiness not established. Physical assets arriving ahead of organisational capability is a slow failure mode, not a dramatic one, and it will not show up in the first year.',
+ r3:'Commitment and exit cost not assessed. The harder the asset is to exit, the higher the bar the decision should clear. A project anchored to an individual sponsor rather than to strategy carries a risk nobody has priced.',
+ r4:'Political and policy exposure not verified as current. Trade bloc membership, tariff regime, and jurisdiction monitoring status all change and are all commonly assumed static.'
+};
+
+var BENCH={
+ n1:'<strong>What we found.</strong> In CFA-zone markets the euro peg holds, so the real constraint is administrative, domiciliation thresholds, prior authorisation for foreign currency accounts, and different approval paths for dividends versus technical service fees. In floating-rate markets it\'s a price problem instead, and one that can move fast enough to break a business case between approval and commissioning.<span class="bench-src">Partly sourced. <strong>Why:</strong> the rules are published, but actual approval times are not, no central bank publishes how long a transfer really takes, that number only exists in the memory of someone who has processed one recently.<strong> What this means for you:</strong> don\'t take a stated timeline from your partner or your own bank at face value. Ask your bank\'s correspondent desk for a recent comparable transfer and use that, not the published statute, to plan cash flow.</span>',
+ n2:'<strong>What we found.</strong> Continental studies put the cost of unreliable power to firms in the tens of percent of sales, but that figure is a regional average, not something you can plan a specific plant against.<span class="bench-src">Not yet sourced at the market level. <strong>Why:</strong> industrial tariffs are published by dozens of national utilities separately, but actual outage hours and backup costs are not, they only show up in what a plant is already paying, and that data lives with operators, not regulators.<strong> What this means for you:</strong> get a real number from someone already running a comparable facility in your target market before you model this. A tariff sheet alone will understate your true energy cost, sometimes by two to three times, once backup generation is included.</span>',
+ n3:'<strong>What we found.</strong> Nothing structured for this specific market and category.<span class="bench-src">Not yet sourced. <strong>Why:</strong> there is no public database anywhere that tracks component-level import clearance times by port, this only exists in the memory of freight forwarders who have cleared the specific part before.<strong> What this means for you:</strong> before committing, ask your logistics team or freight forwarder to name the two or three inputs most likely to stall the line, and how long clearance actually took the last time each moved through this port. That answer will not come from any document.</span>',
+ n4:'<strong>What we found.</strong> Licence and permit regimes with their statutory timelines. The real risk sits in the gap between that statutory ceiling and how long approval actually takes in practice. Competition clearance regimes exist at community level in both WAEMU and CEMAC, whether they get enforced in practice is a separate, unanswered question.<span class="bench-src">Partly sourced. <strong>Why:</strong> the law is public and stable; enforcement practice is not published anywhere and only surfaces through direct experience or a local lawyer who has run a filing recently.<strong> What this means for you:</strong> get the observed timeline, not the legal one, from counsel who has actually filed in this market in the last year.</span>',
+ e1:'<strong>What we found.</strong> Nothing. This dimension returns the questions to ask, not an answer.<span class="bench-src">Not yet sourced. <strong>Why:</strong> this is genuinely the hardest number to find anywhere in Africa. It requires field price observation at the kiosk level, not census or survey data, and it lives inside FMCG companies\' own proprietary market research, never published. We are actively building this (household expenditure survey collection is underway) but do not have it yet.<strong> What this means for you:</strong> this is also the number your partner is most likely to already have, and most likely to shade toward the price point that suits their business case. Do not accept it unverified. Get an independent field check, your own team or a local research firm, before you set a launch price on their number alone.</span>',
+ e2:'<strong>What we found.</strong> A real pattern, not a specific figure: stated regional coverage and actual volume distribution diverge widely, and cost per unit rises sharply once a distributor\'s owned fleet coverage ends.<span class="bench-src">Partly sourced. <strong>Why:</strong> corridor-level cost data exists in transport studies, but route-specific pricing moves week to week with fuel costs and informal checkpoint fees, so any number published today is close to stale by the time you read it.<strong> What this means for you:</strong> use the pattern here as the question to ask, not the answer to trust. If your partner claims flat transport cost into secondary cities, that specific claim is the one to press on, since the pattern says it should not be flat.</span>',
+ e3:'<strong>What we found.</strong> The localisation tax advantage usually sits in the tax base rather than the headline rate. In Cameroun specifically, excise on imports is assessed on customs value plus duty, while local production is assessed on the recommended price, inputs used in local production are exempt, and a separate per-unit duty applies to non-returnable packaging. A rate comparison alone misses all three mechanisms.<span class="bench-src">Fully sourced for Cameroun down to the article level. <strong>Why the caveat:</strong> we\'ve confirmed this against the DGI\'s own published guidance; the final cross-check against the promulgated finance law text is still in progress.<strong> What this means for you:</strong> safe to use directionally now; we\'ll flag if the article-level check changes anything.</span>',
+ e4:'<strong>What we found.</strong> Domestic container glass capacity in WAEMU and CEMAC is highly concentrated, can manufacturing is absent from both zones entirely, and malt is almost entirely imported. Where the dominant local packaging or sweetener supplier is affiliated with the incumbent competitor, supply security and competitive exposure become the same question.<span class="bench-src">Partly sourced. <strong>Why:</strong> producer capacity is knowable in principle, but nobody has mapped it systematically across markets, it requires calling each producer directly and confirming ownership.<strong> What this means for you:</strong> before signing anything, confirm who actually owns your proposed packaging or input supplier. If it traces back to your biggest local competitor, that is a strategic exposure, not a procurement detail, and it belongs in the decision memo, not a footnote.</span>',
+ e5:'<strong>What we found.</strong> Nothing structured for this market and category.<span class="bench-src">Not yet sourced. <strong>Why:</strong> income volatility data comes from household surveys that are often several years out of date by the time they\'re published, and nobody has built a current, market-specific version.<strong> What this means for you:</strong> ask your partner for actual monthly sales over the last two to three years, not a single annual total. A flat annual figure hides exactly the volatility that later breaks a utilisation assumption.</span>',
+ r1:'<strong>What we found.</strong> Inflated transport and operating cost reporting by a distributor or JV partner is a documented failure pattern in localisation projects generally. Worth remembering the asymmetry runs both ways: headquarters usually knows less than the partner about informal channel structure, real customs practice, and labour relations, not just the reverse.<span class="bench-src">Partly sourced. <strong>Why:</strong> there is no public benchmark to check a partner\'s numbers against, these figures are commercially sensitive and companies do not publish them; we are building reference ranges from verified cases but do not have full coverage yet.<strong> What this means for you:</strong> identify which three numbers in your business case would change the decision if they were wrong by thirty percent, and verify those three independently. Do not try to verify everything, verify what actually matters.</span>',
+ r2:'<strong>What we found.</strong> Nothing structured. This stays a judgment call, not a lookup.<span class="bench-src">Not yet sourced, and unlikely to become a data point. <strong>Why:</strong> capability transfer outcomes, whether the workforce can actually run and maintain the plant, are not tracked by anyone systematically; this is genuinely a site-by-site judgment.<strong> What this means for you:</strong> ask the concrete version of this question directly: who operates this facility in year three, and where are they being trained or recruited right now? A vague answer here is itself the finding.</span>',
+ r3:'<strong>What we found.</strong> Nothing structured.<span class="bench-src">Not yet sourced. <strong>Why:</strong> asset resale and redeployment value is specific to the equipment and the country, and nobody publishes a resale index for used bottling or processing lines in African markets.<strong> What this means for you:</strong> get a rough redeployment or resale estimate from your equipment vendor before committing capacity, not after. That number changes what your actual capital exposure means if the project has to wind down.</span>',
+ r4:'<strong>What we found.</strong> Trade bloc membership and tariff regime changes are actively tracked, including the January 2025 departure of three WAEMU states from ECOWAS while they remained inside the monetary union. Jurisdiction monitoring status under international anti-money-laundering frameworks is also tracked and changes several times a year.<span class="bench-src">Partly sourced. <strong>Why:</strong> bloc membership and monitoring status are public and we track them directly; whether a dominant local incumbent is actively influencing a regulator is not published anywhere, that only surfaces through people on the ground.<strong> What this means for you:</strong> verify the public status yourself (we\'ll flag if it changes), and separately ask someone with local political visibility, not your partner, whether the incumbent has a documented pattern of regulatory influence in this specific category.</span>'
+};
+
+var QP={
+ n1:['What share of the cost base remains hard currency denominated, and what does a twenty percent depreciation do to unit economics?','Which instrument governs the chosen repatriation mechanism, and when was it last revised?','What is the observed, not statutory, approval time for transfers of this type?'],
+ n2:['What outage hours does the unit cost model assume, and where did that number come from?','What is the delivered cost per kWh on backup, including fuel logistics, not just the generator?','For beverage: has borehole yield been tested, and is the abstraction permitted?'],
+ n3:['Which single imported component, if unavailable for eight weeks, would idle the line?','What is the observed customs clearance time for that component at this port?','Is there a qualified alternate source, and has it been qualified or only identified?'],
+ n4:['What is the gap between statutory and observed approval time for the licences on the critical path?','Does this structure trigger a competition notification, and has anyone confirmed rather than assumed?','Is land title verified independently of the partner?'],
+ e1:['What is the largest single cash amount the target consumer routinely spends on this category in one transaction, and what is the source?','Does the pack format reflect that threshold, or what the line was specified to produce?','If price lands ten percent above the threshold, does the case survive?'],
+ e2:['What independent source confirms the stated coverage figure?','What is cost per unit to reach secondary cities, and who produced that number?','What share of the addressable market sits in channels the partner does not reach at all?'],
+ e3:['What is the net fiscal position after localization, not the avoided import duty in isolation?','How is the excise base computed for local production versus import, and does the model reflect that difference?','Which incentives does the case rely on, when do they expire, and what conditions attach?'],
+ e4:['If the single domestic packaging supplier raises prices or deprioritises you, what is the fallback and at what cost?','Is that supplier affiliated with a competitor, and has that been treated as a strategic exposure rather than a procurement one?','What share of input cost is still imported after localization?'],
+ e5:['What demonstrated volume, not projected volume, underpins the breakeven case?','What drives income volatility for this consumer, and what does a bad year do to utilisation?','If utilisation lands twenty points below plan for two years, what happens?'],
+ r1:['Which three numbers would change the decision if wrong by thirty percent, and what is the independent source for each?','Where the partner is the only source, what would a second source cost to obtain?','What does the partner know that headquarters does not, and has anyone asked them systematically?'],
+ r2:['Who operates this plant in year three, and where are they being recruited or trained now?','Is the maintenance regime preventive or reactive, and who holds the schedule?','If the two most senior technical staff leave in year two, what is written down?'],
+ r3:['If this project is wound down in year five, what is recoverable and what is written off?','Is this anchored in stated multi-year strategy, or in one sponsor who may move?','What triggers a partner buy-out, and at what valuation basis?'],
+ r4:['Has the trade bloc and tariff position been verified in the last twelve months rather than assumed?','Does the incumbent control an input you depend on?','What is the jurisdiction monitoring status, and what enhanced due diligence does it impose on the group?']
+};
+
+var QO={
+ n1:['Has repatriation actually cleared in the last four quarters, and how long did each take?','Is the hard currency share of the cost base rising or falling year on year?','Has the governing instrument been revised since the original approval?'],
+ n2:['What are actual outage hours against the hours assumed at approval?','What share of energy cost is now self-generation, and how has that moved?','Has water yield or permitted abstraction changed?'],
+ n3:['How many production hours were lost to input unavailability in the last twelve months?','Has the imported input ratio risen since commissioning?','Is the spare parts stocking level holding?'],
+ n4:['Have any licences been renewed on time, and were renewal timelines as expected?','Has any regulatory condition changed since approval?','Is land or permit status still uncontested?'],
+ e1:['Has the shelf price crossed the affordability threshold, and what happened to volume?','Has pack format been adjusted in response to purchasing power, or held?','What is the price gap to the nearest informal or imported substitute?'],
+ e2:['Has distributor inventory been building?','Has cost per unit to secondary cities moved against plan?','Has the partner reduced coverage in any region without saying so?'],
+ e3:['Has the excise or tariff position changed since approval?','Are the incentives relied on still in force, and when do they lapse?','Has any packaging-specific duty been introduced?'],
+ e4:['Has the domestic packaging supplier changed terms, ownership, or priority?','Has the imported share of input cost risen?','Has local raw input quality or availability degraded?'],
+ e5:['What is actual capacity utilisation against the approval assumption?','Is the forecast error trending in one direction?','Has customer concentration increased?'],
+ r1:['Which claims made at approval have since proved wrong, and by how much?','Has the partner met its side of the commitment?','Has the partner\'s own financial position changed?'],
+ r2:['How many senior technical staff have turned over since commissioning?','Is the maintenance backlog growing?','Have quality rejection rates moved?'],
+ r3:['Has headquarters restructured, changed sponsor, or reprioritised the region?','What would exit cost today, and is that number known?','Has the working capital cycle widened?'],
+ r4:['Has trade bloc membership or tariff treatment changed since approval?','Has the incumbent\'s position or integration changed?','Has jurisdiction monitoring status changed?']
+};
+
+var MON={
+ n1:['Days to clear an outbound transfer','Any single transfer exceeding 90 days, or two consecutive quarters of lengthening','Quarterly'],
+ n2:['Actual outage hours and self-generation share of energy cost','Outage hours exceeding the approval assumption by 25 percent','Monthly'],
+ n3:['Production hours lost to input unavailability','Any month above 2 percent of scheduled hours','Monthly'],
+ n4:['Licence renewal timelines and regulatory condition changes','Any renewal exceeding the previous cycle by 50 percent','Per renewal cycle'],
+ e1:['Shelf price against the single-transaction threshold','Price crossing the threshold, or volume falling more than 10 percent after a price move','Monthly'],
+ e2:['Cost per unit to secondary cities, distributor inventory days','Inventory days rising 30 percent above baseline','Monthly'],
+ e3:['Excise, tariff and incentive status','Any finance law revision affecting the category, or an incentive within 12 months of expiry','Annually, at finance law publication'],
+ e4:['Imported share of input cost, domestic supplier terms','Imported share rising 10 points, or a change in supplier ownership','Quarterly'],
+ e5:['Capacity utilisation against plan, forecast error direction','Utilisation below 70 percent of plan for two consecutive quarters','Monthly'],
+ r1:['Variance between partner-reported and independently verified figures','Any load-bearing claim proving wrong by more than 20 percent','Semi-annually'],
+ r2:['Senior technical turnover, maintenance backlog, quality rejection rate','Backlog growing three consecutive months, or loss of two senior technical staff','Monthly'],
+ r3:['Sponsor continuity, working capital cycle, estimated exit cost','Change of sponsor or regional strategy, or working capital cycle widening 20 percent','Semi-annually'],
+ r4:['Trade bloc status, tariff regime, jurisdiction monitoring status','Any change to bloc membership, CET treatment, or monitoring listing','Quarterly']
+};
+
+function status(k){ if(FAIL[k]())return 'red'; return AMBER[k]()?'amber':'green'; }
+function g(k){
+  var el=document.getElementById('gate_'+k);
+  if(!el)return;
+  if(FAIL[k]()){ el.textContent=GATES[k]; el.classList.add('on');
+    if(k.charAt(0)==='n')el.classList.add('hard'); else el.classList.remove('hard');
+  } else el.classList.remove('on');
+}
+
+function layerStatus(L){
+  var d=DIMS.filter(function(x){return x.layer===L;});
+  var reds=d.filter(function(x){return status(x.k)==='red';});
+  var ambers=d.filter(function(x){return status(x.k)==='amber';});
+  return {red:reds,amber:ambers,dims:d,
+    flag: reds.length? 'red' : (ambers.length? 'amber':'green')};
+}
+
+var LAYERNAME={1:'Part 1 of 3 - Can this even be done?',2:'Part 2 of 3 - Is it actually worth doing?',3:'Part 3 of 3 - Will it still make sense in five years?'};
+var LAYERSTATUS={
+ 1:{red:'Not met',amber:'Met, but with exposure',green:'Met'},
+ 2:{red:'Not established',amber:'Attractive, with caveats',green:'Established'},
+ 3:{red:'Not assessed',amber:'Durability at risk',green:'Assessed'}
+};
+
+function runAnalysis(){
+  var market=v('ctx_market')||'market not set';
+  var cat=v('ctx_cat')||'category not set';
+  var modeLabel = MODE==='p' ? 'Prospective: should we build' : 'Operational: should we remain';
+  document.getElementById('memoTitle').textContent='Localization assessment - '+cat+' / '+market;
+  document.getElementById('memoMeta').textContent='Generated '+new Date().toISOString().slice(0,10)+' - '+modeLabel+' - three layers, thirteen dimensions - not a recommendation';
+
+  var L1=layerStatus(1),L2=layerStatus(2),L3=layerStatus(3);
+
+  // verdict hierarchy
+  var vClass='',vText='',vSub='';
+  if(L1.flag==='red'){
+    vClass='stop';
+    vText='Stop at Part 1. Something that has to be true isn\'t true yet.';
+    vSub='Unresolved: '+L1.red.map(function(x){return x.n;}).join('; ')+'. Nothing after this point matters until these are settled, no amount of upside in Parts 2 and 3 changes that, so we\'re stopping here rather than giving you a score that would hide the real problem.';
+  } else if(L2.flag==='red'){
+    vText='Feasible, but economic attractiveness is not established.';
+    vSub='The basics hold. What\'s still unresolved in Part 2: '+L2.red.map(function(x){return x.n;}).join('; ')+'. The project can physically be done. Whether it\'s actually worth doing has not been shown yet.';
+  } else if(L3.flag==='red'){
+    vText='Attractive, but durability is not established.';
+    vSub='This is the pattern behind the biggest losses. Projects that clear Parts 1 and 2 get approved, then fail years later on something in Part 3 nobody checked. Unresolved: '+L3.red.map(function(x){return x.n;}).join('; ')+'.';
+  } else if(L1.flag==='amber'||L2.flag==='amber'||L3.flag==='amber'){
+    var ab=[].concat(L1.amber,L2.amber,L3.amber).map(function(x){return x.n;});
+    vText='No blocking gaps. Carry named caveats into the decision.';
+    vSub='Caveats on: '+ab.join('; ')+'. Put the questions below to the partner, record the answers alongside the case, and adopt the monitoring schedule rather than treating this as settled.';
+  } else {
+    vText='All three layers assessed with no gap identified.';
+    vSub='Worth asking what the assessment does not cover, listed below, before treating this as a clean result. Adopt the monitoring schedule: the assessment is a snapshot and the decision is not.';
+  }
+  if(v('ctx_market')==='DRC (not yet built)'){
+    vSub='This memo runs on structure only, we have not yet assembled DRC source records into this tool. That is a backlog item, not a finding that the sources do not exist, the DRC\'s central bank publishes its FX regulation directly and keeps it current. Treat every benchmark statement below as unverified for this market until that assembly work is done. '+vSub;
+  }
+  document.getElementById('verdictZone').innerHTML=
+    '<div class="verdict '+vClass+'"><div class="verdict-label">Assessment</div>'+
+    '<div class="verdict-text">'+vText+'</div><div class="verdict-sub">'+vSub+'</div></div>';
+
+  var Q = MODE==='p' ? QP : QO;
+  var qsLabel = MODE==='p' ? 'Questions to put to the partner' : 'Questions to put to the operation';
+  var html='';
+  [1,2,3].forEach(function(L){
+    var st=layerStatus(L);
+    html+='<div class="layer-result"><div class="lr-head">'+
+      '<span class="lr-dot dot-'+st.flag+'"></span>'+
+      '<span class="lr-name">'+LAYERNAME[L]+'</span>'+
+      '<span class="lr-status">'+LAYERSTATUS[L][st.flag]+'</span></div><div class="lr-body">';
+    st.dims.forEach(function(d){
+      var s=status(d.k);
+      html+='<div class="res-dim"><div class="res-dim-top"><span class="lr-dot dot-'+s+'"></span>'+
+        '<span class="res-dim-name">'+d.n+'</span></div>'+
+        '<div class="res-bench">'+BENCH[d.k]+'</div>'+
+        '<div class="qs-label">'+qsLabel+'</div>';
+      Q[d.k].forEach(function(q,i){html+='<div class="ic-q">'+(i+1)+'. '+q+'</div>';});
+      html+='</div>';
+    });
+    html+='</div></div>';
+  });
+  document.getElementById('memoBody').innerHTML=html;
+
+  var mh='';
+  DIMS.forEach(function(d){
+    var m=MON[d.k];
+    mh+='<div class="mon-row"><div class="mon-ind"><strong>'+d.n+'</strong><br/>'+m[0]+'</div>'+
+        '<div class="mon-thr">'+m[1]+'</div><div class="mon-cad">'+m[2]+'</div></div>';
+  });
+  document.getElementById('monBody').innerHTML=mh;
+
+  document.getElementById('output').classList.add('on');
+  document.getElementById('output').scrollIntoView({behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
