@@ -240,14 +240,11 @@ const THESES_MAP = {
   "Markets Where True":"Markets Where True",
   "Markets Where Fragmented or False":"Markets Where Fragmented or False","Markets Where Fragmented":"Markets Where Fragmented or False",
   "Postmortem":"Postmortem",
-  "Created Date":"Created Date","Last Updated":"Last Updated",
+  "Created Date":"Created Date","Last Date":"Last Date","Last Updated":"Last Date",
 };
-// Verified against the authoritative schema doc (GON_Airtable_Schema_v1_1.md) 28 July 2026,
-// after the previous unverified version caused the Theses preview to show "?" for every
-// record (renderRecords only checked Entry ID / Gap ID for the badge, never Thesis ID) and
-// silently dropped Source Article or Benchmark, Markets Where Fragmented or False, and
-// Last Updated, since none of those exact labels existed in the old map. Fixed both here
-// and in renderRecords below.
+// Verified against the live Theses CSV export (Theses-Grid_view.csv) 28 July 2026. The
+// authoritative doc (GON_Airtable_Schema_v1_1.md) was itself wrong on one field: it names
+// this field "Last Updated", the real Airtable field is "Last Date". Live export beats doc.
 
 const GAPMAP_MAP = {
   "Gap ID":"Gap ID","Gap Description":"Gap Description",
