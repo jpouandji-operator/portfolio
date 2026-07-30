@@ -77,9 +77,17 @@ a:hover{opacity:0.7;}
 .filter-chip{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.05em;padding:3px 10px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;transition:all 0.15s;background:transparent;}
 .filter-chip:hover{border-color:var(--muted);color:var(--ink);}
 .filter-chip.active{border-color:var(--ink);color:var(--ink);background:var(--paper2);}
-.mode-chip{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.05em;padding:3px 10px;border:1px solid var(--rule);color:var(--muted);cursor:pointer;transition:all 0.15s;background:transparent;}
-.mode-chip:hover{border-color:var(--muted);color:var(--ink);}
-.mode-chip.active{border-color:var(--accent,var(--ink));color:var(--ink);background:var(--paper2);font-weight:600;}
+.mode-selector{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:14px 0 16px;margin:0 0 22px;}
+.mode-selector-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;}
+.mode-options{display:flex;gap:10px;flex-wrap:wrap;}
+.mode-chip{flex:1 1 180px;text-align:left;font-family:inherit;padding:10px 13px;border:1px solid var(--rule);background:transparent;cursor:pointer;transition:all 0.15s;}
+.mode-chip:hover{border-color:var(--muted);}
+.mode-chip .mode-name{display:block;font-size:0.8rem;font-weight:600;color:var(--muted);letter-spacing:-0.01em;margin-bottom:2px;transition:color 0.15s;}
+.mode-chip .mode-desc{display:block;font-family:'IBM Plex Mono',monospace;font-size:0.56rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);opacity:0.75;line-height:1.35;}
+.mode-chip:hover .mode-name{color:var(--ink);}
+.mode-chip.active{border-color:var(--ink);background:var(--paper2);}
+.mode-chip.active .mode-name{color:var(--ink);}
+.mode-chip.active .mode-desc{opacity:1;}
 
 /* EXAMPLES */
 .examples-section{padding:0.75rem 0;border-bottom:1px solid var(--rule);animation:fadeUp 0.5s ease 0.2s both;}
@@ -372,20 +380,31 @@ a:hover{opacity:0.7;}
   <div id="screenEmpty" class="screen active">
     <div class="search-section">
       <div class="eyebrow">Operator intelligence for African private capital</div>
-      <div class="search-headline">What are you least confident <em>underwriting in this deal?</em></div>
-      <div class="search-sub">Name the market and sector. Get an operator read, then the data behind it.</div>
+      <div class="search-headline" id="searchHeadline">What are you least confident <em>underwriting in this deal?</em></div>
+      <div class="search-sub" id="searchSub">Name the market and sector. Get an operator read, then the data behind it.</div>
+      <div class="mode-selector">
+        <div class="mode-selector-label">Reading as</div>
+        <div class="mode-options">
+          <button class="mode-chip active" onclick="setMode(this,'investor')">
+            <span class="mode-name">Investor</span>
+            <span class="mode-desc">VC or PE, evaluating a deal</span>
+          </button>
+          <button class="mode-chip" onclick="setMode(this,'partner')">
+            <span class="mode-name">Partner / market entry</span>
+            <span class="mode-desc">Corporate BD, local production or distributor</span>
+          </button>
+          <button class="mode-chip" onclick="setMode(this,'institutional')">
+            <span class="mode-name">DFI / foundation</span>
+            <span class="mode-desc">Mandate scoping or commissioned diligence</span>
+          </button>
+        </div>
+      </div>
       <div class="search-row">
         <input type="text" class="search-input" id="mainInput" placeholder="e.g. mobile money Cameroun, energy deal South Africa, fintech exits Kenya..."/>
         <button class="search-btn" id="searchBtn" onclick="runSearch()">
           <span class="btn-text">Get operator read</span>
           <span class="dots"><span></span><span></span><span></span></span>
         </button>
-      </div>
-      <div class="filters" style="margin-bottom:6px;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);align-self:center;margin-right:4px;">Reading as</span>
-        <button class="mode-chip active" onclick="setMode(this,'investor')">Investor (VC/PE)</button>
-        <button class="mode-chip" onclick="setMode(this,'partner')">Partner / market entry</button>
-        <button class="mode-chip" onclick="setMode(this,'institutional')">DFI / foundation</button>
       </div>
       <div class="filters">
         <button class="filter-chip active" onclick="setFilter(this,'')">All signals</button>
@@ -495,10 +514,40 @@ function saveToken(){
 }
 
 // ── FILTER / SEARCH ────────────────────────────────────────────────────────
+const MODE_COPY={
+  investor:{
+    headline:'What are you least confident <em>underwriting in this deal?</em>',
+    sub:'Name the market and sector. Get an operator read, then the data behind it.',
+    placeholder:'e.g. mobile money Cameroun, energy deal South Africa, fintech exits Kenya...',
+    btn:'Get operator read'
+  },
+  partner:{
+    headline:'What could actually <em>break this partnership?</em>',
+    sub:'Name the market and sector. Get the real operating conditions, then the data behind them.',
+    placeholder:'e.g. packaging supply Nigeria, port clearance Kenya, local partner Cote d\'Ivoire...',
+    btn:'Get operator read'
+  },
+  institutional:{
+    headline:'What is actually <em>verified in this market?</em>',
+    sub:'Name the market and sector. Get the evidence basis, and where it is genuinely thin.',
+    placeholder:'e.g. labour enforcement Zambia, regulatory feasibility DRC, workforce capacity Ghana...',
+    btn:'Get evidence read'
+  }
+};
+
 function setMode(btn,mode){
   currentMode=mode;
   document.querySelectorAll('.mode-chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
+  const c=MODE_COPY[mode]||MODE_COPY.investor;
+  const h=document.getElementById('searchHeadline');
+  const sub=document.getElementById('searchSub');
+  const inp=document.getElementById('mainInput');
+  const bt=document.querySelector('#searchBtn .btn-text');
+  if(h)h.innerHTML=c.headline;
+  if(sub)sub.textContent=c.sub;
+  if(inp)inp.placeholder=c.placeholder;
+  if(bt)bt.textContent=c.btn;
 }
 
 function setFilter(el,val){
