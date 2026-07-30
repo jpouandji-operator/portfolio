@@ -370,6 +370,12 @@ a:hover{opacity:0.7;}
     <input type="password" class="token-input" id="tokenInput" placeholder="pat..."/>
     <button class="token-save" onclick="saveToken()">Save</button>
   </div>
+  <div class="token-panel-label" style="margin-top:14px;">Anthropic API Key (optional, enables the written synthesis layer)</div>
+  <div class="token-row">
+    <input type="password" class="token-input" id="keyInput" placeholder="sk-ant-..."/>
+    <button class="token-save" onclick="saveKey()">Save</button>
+  </div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:0.55rem;color:var(--muted);margin-top:8px;line-height:1.5;">Without a key the tool still returns the verified evidence, ranked, with conflicts and confidence. It simply will not write the prose synthesis around it.</div>
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
@@ -497,6 +503,15 @@ let currentBrief='';
 
 // ── TOKEN ──────────────────────────────────────────────────────────────────
 function getToken(){return localStorage.getItem('gon_tok')||'';}
+function getKey(){return localStorage.getItem('gon_key')||'';}
+function saveKey(){
+  const v=document.getElementById('keyInput').value.trim();
+  if(!v){showToast('Paste a key first');return;}
+  localStorage.setItem('gon_key',v);
+  document.getElementById('keyInput').value='';
+  showToast('API key saved locally');
+  document.getElementById('tokenPanel').classList.remove('open');
+}
 function initToken(){
   const t=getToken(),btn=document.getElementById('tokenBtn');
   if(t){btn.textContent='● Token active';btn.classList.add('active');}
@@ -581,7 +596,13 @@ const SECTOR_MAP={
   'payment':'Fintech / Mobile money','energy':'Energy / Cleantech',
   'solar':'Energy / Cleantech','cleantech':'Energy / Cleantech',
   'agritech':'Agritech','agriculture':'Agritech',
-  'health':'Healthtech','saas':'SaaS / B2B','b2b':'SaaS / B2B',
+  'health':'Healthtech','pharmaceutical':'Healthtech','pharma':'Healthtech',
+  'medical':'Healthtech','clinic':'Healthtech','hospital':'Healthtech',
+  'telemedicine':'Healthtech','diagnostics':'Healthtech','vaccine':'Healthtech',
+  'saas':'SaaS / B2B','b2b':'SaaS / B2B','software':'SaaS / B2B',
+  'manufacturing':'FMCG / Manufacturing','fmcg':'FMCG / Manufacturing',
+  'packaging':'FMCG / Manufacturing','consumer goods':'FMCG / Manufacturing',
+  'bottling':'FMCG / Manufacturing','food':'FMCG / Manufacturing',
   'ecommerce':'E-commerce / Logistics','logistics':'E-commerce / Logistics',
   'media':'Entertainment / Media','entertainment':'Entertainment / Media',
   'telecom':'Telecoms','telco':'Telecoms',
@@ -639,11 +660,12 @@ async function runSearch(){
 
   try{
     // Fetch Airtable records
-    const {direct,adjacent,theses}=await fetchAll(token,query);
+    const R=await fetchAll(token,query);
+    const {direct,adjacent,theses}=R;
     currentResults=[...direct,...adjacent];
 
     // Generate operator brief via Claude API
-    await generateBriefAndRender(query,direct,adjacent,theses);
+    await generateBriefAndRender(query,direct,adjacent,theses,R);
 
     // Render evidence cards
     renderEvidence(direct,adjacent);
@@ -660,26 +682,82 @@ async function runSearch(){
 async function fetchAll(token,query){
   const geo=extractGeo(query);
   const sector=extractSector(query);
-  const direct=await fetchDirect(token,geo,sector);
+
+  // Diagnose coverage honestly before assembling anything. The failure this replaces:
+  // when a sector had no entries in a market, the tool silently returned whatever else
+  // existed for that market and presented it as the answer.
+  let direct=[],marketOnly=[],sectorElsewhere=[],coverage='';
+
+  if(geo&&sector){
+    direct=await fetchScoped(token,geo,sector,query);
+    if(direct.length===0){
+      coverage='sector_absent_in_market';
+      marketOnly=await fetchScoped(token,geo,null,query);
+      sectorElsewhere=await fetchScoped(token,null,sector,query);
+    }else{
+      coverage='direct';
+    }
+  }else if(geo){
+    direct=await fetchScoped(token,geo,null,query);
+    coverage=direct.length?'market_only_no_sector':'no_market_data';
+  }else if(sector){
+    direct=await fetchScoped(token,null,sector,query);
+    coverage=direct.length?'sector_only_no_market':'no_sector_data';
+  }else{
+    coverage='underspecified';
+  }
+
   let adjacent=[];
-  if(sector){adjacent=await fetchAdjacent(token,geo,sector,direct);}
+  if(sector&&coverage==='direct'){adjacent=await fetchAdjacent(token,geo,sector,direct);}
   const theses=await fetchTheses(token,geo);
-  return{direct,adjacent,theses};
+  return{direct,adjacent,theses,coverage,marketOnly,sectorElsewhere,geo,sector};
 }
 
-async function fetchDirect(token,geo,sector){
+async function fetchScoped(token,geo,sector,query){
   const parts=[];
   if(geo)parts.push(`SEARCH("${geo}",{Market})`);
   if(sector)parts.push(`{Sector}="${sector}"`);
   let formula=parts.length===2?`AND(AND(${parts.join(',')}),{Entry Status}="Active")`:
     parts.length===1?`AND(${parts[0]},{Entry Status}="Active")`:`{Entry Status}="Active"`;
   if(currentFilter)formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;
-  const records=await airtableFetch(token,formula,20);
-  return rankByEvidenceQuality(records).slice(0,10);
+  const records=await airtableFetch(token,formula,25);
+  return rankByRelevanceThenQuality(records,query).slice(0,10);
 }
 
-// Rank by real evidence quality, not arbitrary order. Tier A and High confidence
-// surface first so the model reasons from the strongest available evidence.
+// Relevance to the actual question asked, scored before evidence quality is considered.
+// Without this, ranking by strength alone surfaces the best-sourced entry in the market
+// even when it has nothing to do with what was asked.
+const STOPWORDS=new Set(['i','a','an','the','in','on','of','to','for','and','or','is','are','want','need','looking','about','with','my','we','our','this','that','it','be','can','should','would','do','does','how','what','why','into','at','as','by','from','deal','deals','invest','investing','investment','startup','company','business','market']);
+function queryTokens(query){
+  return (query||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
+    .filter(t=>t.length>2&&!STOPWORDS.has(t));
+}
+function scoreRelevance(r,tokens){
+  if(!tokens.length)return 0;
+  const f=r.fields;
+  const hay=((f['Metric Name']||'')+' '+(f['Value']||'')+' '+(f['IC Dimension']||'')+' '+(f['Sector']||'')+' '+(f['Operator Note']||'')).toLowerCase();
+  let hits=0;
+  tokens.forEach(t=>{
+    if(hay.indexOf(t)!==-1)hits+=1;
+    // reward a match in the headline metric name more heavily
+    if((f['Metric Name']||'').toLowerCase().indexOf(t)!==-1)hits+=2;
+  });
+  return hits;
+}
+// Rank by relevance first, then by evidence quality as the tiebreak.
+function rankByRelevanceThenQuality(records,query){
+  const tokens=queryTokens(query);
+  const tierScore=t=>{const s=(t||'');return s.indexOf('Tier A')===0?3:s.indexOf('Tier B')===0?2:1;};
+  const confScore=c=>{const s=(c||'');return s==='High'?3:s==='Medium'?2:s==='Low'?1:0;};
+  const testScore=t=>{const s=(t||'');
+    if(s.indexOf('Pass (all three')===0||s==='Pass')return 3;
+    if(s.indexOf('Pass with caveat')===0)return 2;
+    return 1;};
+  return records.slice().map(r=>({r,rel:scoreRelevance(r,tokens),
+    q:tierScore(r.fields['Data Tier'])*3+confScore(r.fields['Confidence Level'])*2+testScore(r.fields['Three-Test Status'])}))
+    .sort((a,b)=>(b.rel-a.rel)||(b.q-a.q))
+    .map(x=>x.r);
+}
 function rankByEvidenceQuality(records){
   const tierScore=t=>{const s=(t||'');return s.indexOf('Tier A')===0?3:s.indexOf('Tier B')===0?2:1;};
   const confScore=c=>{const s=(c||'');return s==='High'?3:s==='Medium'?2:s==='Low'?1:0;};
@@ -780,7 +858,8 @@ async function airtableFetch(token,formula,max){
 }
 
 // ── CLAUDE API - OPERATOR BRIEF ────────────────────────────────────────────
-async function generateBriefAndRender(query,direct,adjacent,theses){
+async function generateBriefAndRender(query,direct,adjacent,theses,R){
+  R=R||{coverage:'direct',marketOnly:[],sectorElsewhere:[]};
   const geo=extractGeo(query)||'the target market';
   const sector=extractSector(query)||'this sector';
 
@@ -896,6 +975,17 @@ Respond with JSON only. No preamble, no markdown fences.`;
 Market: ${geo}
 Sector: ${sector}
 
+COVERAGE DIAGNOSIS - this governs what you are allowed to claim:
+${(function(){
+  const c=R.coverage;
+  if(c==='sector_absent_in_market')return'THE CORPUS HAS NO ENTRIES FOR THIS SECTOR IN THIS MARKET. You must say this plainly and early. Do not present the market-level entries below as if they answered the question asked. They are context about the market, not evidence about this sector in it. Where same-sector entries from OTHER markets are listed, label them explicitly as other markets and directional only.';
+  if(c==='market_only_no_sector')return'No sector was identified in the query, so this is market-wide evidence only. Say that the question is underspecified for a sector-level read, and name what sector detail would sharpen it.';
+  if(c==='sector_only_no_market')return'No market was identified in the query. This is sector-wide evidence across markets. Say that a market needs naming before this becomes specific.';
+  if(c==='no_market_data')return'THE CORPUS HAS NO ACTIVE ENTRIES FOR THIS MARKET AT ALL. Say so plainly. Do not imply coverage exists.';
+  if(c==='underspecified')return'Neither a market nor a sector could be identified in the query. Ask for both rather than answering.';
+  return'Direct coverage: the entries below match both the market and the sector asked about.';
+})()}
+
 EVIDENCE BASIS (assessed from the corpus itself, not from row count): ${confidence.level}. ${confidence.basis}
 
 RETRIEVED BENCHMARK ENTRIES (ranked by evidence quality, strongest first):
@@ -909,20 +999,36 @@ ${thesisContext}
 
 ${adjacent.length>0?`Adjacent market signals (same sector, different market - directional only, do not treat as evidence for this market): ${adjacent.map(r=>`${r.fields['Market']} - ${r.fields['Metric Name']}`).join(', ')}`:''}
 
+${(R.marketOnly&&R.marketOnly.length)?`MARKET-LEVEL CONTEXT ONLY (this market, but NOT the sector asked about - do not present as an answer to the sector question): ${R.marketOnly.slice(0,6).map(r=>`[${r.fields['Sector']||'no sector'}] ${r.fields['Metric Name']}`).join(' | ')}`:''}
+
+${(R.sectorElsewhere&&R.sectorElsewhere.length)?`SAME SECTOR, DIFFERENT MARKETS (closest available comparable, explicitly NOT evidence for the market asked about): ${R.sectorElsewhere.slice(0,6).map(r=>`${r.fields['Market']} - ${r.fields['Metric Name']}`).join(' | ')}`:''}
+
 Write a short operator brief for a VC doing diligence on a deal in this market.`;
 
   try{
+    const apiKey=getKey();
+    if(!apiKey){throw new Error('NO_API_KEY');}
     const response=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:systemPrompt,
         messages:[{role:'user',content:userPrompt}]
       })
     });
 
+    if(!response.ok){
+      let msg='API error '+response.status;
+      try{const e=await response.json();msg=e.error?.message||msg;}catch(_){}
+      throw new Error(msg);
+    }
     const data=await response.json();
     const text=data.content?.[0]?.text||'';
 
@@ -941,18 +1047,57 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
 
   }catch(e){
     // Fallback: show a honest no-data brief
+    // The previous fallback asserted "validated data coverage is limited" on EVERY
+    // failure, including a pure API failure with a fully populated corpus behind it.
+    // That produced identical briefs for unrelated queries and made a false claim
+    // about the corpus. Failure cause and coverage state are now separate facts.
+    const apiUnavailable=(e&&e.message==='NO_API_KEY');
+    const n=direct.length;
+    const cov=R.coverage;
+    const strongest=direct.slice(0,3).map(r=>{
+      const f=r.fields;
+      return `${f['Metric Name']||'untitled'} (${f['Confidence Level']||'confidence not stated'}, ${(f['Data Tier']||'tier not stated').split(' -')[0]}, source ${f['Source Name']||'not stated'} ${f['Source Date']||''})`;
+    });
+
+    let realityText;
+    if(cov==='sector_absent_in_market'){
+      realityText=`The corpus has no verified entries for this sector in ${geo}. That is the finding, and it is not the same thing as the sector being unattractive here. ${(R.marketOnly&&R.marketOnly.length)?`There are ${R.marketOnly.length} verified ${geo} entries in other sectors, which describe the market but not this sector within it. `:''}${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The closest comparable evidence is the same sector in other markets: ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}. Treat that as directional only, not as evidence for ${geo}.`:''}`;
+    }else if(cov==='no_market_data'){
+      realityText=`The corpus has no active entries for ${geo} at all. Nothing below is evidence about this market.`;
+    }else if(cov==='underspecified'){
+      realityText=`No market and no sector could be identified in that query. Name both and the read becomes specific rather than generic.`;
+    }else if(n>0){
+      realityText=`${n} verified entr${n===1?'y':'ies'} matched this market and sector. The strongest available, with their own confidence and tier attached: ${strongest.join('; ')}. The written synthesis layer is unavailable, so this is the evidence itself rather than a narrative around it.`;
+    }else{
+      realityText=`No verified entries matched this query.`;
+    }
+
     const fallback={
-      market_reality:`GON's validated data coverage for ${geo} ${sector} is limited at this stage. What we can say: the absence of primary validated data for this specific combination is itself a signal - it means most assumptions being used in models for this market are borrowed from better-documented markets and may not hold.`,
-      what_investors_underestimate:`The tendency to import assumptions from better-documented African markets (Nigeria, Kenya, South Africa) into less-documented ones without adjusting for local distribution infrastructure, regulatory context, and customer behavior differences.`,
-      what_this_changes:`Due diligence for this market should rely more heavily on primary founder data and direct operator interviews rather than published benchmarks. Ask the founder to show you their actual unit economics from the ground, not projections.`,
-      ic_questions:[
-        `Show me your actual CAC and LTV from the last 6 months of operations - not projections, actual data from this market specifically.`,
-        `What is the main reason comparable businesses have failed or struggled in this market, and why are you different?`,
-        `Which assumption in your model would most change your unit economics if it turns out to be wrong?`
-      ],
-      conflicts_and_gaps:`The material gap here is the absence of verified GON benchmarks for this market and sector combination itself. Nothing in this brief should be treated as evidence-backed for this specific market; it is pattern recognition from adjacent markets only.`,
-      cross_market_pattern:`No GON cross-market thesis currently has verified coverage of this market, which is itself the finding: this market has not yet been tested against the patterns confirmed elsewhere in the corpus.`,
-      confidence_note:`Limited validated data for this specific market in GON database. Brief based on general operator pattern recognition. Treat as directional only.`
+      market_reality:realityText,
+      what_investors_underestimate:(n>0
+        ?`Read the confidence level and source tier on each entry above before using any figure. They are not interchangeable, and a Tier B or caveated figure should not carry the same weight as a Tier A clean pass.`
+        :`That an absence of coverage in this corpus is a statement about this corpus, not a statement about the market. It means the question has to be answered from primary sources directly.`),
+      what_this_changes:(n>0
+        ?`The evidence above is usable now. What is missing is the prose synthesis, not the underlying verification.`
+        :`This question needs primary founder or operator data, or a dedicated research pass, before it can be answered from the corpus.`),
+      conflicts_and_gaps:(conflicts.length
+        ?`Detected in the retrieved set: ${conflicts.join(' ')}`
+        :(cov==='sector_absent_in_market'
+          ?`The gap is specific and worth stating precisely: this sector has no coverage in ${geo}, while the market itself does have coverage in other sectors. Those are different gaps.`
+          :`No numeric conflicts or supersessions were detected among the retrieved entries.`)),
+      cross_market_pattern:(theses&&theses.length
+        ?`${theses.length} GON thes${theses.length===1?'is':'es'} reference ${geo}: ${theses.slice(0,3).map(t=>`${t.fields['Thesis ID']||''} (${t.fields['Thesis State']||'state unknown'})`).join(', ')}.`
+        :`No GON cross-market thesis currently references ${geo}.`),
+      ic_questions:(n>0
+        ?[`Which of the entries above would most change your model if it turned out to be wrong?`,
+          `For any figure you plan to rely on, has its source date been checked against its decay class?`,
+          `Where two entries disagree, which one does your own ground experience support?`]
+        :[`What primary source would settle this question, and who holds it?`,
+          `Which better-documented market are you implicitly borrowing assumptions from, and does that comparison actually hold?`,
+          `What would you need to see verified before committing capital against this gap?`]),
+      confidence_note:(apiUnavailable
+        ?`Written synthesis unavailable: no Anthropic API key is saved, so the model layer did not run. The retrieval, ranking, confidence assessment and conflict detection above are the corpus's own and are unaffected.`
+        :`Written synthesis unavailable (${(e&&e.message)?e.message:'model layer error'}). The retrieval, ranking, confidence assessment and conflict detection above are the corpus's own and are unaffected.`)
     };
     currentBrief=fallback;
     renderBrief(fallback,geo,sector,'No verified data',direct.length,adjacent.length,MODE.labels);
@@ -1068,14 +1213,21 @@ function buildEvBar(r,isAdjacent){
 function renderCard(r,idx,isAdjacent){
   const f=r.fields;
   const sev=isAdjacent?'green':getSeverity(r);
-  const flagLabels={red:['flag-red','Critical gap'],amber:['flag-amber','Watch closely'],green:['flag-green','Adequately covered']};
+  const flagLabels={red:['flag-red','Strong evidence'],amber:['flag-amber','Caveated evidence'],green:['flag-green','Directional only']};
   const[flagCls,flagLabel]=isAdjacent?['flag-adjacent','Comparable market']:flagLabels[sev];
   const implication=getImplication(r);
   const icq=getICQ(r);
   const notMean=getNotMean(r,isAdjacent);
   const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
   const value=(f['Value']||'').substring(0,80);
-  const cleanNote=(f['Operator Note']||'').replace(/Core claim:.*$/ms,'').replace(/Assumption invalidated:.*$/ms,'').replace(/Predicted effect:.*$/ms,'').trim().substring(0,500);
+  let cleanNote=(f['Operator Note']||'').replace(/Core claim:.*$/ms,'').replace(/Assumption invalidated:.*$/ms,'').replace(/Predicted effect:.*$/ms,'').trim();
+  // strip internal corpus-authoring meta-commentary before anything is shown to a reader
+  cleanNote=cleanNote
+    .split(/(?<=\.)\s+/)
+    .filter(sent=>!/(this session|this corpus|this pass|this dimension|this entry closes|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|as flagged (earlier|above)|per this corpus)/i.test(sent))
+    .join(' ')
+    .trim()
+    .substring(0,500);
 
   return`<div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
     <div class="card-flags">
