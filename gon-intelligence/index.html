@@ -730,6 +730,54 @@ async function fetchScoped(token,geo,sector,query){
 // Relevance to the actual question asked, scored before evidence quality is considered.
 // Without this, ranking by strength alone surfaces the best-sourced entry in the market
 // even when it has nothing to do with what was asked.
+
+// What kind of venture is being asked about, and therefore which parts of the corpus
+// actually bear on it. This is routing, not inference: it decides what to look at,
+// it never decides what is true.
+const INTENT_MAP=[
+  {match:/\b(plant|factory|manufactur|industrial|assembly|processing|bottling|production line)\b/i,
+   label:'an industrial or manufacturing build',
+   priorities:[
+     {dim:'Unit economics',why:'power and input costs decide whether a plant works here at all'},
+     {dim:'Distribution economics',why:'getting inputs in and product out is usually the binding constraint'},
+     {dim:'Regulatory environment',why:'permitting and labour law set your fixed cost floor'},
+     {dim:'Currency / macro risk',why:'you will need to get returns back out'}
+   ]},
+  {match:/\b(acquir|acquisition|exit|sell|buyout|m&a|divest)\b/i,
+   label:'an acquisition or exit',
+   priorities:[
+     {dim:'Exit dynamics',why:'who actually buys, and at what, in this market'},
+     {dim:'Regulatory environment',why:'approval and ownership rules can gate the deal'},
+     {dim:'Currency / macro risk',why:'proceeds have to convert and leave'}
+   ]},
+  {match:/\b(distribut|retail|logistics|supply chain|last mile|import|export)\b/i,
+   label:'a distribution or supply chain question',
+   priorities:[
+     {dim:'Distribution economics',why:'route to market is the whole question here'},
+     {dim:'Unit economics',why:'freight and clearance costs sit directly in margin'},
+     {dim:'Regulatory environment',why:'customs and licensing determine what is actually possible'}
+   ]},
+  {match:/\b(fintech|payment|mobile money|wallet|lending|credit|bank)\b/i,
+   label:'a financial services venture',
+   priorities:[
+     {dim:'Regulatory environment',why:'licensing determines whether you can operate at all'},
+     {dim:'Demand validation',why:'registered users and active users are different numbers'},
+     {dim:'Distribution economics',why:'agent and channel economics decide unit cost'},
+     {dim:'Currency / macro risk',why:'float and settlement carry currency exposure'}
+   ]},
+  {match:/\b(energy|power|solar|grid|electric|renewable)\b/i,
+   label:'an energy or power venture',
+   priorities:[
+     {dim:'Unit economics',why:'tariff structure and subsidy decide the revenue model'},
+     {dim:'Regulatory environment',why:'the regulator sets your price, not the market'},
+     {dim:'Currency / macro risk',why:'tariffs rarely track currency, and that gap is the risk'}
+   ]}
+];
+function detectIntent(query){
+  for(const it of INTENT_MAP){if(it.match.test(query||''))return it;}
+  return null;
+}
+
 const STOPWORDS=new Set(['i','a','an','the','in','on','of','to','for','and','or','is','are','want','need','looking','about','with','my','we','our','this','that','it','be','can','should','would','do','does','how','what','why','into','at','as','by','from','deal','deals','invest','investing','investment','startup','company','business','market']);
 function queryTokens(query){
   return (query||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
@@ -738,7 +786,9 @@ function queryTokens(query){
 function scoreRelevance(r,tokens){
   if(!tokens.length)return 0;
   const f=r.fields;
-  const hay=((f['Metric Name']||'')+' '+(f['Value']||'')+' '+(f['IC Dimension']||'')+' '+(f['Sector']||'')+' '+(f['Operator Note']||'')).toLowerCase();
+  // Operator Note is deliberately excluded: it contains internal authoring commentary,
+  // which produced false matches against ordinary words in the query.
+  const hay=((f['Metric Name']||'')+' '+(f['Value']||'')+' '+(f['IC Dimension']||'')+' '+(f['Sector']||'')).toLowerCase();
   let hits=0;
   tokens.forEach(t=>{
     if(hay.indexOf(t)!==-1)hits+=1;
@@ -750,6 +800,9 @@ function scoreRelevance(r,tokens){
 // Rank by relevance first, then by evidence quality as the tiebreak.
 function rankByRelevanceThenQuality(records,query){
   const tokens=queryTokens(query);
+  const intent=detectIntent(query);
+  const prio={};
+  if(intent)intent.priorities.forEach((p,i)=>{prio[p.dim]=intent.priorities.length-i;});
   const tierScore=t=>{const s=(t||'');return s.indexOf('Tier A')===0?3:s.indexOf('Tier B')===0?2:1;};
   const confScore=c=>{const s=(c||'');return s==='High'?3:s==='Medium'?2:s==='Low'?1:0;};
   const testScore=t=>{const s=(t||'');
@@ -758,7 +811,8 @@ function rankByRelevanceThenQuality(records,query){
     return 1;};
   return records.slice().map(r=>({r,rel:scoreRelevance(r,tokens),
     q:tierScore(r.fields['Data Tier'])*3+confScore(r.fields['Confidence Level'])*2+testScore(r.fields['Three-Test Status'])}))
-    .sort((a,b)=>(b.rel-a.rel)||(b.q-a.q))
+    .map(x=>Object.assign(x,{p:(prio[x.r.fields['IC Dimension']]||0)}))
+    .sort((a,b)=>(b.p-a.p)||(b.rel-a.rel)||(b.q-a.q))
     .map(x=>x.r);
 }
 function rankByEvidenceQuality(records){
@@ -802,28 +856,46 @@ async function fetchTheses(token,geo){
 // surfaced rather than silently averaged away.
 function detectConflicts(records){
   const flags=[];
+  // A conflict is only a conflict if the two entries are measuring the same thing.
+  // The previous version compared the first number found in any two entries sharing a
+  // market and dimension, which reported a date against a truck count and a minimum
+  // wage against a border queue. Fabricated contradictions are worse than none: they
+  // tell a reader the corpus disagrees with itself when it does not.
+  const SIG=new Set(['minimum','wage','tariff','clearance','days','cost','price','rate','share','penetration','margin','fee','levy','tax','capital','volume','users','accounts']);
+  const unitOf=v=>{
+    const t=String(v||'');
+    if(/%/.test(t))return 'pct';
+    if(/\$|USD|EUR|FCFA|CDF|KES|NGN|ZAR/i.test(t))return 'money';
+    if(/\bdays?\b|\bhours?\b|\bweeks?\b/i.test(t))return 'time';
+    return null;
+  };
+  const keyTokens=r=>new Set(String(r.fields['Metric Name']||'').toLowerCase()
+    .replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(t=>SIG.has(t)));
+
   for(let i=0;i<records.length;i++){
     for(let j=i+1;j<records.length;j++){
       const a=records[i].fields,b=records[j].fields;
-      const sameMetric=(a['IC Dimension']||'')===(b['IC Dimension']||'')&&(a['Market']||'').toString()===(b['Market']||'').toString();
-      if(!sameMetric)continue;
+      if((a['IC Dimension']||'')!==(b['IC Dimension']||''))continue;
+      if(String(a['Market']||'')!==String(b['Market']||''))continue;
+      const ua=unitOf(a['Value']),ub=unitOf(b['Value']);
+      if(!ua||ua!==ub)continue;                      // must be the same kind of quantity
+      const ka=keyTokens(records[i]),kb=keyTokens(records[j]);
+      const shared=[...ka].filter(t=>kb.has(t));
+      if(shared.length<2)continue;                    // must be measuring the same thing
       const na=extractFirstNumber(a['Value']),nb=extractFirstNumber(b['Value']);
-      if(na!==null&&nb!==null&&na>0&&nb>0){
-        const ratio=Math.max(na,nb)/Math.min(na,nb);
-        if(ratio>1.5){
-          flags.push(`${a['Entry ID']||'?'} and ${b['Entry ID']||'?'} report materially different figures for the same market and dimension (${na} vs ${nb}). Surface this disagreement; do not average or silently prefer one.`);
-        }
+      if(na===null||nb===null||na<=0||nb<=0)continue;
+      if(Math.max(na,nb)/Math.min(na,nb)>1.5){
+        flags.push(`Two sources give different figures for ${shared.join(' ')} in this market: ${na} and ${nb}. Worth resolving before either is relied on.`);
       }
     }
   }
-  // Supersession: an Operator Note explicitly saying it supersedes/sharpens another entry
   records.forEach(r=>{
     const note=(r.fields['Operator Note']||'');
-    if(/supersed|sharpen|corrects an earlier|replaces GON-/i.test(note)){
-      flags.push(`${r.fields['Entry ID']||'?'} explicitly corrects or supersedes an earlier entry. Serve the corrected version and note that a correction occurred.`);
+    if(/supersed|replaces GON-|corrects an earlier/i.test(note)){
+      flags.push('One of these findings corrects an earlier one. The corrected version is the one shown.');
     }
   });
-  return flags.slice(0,6);
+  return flags.slice(0,4);
 }
 
 function extractFirstNumber(val){
@@ -1050,57 +1122,68 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
 
   }catch(e){
     // Fallback: show a honest no-data brief
-    // The previous fallback asserted "validated data coverage is limited" on EVERY
-    // failure, including a pure API failure with a fully populated corpus behind it.
-    // That produced identical briefs for unrelated queries and made a false claim
-    // about the corpus. Failure cause and coverage state are now separate facts.
+    // Without the model layer this still has to read like a brief, not a system status
+    // report. It routes on what the question implies, then states the consequence for
+    // the reader rather than handing over rows and expecting them to infer it.
     const apiUnavailable=(e&&e.message==='NO_API_KEY');
     const n=direct.length;
     const cov=R.coverage;
-    const strongest=direct.slice(0,3).map(r=>{
-      const f=r.fields;
-      return `${f['Metric Name']||'untitled'} (${f['Confidence Level']||'confidence not stated'}, ${(f['Data Tier']||'tier not stated').split(' -')[0]}, source ${f['Source Name']||'not stated'} ${f['Source Date']||''})`;
-    });
+    const intent=(typeof detectIntent==='function')?detectIntent(query):null;
+    const dimsFound=[...new Set(direct.map(r=>r.fields['IC Dimension']).filter(Boolean))];
+
+    // what the corpus covers, framed as consequence rather than as dimension names
+    const consequences=[];
+    if(intent){
+      intent.priorities.forEach(pr=>{
+        const hit=direct.find(r=>r.fields['IC Dimension']===pr.dim);
+        if(hit)consequences.push(`${pr.why.charAt(0).toUpperCase()+pr.why.slice(1)}. ${readerSafe(hit.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(hit.fields['Value']||'').substring(0,180)}`);
+      });
+    }
+    const missing=intent?intent.priorities.filter(pr=>!direct.some(r=>r.fields['IC Dimension']===pr.dim)):[];
 
     let realityText;
     if(cov==='sector_absent_in_market'){
-      realityText=`The corpus has no verified entries for this sector in ${geo}. That is the finding, and it is not the same thing as the sector being unattractive here. ${(R.marketOnly&&R.marketOnly.length)?`There are ${R.marketOnly.length} verified ${geo} entries in other sectors, which describe the market but not this sector within it. `:''}${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The closest comparable evidence is the same sector in other markets: ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}. Treat that as directional only, not as evidence for ${geo}.`:''}`;
+      realityText=`Nothing in the corpus covers this sector in ${geo}. That is a statement about the evidence, not about the opportunity. ${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The nearest comparable is the same sector in ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}, which is worth reading for structure but is not evidence for ${geo}.`:''}`;
     }else if(cov==='no_market_data'){
-      realityText=`The corpus has no active entries for ${geo} at all. Nothing below is evidence about this market.`;
+      realityText=`There is no verified coverage of ${geo} in the corpus at all. Nothing below should be read as evidence about this market.`;
     }else if(cov==='underspecified'){
-      realityText=`No market and no sector could be identified in that query. Name both and the read becomes specific rather than generic.`;
+      realityText=`That question needs a market and a sector before it can be answered specifically. Name both and this becomes a real read rather than a general one.`;
+    }else if(n>0&&consequences.length){
+      realityText=`Read as ${intent.label}, ${geo} turns on a few things and the corpus has real coverage of them. ${consequences.slice(0,3).join(' ')}`;
     }else if(n>0){
-      realityText=`${n} verified entr${n===1?'y':'ies'} matched this market and sector. The strongest available, with their own confidence and tier attached: ${strongest.join('; ')}. The written synthesis layer is unavailable, so this is the evidence itself rather than a narrative around it.`;
+      realityText=`${n} verified finding${n===1?'':'s'} bear on ${geo} here. ${direct.slice(0,2).map(r=>readerSafe(r.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(r.fields['Value']||'').substring(0,150)).join(' ')}`;
     }else{
-      realityText=`No verified entries matched this query.`;
+      realityText=`Nothing in the corpus matches that question yet.`;
     }
 
     const fallback={
       market_reality:realityText,
-      what_investors_underestimate:(n>0
-        ?`Read the confidence level and source tier on each entry above before using any figure. They are not interchangeable, and a Tier B or caveated figure should not carry the same weight as a Tier A clean pass.`
-        :`That an absence of coverage in this corpus is a statement about this corpus, not a statement about the market. It means the question has to be answered from primary sources directly.`),
+      what_investors_underestimate:(missing.length
+        ? `The gap worth naming: ${missing.map(m=>m.why).join(', and ')}. The corpus does not cover that here, so it stays an open question rather than a verified one.`
+        : (n>0
+          ? `Most of what will decide this is operational rather than published. What is above is what can be verified from primary sources; the rest has to come from people who have actually run something here.`
+          : `An absence of coverage is a fact about the evidence, not about the market. It means this has to be answered from primary sources directly.`)),
       what_this_changes:(n>0
-        ?`The evidence above is usable now. What is missing is the prose synthesis, not the underlying verification.`
-        :`This question needs primary founder or operator data, or a dedicated research pass, before it can be answered from the corpus.`),
+        ? `Take the findings above into the conversation rather than into the model. They tell you which assumptions to test, not what the answer is.`
+        : `This needs primary founder or operator data before it can carry weight in a decision.`),
       conflicts_and_gaps:(conflicts.length
-        ?`Detected in the retrieved set: ${conflicts.join(' ')}`
-        :(cov==='sector_absent_in_market'
-          ?`The gap is specific and worth stating precisely: this sector has no coverage in ${geo}, while the market itself does have coverage in other sectors. Those are different gaps.`
-          :`No numeric conflicts or supersessions were detected among the retrieved entries.`)),
+        ? conflicts.join(' ')
+        : (cov==='sector_absent_in_market'
+          ? `The gap is specific: this sector is uncovered in ${geo}, while the market itself is covered in other areas. Those are different problems and worth keeping separate.`
+          : `Nothing in the retrieved findings contradicts anything else in it.`)),
       cross_market_pattern:(theses&&theses.length
-        ?`${theses.length} GON thes${theses.length===1?'is':'es'} reference ${geo}: ${theses.slice(0,3).map(t=>`${t.fields['Thesis ID']||''} (${t.fields['Thesis State']||'state unknown'})`).join(', ')}.`
-        :`No GON cross-market thesis currently references ${geo}.`),
+        ? `${geo} sits inside ${theses.length} pattern${theses.length===1?'':'s'} that hold across several markets, which means what you find here is unlikely to be unique to it.`
+        : `No cross-market pattern in the corpus currently reaches ${geo}.`),
       ic_questions:(n>0
-        ?[`Which of the entries above would most change your model if it turned out to be wrong?`,
-          `For any figure you plan to rely on, has its source date been checked against its decay class?`,
-          `Where two entries disagree, which one does your own ground experience support?`]
-        :[`What primary source would settle this question, and who holds it?`,
-          `Which better-documented market are you implicitly borrowing assumptions from, and does that comparison actually hold?`,
-          `What would you need to see verified before committing capital against this gap?`]),
+        ? [ `Which of these would change your decision if it turned out to be wrong?`,
+            `What is the oldest figure here that you are still willing to rely on?`,
+            `Who on the ground can confirm the parts that are not written down?` ]
+        : [ `What primary source would settle this, and who holds it?`,
+            `Which better-documented market are you borrowing assumptions from, and does the comparison hold?`,
+            `What would you need verified before committing capital against this gap?` ]),
       confidence_note:(apiUnavailable
-        ?`Written synthesis unavailable: no Anthropic API key is saved, so the model layer did not run. The retrieval, ranking, confidence assessment and conflict detection above are the corpus's own and are unaffected.`
-        :`Written synthesis unavailable (${(e&&e.message)?e.message:'model layer error'}). The retrieval, ranking, confidence assessment and conflict detection above are the corpus's own and are unaffected.`)
+        ? `Written from the verified findings directly. The narrative layer is off, which changes how this reads, not what it is based on.`
+        : `Written from the verified findings directly (${(e&&e.message)?e.message:'narrative layer unavailable'}).`)
     };
     currentBrief=fallback;
     renderBrief(fallback,geo,sector,'No verified data',direct.length,adjacent.length,MODE.labels);
@@ -1194,43 +1277,58 @@ function getNotMean(r,isAdjacent){
   return'';
 }
 
+
+// Operator Notes were written for us while building the corpus. They contain entry IDs,
+// references to "this session", and arguments about database bookkeeping. None of that
+// belongs in front of a reader who has never seen the schema.
+function readerSafe(note){
+  if(!note)return'';
+  let t=String(note)
+    .replace(/Core claim:.*$/ms,'')
+    .replace(/Assumption invalidated:.*$/ms,'')
+    .replace(/Predicted effect:.*$/ms,'')
+    .trim();
+  t=t.split(/(?<=[.!?])\s+/)
+    .filter(sent=>!/(this session|this corpus|this pass|this dimension|this entry|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|GON-[A-Z]+-\d+|THX-\d+|standing bias|coverage framing|was never given its own row|Thesis citing)/i.test(sent))
+    .join(' ')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+  return t;
+}
+
 function buildEvBar(r,isAdjacent){
-  const conf=r.fields['Confidence Level']||'Medium';
-  const ts=r.fields['Three-Test Status']||'';
-  const sd=r.fields['Source Date']||'Unknown';
-  const market=Array.isArray(r.fields['Market'])?r.fields['Market'].join(', '):(r.fields['Market']||'');
-  const strength=(!isAdjacent&&conf==='High'&&ts==='Pass')?'High':isAdjacent?'Analogy':'Medium';
-  const strengthCls=strength==='High'?'':'medium';
-  const opNote=r.fields['Operator Note']||'';
-  const contested=opNote.toLowerCase().includes('contest')||opNote.toLowerCase().includes('fragmented')||ts==='Pass with caveat';
-  const coverage=isAdjacent?`Analogy - ${market}`:market;
-  const fresh=sd.includes('2026')?'2026':sd.includes('2025')?'2025':sd||'Unknown';
+  const f=r.fields;
+  const conf=f['Confidence Level']||'Medium';
+  const tier=f['Data Tier']||'';
+  const ts=f['Three-Test Status']||'';
+  const sd=f['Source Date']||'';
+  const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
+  // Plain-language translation of the internal schema.
+  const sourcing=tier.indexOf('Tier A')===0?'Primary source':tier.indexOf('Tier B')===0?'Secondary, corroborated':'Single source';
+  const checked=ts.indexOf('Pass (all three')===0||ts==='Pass'?'Fully checked'
+    :ts.indexOf('Pass with caveat')===0?'Checked, with a caveat'
+    :ts.indexOf('Directional')===0?'Directional only':'Not fully checked';
+  const yr=(String(sd).match(/20\d\d/)||[])[0]||'undated';
+  const weight=isAdjacent?'Different market':(conf==='High'?'Rely on this':conf==='Low'?'Treat as directional':'Use with care');
   return`<div class="ev-bar">
-    <div class="ev-cell"><span class="ev-key">Evidence</span><span class="ev-val ${strengthCls}">${strength}</span></div>
-    <div class="ev-cell"><span class="ev-key">Coverage</span><span class="ev-val ${isAdjacent?'medium':''}">${coverage}</span></div>
-    <div class="ev-cell"><span class="ev-key">Updated</span><span class="ev-val">${fresh}</span></div>
-    <div class="ev-cell"><span class="ev-key">Signal</span><span class="ev-val ${contested?'contested':''}">${contested?'Contested':'Consistent'}</span></div>
+    <div class="ev-cell"><span class="ev-key">How to weigh it</span><span class="ev-val ${conf==='High'&&!isAdjacent?'':'medium'}">${weight}</span></div>
+    <div class="ev-cell"><span class="ev-key">Where it comes from</span><span class="ev-val">${sourcing}</span></div>
+    <div class="ev-cell"><span class="ev-key">How thoroughly</span><span class="ev-val">${checked}</span></div>
+    <div class="ev-cell"><span class="ev-key">As of</span><span class="ev-val">${yr}</span></div>
   </div>`;
 }
 
 function renderCard(r,idx,isAdjacent){
   const f=r.fields;
   const sev=isAdjacent?'green':getSeverity(r);
-  const flagLabels={red:['flag-red','Strong evidence'],amber:['flag-amber','Caveated evidence'],green:['flag-green','Directional only']};
+  const flagLabels={red:['flag-red','Well established'],amber:['flag-amber','Holds, with caveats'],green:['flag-green','Early signal']};
   const[flagCls,flagLabel]=isAdjacent?['flag-adjacent','Comparable market']:flagLabels[sev];
   const implication=getImplication(r);
   const icq=getICQ(r);
   const notMean=getNotMean(r,isAdjacent);
   const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
   const value=(f['Value']||'').substring(0,80);
-  let cleanNote=(f['Operator Note']||'').replace(/Core claim:.*$/ms,'').replace(/Assumption invalidated:.*$/ms,'').replace(/Predicted effect:.*$/ms,'').trim();
-  // strip internal corpus-authoring meta-commentary before anything is shown to a reader
-  cleanNote=cleanNote
-    .split(/(?<=\.)\s+/)
-    .filter(sent=>!/(this session|this corpus|this pass|this dimension|this entry closes|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|as flagged (earlier|above)|per this corpus)/i.test(sent))
-    .join(' ')
-    .trim()
-    .substring(0,500);
+  let cleanNote=readerSafe(f['Operator Note']).substring(0,420);
 
   return`<div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
     <div class="card-flags">
@@ -1265,6 +1363,17 @@ function toggleExpand(idx){
   btn.textContent=layer.classList.contains('open')?'- Collapse':'+ Full operator note + IC question';
 }
 
+function toggleEvidence(){
+  const b=document.getElementById('evidenceBody');
+  const l=document.getElementById('evToggleLabel');
+  const c=document.getElementById('evToggleCaret');
+  if(!b)return;
+  const open=b.style.display!=='none';
+  b.style.display=open?'none':'block';
+  if(c)c.textContent=open?'+':'-';
+  if(l)l.textContent=(open?'Show the ':'Hide the ')+l.textContent.replace(/^(Show|Hide) the /,'');
+}
+
 function renderEvidence(direct,adjacent){
   const container=document.getElementById('resultsContainer');
   if(!direct.length&&!adjacent.length){container.innerHTML='';return;}
@@ -1272,8 +1381,15 @@ function renderEvidence(direct,adjacent){
   let html='';
 
   if(direct.length){
-    html+=`<div class="evidence-divider">Supporting evidence <span class="evidence-count">${direct.length} direct signal${direct.length!==1?'s':''}</span></div>`;
+    // The read comes first. The workings are one click away, which is what separates
+    // this from a chatbot, but they are not what a reader wants dumped on them first.
+    html+=`<div class="evidence-divider" style="cursor:pointer;user-select:none;" onclick="toggleEvidence()">
+      <span id="evToggleLabel">Show the ${direct.length} finding${direct.length!==1?'s':''} this is based on</span>
+      <span class="evidence-count" id="evToggleCaret">+</span>
+    </div>`;
+    html+=`<div id="evidenceBody" style="display:none;">`;
     html+=direct.map((r,i)=>renderCard(r,i,false)).join('');
+    html+=`</div>`;
   }
 
   if(adjacent.length){
@@ -1315,9 +1431,9 @@ function renderGapCard(geo,sector){
     why='FRA Decree No 43 (February 2026) suspended new consumer finance applications under the FinTech Law. Earlier freezes in 2024 and 2025 compound this.';
     impl='Any Egypt consumer lending deal needs to verify that licensing status predates October 2024. If unlicensed, this is not a compliance gap - it is a market access problem.';
   }else{
-    title=`Validated benchmarks for "${currentQuery}" are limited in GON at this stage`;
-    why='GON coverage is deepest in WAEMU and CEMAC. This query either falls outside current database depth or in a market where primary data is genuinely sparse.';
-    impl='Treat any quantitative assumption without a primary source as directional only. The absence of benchmark data is itself worth noting in the IC memo.';
+    title=`Not everything that matters here is written down`;
+    why='The strongest signals in this market are usually operational and unpublished. What follows above is what can be verified from primary sources; it is not the whole picture.';
+    impl='Where a number matters to your decision and is not above, treat it as an open question to put to the founder or an operator on the ground, not as an assumption you can carry.';
   }
 
   return`<div class="gap-card">
