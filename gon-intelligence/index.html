@@ -125,7 +125,14 @@ a:hover{opacity:0.7;}
 .back-btn{font-family:'Playfair Display',serif;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);background:none;border:1px solid var(--rule);padding:4px 12px;cursor:pointer;transition:all 0.2s;}
 .back-btn:hover{border-color:var(--ink);color:var(--ink);}
 
-/* ── OPERATOR BRIEF ─────────────────────────────────────────────────────── */
+
+.results-controls{display:flex;gap:26px;flex-wrap:wrap;align-items:center;padding:12px 0 16px;margin:0 0 22px;border-bottom:1px solid var(--rule);}
+.rc-group{display:flex;align-items:center;gap:9px;}
+.rc-label{font-family:'Playfair Display',serif;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);}
+.rc-select{font-family:Georgia,serif;font-size:0.82rem;color:var(--ink);background:transparent;border:none;border-bottom:1px solid var(--rule);padding:3px 18px 3px 2px;cursor:pointer;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 8px) 52%,calc(100% - 4px) 52%;background-size:4px 4px,4px 4px;background-repeat:no-repeat;}
+.rc-select:focus{outline:none;border-bottom-color:var(--ink);}
+
+/* ------ OPERATOR BRIEF ------ */
 .brief-block{
   border-left:3px solid var(--accent);
   padding:1.25rem 1.25rem;
@@ -186,7 +193,7 @@ a:hover{opacity:0.7;}
 }
 .brief-questions li:last-child{border-bottom:none;}
 .brief-questions li::before{
-  content:'—';
+  content:'-';
   color:var(--accent);
   flex-shrink:0;
   font-family:'Playfair Display',serif;
@@ -454,6 +461,31 @@ a:hover{opacity:0.7;}
       <button class="back-btn" onclick="goBack()">&#8592; New query</button>
     </div>
 
+    <!-- Controls persist here. Previously they lived only on the empty screen, so a
+         reader who wanted to re-cut the same question as a different audience, or
+         narrow to one lens, had to go back and retype the query. -->
+    <div class="results-controls">
+      <div class="rc-group">
+        <span class="rc-label">Reading as</span>
+        <select class="rc-select" id="resultsMode" onchange="rerunWithMode(this.value)">
+          <option value="investor">Investor (VC or PE)</option>
+          <option value="partner">Partner / market entry</option>
+          <option value="institutional">DFI / foundation</option>
+        </select>
+      </div>
+      <div class="rc-group">
+        <span class="rc-label">Narrow to</span>
+        <select class="rc-select" id="resultsFilter" onchange="rerunWithFilter(this.value)">
+          <option value="">All signals</option>
+          <option value="Distribution economics">Can this scale?</option>
+          <option value="Regulatory environment">What regulation matters?</option>
+          <option value="Demand validation">Is demand real?</option>
+          <option value="Unit economics">What kills margins?</option>
+          <option value="Exit dynamics">Can investors exit?</option>
+        </select>
+      </div>
+    </div>
+
     <!-- OPERATOR BRIEF (primary output) -->
     <div id="briefContainer"></div>
 
@@ -504,7 +536,7 @@ let currentQuery='';
 let currentGeo='';
 let currentBrief='';
 
-// ── TOKEN ──────────────────────────────────────────────────────────────────
+// ------ TOKEN ------
 function getToken(){return localStorage.getItem('gon_tok')||'';}
 function getKey(){return localStorage.getItem('gon_key')||'';}
 function saveKey(){
@@ -517,8 +549,8 @@ function saveKey(){
 }
 function initToken(){
   const t=getToken(),btn=document.getElementById('tokenBtn');
-  if(t){btn.textContent='● Token active';btn.classList.add('active');}
-  else{btn.textContent='○ Add token';document.getElementById('tokenPanel').classList.add('open');}
+  if(t){btn.textContent='* Token active';btn.classList.add('active');}
+  else{btn.textContent='o Add token';document.getElementById('tokenPanel').classList.add('open');}
 }
 function toggleToken(){document.getElementById('tokenPanel').classList.toggle('open');}
 function saveToken(){
@@ -526,12 +558,12 @@ function saveToken(){
   if(!v)return;
   localStorage.setItem('gon_tok',v);
   const btn=document.getElementById('tokenBtn');
-  btn.textContent='● Token active';btn.classList.add('active');
+  btn.textContent='* Token active';btn.classList.add('active');
   document.getElementById('tokenPanel').classList.remove('open');
   showToast('Token saved');
 }
 
-// ── FILTER / SEARCH ────────────────────────────────────────────────────────
+// ------ FILTER / SEARCH ------
 const MODE_COPY={
   investor:{
     headline:'What are you least confident <em>underwriting in this deal?</em>',
@@ -557,6 +589,10 @@ function setMode(btn,mode){
   currentMode=mode;
   document.querySelectorAll('.mode-chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
+  applyModeCopy(mode);
+}
+
+function applyModeCopy(mode){
   const c=MODE_COPY[mode]||MODE_COPY.investor;
   const h=document.getElementById('searchHeadline');
   const sub=document.getElementById('searchSub');
@@ -573,6 +609,25 @@ function setFilter(el,val){
   document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
 }
+
+// Re-cutting the same question rather than retyping it. Both handlers reuse the
+// query already in the input, so the reader never loses their place.
+let lastQuery='';
+function rerunWithMode(mode){
+  currentMode=mode;
+  document.querySelectorAll('.mode-chip').forEach(c=>c.classList.remove('active'));
+  const chips=document.querySelectorAll('.mode-chip');
+  const idx={investor:0,partner:1,institutional:2}[mode];
+  if(chips[idx])chips[idx].classList.add('active');
+  applyModeCopy(mode);
+  if(lastQuery){document.getElementById('mainInput').value=lastQuery;runSearch();}
+}
+function rerunWithFilter(val){
+  currentFilter=val;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  if(lastQuery){document.getElementById('mainInput').value=lastQuery;runSearch();}
+}
+
 function quickSearch(q){document.getElementById('mainInput').value=q;runSearch();}
 function goBack(){
   document.getElementById('screenResults').classList.remove('active');
@@ -581,7 +636,7 @@ function goBack(){
   document.getElementById('mainInput').focus();
 }
 
-// ── GEO / SECTOR EXTRACTION ────────────────────────────────────────────────
+// ------ GEO / SECTOR EXTRACTION ------
 const GEO_MAP={
   'senegal':'Senegal','nigeria':'Nigeria','kenya':'Kenya','ghana':'Ghana',
   'cameroun':'Cameroun','cameroon':'Cameroun','ivory coast':'Ivory Coast',
@@ -622,7 +677,7 @@ function extractSector(query){
   return null;
 }
 
-// ── MAIN SEARCH ────────────────────────────────────────────────────────────
+// ------ MAIN SEARCH ------
 async function runSearch(){
   const query=document.getElementById('mainInput').value.trim();
   if(!query){document.getElementById('mainInput').focus();return;}
@@ -630,7 +685,10 @@ async function runSearch(){
   if(!token){document.getElementById('tokenPanel').classList.add('open');showToast('Please save your Airtable token first');return;}
 
   currentQuery=query;
+  lastQuery=query;
   currentGeo=extractGeo(query);
+  const rm=document.getElementById('resultsMode');if(rm)rm.value=currentMode;
+  const rf=document.getElementById('resultsFilter');if(rf)rf.value=currentFilter;
 
   document.getElementById('screenEmpty').classList.remove('active');
   document.getElementById('screenResults').classList.add('active');
@@ -681,7 +739,7 @@ async function runSearch(){
   }
 }
 
-// ── AIRTABLE FETCH ─────────────────────────────────────────────────────────
+// ------ AIRTABLE FETCH ------
 async function fetchAll(token,query){
   const geo=extractGeo(query);
   const sector=extractSector(query);
@@ -737,6 +795,7 @@ async function fetchScoped(token,geo,sector,query){
 const INTENT_MAP=[
   {match:/\b(plant|factory|manufactur|industrial|assembly|processing|bottling|production line)\b/i,
    label:'an industrial or manufacturing build',
+   offSector:/fintech|mobile money|entertainment|media|saas/i,
    priorities:[
      {dim:'Unit economics',why:'power and input costs decide whether a plant works here at all'},
      {dim:'Distribution economics',why:'getting inputs in and product out is usually the binding constraint'},
@@ -745,6 +804,7 @@ const INTENT_MAP=[
    ]},
   {match:/\b(acquir|acquisition|exit|sell|buyout|m&a|divest)\b/i,
    label:'an acquisition or exit',
+   offSector:null,
    priorities:[
      {dim:'Exit dynamics',why:'who actually buys, and at what, in this market'},
      {dim:'Regulatory environment',why:'approval and ownership rules can gate the deal'},
@@ -752,6 +812,7 @@ const INTENT_MAP=[
    ]},
   {match:/\b(distribut|retail|logistics|supply chain|last mile|import|export)\b/i,
    label:'a distribution or supply chain question',
+   offSector:null,
    priorities:[
      {dim:'Distribution economics',why:'route to market is the whole question here'},
      {dim:'Unit economics',why:'freight and clearance costs sit directly in margin'},
@@ -759,6 +820,7 @@ const INTENT_MAP=[
    ]},
   {match:/\b(fintech|payment|mobile money|wallet|lending|credit|bank)\b/i,
    label:'a financial services venture',
+   offSector:/fmcg|manufactur|agritech|energy \/ cleantech/i,
    priorities:[
      {dim:'Regulatory environment',why:'licensing determines whether you can operate at all'},
      {dim:'Demand validation',why:'registered users and active users are different numbers'},
@@ -767,6 +829,7 @@ const INTENT_MAP=[
    ]},
   {match:/\b(energy|power|solar|grid|electric|renewable)\b/i,
    label:'an energy or power venture',
+   offSector:/fintech|mobile money|entertainment|media/i,
    priorities:[
      {dim:'Unit economics',why:'tariff structure and subsidy decide the revenue model'},
      {dim:'Regulatory environment',why:'the regulator sets your price, not the market'},
@@ -809,10 +872,25 @@ function rankByRelevanceThenQuality(records,query){
     if(s.indexOf('Pass (all three')===0||s==='Pass')return 3;
     if(s.indexOf('Pass with caveat')===0)return 2;
     return 1;};
+  // Dimension priority is a boost, never the first sort key. Sorting on it
+  // lexicographically meant any entry carrying the right dimension tag outranked
+  // everything below it regardless of subject: a mobile money commission entry
+  // tagged Unit economics won a question about building a factory, because it was
+  // tagged Unit economics and nothing else was consulted. Priority, topical
+  // relevance and evidence quality now compete inside one score.
+  const offSector=(r)=>{
+    if(!intent||!intent.offSector)return 0;
+    const sec=String(r.fields['Sector']||'');
+    if(!intent.offSector.test(sec))return 0;
+    // A wrong-sector entry is only admissible if the question named it explicitly.
+    return scoreRelevance(r,tokens)>0?4:99;
+  };
   return records.slice().map(r=>({r,rel:scoreRelevance(r,tokens),
     q:tierScore(r.fields['Data Tier'])*3+confScore(r.fields['Confidence Level'])*2+testScore(r.fields['Three-Test Status'])}))
-    .map(x=>Object.assign(x,{p:(prio[x.r.fields['IC Dimension']]||0)}))
-    .sort((a,b)=>(b.p-a.p)||(b.rel-a.rel)||(b.q-a.q))
+    .map(x=>Object.assign(x,{p:(prio[x.r.fields['IC Dimension']]||0),pen:offSector(x.r)}))
+    .map(x=>Object.assign(x,{score:(x.p*2)+(x.rel*3)-x.pen}))
+    .filter(x=>x.pen<99)
+    .sort((a,b)=>(b.score-a.score)||(b.q-a.q))
     .map(x=>x.r);
 }
 function rankByEvidenceQuality(records){
@@ -909,7 +987,7 @@ function extractFirstNumber(val){
 // Confidence comes from the corpus's own human-assessed values, never from
 // how many rows happened to match a filter.
 function deriveConfidence(records){
-  if(!records.length)return{level:'No verified data',basis:'No active benchmark entries matched this market and sector in the GON corpus.'};
+  if(!records.length)return{level:'No verified data',basis:'No verified findings matched this market and sector in the GON research base.'};
   const conf=records.map(r=>r.fields['Confidence Level']||'').filter(Boolean);
   const tiers=records.map(r=>r.fields['Data Tier']||'').filter(Boolean);
   const highs=conf.filter(c=>c==='High').length;
@@ -932,7 +1010,7 @@ async function airtableFetch(token,formula,max){
   return d.records||[];
 }
 
-// ── CLAUDE API - OPERATOR BRIEF ────────────────────────────────────────────
+// ------ CLAUDE API - OPERATOR BRIEF ------
 async function generateBriefAndRender(query,direct,adjacent,theses,R){
   R=R||{coverage:'direct',marketOnly:[],sectorElsewhere:[]};
   const geo=extractGeo(query)||'the target market';
@@ -1006,7 +1084,8 @@ async function generateBriefAndRender(query,direct,adjacent,theses,R){
   };
   const MODE=MODES[currentMode]||MODES.investor;
 
-  const systemPrompt=`You are Jean-Philippe Ouandji, a digital marketing and growth operator with 12 years inside African distribution networks, particularly WAEMU and CEMAC. You write GON Intelligence briefs - short, honest reads on African markets built on a primary-source-verified corpus.
+  const systemPrompt=`You are Jean-Philippe Ouandji, a digital marketing and growth operator with 12 years inside African distribution networks, particularly WAEMU and CEMAC. You write GON Intelligence briefs - short, honest reads on African markets built on primary-source-verified research.
+NEVER use the words corpus, entry, record, row, dimension, tier or three-test in your output. They are internal vocabulary. Say research, finding, or source instead.
 
 You are writing for ${MODE.audience}.
 
@@ -1053,15 +1132,15 @@ Sector: ${sector}
 COVERAGE DIAGNOSIS - this governs what you are allowed to claim:
 ${(function(){
   const c=R.coverage;
-  if(c==='sector_absent_in_market')return'THE CORPUS HAS NO ENTRIES FOR THIS SECTOR IN THIS MARKET. You must say this plainly and early. Do not present the market-level entries below as if they answered the question asked. They are context about the market, not evidence about this sector in it. Where same-sector entries from OTHER markets are listed, label them explicitly as other markets and directional only.';
+  if(c==='sector_absent_in_market')return'THERE IS NO VERIFIED RESEARCH ON THIS SECTOR IN THIS MARKET. You must say this plainly and early. Do not present the market-level entries below as if they answered the question asked. They are context about the market, not evidence about this sector in it. Where same-sector entries from OTHER markets are listed, label them explicitly as other markets and directional only.';
   if(c==='market_only_no_sector')return'No sector was identified in the query, so this is market-wide evidence only. Say that the question is underspecified for a sector-level read, and name what sector detail would sharpen it.';
   if(c==='sector_only_no_market')return'No market was identified in the query. This is sector-wide evidence across markets. Say that a market needs naming before this becomes specific.';
-  if(c==='no_market_data')return'THE CORPUS HAS NO ACTIVE ENTRIES FOR THIS MARKET AT ALL. Say so plainly. Do not imply coverage exists.';
+  if(c==='no_market_data')return'THERE IS NO VERIFIED RESEARCH ON THIS MARKET AT ALL. Say so plainly. Do not imply coverage exists.';
   if(c==='underspecified')return'Neither a market nor a sector could be identified in the query. Ask for both rather than answering.';
   return'Direct coverage: the entries below match both the market and the sector asked about.';
 })()}
 
-EVIDENCE BASIS (assessed from the corpus itself, not from row count): ${confidence.level}. ${confidence.basis}
+EVIDENCE BASIS (assessed from the research itself, not from how many findings matched): ${confidence.level}. ${confidence.basis}
 
 RETRIEVED BENCHMARK ENTRIES (ranked by evidence quality, strongest first):
 ${hasData?recordContext:'No validated benchmarks found in GON database for this specific market/sector combination.'}
@@ -1136,30 +1215,30 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     if(intent){
       intent.priorities.forEach(pr=>{
         const hit=direct.find(r=>r.fields['IC Dimension']===pr.dim);
-        if(hit)consequences.push(`${pr.why.charAt(0).toUpperCase()+pr.why.slice(1)}. ${readerSafe(hit.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(hit.fields['Value']||'').substring(0,180)}`);
+        if(hit)consequences.push(`${pr.why.charAt(0).toUpperCase()+pr.why.slice(1)}. ${readerSafe(hit.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(hit.fields['Value']||'').substring(0,180)} ${attribution(hit)}`);
       });
     }
     const missing=intent?intent.priorities.filter(pr=>!direct.some(r=>r.fields['IC Dimension']===pr.dim)):[];
 
     let realityText;
     if(cov==='sector_absent_in_market'){
-      realityText=`Nothing in the corpus covers this sector in ${geo}. That is a statement about the evidence, not about the opportunity. ${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The nearest comparable is the same sector in ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}, which is worth reading for structure but is not evidence for ${geo}.`:''}`;
+      realityText=`There is no verified research on this sector in ${geo}. That is a statement about the evidence, not about the opportunity. ${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The nearest comparable is the same sector in ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}, which is worth reading for structure but is not evidence for ${geo}.`:''}`;
     }else if(cov==='no_market_data'){
-      realityText=`There is no verified coverage of ${geo} in the corpus at all. Nothing below should be read as evidence about this market.`;
+      realityText=`There is no verified research on ${geo} at all. Nothing below should be read as evidence about this market.`;
     }else if(cov==='underspecified'){
       realityText=`That question needs a market and a sector before it can be answered specifically. Name both and this becomes a real read rather than a general one.`;
     }else if(n>0&&consequences.length){
-      realityText=`Read as ${intent.label}, ${geo} turns on a few things and the corpus has real coverage of them. ${consequences.slice(0,3).join(' ')}`;
+      realityText=`Read as ${intent.label}, ${geo} turns on a few things, and there is verified research on them. ${consequences.slice(0,3).join(' ')}`;
     }else if(n>0){
       realityText=`${n} verified finding${n===1?'':'s'} bear on ${geo} here. ${direct.slice(0,2).map(r=>readerSafe(r.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(r.fields['Value']||'').substring(0,150)).join(' ')}`;
     }else{
-      realityText=`Nothing in the corpus matches that question yet.`;
+      realityText=`Nothing verified matches that question yet.`;
     }
 
     const fallback={
       market_reality:realityText,
       what_investors_underestimate:(missing.length
-        ? `The gap worth naming: ${missing.map(m=>m.why).join(', and ')}. The corpus does not cover that here, so it stays an open question rather than a verified one.`
+        ? `The gap worth naming: ${missing.map(m=>m.why).join(', and ')}. There is no verified research on that here, so it stays an open question rather than a settled one.`
         : (n>0
           ? `Most of what will decide this is operational rather than published. What is above is what can be verified from primary sources; the rest has to come from people who have actually run something here.`
           : `An absence of coverage is a fact about the evidence, not about the market. It means this has to be answered from primary sources directly.`)),
@@ -1173,11 +1252,9 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
           : `Nothing in the retrieved findings contradicts anything else in it.`)),
       cross_market_pattern:(theses&&theses.length
         ? `${geo} sits inside ${theses.length} pattern${theses.length===1?'':'s'} that hold across several markets, which means what you find here is unlikely to be unique to it.`
-        : `No cross-market pattern in the corpus currently reaches ${geo}.`),
+        : `No cross-market pattern currently reaches ${geo}.`),
       ic_questions:(n>0
-        ? [ `Which of these would change your decision if it turned out to be wrong?`,
-            `What is the oldest figure here that you are still willing to rely on?`,
-            `Who on the ground can confirm the parts that are not written down?` ]
+        ? buildFounderQuestions(direct,missing,geo,sector)
         : [ `What primary source would settle this, and who holds it?`,
             `Which better-documented market are you borrowing assumptions from, and does the comparison hold?`,
             `What would you need verified before committing capital against this gap?` ]),
@@ -1236,7 +1313,7 @@ function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount,label
     </div>`;
 }
 
-// ── RENDER EVIDENCE ────────────────────────────────────────────────────────
+// ------ RENDER EVIDENCE ------
 function getSeverity(r){
   const conf=r.fields['Confidence Level']||'';
   const ts=r.fields['Three-Test Status']||'';
@@ -1289,11 +1366,63 @@ function readerSafe(note){
     .replace(/Predicted effect:.*$/ms,'')
     .trim();
   t=t.split(/(?<=[.!?])\s+/)
-    .filter(sent=>!/(this session|this corpus|this pass|this dimension|this entry|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|GON-[A-Z]+-\d+|THX-\d+|standing bias|coverage framing|was never given its own row|Thesis citing)/i.test(sent))
+    // Every pattern below corresponds to real authoring commentary found in front of a
+    // reader. The rule: if a sentence is about how or why the finding was recorded,
+    // rather than about the market, it does not ship.
+    .filter(sent=>!/(this session|multiple sessions|across sessions|earlier session|this corpus|the corpus|this pass|this dimension|this entry|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|GON-[A-Z]+-\d+|THX-\d+|standing bias|coverage framing|was never given its own row|Thesis citing)/i.test(sent))
+    .filter(sent=>!/(had been (stated|assumed|treated)|stated as settled|without ever being tested|worth (preserving|recording|logging)|rather than smoothing|is worth keeping|belongs in (any|the) .* model, not a footnote|we (logged|recorded|entered|treated)|is consistent with the .* the same source flags separately)/i.test(sent))
     .join(' ')
     .replace(/\s{2,}/g,' ')
     .trim();
   return t;
+}
+
+// The previous questions were three fixed strings that asked the reader about the
+// brief rather than asking the founder about the business. A question an investor can
+// carry into a meeting has to name the thing being tested. These are built from the
+// findings actually retrieved: the weakest one, the oldest one, and the named gap.
+function buildFounderQuestions(direct,missing,geo,sector){
+  const qs=[];
+  const yearOf=r=>parseInt((String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0]||'0',10);
+  const named=r=>String(r.fields['Metric Name']||'').replace(/\s*\(.*?\)\s*/g,'').trim();
+
+  // 1. The finding most exposed to being wrong: lowest confidence or weakest test.
+  const weakest=direct.slice().sort((a,b)=>{
+    const s=r=>(r.fields['Confidence Level']==='High'?3:r.fields['Confidence Level']==='Medium'?2:1)
+      +(String(r.fields['Three-Test Status']||'').indexOf('Pass (all three')===0?2:0);
+    return s(a)-s(b);
+  })[0];
+  if(weakest&&named(weakest)){
+    qs.push(`On ${named(weakest).toLowerCase()}: what is your own number for ${geo||'this market'}, and how did you arrive at it?`);
+  }
+
+  // 2. The oldest figure being relied on, named, with its age stated.
+  const dated=direct.filter(r=>yearOf(r)>0).sort((a,b)=>yearOf(a)-yearOf(b))[0];
+  if(dated&&named(dated)){
+    const y=yearOf(dated);
+    const age=(new Date().getFullYear())-y;
+    qs.push(`The most recent figure I can verify on ${named(dated).toLowerCase()} dates to ${y}${age>=2?`, which is ${age} years old`:''}. Has that moved, and what are you seeing on the ground?`);
+  }
+
+  // 3. The named gap, turned into a question rather than left as a disclaimer.
+  if(missing&&missing.length){
+    qs.push(`Nothing published covers ${missing[0].why}. Who inside your operation owns that number, and can I speak to them?`);
+  } else {
+    qs.push(`Which of the figures above does your model actually depend on, and what happens to the case if it is off by half?`);
+  }
+
+  return qs.slice(0,3);
+}
+
+// A claim with no visible source is an assertion. The Source Name field was being
+// read into the ranking and never shown, which meant briefs said "the source's own
+// admission" without ever naming the source. Every claim in a brief now carries it.
+function attribution(r){
+  if(!r||!r.fields)return'';
+  const src=String(r.fields['Source Name']||'').trim();
+  const yr=(String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0];
+  if(!src)return'';
+  return`(${src}${yr?', '+yr:''})`;
 }
 
 function buildEvBar(r,isAdjacent){
@@ -1455,7 +1584,7 @@ function showError(msg){
   err.textContent=`Error: ${msg}. Check your Airtable token has data.records:read scope.`;
 }
 
-// ── PDF ────────────────────────────────────────────────────────────────────
+// ------ PDF ------
 function generateFullBrief(){
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   let text=`GON INTELLIGENCE BRIEF\n${'='.repeat(50)}\nQuery: ${currentQuery}\nDate: ${date}\n\n`;
