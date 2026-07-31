@@ -37,7 +37,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **[DRAFTED — pending JP review — 2026-07-01]** | Published as "BCEAO Just Started the Clock on Wave's Moat. Nobody Has Priced This Yet." — title adjusted for accuracy (deadline extended to Sept 30, 2026, not yet passed). Draft at /bceao-wave-moat-pispi/. PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
@@ -102,6 +102,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-07-01 | (all) | — | — | — | GA4 MCP still not connected this run — see GON_Performance_Log.md |
 
 ---
 
@@ -110,5 +111,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 1 Jul 2026 | Routine run. A01 drafted (BCEAO/Wave/PI-SPI), PR opened, pending JP review. Airtable unreachable this run (network policy blocked api.airtable.com — see PR description). GA4 not connected. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
