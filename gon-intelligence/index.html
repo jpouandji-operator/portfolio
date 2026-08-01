@@ -1273,7 +1273,14 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
       // the subject the question implies.
       const onTopic=inDim.filter(r=>pr.topic.test(
         (r.fields['Metric Name']||'')+' '+(r.fields['Value']||'')));
-      return onTopic.length?onTopic[0]:null;
+      if(!onTopic.length)return null;
+      // Take the best on-topic finding, not the first one the fetch happened to
+      // return. Strength of topic match first, then evidence quality.
+      const topicHits=r=>((( (r.fields['Metric Name']||'')+' '+(r.fields['Value']||'') )
+        .match(new RegExp(pr.topic.source,'gi'))||[]).length);
+      const qual=r=>(String(r.fields['Data Tier']||'').indexOf('Tier A')===0?3:2)
+        +(r.fields['Confidence Level']==='High'?3:r.fields['Confidence Level']==='Medium'?2:1);
+      return onTopic.slice().sort((a,b)=>(topicHits(b)-topicHits(a))||(qual(b)-qual(a)))[0];
     };
     const consequences=[];
     const covered=[];
@@ -1312,7 +1319,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     const fallback={
       market_reality:realityText,
       what_investors_underestimate:(missing.length
-        ? `The gap worth naming: ${missing.map(m=>m.why).join(', and ')}. There is no verified research on that here, so it stays an open question rather than a settled one.`
+        ? `No verified figure here covers ${missing.map(m=>m.gap||m.why).join(', or ')}. Those stay open questions rather than settled ones.`
         : (n>0
           ? `Most of what will decide this is operational rather than published. What is above is what can be verified from primary sources; the rest has to come from people who have actually run something here.`
           : `An absence of coverage is a fact about the evidence, not about the market. It means this has to be answered from primary sources directly.`)),
@@ -1325,10 +1332,13 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
           ? `The gap is specific: this sector is uncovered in ${geo}, while the market itself is covered in other areas. Those are different problems and worth keeping separate.`
           : `Nothing in the retrieved findings contradicts anything else in it.`)),
       cross_market_pattern:(theses&&theses.length
-        ? `${geo} sits inside ${theses.length} pattern${theses.length===1?'':'s'} that hold across several markets, which means what you find here is unlikely to be unique to it.`
+        ? `${geo} sits inside ${theses.length} pattern${theses.length===1?'':'s'} that hold across several markets. `
+          + theses.slice(0,2).map(t=>trimWords(String(t.fields&&t.fields['Thesis Statement']||'').trim(),200))
+              .filter(Boolean).map(x=>/[.!?]$/.test(x)?x:x+'.').join(' ')
+          + ` What you find here is unlikely to be unique to it.`
         : `No cross-market pattern currently reaches ${geo}.`),
       ic_questions:(n>0
-        ? buildFounderQuestions(direct,missing,geo,sector)
+        ? buildFounderQuestions((consequences.length?consequences.map(c=>c.rec):direct),missing,geo,sector)
         : [ `What primary source would settle this, and who holds it?`,
             `Which better-documented market are you borrowing assumptions from, and does the comparison hold?`,
             `What would you need verified before committing capital against this gap?` ]),
@@ -1441,16 +1451,21 @@ function readerSafe(note){
     .replace(/Assumption invalidated:.*$/ms,'')
     .replace(/Predicted effect:.*$/ms,'')
     .trim();
-  t=t.split(/(?<=[.!?])\s+/)
-    // Every pattern below corresponds to real authoring commentary found in front of a
-    // reader. The rule: if a sentence is about how or why the finding was recorded,
-    // rather than about the market, it does not ship.
-    .filter(sent=>!/(this session|multiple sessions|across sessions|earlier session|this corpus|the corpus|this pass|this dimension|this entry|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|GON-[A-Z]+-\d+|THX-\d+|standing bias|coverage framing|was never given its own row|Thesis citing)/i.test(sent))
-    .filter(sent=>!/(had been (stated|assumed|treated)|stated as settled|without ever being tested|worth (preserving|recording|logging)|rather than smoothing|is worth keeping|belongs in (any|the) .* model, not a footnote|we (logged|recorded|entered|treated)|is consistent with the .* the same source flags separately)/i.test(sent))
-    .join(' ')
-    .replace(/\s{2,}/g,' ')
-    .trim();
-  return t;
+  let sents=t.split(/(?<=[.!?])\s+/);
+
+  // Authoring commentary: sentences about how or why we recorded something.
+  const authoring=/(this session|multiple sessions|across sessions|earlier session|this corpus|the corpus|this pass|this dimension|this entry|closes a real gap|already logged|logged (in|elsewhere)|elsewhere in this|GON-[A-Z]+-\d+|THX-\d+|standing bias|coverage framing|was never given its own row|Thesis citing|Door \d|R2 dimension|coverage note|hard-coded|should be updated|should be reconsidered|re-verified|Logged at)/i;
+
+  // Sentences that only make sense next to the one we removed. "It was wrong."
+  // survived every keyword filter because it contains no keywords: it is a pronoun
+  // and a verb pointing at a deleted antecedent. Filtering by meaning is not
+  // possible here, so filter by shape: a very short sentence opening on a bare
+  // pronoun has no standalone content and cannot be the start of a reader's text.
+  const danglingRef=/^(it|this|that|they|these|those|he|she)\b/i;
+
+  sents=sents.filter(x=>!authoring.test(x));
+  sents=sents.filter((x,idx)=>!(idx===0&&danglingRef.test(x.trim())&&x.trim().split(/\s+/).length<=8));
+  return sents.join(' ').replace(/\s{2,}/g,' ').trim();
 }
 
 // The previous questions were three fixed strings that asked the reader about the
@@ -1460,15 +1475,16 @@ function readerSafe(note){
 function buildFounderQuestions(direct,missing,geo,sector){
   const qs=[];
   const yearOf=r=>parseInt((String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0]||'0',10);
-
-  // Metric Name is often a full clause, not a noun phrase. The previous version
-  // dropped it lowercased into the middle of a question, which produced sentences
-  // no one could read aloud. A finding is now stated as a statement first, then
-  // the question is asked about it. That reads the way a person actually talks.
   const asStatement=r=>{
     const st=statementOf(r);
     return st?st.replace(/\s*$/,'').replace(/([^.!?])$/,'$1.'):'';
   };
+  // "What is your number" only makes sense when the finding is a number. Asked
+  // about a border closure or a licensing structure, it reads as a non sequitur.
+  const hasFigure=r=>/\d/.test(String(r.fields['Value']||'')+String(r.fields['Metric Name']||''));
+  const askAbout=r=>hasFigure(r)
+    ? 'What is your own figure, and how did you arrive at it?'
+    : 'Does that match what you have seen operating here, and what would you correct?';
 
   // 1. The finding most exposed to being wrong.
   const weakest=direct.slice().sort((a,b)=>{
@@ -1477,18 +1493,26 @@ function buildFounderQuestions(direct,missing,geo,sector){
     return sc(a)-sc(b);
   })[0];
   if(weakest&&asStatement(weakest)){
-    qs.push(`Our reading is this. ${asStatement(weakest)} What is your number, and where does it come from?`);
+    qs.push(`Our reading is this. ${asStatement(weakest)} ${askAbout(weakest)}`);
   }
 
-  // 2. The oldest figure being relied on, with its age stated plainly.
-  const dated=direct.filter(r=>yearOf(r)>0).sort((a,b)=>yearOf(a)-yearOf(b))[0];
-  if(dated&&dated!==weakest&&asStatement(dated)){
+  // 2. The oldest figure being relied on. If the oldest is the one already used
+  //    above, step to the next oldest rather than dropping the question entirely.
+  const byAge=direct.filter(r=>yearOf(r)>0).sort((a,b)=>yearOf(a)-yearOf(b));
+  const dated=byAge.find(r=>r!==weakest);
+  if(dated&&asStatement(dated)){
     const y=yearOf(dated);
     const age=(new Date().getFullYear())-y;
-    qs.push(`The oldest figure we are relying on dates to ${y}${age>=2?`, so it is ${age} years old`:''}. ${asStatement(dated)} Has that moved since?`);
+    // Only worth asking when the figure is genuinely old. Calling a current-year
+    // figure "the oldest we are relying on" is technically true and useless.
+    if(age>=2){
+      qs.push(`The oldest figure we are relying on dates to ${y}, so it is ${age} years old. ${asStatement(dated)} Has that moved since?`);
+    }else{
+      qs.push(`${asStatement(dated)} How much of that is already priced into your plan, and what would have to change for it to stop mattering?`);
+    }
   }
 
-  // 3. The named gap, as a noun phrase, turned into a question rather than a caveat.
+  // 3. The named gap, as a noun phrase.
   if(missing&&missing.length&&missing[0].gap){
     qs.push(`We have no verified figure on ${missing[0].gap} in ${geo||'this market'}. Who inside your operation owns that number, and can we speak to them?`);
   }else{
@@ -1507,24 +1531,79 @@ function statementOf(r){
   const f=r.fields;
   let metric=String(f['Metric Name']||'').trim().replace(/\.$/,'');
   let value=String(f['Value']||'').trim();
-  // Values are sometimes a full sentence and sometimes a bare figure. Keep the first
-  // sentence either way, and cap it so one long entry cannot swallow the brief.
   value=(value.split(/(?<=[.!?])\s/)[0]||value).trim();
-  if(value.length>190)value=value.slice(0,190).replace(/\s+\S*$/,'')+'...';
-  const src=attribution(r);
-  if(!metric&&!value)return'';
-  const close=t=>{t=t.trim();return /[.!?]$/.test(t)?t:t+'.';};
-  if(!value)return close(`${metric}. ${src}`);
-  if(!metric)return close(`${value} ${src}`);
-  // Drop the metric label when the value already says the same thing. Without this
-  // the brief reads "DRC industrial electricity tariff: Industrial tariff averages
-  // USD 0.09 per kWh", which states the subject twice.
+
+  // Metric Name is sometimes a one-line label and sometimes a three-clause summary
+  // of the whole finding. When it is long, it is already a statement, and pairing it
+  // with the Value produced a sentence that said the same thing twice at 90 words.
+  // Take whichever field states the finding, not both.
   const words=t=>new Set(String(t).toLowerCase().replace(/[^a-z0-9\s]/g,' ')
     .split(/\s+/).filter(w=>w.length>3));
   const mw=words(metric),vw=words(value);
   let shared=0;mw.forEach(w=>{if(vw.has(w))shared++;});
-  const redundant=mw.size>0&&(shared/mw.size)>=0.5;
-  return redundant?close(`${value} ${src}`):close(`${metric}: ${value} ${src}`);
+  const redundant=mw.size>0&&(shared/mw.size)>=0.4;
+
+  let body;
+  if(!metric&&!value)return'';
+  else if(!value)body=metric;
+  else if(!metric)body=value;
+  else if(metric.length>85||redundant)body=(value.length>=40?value:metric);
+  else body=`${metric}: ${value}`;
+
+  body=trimWords(body,180);
+  const src=attribution(r);
+  body=body.trim();
+  const truncated=/\.\.\.$/.test(body);
+  if(!truncated&&!/[.!?]$/.test(body))body+='.';
+  if(!src)return body;
+  // Do not strip the ellipsis when appending the source. The previous cleanup
+  // regex turned "..." into ".." on every truncated statement.
+  return truncated?`${body} ${src}.`:`${body.replace(/\.$/,'')} ${src}.`;
+}
+
+// Cut at a word boundary, never mid-word. "full text confirmed via the governm"
+// was a raw substring call.
+function trimWords(t,max){
+  t=String(t||'').trim();
+  if(t.length<=max)return t;
+  let cut=t.slice(0,max);
+  // Prefer a clause boundary. Cutting mid-clause produced "...that caused",
+  // which reads as a transmission failure rather than a shortened quote.
+  const lastClause=Math.max(cut.lastIndexOf(', '),cut.lastIndexOf('; '));
+  if(lastClause>max*0.55)cut=cut.slice(0,lastClause);
+  else cut=cut.replace(/\s+\S*$/,'');
+  return cut.replace(/[,;:\s]+$/,'')+'...';
+}
+
+// Source Name and Source Date fields carry parenthetical working notes and stacked
+// multi-source strings: "2024 (per the interoperability instruction already logged
+// in GON-FIN-113)" and three publications joined by semicolons. A reader needs the
+// source, not our bookkeeping about it.
+function cleanSource(t){
+  return String(t||'')
+    .replace(/\([^)]*GON-[A-Z]+-\d+[^)]*\)/g,'')
+    .replace(/\([^)]*(already logged|per the|via the governm|primary text|full text)[^)]*\)/gi,'')
+    .replace(/\s{2,}/g,' ').replace(/\s*[;,]\s*$/,'').trim();
+}
+function primarySource(t){
+  // Multiple sources stacked into one field. Name the first, count the rest.
+  const parts=cleanSource(t).split(/\s*;\s*/).filter(Boolean);
+  if(!parts.length)return'';
+  const first=parts[0].replace(/\s*\([^)]*\)\s*$/,'').trim();
+  return parts.length>1?`${first} and ${parts.length-1} other source${parts.length>2?'s':''}`:first;
+}
+function sourceYear(t){
+  const m=String(t||'').match(/20\d\d/);
+  return m?m[0]:'';
+}
+
+// Some IC Checklist Implication values are routing notes to ourselves rather than
+// questions for a founder: "Feeds Door 2's R2 dimension", "formally completes the
+// confirming evidence set for THX-012". Those must not render under a heading that
+// tells a reader to ask them out loud.
+function isInternalRouting(t){
+  return /^(feeds|directly feeds|directly resolves|formally completes|closes|logged|updates?|feeds into)\b/i.test(String(t||'').trim())
+    || /(Door \d|R2 dimension|N3|THX-\d|GON-[A-Z]+-\d+|coverage note|hard-coded|this entry|confidence should be reconsidered)/i.test(String(t||''));
 }
 
 // A claim with no visible source is an assertion. The Source Name field was being
@@ -1532,8 +1611,8 @@ function statementOf(r){
 // admission" without ever naming the source. Every claim in a brief now carries it.
 function attribution(r){
   if(!r||!r.fields)return'';
-  const src=String(r.fields['Source Name']||'').trim();
-  const yr=(String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0];
+  const src=primarySource(r.fields['Source Name']);
+  const yr=sourceYear(r.fields['Source Date']);
   if(!src)return'';
   return`(${src}${yr?', '+yr:''})`;
 }
@@ -1569,7 +1648,7 @@ function renderCard(r,idx,isAdjacent){
   const icq=getICQ(r);
   const notMean=getNotMean(r,isAdjacent);
   const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
-  const value=(f['Value']||'').substring(0,80);
+  const value=trimWords(f['Value']||'',110);
   let cleanNote=readerSafe(f['Operator Note']).substring(0,420);
 
   return`<div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
@@ -1581,14 +1660,14 @@ function renderCard(r,idx,isAdjacent){
     <div class="implication">${implication}</div>
     <div class="bench-inline">
       <span class="bench-val-sm">${value}</span>
-      <span class="bench-src-sm">${f['Source Name']||''}${f['Source Date']?' &middot; '+f['Source Date']:''}</span>
+      <span class="bench-src-sm">${primarySource(f['Source Name'])}${sourceYear(f['Source Date'])?' &middot; '+sourceYear(f['Source Date']):''}</span>
     </div>
     ${buildEvBar(r,isAdjacent)}
     <button class="expand-trigger" id="expandBtn-${idx}" onclick="toggleExpand(${idx})">+ Full operator note + IC question</button>
     <div class="card-layer2" id="layer2-${idx}">
       ${cleanNote?`<div class="op-note">${cleanNote}</div>`:''}
       ${notMean?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> ${notMean}</div>`:''}
-      ${icq?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
+      ${(icq&&!isInternalRouting(icq))?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
       <div class="src-row">
         ${f['Entry ID']?`<span class="src-tag">${f['Entry ID']}</span>`:''}
         ${!isAdjacent&&market?`<span class="src-tag">${market}</span>`:''}
