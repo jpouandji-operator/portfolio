@@ -771,7 +771,19 @@ async function fetchAll(token,query){
   let adjacent=[];
   if(sector&&coverage==='direct'){adjacent=await fetchAdjacent(token,geo,sector,direct);}
   const theses=await fetchTheses(token,geo);
-  return{direct,adjacent,theses,coverage,marketOnly,sectorElsewhere,geo,sector};
+
+  // directAll is what we actually know about this market. direct is what the reader
+  // has chosen to look at. Gaps are computed against the former, so narrowing the
+  // lens cannot manufacture a gap in data that exists.
+  const directAll=direct;
+  let lensEmpty=false;
+  if(currentFilter){
+    const lensed=direct.filter(r=>String(r.fields['IC Dimension']||'')===currentFilter);
+    lensEmpty=(directAll.length>0&&lensed.length===0);
+    direct=lensed;
+    adjacent=adjacent.filter(r=>String(r.fields['IC Dimension']||'')===currentFilter);
+  }
+  return{direct,directAll,adjacent,theses,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector};
 }
 
 async function fetchScoped(token,geo,sector,query){
@@ -780,7 +792,11 @@ async function fetchScoped(token,geo,sector,query){
   if(sector)parts.push(`{Sector}="${sector}"`);
   let formula=parts.length===2?`AND(AND(${parts.join(',')}),{Entry Status}="Active")`:
     parts.length===1?`AND(${parts[0]},{Entry Status}="Active")`:`{Entry Status}="Active"`;
-  if(currentFilter)formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;
+  // The lens is deliberately NOT applied here. Filtering inside the query made an
+  // empty lens indistinguishable from an empty market, so narrowing to one dimension
+  // made the tool announce "there is no verified research on DRC at all" while the
+  // unfiltered view showed eight findings. Coverage is diagnosed on the full set and
+  // the lens is applied afterwards, as a view over known data.
   const records=await airtableFetch(token,formula,25);
   return rankByRelevanceThenQuality(records,query).slice(0,10);
 }
@@ -957,7 +973,6 @@ function rankByEvidenceQuality(records){
 async function fetchAdjacent(token,geo,sector,existing){
   const ids=new Set(existing.map(r=>r.id));
   let formula=`AND({Sector}="${sector}",{Entry Status}="Active")`;
-  if(currentFilter)formula=`AND(${formula},{IC Dimension}="${currentFilter}")`;
   const all=await airtableFetch(token,formula,8);
   return all.filter(r=>!ids.has(r.id)).slice(0,3);
 }
@@ -1264,8 +1279,8 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     // reliably. Metric Name and Value are structured fields: they state what was
     // measured and what it was, and nothing else. Operator Note now appears only in
     // the expanded evidence card, where the reader has asked to see the workings.
-    const findingFor=pr=>{
-      const inDim=direct.filter(r=>r.fields['IC Dimension']===pr.dim);
+    const findingFor=(pr,pool)=>{
+      const inDim=(pool||direct).filter(r=>r.fields['IC Dimension']===pr.dim);
       if(!inDim.length)return null;
       // A dimension tag alone is not relevance. A mobile money commission entry is
       // tagged Unit economics, and answered a question about building a factory,
@@ -1286,19 +1301,28 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     const covered=[];
     if(intent){
       intent.priorities.forEach(pr=>{
-        const hit=findingFor(pr);
+        const hit=findingFor(pr,direct);
         if(hit){
           covered.push(pr);
           consequences.push({why:pr.why,rec:hit});
         }
       });
     }
-    // A priority is missing if nothing on-topic was found for it, whether or not
-    // something carrying that dimension tag exists.
-    const missing=intent?intent.priorities.filter(pr=>!covered.includes(pr)):[];
+    // Gaps are computed against everything known about this market, never against
+    // the narrowed view. Otherwise selecting "What regulation matters?" made the
+    // tool report a gap in logistics data that it demonstrably holds.
+    const knownAll=(R.directAll&&R.directAll.length)?R.directAll:direct;
+    const coveredAll=intent?intent.priorities.filter(pr=>!!findingFor(pr,knownAll)):[];
+    const missing=intent?intent.priorities.filter(pr=>coveredAll.indexOf(pr)===-1):[];
 
+    const lensLabel=currentFilter?String(currentFilter).toLowerCase():'';
     let realityText;
-    if(cov==='sector_absent_in_market'){
+    if(R.lensEmpty){
+      // An empty lens is not an empty market, and must never be reported as one.
+      realityText=`Nothing under ${lensLabel} has been verified for ${geo}, though `
+        +`${R.directAll.length} finding${R.directAll.length===1?'':'s'} on ${geo} sit${R.directAll.length===1?'s':''} under other headings. `
+        +`Widen to all signals to see them.`;
+    }else if(cov==='sector_absent_in_market'){
       realityText=`There is no verified research on this sector in ${geo}. That is a statement about the evidence, not about the opportunity. ${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The nearest comparable is the same sector in ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}, which is worth reading for structure but is not evidence for ${geo}.`:''}`;
     }else if(cov==='no_market_data'){
       realityText=`There is no verified research on ${geo} at all. Nothing below should be read as evidence about this market.`;
@@ -1307,10 +1331,10 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     }else if(n>0&&consequences.length){
       realityText=`Read as ${intent.label}, ${geo} turns on a few things. `
         + consequences.slice(0,3).map(c=>
-            `${c.why.charAt(0).toUpperCase()+c.why.slice(1)}: ${statementOf(c.rec)}`
+            `${c.why.charAt(0).toUpperCase()+c.why.slice(1)}: ${statementOf(c.rec,true)}`
           ).join(' ');
     }else if(n>0){
-      realityText=`${n} verified finding${n===1?'':'s'} bear on ${geo} here. `
+      realityText=`${n} verified finding${n===1?'':'s'} bear${n===1?'s':''} on ${geo} here. `
         + direct.slice(0,2).map(r=>statementOf(r)).join(' ');
     }else{
       realityText=`Nothing verified matches that question yet.`;
@@ -1325,19 +1349,23 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
           : `An absence of coverage is a fact about the evidence, not about the market. It means this has to be answered from primary sources directly.`)),
       what_this_changes:(n>0
         ? `Take the findings above into the conversation rather than into the model. They tell you which assumptions to test, not what the answer is.`
-        : `This needs primary founder or operator data before it can carry weight in a decision.`),
+        : (R.lensEmpty
+          ? `Nothing here is a finding about ${geo}. It is a finding about this lens. Widen the view before drawing anything from it.`
+          : `This needs primary founder or operator data before it can carry weight in a decision.`)),
       conflicts_and_gaps:(conflicts.length
         ? conflicts.join(' ')
         : (cov==='sector_absent_in_market'
           ? `The gap is specific: this sector is uncovered in ${geo}, while the market itself is covered in other areas. Those are different problems and worth keeping separate.`
-          : `Nothing in the retrieved findings contradicts anything else in it.`)),
+          : `Nothing in these findings contradicts anything else here.`)),
       cross_market_pattern:(theses&&theses.length
         ? `${geo} sits inside ${theses.length} pattern${theses.length===1?'':'s'} that hold across several markets. `
           + theses.slice(0,2).map(t=>trimWords(String(t.fields&&t.fields['Thesis Statement']||'').trim(),200))
               .filter(Boolean).map(x=>/[.!?]$/.test(x)?x:x+'.').join(' ')
           + ` What you find here is unlikely to be unique to it.`
         : `No cross-market pattern currently reaches ${geo}.`),
-      ic_questions:(n>0
+      ic_questions:(R.lensEmpty
+        ? [ `Widen to all signals before taking anything from this view.` ]
+        : n>0
         ? buildFounderQuestions((consequences.length?consequences.map(c=>c.rec):direct),missing,geo,sector)
         : [ `What primary source would settle this, and who holds it?`,
             `Which better-documented market are you borrowing assumptions from, and does the comparison hold?`,
@@ -1526,7 +1554,7 @@ function buildFounderQuestions(direct,missing,geo,sector){
 // Metric Name says what was measured, Value says what it was, Source Name and
 // Source Date say who says so and when. Nothing here is free prose, so nothing here
 // can leak authoring commentary or arrive as a sentence fragment.
-function statementOf(r){
+function statementOf(r,preferValue){
   if(!r||!r.fields)return'';
   const f=r.fields;
   let metric=String(f['Metric Name']||'').trim().replace(/\.$/,'');
@@ -1547,7 +1575,7 @@ function statementOf(r){
   if(!metric&&!value)return'';
   else if(!value)body=metric;
   else if(!metric)body=value;
-  else if(metric.length>85||redundant)body=(value.length>=40?value:metric);
+  else if(metric.length>85||redundant||preferValue)body=(value.length>=40?value:metric);
   else body=`${metric}: ${value}`;
 
   body=trimWords(body,180);
