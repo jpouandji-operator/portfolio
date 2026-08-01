@@ -795,45 +795,91 @@ async function fetchScoped(token,geo,sector,query){
 const INTENT_MAP=[
   {match:/\b(plant|factory|manufactur|industrial|assembly|processing|bottling|production line)\b/i,
    label:'an industrial or manufacturing build',
-   offSector:/fintech|mobile money|entertainment|media|saas/i,
    priorities:[
-     {dim:'Unit economics',why:'power and input costs decide whether a plant works here at all'},
-     {dim:'Distribution economics',why:'getting inputs in and product out is usually the binding constraint'},
-     {dim:'Regulatory environment',why:'permitting and labour law set your fixed cost floor'},
-     {dim:'Currency / macro risk',why:'you will need to get returns back out'}
+     {dim:'Unit economics',
+      why:'power and input costs decide whether a plant works here at all',
+      gap:'landed power cost and industrial tariff',
+      topic:/power|electric|tariff|energy|fuel|diesel|grid|input cost|utility|kwh/i},
+     {dim:'Distribution economics',
+      why:'getting inputs in and product out is usually the binding constraint',
+      gap:'inbound input logistics and outbound route to market',
+      topic:/port|customs|clearance|freight|road|corridor|transport|logistic|import|export|border|truck|warehouse/i},
+     {dim:'Regulatory environment',
+      why:'permitting and labour law set your fixed cost floor',
+      gap:'permitting timelines and the applicable labour code',
+      topic:/permit|licen|labour|labor|wage|employ|code du travail|inspect|environment|zoning|industrial park|tax|duty/i},
+     {dim:'Currency / macro risk',
+      why:'you will need to get returns back out',
+      gap:'capital repatriation and FX conversion',
+      topic:/fx|currency|exchange|repatriat|convert|forex|devalu|inflation|central bank|transfer/i}
    ]},
   {match:/\b(acquir|acquisition|exit|sell|buyout|m&a|divest)\b/i,
    label:'an acquisition or exit',
-   offSector:null,
    priorities:[
-     {dim:'Exit dynamics',why:'who actually buys, and at what, in this market'},
-     {dim:'Regulatory environment',why:'approval and ownership rules can gate the deal'},
-     {dim:'Currency / macro risk',why:'proceeds have to convert and leave'}
+     {dim:'Exit dynamics',
+      why:'who actually buys, and at what, in this market',
+      gap:'realised exit comparables',
+      topic:/exit|acquisition|acquir|ipo|buyer|valuation|multiple|trade sale|secondary/i},
+     {dim:'Regulatory environment',
+      why:'approval and ownership rules can gate the deal',
+      gap:'foreign ownership limits and merger approval',
+      topic:/approval|ownership|foreign|merger|competition|antitrust|licen|consent/i},
+     {dim:'Currency / macro risk',
+      why:'proceeds have to convert and leave',
+      gap:'proceeds repatriation',
+      topic:/fx|currency|repatriat|convert|exchange|capital control|transfer/i}
    ]},
   {match:/\b(distribut|retail|logistics|supply chain|last mile|import|export)\b/i,
    label:'a distribution or supply chain question',
-   offSector:null,
    priorities:[
-     {dim:'Distribution economics',why:'route to market is the whole question here'},
-     {dim:'Unit economics',why:'freight and clearance costs sit directly in margin'},
-     {dim:'Regulatory environment',why:'customs and licensing determine what is actually possible'}
+     {dim:'Distribution economics',
+      why:'route to market is the whole question here',
+      gap:'route to market cost per unit',
+      topic:/distribut|retail|agent|channel|last mile|freight|road|port|corridor|logistic|warehouse|stockist/i},
+     {dim:'Unit economics',
+      why:'freight and clearance costs sit directly in margin',
+      gap:'landed cost per unit',
+      topic:/cost|margin|price|freight|clearance|duty|tariff|fee/i},
+     {dim:'Regulatory environment',
+      why:'customs and licensing determine what is actually possible',
+      gap:'customs and trading licence requirements',
+      topic:/customs|licen|permit|import|export|duty|standard|certif/i}
    ]},
   {match:/\b(fintech|payment|mobile money|wallet|lending|credit|bank)\b/i,
    label:'a financial services venture',
-   offSector:/fmcg|manufactur|agritech|energy \/ cleantech/i,
    priorities:[
-     {dim:'Regulatory environment',why:'licensing determines whether you can operate at all'},
-     {dim:'Demand validation',why:'registered users and active users are different numbers'},
-     {dim:'Distribution economics',why:'agent and channel economics decide unit cost'},
-     {dim:'Currency / macro risk',why:'float and settlement carry currency exposure'}
+     {dim:'Regulatory environment',
+      why:'licensing determines whether you can operate at all',
+      gap:'the licensing route and its conditions',
+      topic:/licen|emi|psp|central bank|regulat|capital requirement|aml|kyc|authoris|authoriz/i},
+     {dim:'Demand validation',
+      why:'registered users and active users are different numbers',
+      gap:'active versus registered user split',
+      topic:/user|active|account|adopt|penetration|transact|wallet|subscriber|customer/i},
+     {dim:'Distribution economics',
+      why:'agent and channel economics decide unit cost',
+      gap:'agent commission and channel cost',
+      topic:/agent|commission|channel|distribut|cash in|cash out|float|merchant/i},
+     {dim:'Currency / macro risk',
+      why:'float and settlement carry currency exposure',
+      gap:'float placement and settlement risk',
+      topic:/float|settlement|fx|currency|exchange|reserve|liquidity/i}
    ]},
   {match:/\b(energy|power|solar|grid|electric|renewable)\b/i,
    label:'an energy or power venture',
-   offSector:/fintech|mobile money|entertainment|media/i,
    priorities:[
-     {dim:'Unit economics',why:'tariff structure and subsidy decide the revenue model'},
-     {dim:'Regulatory environment',why:'the regulator sets your price, not the market'},
-     {dim:'Currency / macro risk',why:'tariffs rarely track currency, and that gap is the risk'}
+     {dim:'Unit economics',
+      why:'tariff structure and subsidy decide the revenue model',
+      gap:'the applicable tariff and any subsidy exposure',
+      topic:/tariff|subsid|kwh|price|cost|revenue|ppa|feed.?in/i},
+     {dim:'Regulatory environment',
+      why:'the regulator sets your price, not the market',
+      gap:'the regulator and the tariff-setting process',
+      topic:/regulat|licen|concession|ppa|permit|authority|utility|offtake/i},
+     {dim:'Currency / macro risk',
+      why:'tariffs rarely track currency, and that gap is the risk',
+      gap:'tariff indexation against currency movement',
+      topic:/fx|currency|index|devalu|inflation|exchange|convert/i}
    ]}
 ];
 function detectIntent(query){
@@ -1211,14 +1257,38 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     const dimsFound=[...new Set(direct.map(r=>r.fields['IC Dimension']).filter(Boolean))];
 
     // what the corpus covers, framed as consequence rather than as dimension names
+    // The brief is built from Metric Name and Value only, never from Operator Note.
+    // Operator Notes are prose written for us while researching. Splicing their first
+    // sentence into a brief produced fragments like "It was wrong." attached to an
+    // unrelated source, and leaked authoring commentary that no regex filter caught
+    // reliably. Metric Name and Value are structured fields: they state what was
+    // measured and what it was, and nothing else. Operator Note now appears only in
+    // the expanded evidence card, where the reader has asked to see the workings.
+    const findingFor=pr=>{
+      const inDim=direct.filter(r=>r.fields['IC Dimension']===pr.dim);
+      if(!inDim.length)return null;
+      // A dimension tag alone is not relevance. A mobile money commission entry is
+      // tagged Unit economics, and answered a question about building a factory,
+      // because dimension was the only thing checked. The finding must also be about
+      // the subject the question implies.
+      const onTopic=inDim.filter(r=>pr.topic.test(
+        (r.fields['Metric Name']||'')+' '+(r.fields['Value']||'')));
+      return onTopic.length?onTopic[0]:null;
+    };
     const consequences=[];
+    const covered=[];
     if(intent){
       intent.priorities.forEach(pr=>{
-        const hit=direct.find(r=>r.fields['IC Dimension']===pr.dim);
-        if(hit)consequences.push(`${pr.why.charAt(0).toUpperCase()+pr.why.slice(1)}. ${readerSafe(hit.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(hit.fields['Value']||'').substring(0,180)} ${attribution(hit)}`);
+        const hit=findingFor(pr);
+        if(hit){
+          covered.push(pr);
+          consequences.push({why:pr.why,rec:hit});
+        }
       });
     }
-    const missing=intent?intent.priorities.filter(pr=>!direct.some(r=>r.fields['IC Dimension']===pr.dim)):[];
+    // A priority is missing if nothing on-topic was found for it, whether or not
+    // something carrying that dimension tag exists.
+    const missing=intent?intent.priorities.filter(pr=>!covered.includes(pr)):[];
 
     let realityText;
     if(cov==='sector_absent_in_market'){
@@ -1228,9 +1298,13 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     }else if(cov==='underspecified'){
       realityText=`That question needs a market and a sector before it can be answered specifically. Name both and this becomes a real read rather than a general one.`;
     }else if(n>0&&consequences.length){
-      realityText=`Read as ${intent.label}, ${geo} turns on a few things, and there is verified research on them. ${consequences.slice(0,3).join(' ')}`;
+      realityText=`Read as ${intent.label}, ${geo} turns on a few things. `
+        + consequences.slice(0,3).map(c=>
+            `${c.why.charAt(0).toUpperCase()+c.why.slice(1)}: ${statementOf(c.rec)}`
+          ).join(' ');
     }else if(n>0){
-      realityText=`${n} verified finding${n===1?'':'s'} bear on ${geo} here. ${direct.slice(0,2).map(r=>readerSafe(r.fields['Operator Note']).split(/(?<=[.!?])\s/)[0]||(r.fields['Value']||'').substring(0,150)).join(' ')}`;
+      realityText=`${n} verified finding${n===1?'':'s'} bear on ${geo} here. `
+        + direct.slice(0,2).map(r=>statementOf(r)).join(' ');
     }else{
       realityText=`Nothing verified matches that question yet.`;
     }
@@ -1309,7 +1383,7 @@ function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount,label
         </ul>
       </div>`:''}
 
-      <div class="brief-confidence">${brief.confidence_note||''} &nbsp;&middot;&nbsp; <span>${directCount} direct signal${directCount!==1?'s':''}</span>${adjacentCount>0?` &nbsp;&middot;&nbsp; <span>${adjacentCount} adjacent</span>`:''}</div>
+      <div class="brief-confidence">${brief.confidence_note||''} &nbsp;&middot;&nbsp; <span>${directCount} verified finding${directCount!==1?'s':''}</span>${adjacentCount>0?` &nbsp;&middot;&nbsp; <span>${adjacentCount} from comparable markets</span>`:''}</div>
     </div>`;
 }
 
@@ -1331,10 +1405,12 @@ function getSeverity(r){
 
 function getImplication(r){
   const note=r.fields['Operator Note']||'';
+  // Only the explicitly structured markers are safe to lift. "Core claim:" and
+  // "Assumption invalidated:" are labels we write deliberately. The previous
+  // fallback took the first sentence of the note whatever it was, which is how a
+  // card ended up headlined "It was wrong." with no antecedent.
   const m=note.match(/Core claim:\s*([^.]+\.)/i)||note.match(/Assumption invalidated:\s*([^.]+\.)/i);
   if(m)return`&#8220;${m[1].trim()}&#8221;`;
-  const first=note.split('.')[0];
-  if(first&&first.length>20)return`&#8220;${first.trim()}.&#8221;`;
   return r.fields['Metric Name']||'';
 }
 
@@ -1384,34 +1460,71 @@ function readerSafe(note){
 function buildFounderQuestions(direct,missing,geo,sector){
   const qs=[];
   const yearOf=r=>parseInt((String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0]||'0',10);
-  const named=r=>String(r.fields['Metric Name']||'').replace(/\s*\(.*?\)\s*/g,'').trim();
 
-  // 1. The finding most exposed to being wrong: lowest confidence or weakest test.
+  // Metric Name is often a full clause, not a noun phrase. The previous version
+  // dropped it lowercased into the middle of a question, which produced sentences
+  // no one could read aloud. A finding is now stated as a statement first, then
+  // the question is asked about it. That reads the way a person actually talks.
+  const asStatement=r=>{
+    const st=statementOf(r);
+    return st?st.replace(/\s*$/,'').replace(/([^.!?])$/,'$1.'):'';
+  };
+
+  // 1. The finding most exposed to being wrong.
   const weakest=direct.slice().sort((a,b)=>{
-    const s=r=>(r.fields['Confidence Level']==='High'?3:r.fields['Confidence Level']==='Medium'?2:1)
+    const sc=r=>(r.fields['Confidence Level']==='High'?3:r.fields['Confidence Level']==='Medium'?2:1)
       +(String(r.fields['Three-Test Status']||'').indexOf('Pass (all three')===0?2:0);
-    return s(a)-s(b);
+    return sc(a)-sc(b);
   })[0];
-  if(weakest&&named(weakest)){
-    qs.push(`On ${named(weakest).toLowerCase()}: what is your own number for ${geo||'this market'}, and how did you arrive at it?`);
+  if(weakest&&asStatement(weakest)){
+    qs.push(`Our reading is this. ${asStatement(weakest)} What is your number, and where does it come from?`);
   }
 
-  // 2. The oldest figure being relied on, named, with its age stated.
+  // 2. The oldest figure being relied on, with its age stated plainly.
   const dated=direct.filter(r=>yearOf(r)>0).sort((a,b)=>yearOf(a)-yearOf(b))[0];
-  if(dated&&named(dated)){
+  if(dated&&dated!==weakest&&asStatement(dated)){
     const y=yearOf(dated);
     const age=(new Date().getFullYear())-y;
-    qs.push(`The most recent figure I can verify on ${named(dated).toLowerCase()} dates to ${y}${age>=2?`, which is ${age} years old`:''}. Has that moved, and what are you seeing on the ground?`);
+    qs.push(`The oldest figure we are relying on dates to ${y}${age>=2?`, so it is ${age} years old`:''}. ${asStatement(dated)} Has that moved since?`);
   }
 
-  // 3. The named gap, turned into a question rather than left as a disclaimer.
-  if(missing&&missing.length){
-    qs.push(`Nothing published covers ${missing[0].why}. Who inside your operation owns that number, and can I speak to them?`);
-  } else {
+  // 3. The named gap, as a noun phrase, turned into a question rather than a caveat.
+  if(missing&&missing.length&&missing[0].gap){
+    qs.push(`We have no verified figure on ${missing[0].gap} in ${geo||'this market'}. Who inside your operation owns that number, and can we speak to them?`);
+  }else{
     qs.push(`Which of the figures above does your model actually depend on, and what happens to the case if it is off by half?`);
   }
 
-  return qs.slice(0,3);
+  return qs.filter(Boolean).slice(0,3);
+}
+
+// One finding, stated as one clean sentence, built only from structured fields.
+// Metric Name says what was measured, Value says what it was, Source Name and
+// Source Date say who says so and when. Nothing here is free prose, so nothing here
+// can leak authoring commentary or arrive as a sentence fragment.
+function statementOf(r){
+  if(!r||!r.fields)return'';
+  const f=r.fields;
+  let metric=String(f['Metric Name']||'').trim().replace(/\.$/,'');
+  let value=String(f['Value']||'').trim();
+  // Values are sometimes a full sentence and sometimes a bare figure. Keep the first
+  // sentence either way, and cap it so one long entry cannot swallow the brief.
+  value=(value.split(/(?<=[.!?])\s/)[0]||value).trim();
+  if(value.length>190)value=value.slice(0,190).replace(/\s+\S*$/,'')+'...';
+  const src=attribution(r);
+  if(!metric&&!value)return'';
+  const close=t=>{t=t.trim();return /[.!?]$/.test(t)?t:t+'.';};
+  if(!value)return close(`${metric}. ${src}`);
+  if(!metric)return close(`${value} ${src}`);
+  // Drop the metric label when the value already says the same thing. Without this
+  // the brief reads "DRC industrial electricity tariff: Industrial tariff averages
+  // USD 0.09 per kWh", which states the subject twice.
+  const words=t=>new Set(String(t).toLowerCase().replace(/[^a-z0-9\s]/g,' ')
+    .split(/\s+/).filter(w=>w.length>3));
+  const mw=words(metric),vw=words(value);
+  let shared=0;mw.forEach(w=>{if(vw.has(w))shared++;});
+  const redundant=mw.size>0&&(shared/mw.size)>=0.5;
+  return redundant?close(`${value} ${src}`):close(`${metric}: ${value} ${src}`);
 }
 
 // A claim with no visible source is an assertion. The Source Name field was being
@@ -1500,7 +1613,7 @@ function toggleEvidence(){
   const open=b.style.display!=='none';
   b.style.display=open?'none':'block';
   if(c)c.textContent=open?'+':'-';
-  if(l)l.textContent=(open?'Show the ':'Hide the ')+l.textContent.replace(/^(Show|Hide) the /,'');
+  if(l)l.textContent=l.textContent.replace(/^(Show|Hide|The) /,open?'Show the ':'The ');
 }
 
 function renderEvidence(direct,adjacent){
@@ -1512,11 +1625,16 @@ function renderEvidence(direct,adjacent){
   if(direct.length){
     // The read comes first. The workings are one click away, which is what separates
     // this from a chatbot, but they are not what a reader wants dumped on them first.
+    // The findings are the product. Collapsing them by default meant the one thing a
+    // reader is being asked to trust, the verified research with its sources, was
+    // hidden behind a click while the interpretation sat in the open. That is the
+    // wrong way round: the interpretation is the part that should have to earn trust
+    // from the evidence, not the other way around. Open by default, collapsible.
     html+=`<div class="evidence-divider" style="cursor:pointer;user-select:none;" onclick="toggleEvidence()">
-      <span id="evToggleLabel">Show the ${direct.length} finding${direct.length!==1?'s':''} this is based on</span>
-      <span class="evidence-count" id="evToggleCaret">+</span>
+      <span id="evToggleLabel">The ${direct.length} verified finding${direct.length!==1?'s':''} this is based on</span>
+      <span class="evidence-count" id="evToggleCaret">-</span>
     </div>`;
-    html+=`<div id="evidenceBody" style="display:none;">`;
+    html+=`<div id="evidenceBody" style="display:block;">`;
     html+=direct.map((r,i)=>renderCard(r,i,false)).join('');
     html+=`</div>`;
   }
