@@ -1543,9 +1543,12 @@ function buildFounderQuestions(direct,missing,geo,sector){
   };
   // "What is your number" only makes sense when the finding is a number. Asked
   // about a border closure or a licensing structure, it reads as a non sequitur.
+  // Read Metric Name only. It names what was measured. Scanning the Value as well
+  // meant an incidental word anywhere in a long description could turn a border
+  // closure into something a founder is asked to supply their own figure for.
   const hasFigure=r=>/\d/.test(String(r.fields['Value']||''))
-    && /(cost|price|tariff|wage|rate|margin|fee|levy|commission|salary|per day|per kwh|per unit|percent|%)/i
-       .test(String(r.fields['Metric Name']||'')+' '+String(r.fields['Value']||''));
+    && /(cost|price|tariff|wage|rate|margin|fee|levy|commission|salary|penetration|share|volume|spend|yield)/i
+       .test(String(r.fields['Metric Name']||''));
   const askAbout=r=>hasFigure(r)
     ? 'What is your own figure, and how did you arrive at it?'
     : 'Does that match what you have seen operating here, and what would you correct?';
@@ -1618,6 +1621,31 @@ function scopeToIntent(records,intent,query){
 // Build Scope section 2 and section 4: entries are not free-standing. Surface the
 // relationships a reader did not ask for. This is the layer the Build Scope calls
 // the differentiator, and it was specified but never built.
+// What actually happens when two specific dimensions meet. Only these pairs produce
+// a claim worth making; anything unlisted stays silent rather than emitting filler.
+const DIM_PAIRS={
+  'Distribution economics|Regulatory environment':
+    'The delay and the compliance clock run at the same time. A shipment held at a border is still accruing whatever the regulation charges for time, so the two costs compound rather than sit side by side.',
+  'Distribution economics|Unit economics':
+    'These are the same number seen twice. Check whether the margin figure already nets the route cost, or whether the two are being counted separately in the model.',
+  'Currency / macro risk|Unit economics':
+    'The cost base and the revenue line are in different currencies. A margin that holds at today rate does not survive a devaluation of any size.',
+  'Regulatory environment|Unit economics':
+    'A regulatory charge lands in the cost base, not in a compliance line item. Check that the margin model carries it rather than footnoting it.',
+  'Currency / macro risk|Distribution economics':
+    'Imported inputs are priced in hard currency and sold in local. Every day of transit delay lengthens that exposure before a single unit is sold.',
+  'Demand validation|Distribution economics':
+    'Demand that exists is not demand you can serve. Check that the route to market physically reaches the customers the demand figure counted.',
+  'Exit dynamics|Regulatory environment':
+    'Approval and ownership rules gate an exit as firmly as buyer appetite does. A willing buyer and a blocked transfer produce the same outcome.',
+  'Demand validation|Unit economics':
+    'Volume and margin have to hold at the same time. Demand proven at one price point says nothing about demand at the price the unit economics require.'
+};
+function pairMechanism(a,b){
+  const k=[a,b].sort().join('|');
+  return DIM_PAIRS[k]||'';
+}
+
 function interlinkage(direct,geo,intent){
   const out=[];
   if(!direct||direct.length<2)return out;
@@ -1650,9 +1678,15 @@ function interlinkage(direct,geo,intent){
     // different. Two entries on the same subject are a conflict or a duplicate,
     // both already reported elsewhere, and restating them here is noise.
     const b=direct.find(r=>dim(r)!==dim(a)&&!sameSubject(a,r));
-    if(a&&b)out.push(`Two of these sit in different dimensions and should be read together: `
-      +`"${name(a)}" under ${dim(a).toLowerCase()}, and "${name(b)}" under ${dim(b).toLowerCase()}. `
-      +`Neither states the combined effect, which is where the real exposure usually sits.`);
+    if(a&&b){
+      // "Neither states the combined effect, which is where the real exposure usually
+      // sits" is true of any two findings ever retrieved. A sentence that survives
+      // swapping both nouns is not analysis. Say what the specific combination does,
+      // or say nothing.
+      const mech=pairMechanism(dim(a),dim(b));
+      if(mech)out.push(`Read these two together: "${name(a)}" under ${dim(a).toLowerCase()}, `
+        +`and "${name(b)}" under ${dim(b).toLowerCase()}. ${mech}`);
+    }
   }
 
   // (b) same-market, same-subject findings that qualify each other.
@@ -1803,7 +1837,12 @@ function qualifierOf(r){
 function announcedPrefix(r){
   const st=String((r.fields||{})['Entry Status']||'');
   const txt=String((r.fields||{})['Metric Name']||'')+' '+String((r.fields||{})['Value']||'');
-  if(/announced/i.test(st)||/\b(proposed|planned|target|intends?|will introduce|draft bill|under consideration)\b/i.test(txt)){
+  // Entry Status is the reliable signal. Text matching is a fallback and must use
+  // announcement phrasing, not bare words: "clearance rates below target" describes
+  // something that already happened, and matching on "target" alone labelled a
+  // completed border closure as not yet delivered.
+  if(/^announced/i.test(st))return 'Stated, not yet delivered: ';
+  if(/\b(proposed reforms?|proposed amendments?|proposed changes?|proposed legislation|draft (bill|law|decree)|under consideration|has announced|have announced|plans to|intends to|is expected to|plans? for|plans? a|will introduce|plans? to introduce|yet to (be )?(take effect|come into force)|not yet in force)\b/i.test(txt)){
     return 'Stated, not yet delivered: ';
   }
   return '';
