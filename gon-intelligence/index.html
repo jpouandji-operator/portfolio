@@ -1094,7 +1094,7 @@ async function generateBriefAndRender(query,direct,adjacent,theses,R){
     Market: ${market} | Sector: ${f['Sector']||''} | IC dimension: ${f['IC Dimension']||''}
     CONFIDENCE: ${f['Confidence Level']||'not stated'} | DATA TIER: ${f['Data Tier']||'not stated'} | THREE-TEST: ${f['Three-Test Status']||'not stated'}
     ENTRY STATUS: ${f['Entry Status']||'not stated'} (if "Announced", this is a stated target and not a delivered outcome) | DECAY CLASS: ${f['Decay Class']||'not stated'}
-    Source: ${f['Source Name']||'not stated'}, dated ${f['Source Date']||'undated'}
+    Source: ${f['Source Name']||'not stated'}, dated ${f['Source Date']||'Date not recorded'}
     Recency test: ${f['Recency Test']||'not assessed'} | Specificity: ${f['Specificity Test']||'not assessed'} | Interpretability: ${f['Interpretability Test']||'not assessed'}
     Operator note: ${(f['Operator Note']||'').substring(0,400)}`;
   }).join('\n');
@@ -1492,8 +1492,15 @@ function getICQ(r){
   return'';
 }
 
+let _notMeanShown={};
+function resetNotMean(){_notMeanShown={};}
 function getNotMean(r,isAdjacent){
   if(isAdjacent)return'';
+  // One card carrying this line is a caution. Five carrying the identical sentence is
+  // wallpaper, and a reader stops seeing any of them.
+  const key=String(r.fields['IC Dimension']||'');
+  if(_notMeanShown[key])return'';
+  _notMeanShown[key]=true;
   const dim=r.fields['IC Dimension']||'';
   const market=Array.isArray(r.fields['Market'])?r.fields['Market'].join(', '):(r.fields['Market']||'');
   if(dim==='Regulatory environment')return`regulatory compliance appears impossible in ${market}. It means the timeline and cost assumptions require validation against operational reality, not statutory ceilings.`;
@@ -1828,7 +1835,7 @@ function qualifierOf(r){
       else if(oldest>limit)bits.push(`may be past its ${limit}-month window, only the year is recorded`);
     }
   }else if(!sd){
-    bits.push('undated');
+    bits.push('Date not recorded');
   }
   return bits.length?bits.join(', '):'';
 }
@@ -1948,7 +1955,7 @@ function buildEvBar(r,isAdjacent){
   const checked=ts.indexOf('Pass (all three')===0||ts==='Pass'?'Fully checked'
     :ts.indexOf('Pass with caveat')===0?'Checked, with a caveat'
     :ts.indexOf('Directional')===0?'Directional only':'Not fully checked';
-  const yr=(String(sd).match(/20\d\d/)||[])[0]||'undated';
+  const yr=(String(sd).match(/20\d\d/)||[])[0]||'Date not recorded';
   const weight=isAdjacent?'Different market':(conf==='High'?'Rely on this':conf==='Low'?'Treat as directional':'Use with care');
   return`<div class="ev-bar">
     <div class="ev-cell"><span class="ev-key">How to weigh it</span><span class="ev-val ${conf==='High'&&!isAdjacent?'':'medium'}">${weight}</span></div>
@@ -1968,7 +1975,18 @@ function renderCard(r,idx,isAdjacent){
   const notMean=getNotMean(r,isAdjacent);
   const market=Array.isArray(f['Market'])?f['Market'].join(', '):(f['Market']||'');
   const value=trimWords(f['Value']||'',110);
-  let cleanNote=readerSafe(f['Operator Note']).substring(0,420);
+  let cleanNote=trimWords(readerSafe(f['Operator Note']),420);
+  // A note can be stripped to nothing when it was written entirely as bookkeeping.
+  // The expansion then opens onto an empty panel, which reads as a broken control
+  // rather than as an absence of commentary. Say which it is.
+  const hadNote=!!String(f['Operator Note']||'').trim();
+  const showsIcq=!!(icq&&!isInternalRouting(icq));
+  const emptyLayer=!cleanNote&&!notMean&&!showsIcq;
+  const emptyMsg=emptyLayer
+    ? (hadNote
+        ? 'No reader-facing commentary on this one. The note attached to it is internal record-keeping rather than analysis.'
+        : 'No operator commentary has been written for this finding yet.')
+    : '';
 
   return`<div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
     <div class="card-flags">
@@ -1985,6 +2003,7 @@ function renderCard(r,idx,isAdjacent){
     <button class="expand-trigger" id="expandBtn-${idx}" onclick="toggleExpand(${idx})">+ Full operator note + IC question</button>
     <div class="card-layer2" id="layer2-${idx}">
       ${cleanNote?`<div class="op-note">${cleanNote}</div>`:''}
+      ${emptyMsg?`<div class="op-note" style="opacity:0.7;font-style:italic;">${emptyMsg}</div>`:''}
       ${notMean?`<div class="not-mean-block"><span class="not-mean-lbl">This does not mean:</span> ${notMean}</div>`:''}
       ${(icq&&!isInternalRouting(icq))?`<div class="ic-q-block"><span class="ic-q-lbl">Ask the founder</span><div class="ic-q-text">${icq}</div></div>`:''}
       <div class="src-row">
@@ -2015,6 +2034,7 @@ function toggleEvidence(){
 }
 
 function renderEvidence(direct,adjacent){
+  resetNotMean();
   const container=document.getElementById('resultsContainer');
   if(!direct.length&&!adjacent.length){container.innerHTML='';return;}
 
