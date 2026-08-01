@@ -1377,10 +1377,10 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
           : `This needs primary founder or operator data before it can carry weight in a decision.`)),
       conflicts_and_gaps:([].concat(
           conflicts,
-          interlinkage(direct,geo),
+          interlinkage(direct,geo,intent),
           concentrationFlag(direct)?[concentrationFlag(direct)]:[]
         ).filter(Boolean).length
-        ? [].concat(conflicts,interlinkage(direct,geo),
+        ? [].concat(conflicts,interlinkage(direct,geo,intent),
             concentrationFlag(direct)?[concentrationFlag(direct)]:[]).filter(Boolean).join(' ')
         : (cov==='sector_absent_in_market'
           ? `The gap is specific: this sector is uncovered in ${geo}, while the market itself is covered in other areas. Those are different problems and worth keeping separate.`
@@ -1593,9 +1593,18 @@ function buildFounderQuestions(direct,missing,geo,sector){
 // Build Scope section 2 and section 4: entries are not free-standing. Surface the
 // relationships a reader did not ask for. This is the layer the Build Scope calls
 // the differentiator, and it was specified but never built.
-function interlinkage(direct,geo){
+function interlinkage(direct,geo,intent){
   const out=[];
   if(!direct||direct.length<2)return out;
+  // Only findings that bear on the question asked. Without this filter the function
+  // re-surfaced a mobile money levy as a cross-dimension insight on a factory query,
+  // which is the same off-topic promotion the ranking layer already prevents.
+  if(intent){
+    const onTopic=direct.filter(r=>intent.priorities.some(pr=>pr.topic.test(
+      (r.fields['Metric Name']||'')+' '+(r.fields['Value']||''))));
+    if(onTopic.length<2)return out;
+    direct=onTopic;
+  }
   const dim=r=>String(r.fields['IC Dimension']||'');
   const name=r=>trimWords(String(r.fields['Metric Name']||''),70);
 
@@ -1645,7 +1654,11 @@ function concentrationFlag(direct){
     const m={};direct.forEach(r=>{const v=String(r.fields[key]||'').trim();if(v)m[v]=(m[v]||0)+1;});
     return m;
   };
-  [['IC Dimension','dimension'],['Sector','sector']].forEach(([field,label])=>{
+  // When a lens is active the reader selected the dimension, so reporting that all
+  // findings share it states the obvious back at them. Sector concentration inside
+  // a chosen lens is still a real signal.
+  const fields=currentFilter?[['Sector','sector']]:[['IC Dimension','dimension'],['Sector','sector']];
+  fields.forEach(([field,label])=>{
     const m=count(field);
     const top=Object.keys(m).sort((a,b)=>m[b]-m[a])[0];
     // Cross-sector is an intentional catch-all value, so a run of it is not a bias
@@ -1665,19 +1678,32 @@ function thesisLine(t,geo){
   const f=(t&&t.fields)||{};
   const stmt=trimWords(String(f['Thesis Statement']||'').trim(),200);
   if(!stmt)return'';
-  const listOf=v=>String(v||'').split(/\s*[;,]\s*/).map(x=>x.trim()).filter(Boolean);
+
+  // These fields carry three things that must not reach a reader as market names:
+  // placeholder values ("None confirmed yet"), parenthetical working notes, and
+  // Entry IDs. Splitting the raw string on commas also miscounts, because the
+  // parentheticals contain commas of their own.
+  const PLACEHOLDER=/^(none|none confirmed( yet)?|n\/a|na|tbd|unknown|not tested|not yet tested|-)$/i;
+  const listOf=v=>String(v||'')
+    .replace(/\([^)]*\)/g,'')
+    .replace(/GON-[A-Z]+-\d+/g,'')
+    .split(/\s*[;,]\s*/)
+    .map(x=>x.replace(/\s{2,}/g,' ').trim())
+    .filter(x=>x&&!PLACEHOLDER.test(x));
+
   const trueIn=listOf(f['Markets Where True']);
   const notIn=listOf(f['Markets Where Fragmented or False']);
   const state=String(f['Thesis State']||'').trim();
 
-  let line=(/[.!?]$/.test(stmt)?stmt:stmt+'.');
+  let line=(/[.!?]$/.test(stmt)||/\.\.\.$/.test(stmt)?stmt:stmt+'.');
   const parts=[];
   if(trueIn.length)parts.push(`confirmed in ${trueIn.length} market${trueIn.length===1?'':'s'}`);
   if(notIn.length)parts.push(`does not hold in ${notIn.slice(0,3).join(', ')}`);
   if(state&&/contested|fragmented|emerging|decaying|broken/i.test(state))parts.push(state.toLowerCase());
   if(parts.length)line+=` This is ${parts.join(', ')}.`;
   if(trueIn.length===1)line+=` One market is an observation, not a rule.`;
-  return line;
+  if(!trueIn.length&&!notIn.length)line+=` No confirmation count is recorded for this pattern yet, so treat it as a hypothesis.`;
+  return line.replace(/\.\s*\./g,'.');
 }
 
 // Build Scope 3.1, 3.2, 3.4, 3.5 and section 5, implemented in the renderer rather
@@ -1704,13 +1730,26 @@ function qualifierOf(r){
   else if(conf==='Medium'&&!bits.length)bits.push('medium confidence');
 
   // Section 5: staleness against Decay Class.
-  const yr=parseInt(sourceYear(f['Source Date'])||'0',10);
+  // Age in months, using the month where the field states one. Year-only arithmetic
+  // called a December 2025 instrument twelve months old in August 2026, which is
+  // four months of overstatement and enough to flag current law as stale.
+  const sd=String(f['Source Date']||'').trim();
+  const yr=parseInt(sourceYear(sd)||'0',10);
   if(yr){
-    const months=((new Date().getFullYear())-yr)*12;
+    const MONTHS=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    let mo=null;
+    const nm=sd.toLowerCase().match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/);
+    if(nm)mo=MONTHS.indexOf(nm[1]);
+    const iso=sd.match(/20\d\d-(\d{2})/);
+    if(iso)mo=parseInt(iso[1],10)-1;
+    const now=new Date();
+    // No month stated means we cannot date it precisely, so assume mid-year rather
+    // than January, which would systematically overstate age.
+    const months=(now.getFullYear()-yr)*12+(now.getMonth()-(mo===null?6:mo));
     const dc=String(f['Decay Class']||'');
-    const limit=/6/.test(dc)?6:/12/.test(dc)?12:/36/.test(dc)?36:24;
-    if(months>limit)bits.push(`older than its ${limit}-month refresh window`);
-  }else if(f['Source Date']===undefined||!String(f['Source Date']||'').trim()){
+    const limit=/\b6\b/.test(dc)?6:/\b12\b/.test(dc)?12:/\b36\b/.test(dc)?36:24;
+    if(months>limit)bits.push(`past its ${limit}-month refresh window`);
+  }else if(!sd){
     bits.push('undated');
   }
   return bits.length?bits.join(', '):'';
