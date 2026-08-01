@@ -995,12 +995,15 @@ async function fetchTheses(token,geo){
 // surfaced rather than silently averaged away.
 function detectConflicts(records){
   const flags=[];
-  // A conflict is only a conflict if the two entries are measuring the same thing.
-  // The previous version compared the first number found in any two entries sharing a
-  // market and dimension, which reported a date against a truck count and a minimum
-  // wage against a border queue. Fabricated contradictions are worse than none: they
-  // tell a reader the corpus disagrees with itself when it does not.
-  const SIG=new Set(['minimum','wage','tariff','clearance','days','cost','price','rate','share','penetration','margin','fee','levy','tax','capital','volume','users','accounts']);
+  // Two entries conflict when they measure the same quantity in the same market and
+  // disagree. The dimension match was dropped as a requirement: the Build Scope's own
+  // worked example, DRC minimum wage cited at $1.31/day and roughly $5.18/day
+  // equivalent, sits across two different IC Dimensions in the live base, so requiring
+  // a dimension match meant the canonical conflict could never fire. Same-thing is
+  // established by shared measure words and matching unit type, not by tagging.
+  const SIG=new Set(['minimum','wage','salary','tariff','clearance','days','cost','price','rate',
+    'share','penetration','margin','fee','levy','tax','capital','volume','users','accounts',
+    'smig','severance','notice','duty','commission','float','subsidy']);
   const unitOf=v=>{
     const t=String(v||'');
     if(/%/.test(t))return 'pct';
@@ -1008,23 +1011,25 @@ function detectConflicts(records){
     if(/\bdays?\b|\bhours?\b|\bweeks?\b/i.test(t))return 'time';
     return null;
   };
-  const keyTokens=r=>new Set(String(r.fields['Metric Name']||'').toLowerCase()
-    .replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(t=>SIG.has(t)));
+  const keyTokens=r=>new Set((String(r.fields['Metric Name']||'')+' '+String(r.fields['Value']||''))
+    .toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(t=>SIG.has(t)));
+  const mk=r=>Array.isArray(r.fields['Market'])?r.fields['Market'].join(','):String(r.fields['Market']||'');
 
   for(let i=0;i<records.length;i++){
     for(let j=i+1;j<records.length;j++){
       const a=records[i].fields,b=records[j].fields;
-      if((a['IC Dimension']||'')!==(b['IC Dimension']||''))continue;
-      if(String(a['Market']||'')!==String(b['Market']||''))continue;
+      if(mk(records[i])!==mk(records[j]))continue;
       const ua=unitOf(a['Value']),ub=unitOf(b['Value']);
-      if(!ua||ua!==ub)continue;                      // must be the same kind of quantity
+      if(!ua||ua!==ub)continue;
       const ka=keyTokens(records[i]),kb=keyTokens(records[j]);
       const shared=[...ka].filter(t=>kb.has(t));
-      if(shared.length<2)continue;                    // must be measuring the same thing
+      if(shared.length<2)continue;
       const na=extractFirstNumber(a['Value']),nb=extractFirstNumber(b['Value']);
       if(na===null||nb===null||na<=0||nb<=0)continue;
       if(Math.max(na,nb)/Math.min(na,nb)>1.5){
-        flags.push(`Two sources give different figures for ${shared.join(' ')} in this market: ${na} and ${nb}. Worth resolving before either is relied on.`);
+        const sa=primarySource(a['Source Name'])||'one source',sb=primarySource(b['Source Name'])||'another';
+        flags.push(`Two sources disagree on ${shared.slice(0,3).join(' ')} here: ${sa} gives ${na}, ${sb} gives ${nb}. `
+          +`Both are logged. Neither has been reconciled, and neither should be used without checking which definition applies.`);
       }
     }
   }
@@ -1370,16 +1375,20 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
         : (R.lensEmpty
           ? `Nothing here is a finding about ${geo}. It is a finding about this lens. Widen the view before drawing anything from it.`
           : `This needs primary founder or operator data before it can carry weight in a decision.`)),
-      conflicts_and_gaps:(conflicts.length
-        ? conflicts.join(' ')
+      conflicts_and_gaps:([].concat(
+          conflicts,
+          interlinkage(direct,geo),
+          concentrationFlag(direct)?[concentrationFlag(direct)]:[]
+        ).filter(Boolean).length
+        ? [].concat(conflicts,interlinkage(direct,geo),
+            concentrationFlag(direct)?[concentrationFlag(direct)]:[]).filter(Boolean).join(' ')
         : (cov==='sector_absent_in_market'
           ? `The gap is specific: this sector is uncovered in ${geo}, while the market itself is covered in other areas. Those are different problems and worth keeping separate.`
-          : `Nothing in these findings contradicts anything else here.`)),
+          : `No conflict was detected among these findings. That is a statement about `
+            +`what was compared, not a guarantee that none exists: only figures measuring `
+            +`the same quantity in the same market are checked against each other.`)),
       cross_market_pattern:(theses&&theses.length
-        ? `${geo} sits inside ${theses.length} pattern${theses.length===1?'':'s'} that hold across several markets. `
-          + theses.slice(0,2).map(t=>trimWords(String(t.fields&&t.fields['Thesis Statement']||'').trim(),200))
-              .filter(Boolean).map(x=>/[.!?]$/.test(x)?x:x+'.').join(' ')
-          + ` What you find here is unlikely to be unique to it.`
+        ? theses.slice(0,2).map(t=>thesisLine(t,geo)).filter(Boolean).join(' ')
         : `No cross-market pattern currently reaches ${geo}.`),
       ic_questions:(R.lensEmpty
         ? [ `Widen to all signals before taking anything from this view.` ]
@@ -1581,6 +1590,142 @@ function buildFounderQuestions(direct,missing,geo,sector){
 // Metric Name says what was measured, Value says what it was, Source Name and
 // Source Date say who says so and when. Nothing here is free prose, so nothing here
 // can leak authoring commentary or arrive as a sentence fragment.
+// Build Scope section 2 and section 4: entries are not free-standing. Surface the
+// relationships a reader did not ask for. This is the layer the Build Scope calls
+// the differentiator, and it was specified but never built.
+function interlinkage(direct,geo){
+  const out=[];
+  if(!direct||direct.length<2)return out;
+  const dim=r=>String(r.fields['IC Dimension']||'');
+  const name=r=>trimWords(String(r.fields['Metric Name']||''),70);
+
+  // (c) structurally connected findings sitting in different dimensions.
+  // Threshold is length>3, not >4: "wage" is four characters, and excluding it meant
+  // two minimum-wage entries scored as different subjects and got surfaced as a
+  // cross-dimension insight when they are actually the conflict reported above.
+  const subjectWords=r=>new Set(String(r.fields['Metric Name']||'').toLowerCase()
+    .split(/\W+/).filter(w=>w.length>3));
+  const sameSubject=(a,b)=>{
+    const wa=subjectWords(a),wb=subjectWords(b);
+    return [...wa].filter(w=>wb.has(w)).length>=2;
+  };
+  const dims=[...new Set(direct.map(dim).filter(Boolean))];
+  if(dims.length>=2){
+    const a=direct.find(r=>dim(r)===dims[0]);
+    // Pick a partner from another dimension that is about something genuinely
+    // different. Two entries on the same subject are a conflict or a duplicate,
+    // both already reported elsewhere, and restating them here is noise.
+    const b=direct.find(r=>dim(r)!==dim(a)&&!sameSubject(a,r));
+    if(a&&b)out.push(`Two of these sit in different dimensions and should be read together: `
+      +`"${name(a)}" under ${dim(a).toLowerCase()}, and "${name(b)}" under ${dim(b).toLowerCase()}. `
+      +`Neither states the combined effect, which is where the real exposure usually sits.`);
+  }
+
+  // (b) same-market, same-subject findings that qualify each other.
+  const pairs=[];
+  for(let i=0;i<direct.length&&pairs.length<1;i++){
+    for(let j=i+1;j<direct.length;j++){
+      const wa=new Set(name(direct[i]).toLowerCase().split(/\W+/).filter(w=>w.length>4));
+      const wb=new Set(name(direct[j]).toLowerCase().split(/\W+/).filter(w=>w.length>4));
+      const shared=[...wa].filter(w=>wb.has(w));
+      if(shared.length>=2){pairs.push(`"${name(direct[i])}" and "${name(direct[j])}" cover the same ground from different angles. Read the second as a qualification of the first, not a duplicate.`);break;}
+    }
+  }
+  out.push(...pairs);
+  return out.slice(0,2);
+}
+
+// Build Scope 3.8: the corpus caught itself defaulting to one sector and one
+// sub-topic more than once. The tool must run the same check on its own answer
+// rather than assume the tagging underneath it is balanced.
+function concentrationFlag(direct){
+  if(!direct||direct.length<4)return'';
+  const notes=[];
+  const count=(key)=>{
+    const m={};direct.forEach(r=>{const v=String(r.fields[key]||'').trim();if(v)m[v]=(m[v]||0)+1;});
+    return m;
+  };
+  [['IC Dimension','dimension'],['Sector','sector']].forEach(([field,label])=>{
+    const m=count(field);
+    const top=Object.keys(m).sort((a,b)=>m[b]-m[a])[0];
+    // Cross-sector is an intentional catch-all value, so a run of it is not a bias
+    // signal, it is the tagging working as designed.
+    if(top&&!/^cross-sector/i.test(top)&&m[top]/direct.length>=0.6){
+      notes.push(`${m[top]} of ${direct.length} findings here sit in one ${label}, ${top.toLowerCase()}. `
+        +`That is a shape in the research, not necessarily a shape in the market.`);
+    }
+  });
+  return notes.slice(0,1).join(' ');
+}
+
+// Build Scope 3.7: a pattern seen in two markets must never read like one confirmed
+// across five, and a known exception must be named rather than suppressed. Counting
+// the patterns ("DRC sits inside 2 patterns") is not a confirmation count.
+function thesisLine(t,geo){
+  const f=(t&&t.fields)||{};
+  const stmt=trimWords(String(f['Thesis Statement']||'').trim(),200);
+  if(!stmt)return'';
+  const listOf=v=>String(v||'').split(/\s*[;,]\s*/).map(x=>x.trim()).filter(Boolean);
+  const trueIn=listOf(f['Markets Where True']);
+  const notIn=listOf(f['Markets Where Fragmented or False']);
+  const state=String(f['Thesis State']||'').trim();
+
+  let line=(/[.!?]$/.test(stmt)?stmt:stmt+'.');
+  const parts=[];
+  if(trueIn.length)parts.push(`confirmed in ${trueIn.length} market${trueIn.length===1?'':'s'}`);
+  if(notIn.length)parts.push(`does not hold in ${notIn.slice(0,3).join(', ')}`);
+  if(state&&/contested|fragmented|emerging|decaying|broken/i.test(state))parts.push(state.toLowerCase());
+  if(parts.length)line+=` This is ${parts.join(', ')}.`;
+  if(trueIn.length===1)line+=` One market is an observation, not a rule.`;
+  return line;
+}
+
+// Build Scope 3.1, 3.2, 3.4, 3.5 and section 5, implemented in the renderer rather
+// than only in the model prompt. Every figure carries its verdict in the same
+// sentence, because a confidence qualifier that is not visible in the answer
+// functions as if it does not exist.
+function qualifierOf(r){
+  const f=r.fields||{};
+  const conf=String(f['Confidence Level']||'');
+  const tier=String(f['Data Tier']||'');
+  const ts=String(f['Three-Test Status']||'');
+  const bits=[];
+
+  // 3.1 and 3.4: the caveat travels with the number.
+  if(ts.indexOf('Pass with caveat')===0)bits.push('carries a named caveat');
+  else if(/directional/i.test(ts))bits.push('directional only, not a benchmark');
+  else if(ts&&ts.indexOf('Pass (all three')!==0&&ts!=='Pass')bits.push('not fully checked');
+
+  // 3.2: Tier B must never read like Tier A.
+  if(tier.indexOf('Tier B')===0)bits.push('secondary source, corroborated');
+  else if(tier&&tier.indexOf('Tier A')!==0)bits.push('single source');
+
+  if(conf==='Low')bits.push('low confidence');
+  else if(conf==='Medium'&&!bits.length)bits.push('medium confidence');
+
+  // Section 5: staleness against Decay Class.
+  const yr=parseInt(sourceYear(f['Source Date'])||'0',10);
+  if(yr){
+    const months=((new Date().getFullYear())-yr)*12;
+    const dc=String(f['Decay Class']||'');
+    const limit=/6/.test(dc)?6:/12/.test(dc)?12:/36/.test(dc)?36:24;
+    if(months>limit)bits.push(`older than its ${limit}-month refresh window`);
+  }else if(f['Source Date']===undefined||!String(f['Source Date']||'').trim()){
+    bits.push('undated');
+  }
+  return bits.length?bits.join(', '):'';
+}
+
+// 3.5: an announced target must never be phrased like a delivered outcome.
+function announcedPrefix(r){
+  const st=String((r.fields||{})['Entry Status']||'');
+  const txt=String((r.fields||{})['Metric Name']||'')+' '+String((r.fields||{})['Value']||'');
+  if(/announced/i.test(st)||/\b(proposed|planned|target|intends?|will introduce|draft bill|under consideration)\b/i.test(txt)){
+    return 'Stated, not yet delivered: ';
+  }
+  return '';
+}
+
 function statementOf(r,preferValue){
   if(!r||!r.fields)return'';
   const f=r.fields;
@@ -1588,10 +1733,6 @@ function statementOf(r,preferValue){
   let value=String(f['Value']||'').trim();
   value=(value.split(/(?<=[.!?])\s/)[0]||value).trim();
 
-  // Metric Name is sometimes a one-line label and sometimes a three-clause summary
-  // of the whole finding. When it is long, it is already a statement, and pairing it
-  // with the Value produced a sentence that said the same thing twice at 90 words.
-  // Take whichever field states the finding, not both.
   const words=t=>new Set(String(t).toLowerCase().replace(/[^a-z0-9\s]/g,' ')
     .split(/\s+/).filter(w=>w.length>3));
   const mw=words(metric),vw=words(value);
@@ -1606,14 +1747,15 @@ function statementOf(r,preferValue){
   else body=`${metric}: ${value}`;
 
   body=trimWords(body,180);
-  const src=attribution(r);
-  body=body.trim();
   const truncated=/\.\.\.$/.test(body);
+  body=announcedPrefix(r)+body.trim();
   if(!truncated&&!/[.!?]$/.test(body))body+='.';
-  if(!src)return body;
-  // Do not strip the ellipsis when appending the source. The previous cleanup
-  // regex turned "..." into ".." on every truncated statement.
-  return truncated?`${body} ${src}.`:`${body.replace(/\.$/,'')} ${src}.`;
+
+  const src=attribution(r);
+  const qual=qualifierOf(r);
+  const tail=[src.replace(/^\(|\)$/g,''),qual].filter(Boolean).join('; ');
+  if(!tail)return body;
+  return truncated?`${body} (${tail}).`:`${body.replace(/\.$/,'')} (${tail}).`;
 }
 
 // Cut at a word boundary, never mid-word. "full text confirmed via the governm"
