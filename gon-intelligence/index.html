@@ -1330,9 +1330,14 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     let realityText;
     if(R.lensEmpty){
       // An empty lens is not an empty market, and must never be reported as one.
-      realityText=`Nothing under ${lensLabel} has been verified for ${geo}, though `
+      const adjHere=(R.adjacent||[]).filter(r=>!currentFilter||String(r.fields['IC Dimension']||'')===currentFilter);
+      realityText=`Nothing under ${lensLabel} has been verified for ${geo} directly, though `
         +`${R.directAll.length} finding${R.directAll.length===1?'':'s'} on ${geo} sit${R.directAll.length===1?'s':''} under other headings. `
-        +`Widen to all signals to see them.`;
+        // Saying nothing exists while comparable-market cards for this exact dimension
+        // sit directly below it reads as the tool contradicting its own page.
+        +(adjHere.length
+          ? `The ${adjHere.length} comparable-market signal${adjHere.length===1?'':'s'} below ${adjHere.length===1?'is':'are'} in this dimension, but ${adjHere.length===1?'it is':'they are'} from other markets and ${adjHere.length===1?'is':'are'} an analogy rather than evidence about ${geo}.`
+          : `Widen to all signals to see them.`);
     }else if(cov==='sector_absent_in_market'){
       realityText=`There is no verified research on this sector in ${geo}. That is a statement about the evidence, not about the opportunity. ${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The nearest comparable is the same sector in ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}, which is worth reading for structure but is not evidence for ${geo}.`:''}`;
     }else if(cov==='no_market_data'){
@@ -1745,18 +1750,10 @@ function thesisLine(t,geo){
   const stmt=trimWords(String(f['Thesis Statement']||'').trim(),200);
   if(!stmt)return'';
 
-  // These fields carry three things that must not reach a reader as market names:
-  // placeholder values ("None confirmed yet"), parenthetical working notes, and
-  // Entry IDs. Splitting the raw string on commas also miscounts, because the
-  // parentheticals contain commas of their own.
-  // An exact-match whitelist failed on "None confirmed yet." because of one trailing
-  // period, and would fail again on "None identified" or "none so far". A market name
-  // never begins with none, unknown, n/a, tbd, pending, or "not ". Test the shape of
-  // the value, not a list of the exact strings we happen to have seen.
   const isPlaceholder=x=>{
-    const t=String(x).replace(/[.\s]+$/,'').trim().toLowerCase();
-    return !t||/^(none|nil|nothing|unknown|n\/a|na|tbd|pending|unconfirmed|untested|-+)\b/.test(t)
-      ||/^not\s/.test(t)||/^no\s/.test(t);
+    const v=String(x).replace(/[.\s]+$/,'').trim().toLowerCase();
+    return !v||/^(none|nil|nothing|unknown|n\/a|na|tbd|pending|unconfirmed|untested|-+)\b/.test(v)
+      ||/^not\s/.test(v)||/^no\s/.test(v);
   };
   const listOf=v=>String(v||'')
     .replace(/\([^)]*\)/g,'')
@@ -1767,18 +1764,33 @@ function thesisLine(t,geo){
 
   const trueIn=listOf(f['Markets Where True']);
   const notIn=listOf(f['Markets Where Fragmented or False']);
-  const state=String(f['Thesis State']||'').trim();
+  // Thesis State carries its own parenthetical gloss. Strip it: dropped mid-sentence
+  // it produced "emerging (early evidence, not yet repeated)" inside a clause.
+  const state=String(f['Thesis State']||'').replace(/\([^)]*\)/g,'').trim();
+
+  const same=(a,b)=>String(a).toLowerCase().replace(/[^a-z]/g,'')===String(b).toLowerCase().replace(/[^a-z]/g,'');
+  const holdsHere=geo&&trueIn.some(m=>same(m,geo));
+  const failsHere=geo&&notIn.some(m=>same(m,geo));
 
   let line=(/[.!?]$/.test(stmt)||/\.\.\.$/.test(stmt)?stmt:stmt+'.');
+
+  // A pattern the market in front of you is a documented exception to is not
+  // background colour, it is the finding. Presenting it as a cross-market pattern
+  // that happens to exclude this market buries the one part that bears on the deal.
+  if(failsHere){
+    return `${line} ${geo} is a documented exception to this. `
+      +`It holds in ${trueIn.length?trueIn.length+' other market'+(trueIn.length===1?'':'s'):'other markets'}, `
+      +`and the reason it breaks here is worth establishing before borrowing any assumption from those markets.`;
+  }
+
   const parts=[];
   if(trueIn.length)parts.push(`confirmed in ${trueIn.length} market${trueIn.length===1?'':'s'}`);
   if(notIn.length)parts.push(`does not hold in ${notIn.slice(0,3).join(', ')}`);
   if(state&&/contested|fragmented|emerging|decaying|broken/i.test(state))parts.push(state.toLowerCase());
   if(parts.length)line+=` This is ${parts.join(', ')}.`;
+  if(holdsHere)line+=` ${geo} is one of them.`;
   if(trueIn.length===1)line+=` One market is an observation, not a rule.`;
   if(!trueIn.length&&!notIn.length)line+=` No confirmation count is recorded for this pattern yet, so treat it as a hypothesis.`;
-  // Do not collapse repeated periods here: it turns a legitimate "..." truncation
-  // marker into a stray "..". Only fix a genuine doubled full stop after a space.
   return line.replace(/(?<!\.)\.\s+\.(?!\.)/g,'. ');
 }
 
