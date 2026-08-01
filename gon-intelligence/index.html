@@ -1334,8 +1334,26 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
             `${c.why.charAt(0).toUpperCase()+c.why.slice(1)}: ${statementOf(c.rec,true)}`
           ).join(' ');
     }else if(n>0){
-      realityText=`${n} verified finding${n===1?'':'s'} bear${n===1?'s':''} on ${geo} here. `
-        + direct.slice(0,2).map(r=>statementOf(r)).join(' ');
+      // Findings exist, but none of them answer the question that was asked. This
+      // branch previously printed them anyway, which is how a mobile money levy came
+      // to be presented as bearing on a factory build the moment a lens narrowed the
+      // set to one dimension. Off-topic evidence must be labelled as off-topic, not
+      // promoted to an answer because it is the only thing left.
+      const onTopicAnywhere=intent
+        ? direct.filter(r=>intent.priorities.some(pr=>pr.topic.test(
+            (r.fields['Metric Name']||'')+' '+(r.fields['Value']||''))))
+        : direct;
+      if(intent&&!onTopicAnywhere.length){
+        const subj=[...new Set(direct.map(r=>String(r.fields['IC Dimension']||'').toLowerCase()).filter(Boolean))].join(' and ');
+        realityText=`Nothing verified here bears on ${intent.label} in ${geo}. `
+          +`${n} finding${n===1?'':'s'} came back under ${subj||'this view'}, but ${n===1?'it concerns':'they concern'} `
+          +`a different subject and should not be read as evidence for this question. `
+          +(currentFilter?`Widen to all signals, or ask about that subject directly.`:`Ask about that subject directly to get a real read on it.`);
+      }else{
+        const use=onTopicAnywhere.length?onTopicAnywhere:direct;
+        realityText=`${use.length} verified finding${use.length===1?'':'s'} bear${use.length===1?'s':''} on ${geo} here. `
+          + use.slice(0,2).map(r=>statementOf(r)).join(' ');
+      }
     }else{
       realityText=`Nothing verified matches that question yet.`;
     }
@@ -1366,7 +1384,14 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
       ic_questions:(R.lensEmpty
         ? [ `Widen to all signals before taking anything from this view.` ]
         : n>0
-        ? buildFounderQuestions((consequences.length?consequences.map(c=>c.rec):direct),missing,geo,sector)
+        ? buildFounderQuestions(
+            (consequences.length
+              ? consequences.map(c=>c.rec)
+              : (intent
+                  ? direct.filter(r=>intent.priorities.some(pr=>pr.topic.test(
+                      (r.fields['Metric Name']||'')+' '+(r.fields['Value']||''))))
+                  : direct)),
+            missing,geo,sector)
         : [ `What primary source would settle this, and who holds it?`,
             `Which better-documented market are you borrowing assumptions from, and does the comparison hold?`,
             `What would you need verified before committing capital against this gap?` ]),
@@ -1509,7 +1534,9 @@ function buildFounderQuestions(direct,missing,geo,sector){
   };
   // "What is your number" only makes sense when the finding is a number. Asked
   // about a border closure or a licensing structure, it reads as a non sequitur.
-  const hasFigure=r=>/\d/.test(String(r.fields['Value']||'')+String(r.fields['Metric Name']||''));
+  const hasFigure=r=>/\d/.test(String(r.fields['Value']||''))
+    && /(cost|price|tariff|wage|rate|margin|fee|levy|commission|salary|per day|per kwh|per unit|percent|%)/i
+       .test(String(r.fields['Metric Name']||'')+' '+String(r.fields['Value']||''));
   const askAbout=r=>hasFigure(r)
     ? 'What is your own figure, and how did you arrive at it?'
     : 'Does that match what you have seen operating here, and what would you correct?';
