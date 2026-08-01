@@ -811,6 +811,7 @@ async function fetchScoped(token,geo,sector,query){
 const INTENT_MAP=[
   {match:/\b(plant|factory|manufactur|industrial|assembly|processing|bottling|production line)\b/i,
    label:'an industrial or manufacturing build',
+   offSector:/fintech|mobile money|entertainment|media|saas/i,
    priorities:[
      {dim:'Unit economics',
       why:'power and input costs decide whether a plant works here at all',
@@ -863,6 +864,7 @@ const INTENT_MAP=[
    ]},
   {match:/\b(fintech|payment|mobile money|wallet|lending|credit|bank)\b/i,
    label:'a financial services venture',
+   offSector:/fmcg|manufactur|agritech|energy \/ cleantech/i,
    priorities:[
      {dim:'Regulatory environment',
       why:'licensing determines whether you can operate at all',
@@ -883,6 +885,7 @@ const INTENT_MAP=[
    ]},
   {match:/\b(energy|power|solar|grid|electric|renewable)\b/i,
    label:'an energy or power venture',
+   offSector:/fintech|mobile money|entertainment|media/i,
    priorities:[
      {dim:'Unit economics',
       why:'tariff structure and subsidy decide the revenue model',
@@ -1274,6 +1277,9 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     const n=direct.length;
     const cov=R.coverage;
     const intent=(typeof detectIntent==='function')?detectIntent(query):null;
+    // Decided once, here. Nothing downstream re-derives relevance.
+    const scoped=scopeToIntent(direct,intent,query);
+    const scopedAll=scopeToIntent((R.directAll&&R.directAll.length)?R.directAll:direct,intent,query);
     const dimsFound=[...new Set(direct.map(r=>r.fields['IC Dimension']).filter(Boolean))];
 
     // what the corpus covers, framed as consequence rather than as dimension names
@@ -1285,7 +1291,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     // measured and what it was, and nothing else. Operator Note now appears only in
     // the expanded evidence card, where the reader has asked to see the workings.
     const findingFor=(pr,pool)=>{
-      const inDim=(pool||direct).filter(r=>r.fields['IC Dimension']===pr.dim);
+      const inDim=(pool||scoped).filter(r=>r.fields['IC Dimension']===pr.dim);
       if(!inDim.length)return null;
       // A dimension tag alone is not relevance. A mobile money commission entry is
       // tagged Unit economics, and answered a question about building a factory,
@@ -1316,7 +1322,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     // Gaps are computed against everything known about this market, never against
     // the narrowed view. Otherwise selecting "What regulation matters?" made the
     // tool report a gap in logistics data that it demonstrably holds.
-    const knownAll=(R.directAll&&R.directAll.length)?R.directAll:direct;
+    const knownAll=scopedAll;
     const coveredAll=intent?intent.priorities.filter(pr=>!!findingFor(pr,knownAll)):[];
     const missing=intent?intent.priorities.filter(pr=>coveredAll.indexOf(pr)===-1):[];
 
@@ -1344,10 +1350,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
       // to be presented as bearing on a factory build the moment a lens narrowed the
       // set to one dimension. Off-topic evidence must be labelled as off-topic, not
       // promoted to an answer because it is the only thing left.
-      const onTopicAnywhere=intent
-        ? direct.filter(r=>intent.priorities.some(pr=>pr.topic.test(
-            (r.fields['Metric Name']||'')+' '+(r.fields['Value']||''))))
-        : direct;
+      const onTopicAnywhere=scoped;
       if(intent&&!onTopicAnywhere.length){
         const subj=[...new Set(direct.map(r=>String(r.fields['IC Dimension']||'').toLowerCase()).filter(Boolean))].join(' and ');
         realityText=`Nothing verified here bears on ${intent.label} in ${geo}. `
@@ -1377,10 +1380,10 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
           : `This needs primary founder or operator data before it can carry weight in a decision.`)),
       conflicts_and_gaps:([].concat(
           conflicts,
-          interlinkage(direct,geo,intent),
+          interlinkage(scoped,geo,null),
           concentrationFlag(direct)?[concentrationFlag(direct)]:[]
         ).filter(Boolean).length
-        ? [].concat(conflicts,interlinkage(direct,geo,intent),
+        ? [].concat(conflicts,interlinkage(scoped,geo,null),
             concentrationFlag(direct)?[concentrationFlag(direct)]:[]).filter(Boolean).join(' ')
         : (cov==='sector_absent_in_market'
           ? `The gap is specific: this sector is uncovered in ${geo}, while the market itself is covered in other areas. Those are different problems and worth keeping separate.`
@@ -1396,10 +1399,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
         ? buildFounderQuestions(
             (consequences.length
               ? consequences.map(c=>c.rec)
-              : (intent
-                  ? direct.filter(r=>intent.priorities.some(pr=>pr.topic.test(
-                      (r.fields['Metric Name']||'')+' '+(r.fields['Value']||''))))
-                  : direct)),
+              : scoped),
             missing,geo,sector)
         : [ `What primary source would settle this, and who holds it?`,
             `Which better-documented market are you borrowing assumptions from, and does the comparison hold?`,
@@ -1590,6 +1590,31 @@ function buildFounderQuestions(direct,missing,geo,sector){
 // Metric Name says what was measured, Value says what it was, Source Name and
 // Source Date say who says so and when. Nothing here is free prose, so nothing here
 // can leak authoring commentary or arrive as a sentence fragment.
+// THE BOUNDARY FILTER.
+// Relevance was being re-decided independently inside every function that touched
+// the result set: the ranker, the consequence builder, the founder questions, and
+// then interlinkage. Each addition was a fresh chance to let an off-topic finding
+// through, and each one did. This function decides relevance once. Everything
+// downstream receives an already-constrained set and cannot widen it.
+//
+// Two gates, in order:
+//   1. Sector. A mobile money entry does not answer a factory question, whatever
+//      keywords it shares. Overridden only when the query names that sector.
+//   2. Subject. The finding must touch something the question actually turns on.
+function scopeToIntent(records,intent,query){
+  if(!records||!records.length)return[];
+  if(!intent)return records;
+  const q=String(query||'').toLowerCase();
+  const named=intent.offSector?intent.offSector.test(q):false;
+  return records.filter(r=>{
+    const f=r.fields||{};
+    const sector=String(f['Sector']||'');
+    if(intent.offSector&&intent.offSector.test(sector)&&!named)return false;
+    const hay=(f['Metric Name']||'')+' '+(f['Value']||'');
+    return intent.priorities.some(pr=>pr.topic.test(hay));
+  });
+}
+
 // Build Scope section 2 and section 4: entries are not free-standing. Surface the
 // relationships a reader did not ask for. This is the layer the Build Scope calls
 // the differentiator, and it was specified but never built.
@@ -1683,13 +1708,21 @@ function thesisLine(t,geo){
   // placeholder values ("None confirmed yet"), parenthetical working notes, and
   // Entry IDs. Splitting the raw string on commas also miscounts, because the
   // parentheticals contain commas of their own.
-  const PLACEHOLDER=/^(none|none confirmed( yet)?|n\/a|na|tbd|unknown|not tested|not yet tested|-)$/i;
+  // An exact-match whitelist failed on "None confirmed yet." because of one trailing
+  // period, and would fail again on "None identified" or "none so far". A market name
+  // never begins with none, unknown, n/a, tbd, pending, or "not ". Test the shape of
+  // the value, not a list of the exact strings we happen to have seen.
+  const isPlaceholder=x=>{
+    const t=String(x).replace(/[.\s]+$/,'').trim().toLowerCase();
+    return !t||/^(none|nil|nothing|unknown|n\/a|na|tbd|pending|unconfirmed|untested|-+)\b/.test(t)
+      ||/^not\s/.test(t)||/^no\s/.test(t);
+  };
   const listOf=v=>String(v||'')
     .replace(/\([^)]*\)/g,'')
     .replace(/GON-[A-Z]+-\d+/g,'')
     .split(/\s*[;,]\s*/)
     .map(x=>x.replace(/\s{2,}/g,' ').trim())
-    .filter(x=>x&&!PLACEHOLDER.test(x));
+    .filter(x=>x&&!isPlaceholder(x));
 
   const trueIn=listOf(f['Markets Where True']);
   const notIn=listOf(f['Markets Where Fragmented or False']);
@@ -1703,7 +1736,9 @@ function thesisLine(t,geo){
   if(parts.length)line+=` This is ${parts.join(', ')}.`;
   if(trueIn.length===1)line+=` One market is an observation, not a rule.`;
   if(!trueIn.length&&!notIn.length)line+=` No confirmation count is recorded for this pattern yet, so treat it as a hypothesis.`;
-  return line.replace(/\.\s*\./g,'.');
+  // Do not collapse repeated periods here: it turns a legitimate "..." truncation
+  // marker into a stray "..". Only fix a genuine doubled full stop after a space.
+  return line.replace(/(?<!\.)\.\s+\.(?!\.)/g,'. ');
 }
 
 // Build Scope 3.1, 3.2, 3.4, 3.5 and section 5, implemented in the renderer rather
@@ -1743,12 +1778,21 @@ function qualifierOf(r){
     const iso=sd.match(/20\d\d-(\d{2})/);
     if(iso)mo=parseInt(iso[1],10)-1;
     const now=new Date();
-    // No month stated means we cannot date it precisely, so assume mid-year rather
-    // than January, which would systematically overstate age.
-    const months=(now.getFullYear()-yr)*12+(now.getMonth()-(mo===null?6:mo));
     const dc=String(f['Decay Class']||'');
     const limit=/\b6\b/.test(dc)?6:/\b12\b/.test(dc)?12:/\b36\b/.test(dc)?36:24;
-    if(months>limit)bits.push(`past its ${limit}-month refresh window`);
+    if(mo!==null){
+      const months=(now.getFullYear()-yr)*12+(now.getMonth()-mo);
+      if(months>limit)bits.push(`past its ${limit}-month refresh window`);
+    }else{
+      // Year only. The true age is anywhere from this many months to twelve more.
+      // Asserting staleness on a mid-year guess is the same overconfidence this
+      // tool exists to avoid, so assert only when even the newest possible date is
+      // past the window, and hedge in the band where it genuinely cannot be known.
+      const youngest=(now.getFullYear()-yr)*12+(now.getMonth()-11);
+      const oldest=(now.getFullYear()-yr)*12+now.getMonth();
+      if(youngest>limit)bits.push(`past its ${limit}-month refresh window`);
+      else if(oldest>limit)bits.push(`may be past its ${limit}-month window, only the year is recorded`);
+    }
   }else if(!sd){
     bits.push('undated');
   }
