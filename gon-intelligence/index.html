@@ -740,7 +740,7 @@ async function runSearch(){
     await generateBriefAndRender(query,direct,adjacent,theses,R);
 
     // Render evidence cards
-    renderEvidence(direct,adjacent,R.marketRead,geo);
+    renderEvidence(direct,adjacent,R.marketRead,R.geo);
     document.getElementById('actionsRow').style.display='flex';
   }catch(e){
     showError(e.message);
