@@ -132,6 +132,17 @@ a:hover{opacity:0.7;}
 .rc-select{font-family:Georgia,serif;font-size:0.82rem;color:var(--ink);background:transparent;border:none;border-bottom:1px solid var(--rule);padding:3px 18px 3px 2px;cursor:pointer;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 8px) 52%,calc(100% - 4px) 52%;background-size:4px 4px,4px 4px;background-repeat:no-repeat;}
 .rc-select:focus{outline:none;border-bottom-color:var(--ink);}
 
+
+.market-read{margin:26px 0 6px;padding:18px 20px;border:1px solid var(--rule);background:rgba(0,0,0,0.015);}
+.mr-head{font-family:'Playfair Display',serif;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--accent);margin-bottom:9px;}
+.mr-warn{font-family:Georgia,serif;font-size:0.8rem;font-style:italic;color:var(--muted);line-height:1.55;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+.mr-item{padding:11px 0;border-bottom:1px solid var(--rule);}
+.mr-item:last-of-type{border-bottom:none;}
+.mr-claim{font-family:Georgia,serif;font-size:0.92rem;line-height:1.6;color:var(--ink);}
+.mr-meta{font-family:'Playfair Display',serif;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-top:6px;}
+.mr-assess{font-family:Georgia,serif;font-size:0.84rem;line-height:1.55;color:var(--muted);margin-top:7px;padding-left:11px;border-left:2px solid var(--rule);}
+.mr-rule{font-family:Georgia,serif;font-size:0.78rem;font-style:italic;color:var(--muted);margin-top:14px;padding-top:11px;border-top:1px solid var(--rule);}
+
 /* ------ OPERATOR BRIEF ------ */
 .brief-block{
   border-left:3px solid var(--accent);
@@ -729,7 +740,7 @@ async function runSearch(){
     await generateBriefAndRender(query,direct,adjacent,theses,R);
 
     // Render evidence cards
-    renderEvidence(direct,adjacent);
+    renderEvidence(direct,adjacent,R.marketRead,geo);
     document.getElementById('actionsRow').style.display='flex';
   }catch(e){
     showError(e.message);
@@ -747,22 +758,29 @@ async function fetchAll(token,query){
   // Diagnose coverage honestly before assembling anything. The failure this replaces:
   // when a sector had no entries in a market, the tool silently returned whatever else
   // existed for that market and presented it as the answer.
-  let direct=[],marketOnly=[],sectorElsewhere=[],coverage='';
+  let direct=[],marketOnly=[],sectorElsewhere=[],coverage='',comparisonSet=[];
 
   if(geo&&sector){
-    direct=await fetchScoped(token,geo,sector,query);
+    const r=await fetchScoped(token,geo,sector,query);
+    direct=r.display;comparisonSet=r.all;
     if(direct.length===0){
       coverage='sector_absent_in_market';
-      marketOnly=await fetchScoped(token,geo,null,query);
-      sectorElsewhere=await fetchScoped(token,null,sector,query);
+      marketOnly=(await fetchScoped(token,geo,null,query)).display;
+      sectorElsewhere=(await fetchScoped(token,null,sector,query)).display;
     }else{
       coverage='direct';
+      // Conflicts are a property of the market, not of the sector slice a reader
+      // happened to ask about. Compare against everything held on the market.
+      const wide=await fetchScoped(token,geo,null,query);
+      comparisonSet=wide.all.length>comparisonSet.length?wide.all:comparisonSet;
     }
   }else if(geo){
-    direct=await fetchScoped(token,geo,null,query);
+    const r=await fetchScoped(token,geo,null,query);
+    direct=r.display;comparisonSet=r.all;
     coverage=direct.length?'market_only_no_sector':'no_market_data';
   }else if(sector){
-    direct=await fetchScoped(token,null,sector,query);
+    const r=await fetchScoped(token,null,sector,query);
+    direct=r.display;comparisonSet=r.all;
     coverage=direct.length?'sector_only_no_market':'no_sector_data';
   }else{
     coverage='underspecified';
@@ -771,6 +789,7 @@ async function fetchAll(token,query){
   let adjacent=[];
   if(sector&&coverage==='direct'){adjacent=await fetchAdjacent(token,geo,sector,direct);}
   const theses=await fetchTheses(token,geo);
+  const marketRead=await fetchMarketRead(token,geo,sector);
 
   // directAll is what we actually know about this market. direct is what the reader
   // has chosen to look at. Gaps are computed against the former, so narrowing the
@@ -783,7 +802,7 @@ async function fetchAll(token,query){
     direct=lensed;
     adjacent=adjacent.filter(r=>String(r.fields['IC Dimension']||'')===currentFilter);
   }
-  return{direct,directAll,adjacent,theses,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector};
+  return{direct,directAll,comparisonSet,adjacent,theses,marketRead,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector};
 }
 
 async function fetchScoped(token,geo,sector,query){
@@ -797,8 +816,14 @@ async function fetchScoped(token,geo,sector,query){
   // made the tool announce "there is no verified research on DRC at all" while the
   // unfiltered view showed eight findings. Coverage is diagnosed on the full set and
   // the lens is applied afterwards, as a view over known data.
-  const records=await airtableFetch(token,formula,25);
-  return rankByRelevanceThenQuality(records,query).slice(0,10);
+  // Two sets, deliberately. The display set is ranked and capped, because a reader
+  // cannot absorb forty findings. The comparison set is everything known about the
+  // market, because conflict detection that only sees the ranked top ten can only
+  // find a conflict when both sides of it happen to rank. That is why the detector
+  // had never fired: the DRC minimum wage figures were never in the same ten.
+  const records=await airtableFetch(token,formula,100);
+  const ranked=rankByRelevanceThenQuality(records,query);
+  return{display:ranked.slice(0,10),all:records};
 }
 
 // Relevance to the actual question asked, scored before evidence quality is considered.
@@ -996,46 +1021,113 @@ async function fetchTheses(token,geo){
 
 // Detect entries that disagree, or that supersede one another, so conflicts get
 // surfaced rather than silently averaged away.
+const STOP=new Set(['with','from','that','this','have','been','into','over','under','across','their','which','were','after','also','other','than','when','only','more','most','some','such','rate','data']);
 function detectConflicts(records){
   const flags=[];
-  // Two entries conflict when they measure the same quantity in the same market and
-  // disagree. The dimension match was dropped as a requirement: the Build Scope's own
-  // worked example, DRC minimum wage cited at $1.31/day and roughly $5.18/day
-  // equivalent, sits across two different IC Dimensions in the live base, so requiring
-  // a dimension match meant the canonical conflict could never fire. Same-thing is
-  // established by shared measure words and matching unit type, not by tagging.
+  if(!records||records.length<2)return flags;
+
   const SIG=new Set(['minimum','wage','salary','tariff','clearance','days','cost','price','rate',
-    'share','penetration','margin','fee','levy','tax','capital','volume','users','accounts',
-    'smig','severance','notice','duty','commission','float','subsidy']);
+    'share','penetration','margin','fee','levy','tax','capital','volume','users','accounts','value',
+    'smig','severance','notice','duty','commission','float','subsidy','deal','exit','acquisition',
+    'transactions','revenue','funding','electrification','access','premium','pipeline','capacity']);
+
   const unitOf=v=>{
     const t=String(v||'');
     if(/%/.test(t))return 'pct';
-    if(/\$|USD|EUR|FCFA|CDF|KES|NGN|ZAR/i.test(t))return 'money';
-    if(/\bdays?\b|\bhours?\b|\bweeks?\b/i.test(t))return 'time';
+    if(/\$|USD|EUR|FCFA|CDF|KES|NGN|ZAR|EGP|FRW|GHS/i.test(t))return 'money';
+    if(/\bdays?\b|\bhours?\b|\bweeks?\b|\bmonths?\b/i.test(t))return 'time';
+    if(/\b(GW|MW|kWh|kW)\b/i.test(t))return 'power';
     return null;
+  };
+  // The basis a figure is stated on. Two numbers measuring the same thing on
+  // different bases are not a numeric disagreement, they are a definition mismatch,
+  // and that is the more common and more dangerous case: both are correct and a
+  // model built on the wrong one is wrong.
+  const basisOf=v=>{
+    const t=String(v||'').toLowerCase();
+    const b=[];
+    if(/per day|daily|\/day/.test(t))b.push('daily');
+    if(/per month|monthly|\/month/.test(t))b.push('monthly');
+    if(/per year|annual|per annum|\/year/.test(t))b.push('annual');
+    if(/\bmean\b|average/.test(t))b.push('mean');
+    if(/\bmedian\b/.test(t))b.push('median');
+    if(/\bregistered\b|\bsigned up\b/.test(t))b.push('registered');
+    if(/\bactive\b/.test(t))b.push('active');
+    if(/\bgross\b/.test(t))b.push('gross');
+    if(/\bnet\b/.test(t))b.push('net');
+    if(/pipeline|registered capacity|announced/.test(t))b.push('pipeline');
+    if(/installed|commissioned|operational/.test(t))b.push('installed');
+    return b;
   };
   const keyTokens=r=>new Set((String(r.fields['Metric Name']||'')+' '+String(r.fields['Value']||''))
     .toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(t=>SIG.has(t)));
   const mk=r=>Array.isArray(r.fields['Market'])?r.fields['Market'].join(','):String(r.fields['Market']||'');
+  const id=r=>String(r.fields['Entry ID']||'').trim();
+  const src=r=>primarySource(r.fields['Source Name'])||'an unnamed source';
+  const yr=r=>sourceYear(r.fields['Source Date']);
 
+  const seen=new Set();
   for(let i=0;i<records.length;i++){
     for(let j=i+1;j<records.length;j++){
-      const a=records[i].fields,b=records[j].fields;
-      if(mk(records[i])!==mk(records[j]))continue;
-      const ua=unitOf(a['Value']),ub=unitOf(b['Value']);
-      if(!ua||ua!==ub)continue;
-      const ka=keyTokens(records[i]),kb=keyTokens(records[j]);
-      const shared=[...ka].filter(t=>kb.has(t));
-      if(shared.length<2)continue;
-      const na=extractFirstNumber(a['Value']),nb=extractFirstNumber(b['Value']);
-      if(na===null||nb===null||na<=0||nb<=0)continue;
-      if(Math.max(na,nb)/Math.min(na,nb)>1.5){
-        const sa=primarySource(a['Source Name'])||'one source',sb=primarySource(b['Source Name'])||'another';
-        flags.push(`Two sources disagree on ${shared.slice(0,3).join(' ')} here: ${sa} gives ${na}, ${sb} gives ${nb}. `
-          +`Both are logged. Neither has been reconciled, and neither should be used without checking which definition applies.`);
+      const A=records[i],B=records[j];
+      if(mk(A)!==mk(B))continue;
+      // Same subject is established two ways: shared measure words, or a near-identical
+      // Metric Name. The whitelist alone missed "1,000,000 registered users" against
+      // "320,000 active users", because only "users" was on it and the threshold is two.
+      const ka=keyTokens(A),kb=keyTokens(B);
+      let shared=[...ka].filter(t=>kb.has(t));
+      const nameWords=r=>new Set(String(r.fields['Metric Name']||'').toLowerCase()
+        .replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)));
+      const na_=nameWords(A),nb_=nameWords(B);
+      const sharedName=[...na_].filter(w=>nb_.has(w));
+      if(shared.length<2&&sharedName.length<2)continue;
+      const subject=(sharedName.length>=2?sharedName:shared).slice(0,3).join(' ');
+      const pairKey=[id(A),id(B)].sort().join('|');
+      if(seen.has(pairKey))continue;
+
+      const ua=unitOf(A.fields['Value']),ub=unitOf(B.fields['Value']);
+      const ba=basisOf(A.fields['Value']),bb=basisOf(B.fields['Value']);
+
+      // Basis first. When two figures are stated on different bases, the numeric gap
+      // between them is a consequence, not the finding. Reporting "these disagree by
+      // 6.4x" for a mean against a median describes arithmetic and hides the point.
+      const clash=ba.filter(x=>bb.length&&!bb.includes(x)&&conflictingBasis(x,bb));
+      if(clash.length){
+        seen.add(pairKey);
+        const nA=extractFirstNumber(A.fields['Value']),nB=extractFirstNumber(B.fields['Value']);
+        flags.push(`${id(A)||'One entry'} and ${id(B)||'another'} both cover ${subject} in ${mk(A)}, `
+          +`stated on different bases: ${ba.join(' and ')} against ${bb.join(' and ')}`
+          +`${(nA&&nB)?` (${nA} against ${nB})`:''}. `
+          +`Both can be correct at once. A model that mixes them will be wrong while every `
+          +`figure in it is right, which is the harder error to find.`);
+        continue;
+      }
+
+      // Same basis, numbers disagree.
+      if(ua&&ua===ub){
+        const na=extractFirstNumber(A.fields['Value']),nb=extractFirstNumber(B.fields['Value']);
+        if(na>0&&nb>0){
+          const ratio=Math.max(na,nb)/Math.min(na,nb);
+          if(ratio>1.3){
+            seen.add(pairKey);
+            flags.push(`Two figures on ${subject} in ${mk(A)} disagree by a factor of ${ratio.toFixed(1)}: `
+              +`${src(A)} gives ${na}${yr(A)?' ('+yr(A)+')':''} in ${id(A)||'one entry'}, `
+              +`${src(B)} gives ${nb}${yr(B)?' ('+yr(B)+')':''} in ${id(B)||'another'}. `
+              +`Both are logged. Establish which definition each uses before either goes into a model.`);
+            continue;
+          }
+        }
+      }
+
+      // Same subject, incompatible units. Usually a unit error somewhere.
+      if(ua&&ub&&ua!==ub){
+        seen.add(pairKey);
+        flags.push(`${id(A)||'One entry'} and ${id(B)||'another'} both cover ${subject} in ${mk(A)} `
+          +`but are measured in different units. Worth checking that one of them has not been recorded wrongly.`);
       }
     }
   }
+
   records.forEach(r=>{
     const note=(r.fields['Operator Note']||'');
     if(/supersed|replaces GON-|corrects an earlier/i.test(note)){
@@ -1043,6 +1135,19 @@ function detectConflicts(records){
     }
   });
   return flags.slice(0,4);
+}
+
+// Which basis pairs actually conflict. Daily against monthly does; gross against
+// pipeline does not, because they describe different things entirely.
+function conflictingBasis(a,list){
+  const GROUPS=[
+    ['daily','monthly','annual'],
+    ['mean','median'],
+    ['registered','active'],
+    ['gross','net'],
+    ['pipeline','installed']
+  ];
+  return GROUPS.some(g=>g.includes(a)&&list.some(b=>g.includes(b)&&b!==a));
 }
 
 function extractFirstNumber(val){
@@ -1069,6 +1174,66 @@ function deriveConfidence(records){
   else level='Low';
   const basis=`${records.length} entr${records.length===1?'y':'ies'} retrieved: ${highs} High / ${conf.filter(c=>c==='Medium').length} Medium / ${lows} Low confidence, ${tierA} Tier A primary-sourced, ${caveats} carrying a named caveat or directional-only status.`;
   return{level,basis};
+}
+
+// MARKET READ.
+// A separate table, deliberately, not a tier inside Benchmarks. The whole repository
+// rests on the three-test standard, and a practitioner view cannot pass it: an opinion
+// has no recency in any useful sense and no specificity to a market figure. Filed
+// alongside evidence with a warning label, it would eventually be ranked as evidence,
+// because every function that touches a record set has to remember the exception.
+// Physical separation makes that impossible rather than merely discouraged.
+//
+// What this layer holds: not evidence about the market, but evidence about what
+// people who operate in it believe. Those are different claims with different uses.
+async function fetchMarketRead(token,geo,sector){
+  const parts=[];
+  if(geo)parts.push(`SEARCH("${geo}",{Markets})`);
+  if(sector)parts.push(`SEARCH("${sector}",{Sectors})`);
+  let formula=parts.length?`OR(${parts.join(',')})`:'';
+  try{
+    const url=`https://api.airtable.com/v0/${BASE_ID}/Market%20Read`
+      +(formula?`?filterByFormula=${encodeURIComponent(formula)}&maxRecords=6`:'?maxRecords=6');
+    const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+    // The table may not exist yet. That is a normal state, not an error worth
+    // showing a reader, so absence is silent.
+    if(!res.ok)return[];
+    const data=await res.json();
+    return (data.records||[]);
+  }catch(e){return[];}
+}
+
+function renderMarketRead(reads,geo){
+  if(!reads||!reads.length)return'';
+  const rows=reads.slice(0,4).map(r=>{
+    const f=r.fields||{};
+    const claim=trimWords(String(f['Claim']||'').trim(),260);
+    if(!claim)return'';
+    const who=String(f['Source Person']||'').trim();
+    const role=String(f['Role']||'').trim();
+    const when=String(f['Date']||'').trim();
+    const status=String(f['Status']||'Unconfirmed').trim();
+    const corr=parseInt(f['Corroboration Count']||'0',10)||0;
+    const assess=trimWords(String(f['Operator Assessment']||'').trim(),240);
+    const standing=[who,role].filter(Boolean).join(', ');
+    return `<div class="mr-item">
+      <div class="mr-claim">${claim}</div>
+      <div class="mr-meta">${standing||'Unattributed'}${when?' &middot; '+when:''}
+        &middot; ${status}${corr>1?` &middot; said independently by ${corr}`:''}</div>
+      ${assess?`<div class="mr-assess">${assess}</div>`:''}
+    </div>`;
+  }).filter(Boolean).join('');
+  if(!rows)return'';
+  return `<div class="market-read">
+    <div class="mr-head">What operators are saying about ${geo||'this market'}</div>
+    <div class="mr-warn">This is not evidence about the market. It is evidence about what people
+      operating in it believe, which is a different claim and carries different weight. Nothing
+      here has been verified against a primary source, and none of it should enter a model.</div>
+    ${rows}
+    <div class="mr-rule">A view becomes a thesis when two or more practitioners with direct
+      exposure say it independently. It becomes a benchmark only when a primary source confirms
+      the underlying fact. Never before.</div>
+  </div>`;
 }
 
 async function airtableFetch(token,formula,max){
@@ -1100,7 +1265,8 @@ async function generateBriefAndRender(query,direct,adjacent,theses,R){
   }).join('\n');
 
   const confidence=deriveConfidence(direct);
-  const conflicts=detectConflicts(direct);
+  // Detect against everything known about the market, not the ranked display set.
+  const conflicts=detectConflicts((R.comparisonSet&&R.comparisonSet.length)?R.comparisonSet:direct);
   const hasData=direct.length>0;
   const confidenceLevel=confidence.level;
 
@@ -2083,7 +2249,7 @@ function toggleEvidence(){
   if(l)l.textContent=l.textContent.replace(/^(Show|Hide|The) /,open?'Show the ':'The ');
 }
 
-function renderEvidence(direct,adjacent){
+function renderEvidence(direct,adjacent,marketRead,geoName){
   resetNotMean();
   const container=document.getElementById('resultsContainer');
   if(!direct.length&&!adjacent.length){container.innerHTML='';return;}
@@ -2098,6 +2264,7 @@ function renderEvidence(direct,adjacent){
     // hidden behind a click while the interpretation sat in the open. That is the
     // wrong way round: the interpretation is the part that should have to earn trust
     // from the evidence, not the other way around. Open by default, collapsible.
+    html+=renderMarketRead(marketRead,geoName);
     html+=`<div class="evidence-divider" style="cursor:pointer;user-select:none;" onclick="toggleEvidence()">
       <span id="evToggleLabel">The ${direct.length} verified finding${direct.length!==1?'s':''} this is based on</span>
       <span class="evidence-count" id="evToggleCaret">-</span>
