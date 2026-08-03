@@ -1325,6 +1325,15 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     const knownAll=scopedAll;
     const coveredAll=intent?intent.priorities.filter(pr=>!!findingFor(pr,knownAll)):[];
     const missing=intent?intent.priorities.filter(pr=>coveredAll.indexOf(pr)===-1):[];
+    // A gap is "no finding in this dimension". But the subject can still be touched
+    // by a finding filed elsewhere: the NERSA entry is tagged Regulatory environment
+    // and is about tariff-setting, so declaring a flat gap on tariffs contradicted
+    // the brief three lines above it. Name where the subject does appear.
+    const elsewhereFor=pr=>{
+      const hit=knownAll.find(r=>String(r.fields['IC Dimension']||'')!==pr.dim
+        && pr.topic.test((r.fields['Metric Name']||'')+' '+(r.fields['Value']||'')));
+      return hit?String(hit.fields['IC Dimension']||'').toLowerCase():'';
+    };
 
     const lensLabel=currentFilter?String(currentFilter).toLowerCase():'';
     let realityText;
@@ -1374,7 +1383,18 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     const fallback={
       market_reality:realityText,
       what_investors_underestimate:(missing.length
-        ? `No verified figure here covers ${missing.map(m=>m.gap||m.why).join(', or ')}. Those stay open questions rather than settled ones.`
+        ? (()=>{
+            const flat=[],partial=[];
+            missing.forEach(m=>{
+              const el=elsewhereFor(m);
+              if(el)partial.push(`${m.gap||m.why} (touched on under ${el} above, but not as a figure you can model)`);
+              else flat.push(m.gap||m.why);
+            });
+            const bits=[];
+            if(flat.length)bits.push(`No verified figure here covers ${flat.join(', or ')}.`);
+            if(partial.length)bits.push(`No modellable figure covers ${partial.join(', or ')}.`);
+            return bits.join(' ')+` Those stay open questions rather than settled ones.`;
+          })()
         : (n>0
           ? `Most of what will decide this is operational rather than published. What is above is what can be verified from primary sources; the rest has to come from people who have actually run something here.`
           : `An absence of coverage is a fact about the evidence, not about the market. It means this has to be answered from primary sources directly.`)),
@@ -1558,9 +1578,16 @@ function buildFounderQuestions(direct,missing,geo,sector){
   // Read Metric Name only. It names what was measured. Scanning the Value as well
   // meant an incidental word anywhere in a long description could turn a border
   // closure into something a founder is asked to supply their own figure for.
-  const hasFigure=r=>/\d/.test(String(r.fields['Value']||''))
-    && /(cost|price|tariff|wage|rate|margin|fee|levy|commission|salary|penetration|share|volume|spend|yield)/i
-       .test(String(r.fields['Metric Name']||''));
+  // A count of licensed distributors is not a figure a founder holds their own
+  // version of. Require a unit-bearing quantity: money, a percentage, or a rate
+  // per something. A bare integer anywhere in a long description is not enough.
+  const hasFigure=r=>{
+    const v=String(r.fields['Value']||'');
+    const unitBearing=/(\$|USD|EUR|FCFA|CDF|KES|NGN|ZAR)|\d\s*%|\d[\d.,]*\s*(per|\/)\s*(day|month|year|kwh|kw|mw|unit|user|customer|tonne|ton|km)/i.test(v);
+    return unitBearing
+      && /(cost|price|tariff|wage|rate|margin|fee|levy|commission|salary|penetration|share|volume|spend|yield|premium)/i
+         .test(String(r.fields['Metric Name']||''));
+  };
   const askAbout=r=>hasFigure(r)
     ? 'What is your own figure, and how did you arrive at it?'
     : 'Does that match what you have seen operating here, and what would you correct?';
@@ -1910,7 +1937,18 @@ function trimWords(t,max){
   const lastClause=Math.max(cut.lastIndexOf(', '),cut.lastIndexOf('; '));
   if(lastClause>max*0.55)cut=cut.slice(0,lastClause);
   else cut=cut.replace(/\s+\S*$/,'');
-  return cut.replace(/[,;:\s]+$/,'')+'...';
+  cut=cut.replace(/[,;:\s]+$/,'');
+  // Never end on a half-stated quantity. "imported power from Eskom at 17..." reads
+  // as a figure the tool failed to finish, which is worse than stopping earlier.
+  // Back off the partial number, then any preposition or article the backoff strands.
+  for(let i=0;i<4;i++){
+    const before=cut;
+    cut=cut.replace(/[\s(]+\d[\d.,%]*\s*[A-Za-z\/]*$/,'');
+    cut=cut.replace(/\s+(at|to|of|for|from|by|in|on|with|than|and|or|the|a|an|per|is|was|were|are)$/i,'');
+    cut=cut.replace(/[,;:\s(]+$/,'');
+    if(cut===before)break;
+  }
+  return cut+'...';
 }
 
 // Source Name and Source Date fields carry parenthetical working notes and stacked
