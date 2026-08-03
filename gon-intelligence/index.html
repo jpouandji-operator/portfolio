@@ -788,7 +788,22 @@ async function fetchAll(token,query){
 
   let adjacent=[];
   if(sector&&coverage==='direct'){adjacent=await fetchAdjacent(token,geo,sector,direct);}
-  const theses=await fetchTheses(token,geo);
+  let theses=await fetchTheses(token,geo);
+  // Filtered by market but never by subject, so a progressive-tariff pattern appeared
+  // in a brief about agent banking. A pattern that does not bear on the question is
+  // not context, it is noise dressed as insight.
+  {
+    const it=(typeof detectIntent==='function')?detectIntent(query):null;
+    if(it&&theses.length){
+      const q=String(query||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
+        .filter(w=>w.length>3);
+      const relevant=theses.filter(t=>{
+        const hay=String((t.fields||{})['Thesis Statement']||'').toLowerCase();
+        return it.priorities.some(pr=>pr.topic.test(hay))||q.some(w=>hay.indexOf(w)!==-1);
+      });
+      theses=relevant;
+    }
+  }
   const marketRead=await fetchMarketRead(token,geo,sector);
 
   // directAll is what we actually know about this market. direct is what the reader
@@ -1155,8 +1170,9 @@ function detectConflicts(records){
         }
       }
 
-      // Same subject, incompatible units. Usually a unit error somewhere.
-      if(ua&&ub&&ua!==ub){
+      // Same subject, incompatible units. Weakest of the three classes, and it fired on
+      // a single shared measure word, so it now needs a strong subject match.
+      if(ua&&ub&&ua!==ub&&sharedSig.length>=2){
         seen.add(pairKey);
         flags.push(`${id(A)||'One entry'} and ${id(B)||'another'} both cover ${subject} in ${mk(A)} `
           +`but are measured in different units. Worth checking that one of them has not been recorded wrongly.`);
@@ -1877,27 +1893,47 @@ function scopeToIntent(records,intent,query){
 // the differentiator, and it was specified but never built.
 // What actually happens when two specific dimensions meet. Only these pairs produce
 // a claim worth making; anything unlisted stays silent rather than emitting filler.
-const DIM_PAIRS={
-  'Distribution economics|Regulatory environment':
-    'The delay and the compliance clock run at the same time. A shipment held at a border is still accruing whatever the regulation charges for time, so the two costs compound rather than sit side by side.',
-  'Distribution economics|Unit economics':
-    'These are the same number seen twice. Check whether the margin figure already nets the route cost, or whether the two are being counted separately in the model.',
-  'Currency / macro risk|Unit economics':
-    'The cost base and the revenue line are in different currencies. A margin that holds at today rate does not survive a devaluation of any size.',
-  'Regulatory environment|Unit economics':
-    'A regulatory charge lands in the cost base, not in a compliance line item. Check that the margin model carries it rather than footnoting it.',
-  'Currency / macro risk|Distribution economics':
-    'Imported inputs are priced in hard currency and sold in local. Every day of transit delay lengthens that exposure before a single unit is sold.',
-  'Demand validation|Distribution economics':
-    'Demand that exists is not demand you can serve. Check that the route to market physically reaches the customers the demand figure counted.',
-  'Exit dynamics|Regulatory environment':
-    'Approval and ownership rules gate an exit as firmly as buyer appetite does. A willing buyer and a blocked transfer produce the same outcome.',
-  'Demand validation|Unit economics':
-    'Volume and margin have to hold at the same time. Demand proven at one price point says nothing about demand at the price the unit economics require.'
-};
-function pairMechanism(a,b){
-  const k=[a,b].sort().join('|');
-  return DIM_PAIRS[k]||'';
+// A dimension pair does not determine a mechanism. Distribution economics covers
+// agent networks and freight corridors alike, so the border-delay mechanism was
+// emitted for a PoS agent mandate paired with a general strike, describing shipments
+// held at a border in a brief about agent banking. Writing eight fixed sentences
+// instead of one did not fix the swap-the-noun problem, it multiplied it by eight.
+// Each mechanism now declares the subject matter it applies to, and stays silent
+// when the findings are not about that.
+const DIM_PAIRS=[
+  {a:'Distribution economics',b:'Regulatory environment',
+   when:/port|border|customs|clearance|freight|corridor|shipment|transit|import|export/i,
+   text:'The delay and the compliance clock run at the same time. Goods held at a border are still accruing whatever the regulation charges for time, so the two costs compound rather than sit side by side.'},
+  {a:'Distribution economics',b:'Regulatory environment',
+   when:/agent|licen|principal|affiliat|terminal|merchant|channel/i,
+   text:'A rule that changes who an agent can work for changes what an agent costs to acquire and keep. Distribution cost and regulatory permission are the same variable here, not two.'},
+  {a:'Distribution economics',b:'Unit economics',
+   when:/cost|margin|price|fee|commission|freight|route/i,
+   text:'These are the same number seen twice. Check whether the margin figure already nets the route cost, or whether the two are being counted separately in the model.'},
+  {a:'Currency / macro risk',b:'Unit economics',
+   when:/fx|currency|exchange|devalu|import|dollar|usd|eur/i,
+   text:'The cost base and the revenue line are in different currencies. A margin that holds at today rate does not survive a devaluation of any size.'},
+  {a:'Regulatory environment',b:'Unit economics',
+   when:/levy|tax|fee|tariff|charge|duty|fine|penalt/i,
+   text:'A regulatory charge lands in the cost base, not in a compliance line item. Check that the margin model carries it rather than footnoting it.'},
+  {a:'Currency / macro risk',b:'Distribution economics',
+   when:/import|freight|transit|input|supply|landed/i,
+   text:'Imported inputs are priced in hard currency and sold in local. Every day of transit delay lengthens that exposure before a single unit is sold.'},
+  {a:'Demand validation',b:'Distribution economics',
+   when:/reach|coverage|access|rural|urban|network|penetration|outlet/i,
+   text:'Demand that exists is not demand you can serve. Check that the route to market physically reaches the customers the demand figure counted.'},
+  {a:'Exit dynamics',b:'Regulatory environment',
+   when:/approval|ownership|foreign|licen|merger|consent|transfer/i,
+   text:'Approval and ownership rules gate an exit as firmly as buyer appetite does. A willing buyer and a blocked transfer produce the same outcome.'},
+  {a:'Demand validation',b:'Unit economics',
+   when:/price|willing|pay|arpu|revenue per|conversion/i,
+   text:'Volume and margin have to hold at the same time. Demand proven at one price point says nothing about demand at the price the unit economics require.'}
+];
+function pairMechanism(a,b,textA,textB){
+  const hay=String(textA||'')+' '+String(textB||'');
+  const hit=DIM_PAIRS.find(m=>
+    ((m.a===a&&m.b===b)||(m.a===b&&m.b===a)) && m.when.test(hay));
+  return hit?hit.text:'';
 }
 
 function interlinkage(direct,geo,intent){
@@ -1937,7 +1973,8 @@ function interlinkage(direct,geo,intent){
       // sits" is true of any two findings ever retrieved. A sentence that survives
       // swapping both nouns is not analysis. Say what the specific combination does,
       // or say nothing.
-      const mech=pairMechanism(dim(a),dim(b));
+      const subjText=r=>String(r.fields['Metric Name']||'')+' '+String(r.fields['Value']||'');
+      const mech=pairMechanism(dim(a),dim(b),subjText(a),subjText(b));
       if(mech)out.push(`Read these two together: "${name(a)}" under ${dim(a).toLowerCase()}, `
         +`and "${name(b)}" under ${dim(b).toLowerCase()}. ${mech}`);
     }
