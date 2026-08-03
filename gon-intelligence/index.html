@@ -1021,7 +1021,8 @@ async function fetchTheses(token,geo){
 
 // Detect entries that disagree, or that supersede one another, so conflicts get
 // surfaced rather than silently averaged away.
-const STOP=new Set(['with','from','that','this','have','been','into','over','under','across','their','which','were','after','also','other','than','when','only','more','most','some','such','rate','data']);
+const GEO_NOISE=['africa','african','sub','saharan','west','east','central','south','north','northern','southern','eastern','western','waemu','uemoa','cemac','sadc','comesa','ecowas','zone','region','regional','market','markets','country','countries','continental','panafrica'];
+const STOP=new Set(['with','from','that','this','have','been','into','over','under','across','their','which','were','after','also','other','than','when','only','more','most','some','such','rate','data','growth','shift','layer','entry','update','report','annual','overall','total','level','status','change','trend','across','within','versus','against','using','based']);
 function detectConflicts(records){
   const flags=[];
   if(!records||records.length<2)return flags;
@@ -1074,14 +1075,27 @@ function detectConflicts(records){
       // Same subject is established two ways: shared measure words, or a near-identical
       // Metric Name. The whitelist alone missed "1,000,000 registered users" against
       // "320,000 active users", because only "users" was on it and the threshold is two.
+      // Every entry for a market contains the market name, so matching on shared words
+      // made "south africa" a subject and compared a 3.6 against a 72 that measure
+      // nothing in common. Geography, years and generic scaffolding words are stripped,
+      // and a shared measure word is now required as an anchor: two entries are only
+      // about the same thing if they name the same quantity, not the same place.
+      const geoWords=new Set(String(mk(A)+' '+mk(B)).toLowerCase()
+        .replace(/[^a-z\s]/g,' ').split(/\s+/).filter(Boolean).concat(GEO_NOISE));
+      const contentWords=r=>new Set(String(r.fields['Metric Name']||'').toLowerCase()
+        .replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
+        .filter(w=>w.length>3&&!STOP.has(w)&&!geoWords.has(w)&&!/^(19|20)\d\d$/.test(w)));
+
       const ka=keyTokens(A),kb=keyTokens(B);
-      let shared=[...ka].filter(t=>kb.has(t));
-      const nameWords=r=>new Set(String(r.fields['Metric Name']||'').toLowerCase()
-        .replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w)));
-      const na_=nameWords(A),nb_=nameWords(B);
-      const sharedName=[...na_].filter(w=>nb_.has(w));
-      if(shared.length<2&&sharedName.length<2)continue;
-      const subject=(sharedName.length>=2?sharedName:shared).slice(0,3).join(' ');
+      const sharedSig=[...ka].filter(t=>kb.has(t)&&!geoWords.has(t));
+      const cwA=contentWords(A),cwB=contentWords(B);
+      const sharedName=[...cwA].filter(w=>cwB.has(w));
+
+      // A measure word must be shared. Without that anchor, two entries can share
+      // three words and be about entirely different quantities.
+      if(sharedSig.length===0)continue;
+      if(sharedSig.length<2&&sharedName.length<2)continue;
+      const subject=(sharedSig.length>=2?sharedSig:sharedSig.concat(sharedName)).slice(0,3).join(' ');
       const pairKey=[id(A),id(B)].sort().join('|');
       if(seen.has(pairKey))continue;
 
@@ -1895,11 +1909,16 @@ function interlinkage(direct,geo,intent){
   }
 
   // (b) same-market, same-subject findings that qualify each other.
+  // Same geography problem as the conflict detector: two WAEMU entries both contain
+  // "WAEMU" and "regulation", which is not evidence they cover the same ground.
+  const NOISE=new Set(GEO_NOISE.concat(['regulation','regulatory','layer','enforcement',
+    'update','annual','report','growth','shift','launch','economics','dynamics','environment']));
   const pairs=[];
   for(let i=0;i<direct.length&&pairs.length<1;i++){
     for(let j=i+1;j<direct.length;j++){
-      const wa=new Set(name(direct[i]).toLowerCase().split(/\W+/).filter(w=>w.length>4));
-      const wb=new Set(name(direct[j]).toLowerCase().split(/\W+/).filter(w=>w.length>4));
+      const clean=r=>new Set(name(r).toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
+        .filter(w=>w.length>4&&!NOISE.has(w)&&!/^(19|20)\d\d$/.test(w)));
+      const wa=clean(direct[i]),wb=clean(direct[j]);
       const shared=[...wa].filter(w=>wb.has(w));
       if(shared.length>=2){pairs.push(`"${name(direct[i])}" and "${name(direct[j])}" cover the same ground from different angles. Read the second as a qualification of the first, not a duplicate.`);break;}
     }
