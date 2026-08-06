@@ -37,8 +37,8 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **[FLAG — appears LIVE, unconfirmed 2026-07-20]** | Repo folder `bceao-pi-spi-wave-regulatory-navigation-africa/` exists and is in sitemap.xml (lastmod 2026-07-13) as "The BCEAO Blinked. Wave Didn't Move." — same thesis, already published. Routine skipped this item 20 Jul 2026 run rather than duplicate it. JP to confirm and update status to [PUBLISHED]. |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | [DRAFTED — pending JP review — 2026-07-20] | Drafted 20 Jul 2026 as "Egypt Closed the Consumer Finance Door. Its Biggest Bank Just Walked Through It." — FRA licence freeze (Feb 2026) + Al Ahly Capital/National Bank of Egypt equity stake in MNT-Halan (Jun 2026). PR open, awaiting image + review. |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
@@ -88,10 +88,12 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | # | Company | Status | Notes |
 |---|---|---|---|
 | B01 | Lucca | [PUBLISHED] | Live at /teardowns/lucca-pricing-promises/ as of June 24, 2026 |
-| B02 | Payplug | Queued | Start here for next Teardown run |
-| B03 | Pluxee | Queued | |
-| B04 | Spendesk or Pennylane | Queued | Choose one — decision pending |
+| B02 | Payplug | **[FLAG — appears LIVE, unconfirmed 2026-07-20]** | Repo folder `teardowns/payplug-acquisition-gap/` exists, in sitemap.xml (lastmod 2026-07-09) as "Payplug's Acquisition Machine Is Working. The Handoff Is Not." — appears already published despite "Queued" status. JP to confirm and update. |
+| B03 | Pluxee | **[FLAG — appears LIVE, unconfirmed 2026-07-20]** | Repo folder `teardowns/pluxee-world-of-opportunities/` exists, in sitemap.xml (lastmod 2026-07-14) as "Pluxee Promises a World of Opportunities..." — appears already published despite "Queued" status. JP to confirm and update. |
+| B04 | Spendesk or Pennylane | Queued | Choose one — decision pending. Next genuine open item for Teardowns track — B02/B03 above appear already done. |
 | B05 | Aircall | Queued | |
+| B06 | LumApps | **[UNREGISTERED — LIVE]** | Repo folder `teardowns/lumapps-enterprise-selling/` and sitemap entry (lastmod 2026-07-07) exist but this item was never in the queue. Added 20 Jul 2026 routine run for record-keeping. |
+| B07 | Sociabble | **[UNREGISTERED — LIVE]** | Repo folder `teardowns/sociabble-feature-portfolio/` and sitemap entry (lastmod 2026-07-16) exist but this item was never in the queue. Added 20 Jul 2026 routine run for record-keeping. |
 
 ---
 
@@ -102,6 +104,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-07-20 | (routine run) | — | — | — | GA4 still not connected this run. Airtable also unreachable (network-level failure, HTTP status 000, not an auth error) — could not query or write intelligence tables this run. |
 
 ---
 
@@ -110,5 +113,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 20 Jul 2026 | Routine run: drafted A02 (Egypt consumer finance). Flagged A01, B02, B03 as apparently already live despite non-Published status (see rows). Added B06/B07 as unregistered-live teardowns found in repo. GA4 and Airtable both unreachable this run. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
