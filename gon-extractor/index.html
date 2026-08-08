@@ -183,15 +183,21 @@ const INDICATORS = {
   "Age of the establishment (years)":                 "firm_age_years",
 };
 
-// Maps each indicator to the GON fields a Benchmarks record needs. Anything not
+// Maps each indicator to the GON fields a Benchmarks record needs.
+// The four timeline types are deliberately separate Quantity Types. They were one
+// bucket called "Licensing timeline" until the corpus had enough entries to prove
+// the problem: conflict detection compared an operating licence against an import
+// licence against a power connection and reported them as disagreeing, because they
+// shared a type. A Quantity Type covering four different processes makes
+// incomparable things look comparable. Do not merge these back. Anything not
 // listed here is extractable but not pushable, which is deliberate: a figure with no
 // agreed Quantity Type should not enter the corpus by accident.
 const GON_MAP = {
-  operating_licence_days:      {qt:"Licensing timeline",   unit:"Days",    dim:"Regulatory environment",  sec:"Cross-sector",       noun:"operating licence"},
-  import_licence_days:         {qt:"Licensing timeline",   unit:"Days",    dim:"Distribution economics",  sec:"Cross-sector",       noun:"import licence"},
-  construction_permit_days:    {qt:"Licensing timeline",   unit:"Days",    dim:"Regulatory environment",  sec:"Cross-sector",       noun:"construction-related permit"},
-  electrical_connection_days:  {qt:"Licensing timeline",   unit:"Days",    dim:"Distribution economics",  sec:"Energy / Cleantech", noun:"electrical connection upon application"},
-  water_connection_days:       {qt:"Licensing timeline",   unit:"Days",    dim:"Distribution economics",  sec:"Cross-sector",       noun:"water connection"},
+  operating_licence_days:      {qt:"Operating licence time",   unit:"Days",    dim:"Regulatory environment",  sec:"Cross-sector",       noun:"operating licence"},
+  import_licence_days:         {qt:"Import licence time",   unit:"Days",    dim:"Distribution economics",  sec:"Cross-sector",       noun:"import licence"},
+  construction_permit_days:    {qt:"Construction permit time",   unit:"Days",    dim:"Regulatory environment",  sec:"Cross-sector",       noun:"construction-related permit"},
+  electrical_connection_days:  {qt:"Utility connection time",   unit:"Days",    dim:"Distribution economics",  sec:"Energy / Cleantech", noun:"electrical connection upon application"},
+  water_connection_days:       {qt:"Utility connection time",   unit:"Days",    dim:"Distribution economics",  sec:"Cross-sector",       noun:"water connection"},
   export_clearance_days:       {qt:"Customs clearance time",unit:"Days",   dim:"Distribution economics",  sec:"Cross-sector",       noun:"direct export clearance through customs"},
   import_clearance_days:       {qt:"Customs clearance time",unit:"Days",   dim:"Distribution economics",  sec:"Cross-sector",       noun:"import clearance from customs"},
   bribery_incidence_pct:       {qt:"Compliance rate",      unit:"Percent", dim:"Regulatory environment",  sec:"Cross-sector",       noun:"firms facing at least one bribe payment request"},
