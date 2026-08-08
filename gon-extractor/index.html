@@ -43,6 +43,13 @@ td.na{color:#444;}
 .note{font-size:10px;color:#555;line-height:1.75;margin-top:11px;}
 .note b{color:#888;font-weight:400;}
 .hidden{display:none;}
+.fld{background:#0d0d0d;border:1px solid #1e1e1e;color:#ccc;font-family:'Courier New',monospace;font-size:11px;padding:6px 9px;border-radius:4px;outline:none;}
+.fld-lbl{font-size:9.5px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+.pickbox{border:1px solid #161616;border-radius:4px;padding:9px;max-height:150px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:4px;}
+.pickbox label{font-size:10.5px;color:#999;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.pickbox input{accent-color:#c0392b;}
+.pickbox label.off{color:#3a3a3a;}
+.ta{width:100%;height:230px;background:#080808;border:1px solid #161616;border-radius:4px;padding:10px;color:#aaa;font-family:'Courier New',monospace;font-size:10px;line-height:1.55;resize:vertical;outline:none;margin-top:12px;}
 select{background:#0d0d0d;border:1px solid #1e1e1e;color:#ccc;font-family:'Courier New',monospace;font-size:11px;padding:6px 9px;border-radius:4px;outline:none;}
 </style>
 </head>
@@ -81,6 +88,45 @@ select{background:#0d0d0d;border:1px solid #1e1e1e;color:#ccc;font-family:'Couri
     </div>
     <div class="tbl-wrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
     <div class="note" id="resNote"></div>
+  </div>
+
+  <div class="card hidden" id="pushCard">
+    <div class="card-label">3 &middot; Generate GON push block</div>
+    <div class="row" style="margin-bottom:11px;align-items:flex-end;">
+      <div>
+        <div class="fld-lbl">Entry ID prefix</div>
+        <input class="fld" id="idPrefix" value="GON-WB" size="10">
+      </div>
+      <div>
+        <div class="fld-lbl">Start number</div>
+        <input class="fld" id="idStart" value="21" size="6">
+      </div>
+      <div>
+        <div class="fld-lbl">Market naming</div>
+        <select id="mktStyle">
+          <option value="gon">GON convention (Cameroun, Ivory Coast)</option>
+          <option value="raw">As printed in the PDF</option>
+        </select>
+      </div>
+    </div>
+    <div class="fld-lbl" style="margin-bottom:6px;">Indicators to include</div>
+    <div id="indPick" class="pickbox"></div>
+    <div class="row" style="margin-top:12px;">
+      <button class="btn btn-go" onclick="buildPush()">Build push block</button>
+      <button class="btn btn-alt" onclick="downloadPush()">Download .md</button>
+      <button class="btn btn-alt" onclick="copyPush()">Copy</button>
+      <span class="stat" id="pushStat" style="margin:0 0 0 6px;"></span>
+    </div>
+    <textarea class="ta" id="pushOut" placeholder="Push block appears here"></textarea>
+    <div class="note">
+      <b>Operator Note is left as a TODO on every record, deliberately.</b> The tool can
+      compose what is verifiable: the figure, the sample, the fieldwork window and the
+      regional comparison. It cannot compose operator judgment, and auto-filling that
+      field would produce sentences that survive swapping the country name, which is
+      the definition of filler. Fill them or delete them before pushing.<br><br>
+      <b>Recency is flagged automatically.</b> Surveys three or more years old are set to
+      Pass with caveat and Medium confidence rather than Pass.
+    </div>
   </div>
 
   <div class="card">
@@ -137,6 +183,31 @@ const INDICATORS = {
   "Age of the establishment (years)":                 "firm_age_years",
 };
 
+// Maps each indicator to the GON fields a Benchmarks record needs. Anything not
+// listed here is extractable but not pushable, which is deliberate: a figure with no
+// agreed Quantity Type should not enter the corpus by accident.
+const GON_MAP = {
+  operating_licence_days:      {qt:"Licensing timeline",   unit:"Days",    dim:"Regulatory environment",  sec:"Cross-sector",       noun:"operating licence"},
+  import_licence_days:         {qt:"Licensing timeline",   unit:"Days",    dim:"Distribution economics",  sec:"Cross-sector",       noun:"import licence"},
+  construction_permit_days:    {qt:"Licensing timeline",   unit:"Days",    dim:"Regulatory environment",  sec:"Cross-sector",       noun:"construction-related permit"},
+  electrical_connection_days:  {qt:"Licensing timeline",   unit:"Days",    dim:"Distribution economics",  sec:"Energy / Cleantech", noun:"electrical connection upon application"},
+  water_connection_days:       {qt:"Licensing timeline",   unit:"Days",    dim:"Distribution economics",  sec:"Cross-sector",       noun:"water connection"},
+  export_clearance_days:       {qt:"Customs clearance time",unit:"Days",   dim:"Distribution economics",  sec:"Cross-sector",       noun:"direct export clearance through customs"},
+  import_clearance_days:       {qt:"Customs clearance time",unit:"Days",   dim:"Distribution economics",  sec:"Cross-sector",       noun:"import clearance from customs"},
+  bribery_incidence_pct:       {qt:"Compliance rate",      unit:"Percent", dim:"Regulatory environment",  sec:"Cross-sector",       noun:"firms facing at least one bribe payment request"},
+  gift_construction_permit_pct:{qt:"Compliance rate",      unit:"Percent", dim:"Regulatory environment",  sec:"Cross-sector",       noun:"firms expected to give a gift for a construction permit"},
+  gift_tax_officials_pct:      {qt:"Compliance rate",      unit:"Percent", dim:"Regulatory environment",  sec:"Cross-sector",       noun:"firms expected to give a gift in meetings with tax officials"},
+  outages_per_month:           {qt:"Power availability",   unit:"Count",   dim:"Unit economics",          sec:"Energy / Cleantech", noun:"electrical outages in a typical month"},
+  firms_with_outages_pct:      {qt:"Power availability",   unit:"Percent", dim:"Unit economics",          sec:"Energy / Cleantech", noun:"firms experiencing electrical outages"},
+  informal_competition_pct:    {qt:"Market share",         unit:"Percent", dim:"Demand validation",       sec:"Cross-sector",       noun:"firms competing against unregistered or informal firms"},
+  investment_internal_pct:     {qt:"Capital deployed",     unit:"Percent", dim:"Currency / macro risk",   sec:"Cross-sector",       noun:"investment financed internally"},
+  bank_financed_investment_pct:{qt:"Capital deployed",     unit:"Percent", dim:"Currency / macro risk",   sec:"Cross-sector",       noun:"firms using banks to finance investment"},
+  mgmt_time_regulation_pct:    {qt:"Compliance rate",      unit:"Percent", dim:"Regulatory environment",  sec:"Cross-sector",       noun:"senior management time spent on regulatory compliance"},
+};
+
+const POPULATION = "Formal private firms with 5 or more employees, non-agricultural, " +
+  "excluding financial intermediation and state-owned firms. Facilitation payment status not distinguished.";
+
 const COLS = ["country","survey_year","sample_firms","fieldwork","indicator",
               "all_firms","small","medium","large","regional_avg","income_group_avg","source_file"];
 
@@ -188,8 +259,10 @@ function meta(lines, filename) {
   if (ym) year = ym[1];
   const sm = head.match(/in\s+([\d,]{3,7})\s+firms were interviewed/);
   const sample = sm ? sm[1].replace(/,/g, '') : '';
-  const wm = head.match(/interviewed between\s+([^.]{4,60}?)\./);
-  const fieldwork = wm ? wm[1].replace(/\s+/g, ' ').trim() : '';
+  // Anchor on the last month-year before the sentence end. Some profiles interleave
+  // body text between the two dates, so a lazy "X and Y" match fails or grabs prose.
+  const wm = head.match(/interviewed between\s+([A-Z][a-z]+(?:\s+20\d\d)?)[\s\S]{0,80}?([A-Z][a-z]+\s+20\d\d)\s*\./);
+  const fieldwork = wm ? (wm[1] + ' to ' + wm[2]).replace(/\s+/g, ' ').trim() : '';
   return { country, year, sample, fieldwork };
 }
 
@@ -288,10 +361,137 @@ function render() {
       return '<td class="' + cls + '">' + (v === '' && numeric ? 'n.a.' : v) + '</td>';
     }).join('') + '</tr>').join('');
 
+  refreshPicker();
   const countries = new Set(records.map(r => r.country)).size;
   document.getElementById('resNote').textContent =
     rows.length + ' rows shown. ' + countries + ' countries, ' +
     inds.length + ' indicators captured.';
+}
+
+// ---- GON push block ---------------------------------------------------------
+// Market names in the corpus follow a fixed convention. The PDFs do not.
+const MKT = {
+  "Cameroon":"Cameroun", "Cote Divoire":"Ivory Coast", "Cote D Ivoire":"Ivory Coast",
+  "Congo Dem Rep":"DRC", "Congo Rep":"Republic of Congo", "Egypt Arab Rep":"Egypt",
+  "Republic Of Kenya":"Kenya", "Kenya":"Kenya"
+};
+function mktName(raw) {
+  if (document.getElementById('mktStyle').value === 'raw') return raw;
+  return MKT[raw] || raw;
+}
+
+function refreshPicker() {
+  const box = document.getElementById('indPick');
+  const inds = [...new Set(records.map(r => r.indicator))].sort();
+  box.innerHTML = inds.map(i => {
+    const mapped = !!GON_MAP[i];
+    return '<label class="' + (mapped ? '' : 'off') + '">' +
+      '<input type="checkbox" value="' + i + '"' +
+      (mapped ? ' checked' : ' disabled') + '>' + i +
+      (mapped ? '' : ' (no mapping)') + '</label>';
+  }).join('');
+  document.getElementById('pushCard').classList.remove('hidden');
+}
+
+function buildPush() {
+  const picked = [...document.querySelectorAll('#indPick input:checked')].map(c => c.value);
+  if (!picked.length) { log('Select at least one indicator.', 'err'); return; }
+
+  const prefix = (document.getElementById('idPrefix').value || 'GON-WB').trim();
+  let n = parseInt(document.getElementById('idStart').value, 10) || 1;
+  const thisYear = new Date().getFullYear();
+
+  const rows = records.filter(r => picked.includes(r.indicator) && r.all_firms !== '');
+  rows.sort((a, b) => a.country.localeCompare(b.country) ||
+                      a.indicator.localeCompare(b.indicator));
+
+  const out = [
+    '# GON PUSH BLOCK - ENTERPRISE SURVEY OBSERVED ENTRIES',
+    '# Target table: Benchmarks',
+    '# Count: ' + rows.length + ' entries',
+    '# Generated: ' + new Date().toISOString().slice(0, 10),
+    '# Requires: gon-push-v2.html or later',
+    '#',
+    '# EVERY RECORD HAS AN UNFILLED OPERATOR NOTE. Fill or delete before pushing.',
+    ''
+  ];
+
+  for (const r of rows) {
+    const g = GON_MAP[r.indicator];
+    const mkt = mktName(r.country);
+    const id = prefix + '-' + String(n++).padStart(3, '0');
+    const yr = parseInt(r.survey_year, 10) || thisYear;
+    const stale = (thisYear - yr) >= 3;
+
+    const val = parseFloat(r.all_firms);
+    const unitWord = g.unit === 'Days' ? ' days' : (g.unit === 'Percent' ? ' percent' : '');
+    const bits = [];
+    bits.push(val + unitWord + ' average for ' + g.noun + '.');
+    bits.push('Firm-reported mean, not median.');
+    if (r.sample_firms) bits.push(r.sample_firms + ' firms surveyed' +
+      (r.fieldwork ? ' ' + r.fieldwork : '') + '.');
+    if (r.regional_avg !== '') bits.push('Regional average ' + r.regional_avg + unitWord + '.');
+    if (r.small !== '' || r.medium !== '' || r.large !== '') {
+      const sb = [];
+      if (r.small !== '') sb.push('small ' + r.small);
+      if (r.medium !== '') sb.push('medium ' + r.medium);
+      if (r.large !== '') sb.push('large ' + r.large);
+      bits.push('By firm size: ' + sb.join(', ') + '.');
+    }
+
+    out.push('### ' + id + ' - ' + mkt + ' ' + g.noun + ', firm-reported');
+    out.push('Value: ' + bits.join(' '));
+    out.push('Market: ' + mkt);
+    out.push('Sector: ' + g.sec);
+    out.push('IC Dimension: ' + g.dim);
+    out.push('Quantity Type: ' + g.qt);
+    out.push('Unit: ' + g.unit);
+    out.push('Basis: Observed');
+    out.push('Population: ' + POPULATION);
+    out.push('Data Tier: Tier A - Cited Source');
+    out.push('Source Name: World Bank Enterprise Surveys');
+    out.push('Source URL: https://www.enterprisesurveys.org');
+    out.push('Source Date: ' + r.survey_year);
+    out.push('Decay Class: 36 months');
+    out.push('Recency Test: ' + (stale ? 'Pass with flag' : 'Pass'));
+    out.push('Specificity Test: Pass');
+    out.push('Interpretability Test: Pass');
+    out.push('Three-Test Status: ' + (stale
+      ? 'Pass with caveat (two of three - caveat named in operator note)'
+      : 'Pass (all three pass)'));
+    out.push('Confidence Level: ' + (stale ? 'Medium' : 'High'));
+    out.push('Operator Note: TODO' + (stale
+      ? ' Recency flagged: ' + yr + ' fieldwork, now ' + (thisYear - yr) +
+        ' years old. Re-verify before using in a live memo.'
+      : ''));
+    out.push('IC Checklist Implication: TODO');
+    out.push('');
+  }
+
+  document.getElementById('pushOut').value = out.join('\n');
+  document.getElementById('pushStat').textContent =
+    rows.length + ' entries, IDs ' + prefix + '-' +
+    String(parseInt(document.getElementById('idStart').value, 10) || 1).padStart(3, '0') +
+    ' to ' + prefix + '-' + String(n - 1).padStart(3, '0');
+  log('Push block built: ' + rows.length + ' entries. Operator Notes need filling.', 'ok');
+}
+
+function downloadPush() {
+  const t = document.getElementById('pushOut').value;
+  if (!t) { log('Build the block first.', 'err'); return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([t], { type: 'text/markdown;charset=utf-8' }));
+  a.download = 'GON_Push_Block_ES.md';
+  a.click();
+  log('Push block downloaded.', 'ok');
+}
+
+function copyPush() {
+  const t = document.getElementById('pushOut').value;
+  if (!t) { log('Build the block first.', 'err'); return; }
+  navigator.clipboard.writeText(t)
+    .then(() => log('Push block copied.', 'ok'))
+    .catch(() => log('Clipboard blocked. Use Download instead.', 'err'));
 }
 
 function csvText() {
@@ -320,6 +520,9 @@ function copyTSV() {
 function reset() {
   records = [];
   document.getElementById('resCard').classList.add('hidden');
+  document.getElementById('pushCard').classList.add('hidden');
+  document.getElementById('pushOut').value = '';
+  document.getElementById('pushStat').textContent = '';
   document.getElementById('stat').textContent = '';
   document.getElementById('bar').style.display = 'none';
   document.getElementById('barFill').style.width = '0';
