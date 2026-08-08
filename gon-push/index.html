@@ -193,103 +193,41 @@ let failCount = 0;
 let singleMarkets = [];
 
 // ── FIELD MAPS ──────────────────────────────────────────────────────────────
-// Last audited against live Airtable CSV exports: 26 July 2026.
-// Rule going forward: whenever the Airtable schema changes, re-export both
-// tables to CSV and diff the header row against these maps before assuming
-// the tool is current. A field existing in Airtable but missing here will
-// silently fail to push. A field existing here but renamed/removed in
-// Airtable will cause Airtable to reject the ENTIRE record on push.
 const BENCHMARK_MAP = {
   "Entry ID":"Entry ID","Metric Name":"Metric Name","Value":"Value",
   "Value Type":"Value Type","Market":"Market","Sector":"Sector",
-  "IC Dimension":"IC Dimension",
-  "Door":"Door","Door 2 Dimension":"Door 2 Dimension","Door 2 Layer":"Door 2 Layer",
-  "Capital Structure":"Capital Structure",
-  "Exit Multiple Comparable":"Exit Multiple Comparable",
-  "Funding Trend Data":"Funding Trend Data",
-  "Data Tier":"Data Tier","Market Tier":"Market Tier","Source Name":"Source Name",
+  "IC Dimension":"IC Dimension","Data Tier":"Data Tier","Source Name":"Source Name",
   "Source URL":"Source URL","Source Date":"Source Date","Decay Class":"Decay Class",
-  "Flag Date":"Flag Date",
   "Entry Status":"Entry Status","Recency Test":"Recency Test","Recency Note":"Recency Note",
   "Specificity Test":"Specificity Test","Specificity Note":"Specificity Note",
   "Interpretability Test":"Interpretability Test","Interpretability Note":"Interpretability Note",
   "Three-Test Status":"Three-Test Status","Confidence Level":"Confidence Level",
   "Operator Note":"Operator Note","IC Checklist Implication":"IC Checklist Implication",
   "Linked Articles":"Linked Articles","Linked Thesis ID":"Linked Thesis ID",
-  "Tier B Provenance":"Tier B Provenance",
-  "Future Review":"Future Review","Notes":"Notes",
-  "Version":"Version","Last Update":"Last Update","Added By":"Added By",
-  // "Enforcement Evidence" added 26/7/2026 - new field, not yet confirmed to exist
-  // on the live Airtable table. Verify the column exists before pushing entries
-  // that populate it, or Airtable will reject those records outright.
-  "Enforcement Evidence":"Enforcement Evidence",
+  "Tier B Provenance":"Tier B Provenance","Notes":"Notes","Added By":"Added By",
+  // Comparability fields. Without these in the map the parser silently drops them,
+  // which would push entries that look complete and cannot participate in conflict
+  // detection or pattern nomination.
+  "Quantity Type":"Quantity Type","Unit":"Unit","Basis":"Basis","Population":"Population",
 };
-// NOTE: "Capital Structure copy" exists as a column in the live Benchmarks
-// export but is not wired up here. It looks like an accidental duplicate of
-// "Capital Structure" (stray Airtable field from a copy/paste at some point)
-// rather than a field with its own purpose. Recommend checking it in
-// Airtable directly and deleting it if it is indeed cruft, rather than
-// having this tool perpetuate writes to two fields that mean the same thing.
 
 const THESES_MAP = {
-  "Thesis ID":"Thesis ID",
   "Thesis Statement":"Thesis Statement",
-  "Source Article or Benchmark":"Source Article or Benchmark","Source Article":"Source Article or Benchmark",
-  "Thesis State":"Thesis State",
+  "Source Article":"Source Article","Thesis State":"Thesis State",
   "Confirming Evidence":"Confirming Evidence","Disconfirming Evidence":"Disconfirming Evidence",
-  "Markets Where True":"Markets Where True",
-  "Markets Where Fragmented or False":"Markets Where Fragmented or False","Markets Where Fragmented":"Markets Where Fragmented or False",
-  "Postmortem":"Postmortem",
-  "Created Date":"Created Date","Last Date":"Last Date","Last Updated":"Last Date",
+  "Markets Where True":"Markets Where True","Markets Where Fragmented":"Markets Where Fragmented",
+  "Created Date":"Created Date","Linked Benchmarks":"Linked Benchmarks","Notes":"Notes",
 };
-// Verified against the live Theses CSV export (Theses-Grid_view.csv) 28 July 2026. The
-// authoritative doc (GON_Airtable_Schema_v1_1.md) was itself wrong on one field: it names
-// this field "Last Updated", the real Airtable field is "Last Date". Live export beats doc.
 
 const GAPMAP_MAP = {
-  "Gap ID":"Gap ID","Gap Description":"Gap Description",
-  "Door":"Door","Market":"Market","Sector":"Sector",
-  // "IC Dimension Affected" is the real Airtable field name (confirmed
-  // against live export 26 July 2026). The old label "IC Dimension" is kept
-  // as an alias so previously-written push blocks still parse correctly.
-  "IC Dimension Affected":"IC Dimension Affected","IC Dimension":"IC Dimension Affected",
-  "Gap Type":"Gap Type",
+  "Gap ID":"Gap ID","Gap Description":"Gap Description","Market":"Market",
+  "Sector":"Sector","IC Dimension":"IC Dimension","Gap Type":"Gap Type",
   "Investment Signal":"Investment Signal","Priority":"Priority",
-  "Potential Sources to Check":"Potential Sources to Check",
-  "Status":"Status",
-  // "Linked Benchmark" (singular) is the real field name. "Linked Benchmarks"
-  // kept as an alias for the same reason as above.
-  "Linked Benchmark":"Linked Benchmark","Linked Benchmarks":"Linked Benchmark",
-  "Date Identified":"Date Identified","Date Closed":"Date Closed",
+  "Status":"Status","Linked Benchmarks":"Linked Benchmarks","Notes":"Notes",
 };
-// NOTE: the live Gap Map table has NO "Notes" field. The previous version of
-// this map included "Notes":"Notes", which would have caused Airtable to
-// reject any Gap Map record where a **Notes:** line was present in the
-// pasted block. Removed rather than aliased, since there is no equivalent
-// field to alias it to.
 
-const BENCHMARK_MULTI = new Set(["Market","Door"]);
-const GAPMAP_MULTI = new Set(["Market","Door"]);
-
-// Dropdown option sets for the new fields, matching the Airtable schema
-// addendum agreed 26 July 2026.
-const DOOR_OPTIONS = ["Door 1 - Investor (VC/PE)","Door 2 - Partner / Localization",
-  "Door 3 - DFI / Foundation (reserved)","Hub - applies to all doors"];
-const DOOR2_DIMENSION_OPTIONS = [
-  "N1 - FX access and repatriation","N2 - Energy and water",
-  "N3 - Critical input availability","N4 - Legal and regulatory feasibility",
-  "E1 - Consumer affordability and price point","E2 - Route to market and transport cost",
-  "E3 - Fiscal position (tax, tariff, excise, incentives)",
-  "E4 - Local input and packaging supply economics",
-  "E5 - Demand scale, volatility and forecastability",
-  "R1 - Partner capability and claim verification",
-  "R2 - Operational readiness and capability transfer",
-  "R3 - Strategic commitment and exit cost",
-  "R4 - Political, policy and trade bloc stability"];
-const DOOR2_LAYER_OPTIONS = ["Layer 1 - Necessary condition",
-  "Layer 2 - Economic attractiveness","Layer 3 - Execution resilience"];
-const MARKET_TIER_OPTIONS = ["Operator-validated (WAEMU, CEMAC)",
-  "Institutional only","Declined"];
+const BENCHMARK_MULTI = new Set(["Market"]);
+const GAPMAP_MULTI = new Set(["Market"]);
 
 const NORMALISE = {
   "Tier A - Cited source":"Tier A - Cited Source",
@@ -364,20 +302,14 @@ function parseInput() {
   const text = document.getElementById('scanInput').value.trim();
   if (!text) return;
   const { map, multi } = getFieldMap();
-  // Strip comment lines (lines starting with a single # or a run of #'s that
-  // is NOT a record heading) before parsing.
-  // CRITICAL FIX 26/7/2026: the previous version of this line stripped ANY
-  // line starting with '#', which includes every "### Entry-ID - Title"
-  // record heading, since "###" also starts with "#". That collapsed every
-  // multi-record paste into a single blob with no section breaks, and
-  // because every record shares field names, later entries silently
-  // overwrote earlier ones - the tool would report "1 record" no matter how
-  // many were pasted. Fixed by explicitly exempting lines that start with
-  // "###" (the record heading marker) from being treated as comments.
-  const cleanText = text.split('\n').filter(line => {
-    const t = line.trim();
-    return !t.startsWith('#') || t.startsWith('###');
-  }).join('\n');
+  // Strip comment lines (lines starting with #) before parsing
+  // Strip comment lines, but never the ### record headings. The original filter
+  // removed any line starting with #, which includes every "### GON-XXX-000"
+  // heading, so the section split then found nothing and the whole block parsed
+  // as a single malformed record with no Entry ID.
+  const cleanText = text.split('\n')
+    .filter(line => { const t = line.trim(); return !t.startsWith('#') || t.startsWith('###'); })
+    .join('\n');
   const sections = cleanText.split(/(?=###\s+)/g).map(s => s.trim()).filter(s => s.length > 20);
 
   records = [];
@@ -401,7 +333,7 @@ function parseInput() {
     }
     // Extract ID from heading
     if (!rec['Entry ID'] && !rec['Thesis ID'] && !rec['Gap ID']) {
-      const m = section.match(/###\s+([\w-]+\d{3})/);
+      const m = section.match(/###\s+([A-Z]{3}-[A-Z0-9]{2,4}-\d{2,4})/);
       if (m) {
         if (currentTable === 'Theses') { /* Theses use Thesis Statement as primary */ }
         else if (currentTable === 'Gap Map') rec['Gap ID'] = m[1];
@@ -409,26 +341,14 @@ function parseInput() {
       }
     }
     // Extract name from heading
-    // FIX 26/7/2026: the previous version used an if/else-if chain keyed on
-    // "currentTable === X && !rec[primary field]" for Gap Map and Theses,
-    // then an unconditional final else that wrote 'Metric Name'. Whenever the
-    // primary field (Gap Description, Thesis Statement) was already present
-    // from an explicit line in the pasted block - the normal case, since
-    // every real push block includes it - the middle conditions evaluated
-    // false and execution fell through to the final else, silently writing
-    // a 'Metric Name' field that doesn't exist on either table. Airtable
-    // then rejected the whole record with "Unknown field name: Metric Name".
-    // Fixed by branching on currentTable first, unconditionally, so there is
-    // no path that reaches the Benchmarks-only branch from another table.
-    const nameMatch = section.match(/###\s+[\w-]+\d{3}\s*[-:]\s*(.+)/);
+    const nameMatch = section.match(/###\s+[A-Z]{3}-[A-Z0-9]{2,4}-\d{2,4}\s*[-:]\s*(.+)/);
     if (nameMatch) {
-      if (currentTable === 'Theses') {
-        // Theses uses Thesis Statement as the primary field; the heading
-        // title is redundant and should never populate any field here.
-      } else if (currentTable === 'Gap Map') {
-        if (!rec['Gap Description']) rec['Gap Description'] = nameMatch[1].trim();
-      } else {
-        if (!rec['Metric Name']) rec['Metric Name'] = nameMatch[1].trim();
+      if (currentTable === 'Theses' && !rec['Thesis Statement']) {
+        // Don't overwrite thesis statement with heading
+      } else if (currentTable === 'Gap Map' && !rec['Gap Description']) {
+        rec['Gap Description'] = nameMatch[1].trim();
+      } else if (!rec['Metric Name']) {
+        rec['Metric Name'] = nameMatch[1].trim();
       }
     }
     // Defaults for benchmarks
@@ -436,42 +356,14 @@ function parseInput() {
       if (!rec['Added By']) rec['Added By'] = 'GON Scan - auto-generated';
       if (!rec['Entry Status']) rec['Entry Status'] = 'Active';
     }
-
-    // ── TABLE MISMATCH DETECTION (added 26/7/2026) ──
-    // Independent of which field map was active, sniff the raw section text
-    // for markers of each record type. If the pasted content looks like it
-    // belongs to a different table than the one currently selected, flag it
-    // rather than silently building a broken record. This is a defensive
-    // layer on top of the comment-stripping fix above, not a substitute for
-    // it - both bugs were contributing to "Unknown" records independently.
-    const looksLikeBenchmark = /\*\*Entry ID:\*\*/.test(section);
-    const looksLikeGapMap = /\*\*Gap ID:\*\*/.test(section);
-    const looksLikeThesis = /\*\*Thesis (Statement|ID):\*\*/.test(section);
-    let mismatch = null;
-    if (currentTable === 'Benchmarks' && (looksLikeGapMap || looksLikeThesis)) {
-      mismatch = looksLikeGapMap ? 'Gap Map' : 'Theses';
-    } else if (currentTable === 'Gap Map' && (looksLikeBenchmark || looksLikeThesis)) {
-      mismatch = looksLikeBenchmark ? 'Benchmarks' : 'Theses';
-    } else if (currentTable === 'Theses' && (looksLikeBenchmark || looksLikeGapMap)) {
-      mismatch = looksLikeBenchmark ? 'Benchmarks' : 'Gap Map';
-    }
-
-    const hasId = !!(rec['Entry ID'] || rec['Gap ID'] || rec['Thesis Statement']);
-    records.push({ fields: rec, index: i, mismatch, invalid: !hasId });
+    records.push({ fields: rec, index: i });
   });
 
-  // Only auto-select records that are neither flagged as a table mismatch
-  // nor missing their primary ID. Anything suspect starts unchecked so a
-  // stray click of "Push" can't send broken data to Airtable.
-  selected = new Set(records.filter(r => !r.mismatch && !r.invalid).map(r => r.index));
+  selected = new Set(records.map(r => r.index));
   statuses = {};
   errors = {};
   renderRecords();
-  const badCount = records.filter(r => r.mismatch || r.invalid).length;
   addLog('Parsed ' + records.length + ' record(s)', 'info');
-  if (badCount > 0) {
-    addLog(badCount + ' record(s) flagged - see warnings below, left unselected', 'error');
-  }
 }
 
 function renderRecords() {
@@ -484,18 +376,12 @@ function renderRecords() {
 
   list.innerHTML = records.map(r => {
     const f = r.fields;
-    const id = f['Entry ID'] || f['Gap ID'] || f['Thesis ID'] || '?';
+    const id = f['Entry ID'] || f['Gap ID'] || '?';
     const name = f['Metric Name'] || f['Thesis Statement'] || f['Gap Description'] || 'Unknown';
     const market = Array.isArray(f['Market']) ? f['Market'].join(', ') : (f['Market'] || '');
     const st = statuses[r.index];
     const err = errors[r.index];
     const sel = selected.has(r.index);
-    let warning = '';
-    if (r.mismatch) {
-      warning = `<div class="error-msg">This looks like a ${r.mismatch} entry (found the ${r.mismatch === 'Gap Map' ? '**Gap ID:**' : r.mismatch === 'Theses' ? '**Thesis Statement:**' : '**Entry ID:**'} marker) but Target Table is set to "${currentTable}". Switch the table selector and re-parse rather than pushing this as is. Left unselected.</div>`;
-    } else if (r.invalid) {
-      warning = `<div class="error-msg">No ${currentTable === 'Gap Map' ? 'Gap ID' : currentTable === 'Theses' ? 'Thesis Statement' : 'Entry ID'} found in this section. Check the pasted text matches the "${currentTable}" format. Left unselected.</div>`;
-    }
     return `
       <div class="record-card ${st||''}" id="rc-${r.index}">
         <div class="record-card-header" onclick="toggleSelect(${r.index})">
@@ -512,7 +398,6 @@ function renderRecords() {
             <button class="preview-btn" onclick="event.stopPropagation();togglePreview(${r.index})">Preview</button>
           </div>
         </div>
-        ${warning}
         ${err?`<div class="error-msg">Error: ${err}</div>`:''}
         <div class="record-preview" id="preview-${r.index}">
           <div class="preview-grid">
@@ -579,15 +464,9 @@ async function airtablePush(token, tableName, fields) {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-    // typecast:true added 26/7/2026 - without it, Airtable strictly rejects any
-    // value that doesn't already exactly match an existing Single Select option,
-    // or isn't already the correct JS type for a Number field, and returns
-    // "cannot accept the provided value" rather than coercing it. typecast
-    // tells Airtable to do the coercion (and auto-create new select options
-    // where needed) the way the Airtable web UI does when you type a new value
-    // into a cell. This does NOT fix a field that is genuinely computed
-    // (Formula, Rollup, Autonumber, Created time) - those reject writes
-    // regardless, and the fix there is to stop sending that field.
+    // typecast is required for single-select fields. Quantity Type, Unit and Basis
+    // are all single selects, and without this a value that does not already exist
+    // as an option is rejected rather than created.
     body: JSON.stringify({ fields, typecast: true })
   });
   const data = await res.json();
@@ -629,16 +508,13 @@ function buildSingleForm() {
           <div class="field-label">Market</div>
           <div class="market-grid">${MARKETS.map(m=>`<span class="market-tag" onclick="toggleMarket(this,'${m}')">${m}</span>`).join('')}</div>
         </div>
-        ${sf('Door',DOOR_OPTIONS)}
-        ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','FMCG / Manufacturing','Cross-sector'])}
-        ${sf('IC Dimension Affected',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability'])}
+        ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','Cross-sector'])}
+        ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability'])}
         ${sf('Gap Type',['Type A - Early market gap','Type B - Political or regulatory opacity','Type C - Fragmentation gap','Type D - Operator-only knowledge'])}
         ${tf('Investment Signal','textarea','full')}
-        ${sf('Priority',['Critical','High','Medium','Low'])}
-        ${tf('Potential Sources to Check','textarea','full')}
+        ${sf('Priority',['High','Medium','Low'])}
         ${sf('Status',['Open gap','In progress','Closed','Superseded'])}
-        ${tf('Linked Benchmark','text')}
-        ${tf('Date Identified','text')}${tf('Date Closed','text')}
+        ${tf('Notes','textarea','full')}
       </div>`;
   } else {
     label.textContent = 'Single Benchmark Entry';
@@ -650,17 +526,12 @@ function buildSingleForm() {
           <div class="field-label">Market</div>
           <div class="market-grid">${MARKETS.map(m=>`<span class="market-tag" onclick="toggleMarket(this,'${m}')">${m}</span>`).join('')}</div>
         </div>
-        ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','FMCG / Manufacturing','Cross-sector'])}
+        ${sf('Sector',['Fintech / Mobile money','Telecoms','Agritech','Energy / Cleantech','E-commerce / Logistics','Healthtech','SaaS / B2B','Entertainment / Media','Real estate','Cross-sector'])}
         ${sf('IC Dimension',['Distribution economics','Regulatory environment','Exit dynamics','Demand validation','Unit economics','Infrastructure','Currency / macro risk','Team / operator capability'])}
-        ${sf('Door',DOOR_OPTIONS)}
-        ${sf('Door 2 Dimension',DOOR2_DIMENSION_OPTIONS)}
-        ${sf('Door 2 Layer',DOOR2_LAYER_OPTIONS)}
-        ${sf('Market Tier',MARKET_TIER_OPTIONS)}
-        ${sf('Value Type',['Point','Range','Directional','Regulatory provision','Market structure','Statistic','Announced','Narrative only','Operator estimate'])}
+        ${sf('Value Type',['Point','Range','Directional','Regulatory provision','Announced','Narrative only','Operator estimate'])}
         ${sf('Data Tier',['Tier A - Cited Source','Tier B - Operator network','Tier B - Operator estimate'])}
         ${tf('Source Name','text')}${tf('Source URL','text')}${tf('Source Date','text')}
         ${sf('Decay Class',['Structural (36 months)','Market dynamics (12 months)','Regulatory (6 months)','Operator signal (quarterly)'])}
-        ${tf('Flag Date','text')}
         ${sf('Entry Status',['Active','Announced','Flagged for review','Superseded','Broken promise','Implementation success','Killed'])}
         ${sf('Recency Test',['Pass','Pass with flag','Fail'])}
         ${sf('Specificity Test',['Pass','Pass with caveat','Fail'])}
@@ -669,13 +540,7 @@ function buildSingleForm() {
         ${sf('Confidence Level',['High','Medium','Low'])}
         ${tf('Operator Note','textarea','full')}
         ${tf('IC Checklist Implication','textarea','full')}
-        ${tf('Capital Structure','text')}${tf('Exit Multiple Comparable','text')}
-        ${tf('Funding Trend Data','text')}
-        ${tf('Linked Articles','text')}${tf('Linked Thesis ID','text')}
-        ${tf('Tier B Provenance','textarea','full')}
-        ${tf('Future Review','textarea','full')}
         ${tf('Notes','textarea')}
-        ${tf('Version','text')}${tf('Last Update','text')}
         ${sf('Added By',['JP - direct entry','GON Scan - auto-generated','External submission'])}
       </div>`;
   }
