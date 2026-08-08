@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GON Survey Extractor</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;color:#e8e8e8;font-family:'Courier New',monospace;min-height:100vh;padding:24px 20px 60px;}
+.wrap{max-width:1180px;margin:0 auto;}
+.head{border-bottom:1px solid #1e1e1e;padding-bottom:14px;margin-bottom:22px;}
+.title{font-size:15px;font-weight:700;letter-spacing:0.10em;}
+.title span{color:#c0392b;}
+.sub{font-size:11px;color:#555;margin-top:5px;line-height:1.6;}
+.card{border:1px solid #1a1a1a;border-radius:5px;padding:15px;margin-bottom:16px;background:#0c0c0c;}
+.card-label{font-size:10px;letter-spacing:0.14em;color:#666;text-transform:uppercase;margin-bottom:11px;}
+.drop{border:1px dashed #262626;border-radius:5px;padding:34px 18px;text-align:center;cursor:pointer;transition:all .2s;}
+.drop:hover,.drop.over{border-color:#c0392b;background:#111;}
+.drop-main{font-size:12px;color:#bbb;}
+.drop-sub{font-size:10px;color:#555;margin-top:7px;line-height:1.6;}
+.btn{font-family:'Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;padding:8px 17px;border-radius:4px;cursor:pointer;border:none;transition:all .2s;}
+.btn-go{background:#c0392b;color:#fff;}
+.btn-go:hover{background:#a33125;}
+.btn-go:disabled{background:#2a2a2a;color:#555;cursor:not-allowed;}
+.btn-alt{background:transparent;border:1px solid #262626;color:#888;}
+.btn-alt:hover{border-color:#3a3a3a;color:#ccc;}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;}
+.bar{height:3px;background:#161616;border-radius:2px;overflow:hidden;margin-top:12px;display:none;}
+.bar-fill{height:100%;background:#c0392b;width:0;transition:width .25s;}
+.stat{font-size:10px;color:#666;margin-top:9px;line-height:1.7;}
+.tbl-wrap{overflow-x:auto;max-height:440px;overflow-y:auto;border:1px solid #161616;border-radius:4px;}
+table{width:100%;border-collapse:collapse;font-size:10.5px;}
+th{background:#111;color:#777;text-align:left;padding:7px 9px;position:sticky;top:0;font-weight:400;letter-spacing:0.06em;border-bottom:1px solid #1e1e1e;white-space:nowrap;}
+td{padding:6px 9px;border-bottom:1px solid #141414;color:#bbb;white-space:nowrap;}
+tr:hover td{background:#101010;}
+td.num{text-align:right;color:#e8e8e8;}
+td.na{color:#444;}
+.log{background:#080808;border:1px solid #161616;border-radius:4px;padding:10px;max-height:190px;overflow-y:auto;font-size:10px;line-height:1.75;}
+.log div{margin-bottom:2px;}
+.lg-i{color:#666;}
+.lg-ok{color:#4a9;}
+.lg-err{color:#c0392b;}
+.note{font-size:10px;color:#555;line-height:1.75;margin-top:11px;}
+.note b{color:#888;font-weight:400;}
+.hidden{display:none;}
+select{background:#0d0d0d;border:1px solid #1e1e1e;color:#ccc;font-family:'Courier New',monospace;font-size:11px;padding:6px 9px;border-radius:4px;outline:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="title">GON <span>SURVEY EXTRACTOR</span></div>
+    <div class="sub">
+      World Bank Enterprise Survey country profiles to structured rows. Runs entirely in this browser.
+      No upload, no server, no API cost. Files never leave the machine.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">1 &middot; Load country profiles</div>
+    <div class="drop" id="drop">
+      <div class="drop-main">Drop Enterprise Survey PDFs here, or click to choose</div>
+      <div class="drop-sub">
+        Select as many as you like. Roughly one second per file.<br>
+        Expects the standard ES country profile with the Appendix indicator table.
+      </div>
+    </div>
+    <input type="file" id="picker" multiple accept="application/pdf" class="hidden">
+    <div class="bar" id="bar"><div class="bar-fill" id="barFill"></div></div>
+    <div class="stat" id="stat"></div>
+  </div>
+
+  <div class="card hidden" id="resCard">
+    <div class="card-label">2 &middot; Extracted indicators</div>
+    <div class="row" style="margin-bottom:12px;">
+      <select id="filter"><option value="">All indicators</option></select>
+      <button class="btn btn-alt" onclick="downloadCSV()">Download CSV</button>
+      <button class="btn btn-alt" onclick="copyTSV()">Copy for Airtable</button>
+      <button class="btn btn-alt" onclick="reset()">Clear</button>
+    </div>
+    <div class="tbl-wrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+    <div class="note" id="resNote"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Log</div>
+    <div class="log" id="log"><div class="lg-i">Ready. Drop one file first to confirm the layout parses before running a batch.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Notes</div>
+    <div class="note">
+      <b>Figures are means, not medians.</b> Provable from the tables themselves: an all-firms
+      value often sits below every size-band value, which a median cannot do.<br><br>
+      <b>Column order</b> in every profile is All Firms, Small, Medium, Large, Regional average,
+      Income-group average. The extractor relies on that order.<br><br>
+      <b>"n.a." is preserved as blank</b>, never as zero. A missing indicator and a value of
+      nothing are different facts.<br><br>
+      <b>Sample excludes</b> firms under five employees, informal firms, fully state-owned firms,
+      and the financial intermediation sector entirely. Nothing here describes fintech licensing.
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Row label to short name. Add a pair here to widen the pull; nothing else changes.
+const INDICATORS = {
+  "Days to obtain an operating license":              "operating_licence_days",
+  "Days to obtain an import license":                 "import_licence_days",
+  "Days to obtain a construction-related permit":     "construction_permit_days",
+  "Days to obtain an electrical connection":          "electrical_connection_days",
+  "Delay in obtaining a water connections":           "water_connection_days",
+  "Days to clear direct exports through customs":     "export_clearance_days",
+  "Days to clear imports from customs":               "import_clearance_days",
+  "Bribery incidence":                                "bribery_incidence_pct",
+  "Percent of firms expected to give gifts to get a construction permit":
+                                                      "gift_construction_permit_pct",
+  "Percent of firms expected to give gifts in meetings with tax officials":
+                                                      "gift_tax_officials_pct",
+  "Number of electrical outages in a typical month":  "outages_per_month",
+  "Percent of firms experiencing electrical outages": "firms_with_outages_pct",
+  "Senior management time spent dealing with the requirements of":
+                                                      "mgmt_time_regulation_pct",
+  "Percent of firms competing against unregistered or informal firms":
+                                                      "informal_competition_pct",
+  "Proportion of investment financed internally":     "investment_internal_pct",
+  "Percent of firms using banks to finance investments": "bank_financed_investment_pct",
+  "Real annual sales growth":                         "real_sales_growth_pct",
+  "Annual employment growth":                         "employment_growth_pct",
+  "Percent of firms offering formal training":        "formal_training_pct",
+  "Age of the establishment (years)":                 "firm_age_years",
+};
+
+const COLS = ["country","survey_year","sample_firms","fieldwork","indicator",
+              "all_firms","small","medium","large","regional_avg","income_group_avg","source_file"];
+
+let records = [];
+
+function log(msg, cls) {
+  const l = document.getElementById('log');
+  const d = document.createElement('div');
+  d.className = 'lg-' + (cls || 'i');
+  d.textContent = msg;
+  l.appendChild(d);
+  l.scrollTop = l.scrollHeight;
+}
+
+// ---- PDF text to lines -----------------------------------------------------
+// pdf.js returns positioned fragments, not lines. Group by vertical position,
+// then order left to right. Without this the appendix table arrives as noise.
+async function pageLines(page) {
+  const tc = await page.getTextContent();
+  const buckets = new Map();
+  for (const it of tc.items) {
+    if (!it.str) continue;
+    const y = Math.round(it.transform[5] / 2) * 2;   // 2pt tolerance
+    if (!buckets.has(y)) buckets.set(y, []);
+    buckets.get(y).push({ x: it.transform[4], s: it.str });
+  }
+  return [...buckets.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([, frags]) => frags.sort((a, b) => a.x - b.x)
+                             .map(f => f.s).join(' ')
+                             .replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
+// "n.a." is a real value and must survive as null rather than zero.
+function parseNums(tail) {
+  const m = tail.match(/(-?\d+\.?\d*|n\.a\.)/g) || [];
+  return m.map(v => v === 'n.a.' ? null : (isNaN(parseFloat(v)) ? null : parseFloat(v)));
+}
+
+function meta(lines, filename) {
+  const stem = filename.replace(/\.pdf$/i, '');
+  const fm = stem.match(/^(.+?)-(\d{4})$/);
+  let country = (fm ? fm[1] : stem).replace(/-/g, ' ').trim();
+  let year = fm ? fm[2] : '';
+
+  const head = lines.join(' ');
+  const ym = head.match(/\b(20\d\d)\b/);
+  if (ym) year = ym[1];
+  const sm = head.match(/in\s+([\d,]{3,7})\s+firms were interviewed/);
+  const sample = sm ? sm[1].replace(/,/g, '') : '';
+  const wm = head.match(/interviewed between\s+([^.]{4,60}?)\./);
+  const fieldwork = wm ? wm[1].replace(/\s+/g, ' ').trim() : '';
+  return { country, year, sample, fieldwork };
+}
+
+async function extract(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+
+  const headLines = await pageLines(await pdf.getPage(Math.min(3, pdf.numPages)));
+  const { country, year, sample, fieldwork } = meta(headLines, file.name);
+
+  const rows = {};
+  const start = Math.max(1, pdf.numPages - 3);
+  for (let p = start; p <= pdf.numPages; p++) {
+    const raw = await pageLines(await pdf.getPage(p));
+    // Long labels wrap, with the six figures landing on the continuation line.
+    // Testing each line and each line joined to its successor catches both.
+    const cand = [];
+    raw.forEach((ln, i) => {
+      cand.push(ln);
+      if (i + 1 < raw.length) cand.push((ln + ' ' + raw[i + 1]).replace(/\s+/g, ' '));
+    });
+    for (const line of cand) {
+      for (const [label, key] of Object.entries(INDICATORS)) {
+        if (rows[key]) continue;
+        if (line.startsWith(label)) {
+          const nums = parseNums(line.slice(label.length));
+          if (nums.length >= 5) rows[key] = nums;
+        }
+      }
+    }
+  }
+  return { country, year, sample, fieldwork, rows, file: file.name };
+}
+
+async function run(files) {
+  const pdfs = [...files].filter(f => f.name.toLowerCase().endsWith('.pdf'));
+  if (!pdfs.length) { log('No PDF files in that selection.', 'err'); return; }
+
+  document.getElementById('bar').style.display = 'block';
+  const fill = document.getElementById('barFill');
+  let done = 0, okCount = 0;
+
+  for (const f of pdfs) {
+    try {
+      const r = await extract(f);
+      const keys = Object.keys(r.rows);
+      if (!keys.length) {
+        log(f.name + ': no appendix rows matched. Is this a standard ES country profile?', 'err');
+      } else {
+        for (const k of keys) {
+          const n = r.rows[k];
+          records.push({
+            country: r.country, survey_year: r.year, sample_firms: r.sample,
+            fieldwork: r.fieldwork, indicator: k,
+            all_firms: n[0] ?? '', small: n[1] ?? '', medium: n[2] ?? '',
+            large: n[3] ?? '', regional_avg: n[4] ?? '', income_group_avg: n[5] ?? '',
+            source_file: r.file
+          });
+        }
+        okCount++;
+        log(r.country + ' ' + r.year + ': ' + keys.length + ' indicators', 'ok');
+      }
+    } catch (e) {
+      log(f.name + ': ' + (e.message || e), 'err');
+    }
+    done++;
+    fill.style.width = (done / pdfs.length * 100) + '%';
+    document.getElementById('stat').textContent =
+      done + ' of ' + pdfs.length + ' files processed';
+  }
+
+  log('Done. ' + okCount + ' of ' + pdfs.length + ' files parsed, ' +
+      records.length + ' rows total.', 'ok');
+  render();
+}
+
+function render() {
+  if (!records.length) return;
+  document.getElementById('resCard').classList.remove('hidden');
+
+  const sel = document.getElementById('filter');
+  const cur = sel.value;
+  const inds = [...new Set(records.map(r => r.indicator))].sort();
+  sel.innerHTML = '<option value="">All indicators</option>' +
+    inds.map(i => '<option value="' + i + '">' + i + '</option>').join('');
+  sel.value = cur;
+
+  const rows = cur ? records.filter(r => r.indicator === cur) : records;
+  document.querySelector('#tbl thead').innerHTML =
+    '<tr>' + COLS.map(c => '<th>' + c + '</th>').join('') + '</tr>';
+  document.querySelector('#tbl tbody').innerHTML = rows.map(r =>
+    '<tr>' + COLS.map(c => {
+      const v = r[c];
+      const numeric = ['all_firms','small','medium','large','regional_avg','income_group_avg'].includes(c);
+      const cls = numeric ? (v === '' ? 'num na' : 'num') : '';
+      return '<td class="' + cls + '">' + (v === '' && numeric ? 'n.a.' : v) + '</td>';
+    }).join('') + '</tr>').join('');
+
+  const countries = new Set(records.map(r => r.country)).size;
+  document.getElementById('resNote').textContent =
+    rows.length + ' rows shown. ' + countries + ' countries, ' +
+    inds.length + ' indicators captured.';
+}
+
+function csvText() {
+  const esc = v => /[",\n]/.test(v) ? '"' + String(v).replace(/"/g, '""') + '"' : v;
+  return '\ufeff' + COLS.join(',') + '\n' +
+    records.map(r => COLS.map(c => esc(r[c] ?? '')).join(',')).join('\n');
+}
+
+function downloadCSV() {
+  const b = new Blob([csvText()], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'es_indicators.csv';
+  a.click();
+  log('CSV downloaded (' + records.length + ' rows).', 'ok');
+}
+
+function copyTSV() {
+  const t = COLS.join('\t') + '\n' +
+    records.map(r => COLS.map(c => r[c] ?? '').join('\t')).join('\n');
+  navigator.clipboard.writeText(t)
+    .then(() => log('Copied as TSV. Paste straight into Airtable or a sheet.', 'ok'))
+    .catch(() => log('Clipboard blocked by the browser. Use Download CSV instead.', 'err'));
+}
+
+function reset() {
+  records = [];
+  document.getElementById('resCard').classList.add('hidden');
+  document.getElementById('stat').textContent = '';
+  document.getElementById('bar').style.display = 'none';
+  document.getElementById('barFill').style.width = '0';
+  log('Cleared.', 'i');
+}
+
+const drop = document.getElementById('drop');
+const picker = document.getElementById('picker');
+drop.addEventListener('click', () => picker.click());
+picker.addEventListener('change', e => run(e.target.files));
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+drop.addEventListener('drop', e => {
+  e.preventDefault(); drop.classList.remove('over');
+  run(e.dataTransfer.files);
+});
+document.getElementById('filter').addEventListener('change', render);
+</script>
+</body>
+</html>
