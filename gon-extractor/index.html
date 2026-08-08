@@ -225,20 +225,31 @@ function log(msg, cls) {
 // ---- PDF text to lines -----------------------------------------------------
 // pdf.js returns positioned fragments, not lines. Group by vertical position,
 // then order left to right. Without this the appendix table arrives as noise.
-async function pageLines(page) {
+// splitCols matters. The profile body is two-column, and both columns share the
+// same vertical bands, so grouping on y alone interleaves them: "1043 firms were
+// interviewed between February and" runs straight into "factors for sustainable
+// development" from the opposite column, and the second date is lost. Bucketing on
+// column first fixes the prose pages. The appendix pages are full-width tables and
+// must NOT be split, or every row would be cut in half.
+async function pageLines(page, splitCols) {
   const tc = await page.getTextContent();
+  const vp = page.getViewport({ scale: 1 });
+  const mid = vp.width / 2;
   const buckets = new Map();
   for (const it of tc.items) {
     if (!it.str) continue;
+    const x = it.transform[4];
+    const col = splitCols ? (x < mid ? 0 : 1) : 0;
     const y = Math.round(it.transform[5] / 2) * 2;   // 2pt tolerance
-    if (!buckets.has(y)) buckets.set(y, []);
-    buckets.get(y).push({ x: it.transform[4], s: it.str });
+    const key = col + ':' + y;
+    if (!buckets.has(key)) buckets.set(key, { col, y, frags: [] });
+    buckets.get(key).frags.push({ x, s: it.str });
   }
-  return [...buckets.entries()]
-    .sort((a, b) => b[0] - a[0])
-    .map(([, frags]) => frags.sort((a, b) => a.x - b.x)
-                             .map(f => f.s).join(' ')
-                             .replace(/\s+/g, ' ').trim())
+  return [...buckets.values()]
+    .sort((a, b) => a.col - b.col || b.y - a.y)
+    .map(b => b.frags.sort((p, q) => p.x - q.x)
+                     .map(f => f.s).join(' ')
+                     .replace(/\s+/g, ' ').trim())
     .filter(Boolean);
 }
 
@@ -257,11 +268,13 @@ function meta(lines, filename) {
   const head = lines.join(' ');
   const ym = head.match(/\b(20\d\d)\b/);
   if (ym) year = ym[1];
-  const sm = head.match(/in\s+([\d,]{3,7})\s+firms were interviewed/);
+  // No "in" prefix required: some profiles render "key 1043 firms were interviewed"
+  // with the preceding words on a different vertical band.
+  const sm = head.match(/([\d,]{2,7})\s+firms were interviewed/);
   const sample = sm ? sm[1].replace(/,/g, '') : '';
-  // Anchor on the last month-year before the sentence end. Some profiles interleave
-  // body text between the two dates, so a lazy "X and Y" match fails or grabs prose.
-  const wm = head.match(/interviewed between\s+([A-Z][a-z]+(?:\s+20\d\d)?)[\s\S]{0,80}?([A-Z][a-z]+\s+20\d\d)\s*\./);
+  // "and" is optional: Kenya 2025 renders "between March December 2025" because the
+  // conjunction sits in a separate text run that the layer drops.
+  const wm = head.match(/interviewed between\s+([A-Z][a-z]+(?:\s+20\d\d)?)\s+(?:and\s+)?([A-Z][a-z]+\s+20\d\d)/);
   const fieldwork = wm ? (wm[1] + ' to ' + wm[2]).replace(/\s+/g, ' ').trim() : '';
   return { country, year, sample, fieldwork };
 }
@@ -270,13 +283,19 @@ async function extract(file) {
   const buf = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
 
-  const headLines = await pageLines(await pdf.getPage(Math.min(3, pdf.numPages)));
+  // Scan the first pages for the intro paragraph. Its page number varies: some
+  // profiles carry a blank second page, which shifts everything by one.
+  let headLines = [];
+  for (let p = 1; p <= Math.min(6, pdf.numPages); p++) {
+    headLines = headLines.concat(await pageLines(await pdf.getPage(p), true));
+    if (headLines.join(' ').includes('firms were interviewed')) break;
+  }
   const { country, year, sample, fieldwork } = meta(headLines, file.name);
 
   const rows = {};
   const start = Math.max(1, pdf.numPages - 3);
   for (let p = start; p <= pdf.numPages; p++) {
-    const raw = await pageLines(await pdf.getPage(p));
+    const raw = await pageLines(await pdf.getPage(p), false);
     // Long labels wrap, with the six figures landing on the continuation line.
     // Testing each line and each line joined to its successor catches both.
     const cand = [];
