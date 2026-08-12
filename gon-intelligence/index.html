@@ -1851,9 +1851,19 @@ function getNotMean(r,isAdjacent){
 // Operator Notes were written for us while building the corpus. They contain entry IDs,
 // references to "this session", and arguments about database bookkeeping. None of that
 // belongs in front of a reader who has never seen the schema.
+// A placeholder is not commentary. 489 entries carry an Operator Note that opens
+// on TODO, 358 of which are the bare token. It marks a judgment we owe, which is
+// the right thing to record and the wrong thing to publish under a finding.
+function isPlaceholderNote(note){
+  return /^\s*(TODO|TBD|PENDING|N\/A|-)\s*$/i.test(String(note||''));
+}
 function readerSafe(note){
   if(!note)return'';
+  if(isPlaceholderNote(note))return'';
   let t=String(note)
+    // "TODO Recency flagged: 2023 fieldwork" is a real caveat wearing a marker.
+    // Drop the marker, keep the caveat.
+    .replace(/^\s*(TODO|TBD)\b[:\-\s]*/i,'')
     .replace(/Core claim:.*$/ms,'')
     .replace(/Assumption invalidated:.*$/ms,'')
     .replace(/Predicted effect:.*$/ms,'')
@@ -1888,10 +1898,24 @@ function buildFounderQuestions(direct,missing,geo,sector){
   const asStatement=r=>{
     if(!r||!r.fields)return'';
     let v=String(r.fields['Value']||'').trim();
-    v=(v.split(/(?<=[.!?])\s/)[0]||v).trim();
+    // "Regulatory provision. Effective January 1, 2026. EP: 500 million FCFA..."
+    // splits to "Regulatory provision.", which is a category label, not a claim.
+    // Take sentences until one of them actually says something.
+    const parts=v.split(/(?<=[.!?])\s/).map(x=>x.trim()).filter(Boolean);
+    let acc='';
+    for(const part of parts){
+      acc=(acc?acc+' ':'')+part;
+      if(acc.length>=45||/\d/.test(acc))break;
+    }
+    v=(acc||v).trim();
     let m=String(r.fields['Metric Name']||'').trim().replace(/\.$/,'');
     let body=(v&&v.length>=25)?v:(m||v);
     body=trimWords(body,150).replace(/\.\.\.$/,'');
+    body=body.replace(/[,;:\s]+$/,'');
+    // A trailing fragment left by the trim reads as a sentence that gave up:
+    // "...for FY2024/25, effective." Drop a stranded tail of two words or fewer.
+    body=body.replace(/,\s*(?:\w+\s*){1,2}$/,'');
+    body=body.replace(/\s+(effective|including|such|dated|pursuant|following|under|per|versus|against|with|from)$/i,'');
     body=body.replace(/[,;:\s]+$/,'');
     if(!body)return'';
     return /[.!?]$/.test(body)?body:body+'.';
@@ -1992,40 +2016,53 @@ function scopeToIntent(records,intent,query){
 // instead of one did not fix the swap-the-noun problem, it multiplied it by eight.
 // Each mechanism now declares the subject matter it applies to, and stays silent
 // when the findings are not about that.
+// Every pattern is word-bounded. "import" as a bare substring matched "importance"
+// inside a COBAC jurisdiction entry, which is how a mobile money brief came to
+// explain that goods held at a border accrue regulatory cost. Nothing in that
+// pairing involved goods, or a border.
 const DIM_PAIRS=[
   {a:'Distribution economics',b:'Regulatory environment',
-   when:/port|border|customs|clearance|freight|corridor|shipment|transit|import|export/i,
+   when:/\b(port|border|customs|clearance|freight|corridor|shipment|transit)\b/i,
    text:'The delay and the compliance clock run at the same time. Goods held at a border are still accruing whatever the regulation charges for time, so the two costs compound rather than sit side by side.'},
   {a:'Distribution economics',b:'Regulatory environment',
-   when:/agent|licen|principal|affiliat|terminal|merchant|channel/i,
+   when:/\b(agent|agents|licence|licences|license|licensing|principal|affiliate|affiliation|terminal|terminals|merchant|merchants|channel|channels)\b/i,
    text:'A rule that changes who an agent can work for changes what an agent costs to acquire and keep. Distribution cost and regulatory permission are the same variable here, not two.'},
   {a:'Distribution economics',b:'Unit economics',
-   when:/cost|margin|price|fee|commission|freight|route/i,
+   when:/\b(cost|costs|margin|margins|price|prices|pricing|fee|fees|commission|commissions|freight|route|routes)\b/i,
    text:'These are the same number seen twice. Check whether the margin figure already nets the route cost, or whether the two are being counted separately in the model.'},
   {a:'Currency / macro risk',b:'Unit economics',
-   when:/fx|currency|exchange|devalu|import|dollar|usd|eur/i,
+   when:/\b(fx|currency|currencies|exchange|devaluation|devalued|dollar|usd|eur)\b/i,
    text:'The cost base and the revenue line are in different currencies. A margin that holds at today rate does not survive a devaluation of any size.'},
   {a:'Regulatory environment',b:'Unit economics',
-   when:/levy|tax|fee|tariff|charge|duty|fine|penalt/i,
+   when:/\b(levy|levies|tax|taxes|fee|fees|tariff|tariffs|charge|charges|duty|duties|fine|fines|penalty|penalties)\b/i,
    text:'A regulatory charge lands in the cost base, not in a compliance line item. Check that the margin model carries it rather than footnoting it.'},
   {a:'Currency / macro risk',b:'Distribution economics',
-   when:/import|freight|transit|input|supply|landed/i,
+   when:/\b(import|imports|imported|freight|transit|input|inputs|supply|landed)\b/i,
    text:'Imported inputs are priced in hard currency and sold in local. Every day of transit delay lengthens that exposure before a single unit is sold.'},
   {a:'Demand validation',b:'Distribution economics',
-   when:/reach|coverage|access|rural|urban|network|penetration|outlet/i,
+   when:/\b(reach|coverage|access|rural|urban|network|networks|penetration|outlet|outlets)\b/i,
    text:'Demand that exists is not demand you can serve. Check that the route to market physically reaches the customers the demand figure counted.'},
   {a:'Exit dynamics',b:'Regulatory environment',
-   when:/approval|ownership|foreign|licen|merger|consent|transfer/i,
+   when:/\b(approval|approvals|ownership|foreign|licence|license|licensing|merger|consent|transfer)\b/i,
    text:'Approval and ownership rules gate an exit as firmly as buyer appetite does. A willing buyer and a blocked transfer produce the same outcome.'},
   {a:'Demand validation',b:'Unit economics',
-   when:/price|willing|pay|arpu|revenue per|conversion/i,
+   when:/\b(price|pricing|willingness|pay|arpu|conversion)\b|revenue per/i,
    text:'Volume and margin have to hold at the same time. Demand proven at one price point says nothing about demand at the price the unit economics require.'}
 ];
+// Two rules cover the same dimension pair, so first-match returned whichever was
+// declared first rather than whichever fitted. Score by how many distinct trigger
+// words are actually present and take the strongest.
 function pairMechanism(a,b,textA,textB){
   const hay=String(textA||'')+' '+String(textB||'');
-  const hit=DIM_PAIRS.find(m=>
-    ((m.a===a&&m.b===b)||(m.a===b&&m.b===a)) && m.when.test(hay));
-  return hit?hit.text:'';
+  let best=null,bestScore=0;
+  DIM_PAIRS.forEach(m=>{
+    if(!((m.a===a&&m.b===b)||(m.a===b&&m.b===a)))return;
+    const hits=hay.match(new RegExp(m.when.source,'gi'));
+    if(!hits||!hits.length)return;
+    const score=new Set(hits.map(h=>h.toLowerCase())).size;
+    if(score>bestScore){bestScore=score;best=m;}
+  });
+  return best?best.text:'';
 }
 
 function interlinkage(direct,geo,intent){
@@ -2082,6 +2119,13 @@ function interlinkage(direct,geo,intent){
     for(let j=i+1;j<direct.length;j++){
       const clean=r=>new Set(name(r).toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
         .filter(w=>w.length>4&&!NOISE.has(w)&&!/^(19|20)\d\d$/.test(w)));
+      // Named quantities decide, exactly as in the conflict detector. Export
+      // clearance and import clearance share four words and run in opposite
+      // directions; outage frequency and outage incidence are measured in
+      // different units. Neither pair covers the same ground.
+      const qt=r=>{const v=r.fields['Quantity Type'];return Array.isArray(v)?String(v[0]||'').trim():String(v||'').trim();};
+      const qi=qt(direct[i]),qj=qt(direct[j]);
+      if(qi&&qj&&qi!==qj)continue;
       const wa=clean(direct[i]),wb=clean(direct[j]);
       const shared=[...wa].filter(w=>wb.has(w));
       if(shared.length>=2){pairs.push(`"${name(direct[i])}" and "${name(direct[j])}" cover the same ground from different angles. Read the second as a qualification of the first, not a duplicate.`);break;}
@@ -2381,10 +2425,11 @@ function renderCard(r,idx,isAdjacent){
   const hadNote=!!String(f['Operator Note']||'').trim();
   const showsIcq=!!(icq&&!isInternalRouting(icq));
   const emptyLayer=!cleanNote&&!notMean&&!showsIcq;
+  const placeholder=isPlaceholderNote(f['Operator Note']);
   const emptyMsg=emptyLayer
-    ? (hadNote
-        ? 'No reader-facing commentary on this one. The note attached to it is internal record-keeping rather than analysis.'
-        : 'No operator commentary has been written for this finding yet.')
+    ? (placeholder||!hadNote
+        ? 'No operator commentary has been written for this finding yet. The figure is verified; the reading of it is not.'
+        : 'No reader-facing commentary on this one. The note attached to it is internal record-keeping rather than analysis.')
     : '';
 
   return`<div class="intel-card ${isAdjacent?'adjacent':sev}" id="card-${idx}">
