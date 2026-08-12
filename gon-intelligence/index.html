@@ -1046,9 +1046,12 @@ function fmtNum(v){
     :v>=1e6?(v/1e6).toFixed(v/1e6<10?1:0)+'m'
     :v>=1e3?(v/1e3).toFixed(v/1e3<10?1:0)+'k':String(v);
 }
-function detectConflicts(records){
+function detectConflicts(records,lensDim,lensHasFindings){
   const flags=[];
   if(!records||records.length<2)return flags;
+  // An empty lens has nothing to conflict about. The brief says zero verified
+  // findings and then printed five paragraphs of conflict detail underneath it.
+  if(lensDim&&!lensHasFindings)return flags;
 
   const SIG=new Set(['minimum','wage','salary','tariff','clearance','days','cost','price','rate',
     'share','penetration','margin','fee','levy','tax','capital','volume','users','accounts','value',
@@ -1090,11 +1093,36 @@ function detectConflicts(records){
   const src=r=>primarySource(r.fields['Source Name'])||'an unnamed source';
   const yr=r=>sourceYear(r.fields['Source Date']);
 
+  const fstr=(r,k)=>{const v=r.fields[k];return Array.isArray(v)?String(v[0]||'').trim():String(v||'').trim();};
+  const dim=r=>fstr(r,'IC Dimension');
+
   const seen=new Set();
+  const numeric=[];
   for(let i=0;i<records.length;i++){
     for(let j=i+1;j<records.length;j++){
       const A=records[i],B=records[j];
       if(mk(A)!==mk(B))continue;
+      // A conflict shown under a lens has to touch the lens. Reporting four customs
+      // and licensing disagreements under "Is demand real?" describes the market,
+      // not the question, and it did so verbatim across all five lenses.
+      if(lensDim&&dim(A)!==lensDim&&dim(B)!==lensDim)continue;
+
+      // COMPARABILITY FIELDS DECIDE FIRST. Quantity Type, Unit and Basis exist so
+      // that "are these the same quantity" stops being answered by word overlap on
+      // prose. An operating licence timeline and a customs clearance timeline are
+      // both stated in days and share the words days, firm and reported. They have
+      // nothing to do with each other, and the old path called them a disagreement.
+      // Where either entry lacks the fields the prose heuristics still run, so the
+      // 251 entries predating the fields are not silently dropped from checking.
+      const qtA=fstr(A,'Quantity Type'),qtB=fstr(B,'Quantity Type');
+      const unA=fstr(A,'Unit'),unB=fstr(B,'Unit');
+      const bsA=fstr(A,'Basis'),bsB=fstr(B,'Basis');
+      const typed=!!(qtA&&qtB);
+      if(typed&&qtA!==qtB)continue;
+      // Statutory against observed is the whole point of the corpus, not an error
+      // in it. That pair belongs to the gap analysis and must never be reported here
+      // as two sources disagreeing.
+      if(bsA&&bsB&&bsA!==bsB&&/statutory/i.test(bsA+bsB)&&/observed/i.test(bsA+bsB))continue;
       // Same subject is established two ways: shared measure words, or a near-identical
       // Metric Name. The whitelist alone missed "1,000,000 registered users" against
       // "320,000 active users", because only "users" was on it and the threshold is two.
@@ -1116,15 +1144,30 @@ function detectConflicts(records){
 
       // A measure word must be shared. Without that anchor, two entries can share
       // three words and be about entirely different quantities.
-      if(sharedSig.length===0)continue;
-      if(sharedSig.length<2&&sharedName.length<2)continue;
-      const subject=[...new Set(sharedSig.length>=2?sharedSig:sharedSig.concat(sharedName))]
-        .slice(0,3).join(' ');
+      if(!typed&&sharedSig.length===0)continue;
+      if(!typed&&sharedSig.length<2&&sharedName.length<2)continue;
+      // Named quantity beats inferred subject. "days firm reported" was never a
+      // subject, it was three words two entries happened to share.
+      const subject=typed?qtA.toLowerCase()
+        :[...new Set(sharedSig.length>=2?sharedSig:sharedSig.concat(sharedName))]
+          .slice(0,3).join(' ');
       const pairKey=[id(A),id(B)].sort().join('|');
       if(seen.has(pairKey))continue;
 
-      const ua=unitOf(A.fields['Value']),ub=unitOf(B.fields['Value']);
-      const ba=basisOf(A.fields['Value']),bb=basisOf(B.fields['Value']);
+      // Same quantity, different denominator: percent of firms against percent of
+      // investment value. Both correct, not comparable, and the numeric gap between
+      // them means nothing.
+      if(typed&&unA&&unB&&unA!==unB){
+        seen.add([id(A),id(B)].sort().join('|'));
+        flags.push(`${id(A)||'One entry'} and ${id(B)||'another'} both measure ${subject} in ${mk(A)} `
+          +`but on different units: ${unA} against ${unB}. Neither is wrong. Establish which denominator `
+          +`your model needs before either figure goes into it.`);
+        continue;
+      }
+      const ua=unA?unA.toLowerCase():unitOf(A.fields['Value']);
+      const ub=unB?unB.toLowerCase():unitOf(B.fields['Value']);
+      const ba=bsA?[bsA.toLowerCase()]:basisOf(A.fields['Value']);
+      const bb=bsB?[bsB.toLowerCase()]:basisOf(B.fields['Value']);
 
       // Basis first. When two figures are stated on different bases, the numeric gap
       // between them is a consequence, not the finding. Reporting "these disagree by
@@ -1156,6 +1199,14 @@ function detectConflicts(records){
           if(ratio>1.3){
             seen.add(pairKey);
             const wide=ratio>8;
+            if(!wide){
+              // Four consecutive paragraphs ending "Establish which definition each
+              // uses before either goes into a model" is a loop, not analysis.
+              // Same-subject disagreements are collected and stated once.
+              numeric.push({subject,market:mk(A),
+                items:[{id:id(A),src:src(A),n:na,yr:yr(A)},{id:id(B),src:src(B),n:nb,yr:yr(B)}]});
+              continue;
+            }
             flags.push(wide
               ? `${id(A)||'One entry'} and ${id(B)||'another'} both appear to cover ${subject} in ${mk(A)}, `
                 +`but are ${ratio.toFixed(0)} times apart (${src(A)}: ${fmtNum(na)}, ${src(B)}: ${fmtNum(nb)}). `
@@ -1180,6 +1231,26 @@ function detectConflicts(records){
     }
   }
 
+  // Collapse the numeric disagreements: one statement per quantity, every entry
+  // named, the instruction given once.
+  const bySubject={};
+  numeric.forEach(x=>{
+    const k=x.subject+'|'+x.market;
+    if(!bySubject[k])bySubject[k]={subject:x.subject,market:x.market,items:{}};
+    x.items.forEach(it=>{if(it.id)bySubject[k].items[it.id]=it;});
+  });
+  Object.keys(bySubject).forEach(k=>{
+    const g=bySubject[k];
+    const its=Object.keys(g.items).map(i=>g.items[i]).sort((a,b)=>a.n-b.n);
+    if(its.length<2)return;
+    const lo=its[0],hi=its[its.length-1];
+    const spread=(lo.n>0)?(hi.n/lo.n):0;
+    flags.push(`${its.length} figures on ${g.subject} in ${g.market} do not agree, spanning `
+      +`${fmtNum(lo.n)} to ${fmtNum(hi.n)}${spread>1?` (${spread.toFixed(1)} times`:''}${spread>1?')':''}: `
+      +its.map(it=>`${it.src} gives ${fmtNum(it.n)}${it.yr?' ('+it.yr+')':''} in ${it.id}`).join(', ')+`. `
+      +`All are logged. Establish which definition each uses before any of them goes into a model.`);
+  });
+
   records.forEach(r=>{
     const note=(r.fields['Operator Note']||'');
     if(/supersed|replaces GON-|corrects an earlier/i.test(note)){
@@ -1197,7 +1268,8 @@ function conflictingBasis(a,list){
     ['mean','median'],
     ['registered','active'],
     ['gross','net'],
-    ['pipeline','installed']
+    ['pipeline','installed'],
+    ['cumulative','point-in-time']
   ];
   return GROUPS.some(g=>g.includes(a)&&list.some(b=>g.includes(b)&&b!==a));
 }
@@ -1331,7 +1403,8 @@ async function generateBriefAndRender(query,direct,adjacent,theses,R){
 
   const confidence=deriveConfidence(direct);
   // Detect against everything known about the market, not the ranked display set.
-  const conflicts=detectConflicts((R.comparisonSet&&R.comparisonSet.length)?R.comparisonSet:direct);
+  const conflicts=detectConflicts((R.comparisonSet&&R.comparisonSet.length)?R.comparisonSet:direct,
+    currentFilter||null,direct.length>0);
   const hasData=direct.length>0;
   const confidenceLevel=confidence.level;
 
@@ -1537,7 +1610,16 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
         .match(new RegExp(pr.topic.source,'gi'))||[]).length);
       const qual=r=>(String(r.fields['Data Tier']||'').indexOf('Tier A')===0?3:2)
         +(r.fields['Confidence Level']==='High'?3:r.fields['Confidence Level']==='Medium'?2:1);
-      return onTopic.slice().sort((a,b)=>(topicHits(b)-topicHits(a))||(qual(b)-qual(a)))[0];
+      // Raw hit count is a length proxy. A caveat-flagged 2019 entry that says
+      // "licence" four times outranked a fully verified 2026 entry that says it
+      // once, and led the brief with the weaker finding. Topic match is a yes or no;
+      // after that, evidence quality and recency decide.
+      const onTopicAtAll=r=>topicHits(r)>0?1:0;
+      const fullPass=r=>String(r.fields['Three-Test Status']||'').indexOf('Pass (all three')===0?1:0;
+      const year=r=>parseInt((String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0]||'0',10);
+      return onTopic.slice().sort((a,b)=>
+        (onTopicAtAll(b)-onTopicAtAll(a))||(fullPass(b)-fullPass(a))
+        ||(qual(b)-qual(a))||(year(b)-year(a)))[0];
     };
     const consequences=[];
     const covered=[];
@@ -1800,9 +1882,19 @@ function readerSafe(note){
 function buildFounderQuestions(direct,missing,geo,sector){
   const qs=[];
   const yearOf=r=>parseInt((String(r.fields['Source Date']||'').match(/20\d\d/)||[])[0]||'0',10);
+  // A question carried into a meeting cannot open with forty words of citation
+  // apparatus and a refresh-window caveat. The claim, short and in plain language.
+  // Provenance belongs on the finding card, where the reader can already see it.
   const asStatement=r=>{
-    const st=statementOf(r);
-    return st?st.replace(/\s*$/,'').replace(/([^.!?])$/,'$1.'):'';
+    if(!r||!r.fields)return'';
+    let v=String(r.fields['Value']||'').trim();
+    v=(v.split(/(?<=[.!?])\s/)[0]||v).trim();
+    let m=String(r.fields['Metric Name']||'').trim().replace(/\.$/,'');
+    let body=(v&&v.length>=25)?v:(m||v);
+    body=trimWords(body,150).replace(/\.\.\.$/,'');
+    body=body.replace(/[,;:\s]+$/,'');
+    if(!body)return'';
+    return /[.!?]$/.test(body)?body:body+'.';
   };
   // "What is your number" only makes sense when the finding is a number. Asked
   // about a border closure or a licensing structure, it reads as a non sequitur.
