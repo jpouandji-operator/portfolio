@@ -1119,6 +1119,12 @@ function detectConflicts(records,lensDim,lensHasFindings){
       const bsA=fstr(A,'Basis'),bsB=fstr(B,'Basis');
       const typed=!!(qtA&&qtB);
       if(typed&&qtA!==qtB)continue;
+      // Some entries carry no measurable quantity at all. A regulatory instrument
+      // entry has numbers in it (Article 18, Decision No 184, Loi 103-12) and none
+      // of them are measurements. Marking the type Qualitative says so explicitly,
+      // which is better than leaving the field blank and hoping the prose path
+      // declines to compare an article number against a date.
+      if(/^qualitative$/i.test(qtA)||/^qualitative$/i.test(qtB))continue;
       // Statutory against observed is the whole point of the corpus, not an error
       // in it. That pair belongs to the gap analysis and must never be reported here
       // as two sources disagreeing.
