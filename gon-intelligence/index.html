@@ -1819,7 +1819,12 @@ function getImplication(r){
   // "Assumption invalidated:" are labels we write deliberately. The previous
   // fallback took the first sentence of the note whatever it was, which is how a
   // card ended up headlined "It was wrong." with no antecedent.
-  const m=note.match(/Core claim:\s*([^.]+\.)/i)||note.match(/Assumption invalidated:\s*([^.]+\.)/i);
+  // [^.]+ ends at the first period, including the one inside 1.8%. That turned
+  // "Core claim: The 1.8% aggregator rate is the published floor" into a card
+  // headlined "The 1." A sentence ends where punctuation is followed by a space
+  // and a capital, or by the end of the note. A decimal is neither.
+  const SENT=src=>new RegExp(src+'\\s*([\\s\\S]+?[.!?])(?=\\s+[A-Z"\u201c(]|\\s*$)','i');
+  const m=note.match(SENT('Core claim:'))||note.match(SENT('Assumption invalidated:'));
   if(m)return`&#8220;${m[1].trim()}&#8221;`;
   return r.fields['Metric Name']||'';
 }
@@ -1902,10 +1907,14 @@ function buildFounderQuestions(direct,missing,geo,sector){
     // splits to "Regulatory provision.", which is a category label, not a claim.
     // Take sentences until one of them actually says something.
     const parts=v.split(/(?<=[.!?])\s/).map(x=>x.trim()).filter(Boolean);
+    // "Regulatory provision." and "Key provisions:" are field labels, not claims.
+    // A question that opens on one tells the founder nothing about what we think.
+    const LABEL=/^(regulatory provision|provision|key provisions?|value|finding|summary|note|context|background)[:.]?$/i;
     let acc='';
     for(const part of parts){
+      if(!acc&&LABEL.test(part.replace(/[:.]$/,'')))continue;
       acc=(acc?acc+' ':'')+part;
-      if(acc.length>=45||/\d/.test(acc))break;
+      if(acc.length>=45&&/\d|[a-z]{6}/.test(acc))break;
     }
     v=(acc||v).trim();
     let m=String(r.fields['Metric Name']||'').trim().replace(/\.$/,'');
@@ -1915,8 +1924,15 @@ function buildFounderQuestions(direct,missing,geo,sector){
     // A trailing fragment left by the trim reads as a sentence that gave up:
     // "...for FY2024/25, effective." Drop a stranded tail of two words or fewer.
     body=body.replace(/,\s*(?:\w+\s*){1,2}$/,'');
-    body=body.replace(/\s+(effective|including|such|dated|pursuant|following|under|per|versus|against|with|from)$/i,'');
-    body=body.replace(/[,;:\s]+$/,'');
+    // A stranded tail is a class, not a list. "eliminating", "as", "under": a
+    // trailing preposition, conjunction, article or bare participle is a sentence
+    // that stopped mid-clause, and no list of individual words will keep up.
+    for(let i=0;i<3;i++){
+      const before=body;
+      body=body.replace(/[\s,;:-]+(?:[a-z]+ing|to|of|in|on|at|by|for|with|from|as|and|or|but|the|a|an|that|which|including|effective|such|dated|pursuant|following|under|per|versus|against)$/i,'');
+      if(body===before)break;
+    }
+    body=body.replace(/[,;:\s-]+$/,'');
     if(!body)return'';
     return /[.!?]$/.test(body)?body:body+'.';
   };
