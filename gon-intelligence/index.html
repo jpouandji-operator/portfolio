@@ -565,9 +565,18 @@ function initToken(){
 }
 function toggleToken(){document.getElementById('tokenPanel').classList.toggle('open');}
 function saveToken(){
-  const v=document.getElementById('tokenInput').value.trim();
+  const el=document.getElementById('tokenInput');
+  const v=el.value.trim();
   if(!v)return;
+  // An Airtable PAT is around 80 characters. Anything far longer is a token pasted
+  // twice into a password field the reader cannot see, and it fails as a TypeError
+  // at fetch time rather than as an auth error, which sends everyone hunting scopes.
+  if(v.length>200||!/^pat/i.test(v)){
+    showToast('That does not look like an Airtable PAT. Clear the box and paste once.');
+    return;
+  }
   localStorage.setItem('gon_tok',v);
+  el.value='';
   const btn=document.getElementById('tokenBtn');
   btn.textContent='* Token active';btn.classList.add('active');
   document.getElementById('tokenPanel').classList.remove('open');
@@ -855,7 +864,7 @@ async function runSearch(){
     await generateBriefAndRender(query,direct,adjacent,theses,R);
 
     // Render evidence cards
-    renderEvidence(direct,adjacent,R.marketRead,R.geo);
+    renderEvidence(direct,adjacent,R.marketRead,R.geo,R);
     document.getElementById('actionsRow').style.display='flex';
   }catch(e){
     showError(e.message);
@@ -1543,7 +1552,16 @@ function renderMarketRead(reads,geo){
 
 async function airtableFetch(token,formula,max){
   const url=`https://api.airtable.com/v0/${BASE_ID}/Benchmarks?filterByFormula=${encodeURIComponent(formula)}&maxRecords=${max}`;
-  const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+  let res;
+  try{
+    res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+  }catch(err){
+    // A malformed or oversized token fails before any response, so the generic
+    // "check your scopes" message sent the reader to the wrong place entirely.
+    throw new Error(token.length>200
+      ? 'The saved token is malformed, most likely pasted twice. Clear it and paste once.'
+      : 'Could not reach Airtable. Check the connection and that the token is valid.');
+  }
   if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`API error ${res.status}`);}
   const d=await res.json();
   return d.records||[];
@@ -2682,7 +2700,7 @@ function toggleEvidence(){
   if(l)l.textContent=l.textContent.replace(/^(Show|Hide|The) /,open?'Show the ':'The ');
 }
 
-function renderEvidence(direct,adjacent,marketRead,geoName){
+function renderEvidence(direct,adjacent,marketRead,geoName,R){
   resetNotMean();
   const container=document.getElementById('resultsContainer');
   if(!direct.length&&!adjacent.length){container.innerHTML='';return;}
@@ -2716,7 +2734,7 @@ function renderEvidence(direct,adjacent,marketRead,geoName){
 
   // Gap card
   const geo=currentGeo||'this market';
-  html+=renderGapCard(geo,extractSector(currentQuery),R);
+  html+=renderGapCard(geo,extractSector(currentQuery),R||null);
 
   container.innerHTML=html;
 
