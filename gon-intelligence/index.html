@@ -174,6 +174,20 @@ a:hover{opacity:0.7;}
   animation:blink 1s ease-in-out infinite;
   display:inline-block;
 }
+/* The reader has to know how much is here before reading any of it. Everything that
+   calibrates trust used to sit below the findings, so a brief assembled from a single
+   survey round read with the same authority as one built on primary regulatory work
+   until forty lines later. */
+.brief-calibration{
+  display:flex;flex-wrap:wrap;gap:0.35rem 0.9rem;align-items:baseline;
+  padding:0.55rem 0 0.7rem;margin-bottom:0.9rem;
+  border-bottom:1px solid var(--rule,rgba(0,0,0,0.1));
+  font-size:0.78rem;line-height:1.45;
+}
+.brief-cal-item{white-space:nowrap;opacity:0.72;}
+.brief-cal-item strong{font-weight:600;opacity:1;}
+.brief-cal-warn{opacity:1;font-weight:600;}
+.brief-note{font-size:0.78rem;opacity:0.62;margin-top:0.35rem;line-height:1.5;}
 .brief-section{margin-bottom:0.9rem;}
 .brief-section:last-child{margin-bottom:0;}
 .brief-section-label{
@@ -753,10 +767,20 @@ const UNCOVERED_SECTORS={
 };
 const UNCOVERED_KEYS=Object.keys(UNCOVERED_SECTORS).sort((a,b)=>b.length-a.length);
 
+// Earliest mention wins, longest key breaks the tie. Sorting by length alone made
+// "Senegal is a better entry point than Ivory Coast" a brief about Ivory Coast, because
+// that key is four characters longer. The market a reader names first is the one they
+// are asking about. Length still decides where keys overlap: "nigeria" and "niger" both
+// start at the same index, "equatorial guinea" starts before the "guinea" inside it.
 function extractGeo(query){
   const q=String(query||'').toLowerCase();
-  for(const k of GEO_KEYS){if(q.indexOf(k)!==-1)return GEO_MAP[k];}
-  return null;
+  let best=null,bestAt=Infinity,bestLen=0;
+  for(const k of GEO_KEYS){
+    const at=q.indexOf(k);
+    if(at===-1)continue;
+    if(at<bestAt||(at===bestAt&&k.length>bestLen)){best=GEO_MAP[k];bestAt=at;bestLen=k.length;}
+  }
+  return best;
 }
 function extractSector(query){
   const q=String(query||'').toLowerCase();
@@ -786,6 +810,23 @@ const GENERIC_QUERY_WORDS=new Set(['deal','deals','market','markets','investment
 function resolveCoverage(query){
   const raw=String(query||'').trim();
   const geo=extractGeo(raw);
+  // "Compare Nigeria and Kenya agent banking" returned a Nigeria brief and dropped
+  // Kenya without a word. The tool answers on one market; it has to say which, and
+  // which it set aside.
+  const alsoNamed=[];
+  {
+    const ql=raw.toLowerCase();
+    GEO_KEYS.forEach(k=>{
+      const v=GEO_MAP[k];
+      if(v!==geo&&ql.indexOf(k)!==-1&&alsoNamed.indexOf(v)===-1){
+        // A key that is only present because it sits inside the one we matched is
+        // not a second market. "Nigeria" contains no other key, but "Guinea" sits
+        // inside "Equatorial Guinea".
+        const stripped=ql.split(String(Object.keys(GEO_MAP).find(x=>GEO_MAP[x]===geo)||'')).join(' ');
+        if(stripped.indexOf(k)!==-1)alsoNamed.push(v);
+      }
+    });
+  }
   const sector=extractSector(raw);
   const uncovered=extractUncoveredSector(raw);
 
@@ -806,7 +847,7 @@ function resolveCoverage(query){
   else if(residual.length||sector||uncovered)status='market_unrecognised';
   else status='underspecified';
 
-  return{geo,sector,uncovered,residual,status,
+  return{geo,sector,uncovered,residual,status,alsoNamed,
     // A market read requires a market. Everything downstream keys off this rather
     // than off whether the fetch happened to return rows.
     canAnswerAsMarket:!!geo};
@@ -884,24 +925,31 @@ async function fetchAll(token,query){
   // when a sector had no entries in a market, the tool silently returned whatever else
   // existed for that market and presented it as the answer.
   let direct=[],marketOnly=[],sectorElsewhere=[],coverage='',comparisonSet=[];
+  // Everything the base holds on this market, regardless of what was asked. Depth is a
+  // property of the market; measuring it on the query made the Kenya panel say 28
+  // curated entries on an agritech question and 44 on a fintech one, while the sentence
+  // claimed to describe Kenya.
+  let marketWide=[];
 
   if(geo&&sector){
     const r=await fetchScoped(token,geo,sector,query);
     direct=r.display;comparisonSet=r.all;
     if(direct.length===0){
       coverage='sector_absent_in_market';
-      marketOnly=(await fetchScoped(token,geo,null,query)).display;
+      const mw=await fetchScoped(token,geo,null,query);
+      marketOnly=mw.display;marketWide=mw.all;
       sectorElsewhere=(await fetchScoped(token,null,sector,query)).display;
     }else{
       coverage='direct';
       // Conflicts are a property of the market, not of the sector slice a reader
       // happened to ask about. Compare against everything held on the market.
       const wide=await fetchScoped(token,geo,null,query);
+      marketWide=wide.all;
       comparisonSet=wide.all.length>comparisonSet.length?wide.all:comparisonSet;
     }
   }else if(geo){
     const r=await fetchScoped(token,geo,null,query);
-    direct=r.display;comparisonSet=r.all;
+    direct=r.display;comparisonSet=r.all;marketWide=r.all;
     coverage=direct.length?'market_only_no_sector':'no_market_data';
   }else{
     // No market, no market read. Findings from six other countries are not an answer
@@ -961,7 +1009,8 @@ async function fetchAll(token,query){
   // asserted in copy. Curated entries carry a reading; World Bank entries carry a
   // figure. A market with forty institutional rows and no curated ones should not
   // read with the same authority as one built from primary regulatory work.
-  const depthSet=(comparisonSet&&comparisonSet.length)?comparisonSet:direct;
+  const depthSet=(marketWide&&marketWide.length)?marketWide
+    :(comparisonSet&&comparisonSet.length)?comparisonSet:direct;
   const curatedCount=depthSet.filter(r=>!String((r.fields||{})['Entry ID']||'').startsWith('GON-WB')).length;
   const institutionalCount=depthSet.length-curatedCount;
   const operatorValidated=OPERATOR_DEPTH.has(geo);
@@ -983,7 +1032,7 @@ async function fetchAll(token,query){
     direct=lensed;
     adjacent=adjacent.filter(r=>String(r.fields['IC Dimension']||'')===currentFilter);
   }
-  return{direct,directAll,comparisonSet,adjacent,theses,marketRead,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector,
+  return{direct,directAll,comparisonSet,marketWide,adjacent,theses,marketRead,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector,
     resolution:CV,depth,curatedCount,institutionalCount,operatorValidated};
 }
 
@@ -1756,7 +1805,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
     }
 
     currentBrief=brief;
-    renderBrief(brief,geo,sector,confidenceLevel,direct.length,adjacent.length,MODE.labels);
+    renderBrief(brief,geo,sector,confidenceLevel,direct.length,adjacent.length,MODE.labels,R);
 
   }catch(e){
     // Fallback: show a honest no-data brief
@@ -1954,20 +2003,79 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
         : `Written from the verified findings directly (${(e&&e.message)?e.message:'narrative layer unavailable'}).`)
     };
     currentBrief=fallback;
-    renderBrief(fallback,geo,sector,'No verified data',direct.length,adjacent.length,MODE.labels);
+    renderBrief(fallback,geo,sector,'No verified data',direct.length,adjacent.length,MODE.labels,R);
   }
 }
 
-function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount,labels){
+// Calibration before content. One scannable line stating how much of the market is in
+// view, what it is built from, and where the reader is standing relative to the whole.
+function calibrationStrip(R,directCount){
+  if(!R)return'';
+  const held=(R.marketWide&&R.marketWide.length)||0;
+  const geo=R.geo;
+  const items=[];
+
+  if(geo&&held){
+    // Two numbers that used to sit forty lines apart and describe different sets while
+    // using the same words. Adjacent, they are simply two facts.
+    items.push(directCount===held
+      ? `<span class="brief-cal-item"><strong>${held}</strong> finding${held===1?'':'s'} on ${geo}</span>`
+      : `<span class="brief-cal-item"><strong>${directCount}</strong> of <strong>${held}</strong> findings on ${geo} in view</span>`);
+  }else if(directCount){
+    items.push(`<span class="brief-cal-item"><strong>${directCount}</strong> finding${directCount===1?'':'s'}</span>`);
+  }
+
+  const cur=R.curatedCount||0, inst=R.institutionalCount||0;
+  if(held){
+    if(cur===0)items.push(`<span class="brief-cal-item brief-cal-warn">One source: World Bank Enterprise Surveys</span>`);
+    else if(inst===0)items.push(`<span class="brief-cal-item">All curated, no survey data</span>`);
+    else items.push(`<span class="brief-cal-item"><strong>${cur}</strong> curated, <strong>${inst}</strong> institutional</span>`);
+  }
+
+  const depthLabel={
+    operator:'Operator-validated market',
+    operator_region_thin:'Operator region, thin on this market',
+    institutional_deep:'Institutional, not operator-validated',
+    institutional_thin:'Thin primary coverage',
+    survey_only:'Survey baseline only'
+  }[R.depth];
+  if(depthLabel)items.push(`<span class="brief-cal-item">${depthLabel}</span>`);
+
+  // A second market named in the question and not answered on is a fact the reader
+  // needs at the top, not an omission they discover by noticing.
+  const also=(R.resolution&&R.resolution.alsoNamed)||[];
+  if(also.length)items.push(`<span class="brief-cal-item brief-cal-warn">${also.join(' and ')} also named, not covered here</span>`);
+
+  if(!items.length)return'';
+  return`<div class="brief-calibration">${items.join('')}</div>`;
+}
+
+function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount,labels,R){
   const L=labels||{market_reality:'What is actually going on',what_investors_underestimate:'What most investors underestimate',what_this_changes:'What this means for the deal',conflicts_and_gaps:'Conflicts, corrections and gaps',cross_market_pattern:'Cross-market pattern',ic_questions:'Ask the founder'};
   const qs=brief.ic_questions||[];
+  // A section that says nothing carries the same visual weight as one that says
+  // something. "No conflict was detected among these findings" appeared at full
+  // section weight in almost every brief; it belongs in the footnote until there is
+  // an actual conflict to report.
+  const conflictText=String(brief.conflicts_and_gaps||'');
+  const noConflict=/^No conflict was detected/i.test(conflictText.trim());
   document.getElementById('briefContainer').innerHTML=`
     <div class="brief-block">
       <div class="brief-eyebrow">Operator brief &mdash; ${geo}${sector&&sector!=='this sector'?' / '+sector:''}</div>
 
+      ${calibrationStrip(R,directCount)}
+
       <div class="brief-section">
         <div class="brief-section-label">${L.market_reality}</div>
         <div class="brief-section-text">${brief.market_reality||''}</div>
+      </div>
+
+      ${/* Consequence follows the finding. The gaps qualify both, so they read after,
+           not between. Previously a reader met a list of what was missing before
+           being told what the thing that was present actually meant. */''}
+      <div class="brief-section">
+        <div class="brief-section-label">${L.what_this_changes}</div>
+        <div class="brief-section-text">${brief.what_this_changes||''}</div>
       </div>
 
       <div class="brief-section">
@@ -1975,15 +2083,10 @@ function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount,label
         <div class="brief-section-text">${brief.what_investors_underestimate||''}</div>
       </div>
 
-      <div class="brief-section">
-        <div class="brief-section-label">${L.what_this_changes}</div>
-        <div class="brief-section-text">${brief.what_this_changes||''}</div>
-      </div>
-
-      ${brief.conflicts_and_gaps?`
+      ${(conflictText&&!noConflict)?`
       <div class="brief-section">
         <div class="brief-section-label">${L.conflicts_and_gaps}</div>
-        <div class="brief-section-text">${brief.conflicts_and_gaps}</div>
+        <div class="brief-section-text">${conflictText}</div>
       </div>`:''}
 
       ${brief.cross_market_pattern?`
@@ -2000,7 +2103,8 @@ function renderBrief(brief,geo,sector,confidence,directCount,adjacentCount,label
         </ul>
       </div>`:''}
 
-      <div class="brief-confidence">${brief.confidence_note||''} &nbsp;&middot;&nbsp; <span>${directCount} verified finding${directCount!==1?'s':''}</span>${adjacentCount>0?` &nbsp;&middot;&nbsp; <span>${adjacentCount} from comparable markets</span>`:''}</div>
+      <div class="brief-confidence">${brief.confidence_note||''}${adjacentCount>0?` &nbsp;&middot;&nbsp; <span>${adjacentCount} from comparable markets</span>`:''}</div>
+      ${noConflict?`<div class="brief-note">No conflict among the figures compared. Only figures measuring the same quantity in the same market are checked against each other, so this is a statement about what was compared rather than a guarantee.</div>`:''}
     </div>`;
 }
 
@@ -2527,7 +2631,11 @@ function statementOf(r,preferValue){
   if(!metric&&!value)return'';
   else if(!value)body=metric;
   else if(!metric)body=value;
-  else if(metric.length>85||redundant||preferValue)body=(value.length>=40?value:metric);
+  // A 40-character floor sent "3.1 days average for operating licence." (39) back to
+  // the metric name, so a brief announced a finding without its number while the
+  // founder question below it quoted the figure. If the value carries a figure, the
+  // figure is the finding.
+  else if(metric.length>85||redundant||preferValue)body=((/\d/.test(value)||value.length>=40)?value:metric);
   else body=`${metric}: ${value}`;
 
   body=trimWords(body,180);
