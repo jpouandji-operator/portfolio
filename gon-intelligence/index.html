@@ -717,6 +717,18 @@ const GEO_MAP={
 
 // Longest key first, so a specific name always beats a substring of itself.
 const GEO_KEYS=Object.keys(GEO_MAP).sort((a,b)=>b.length-a.length);
+// Whole words only. Substring matching made "Healthcare deal Nigeria" a brief about
+// the Central African Republic, because "car" sits inside "healthcare" and starts
+// earlier in the string than "nigeria" does. Boundaries also separate "niger" from
+// "nigeria" without relying on key length.
+const GEO_RX={};
+GEO_KEYS.forEach(k=>{
+  GEO_RX[k]=new RegExp('(^|[^a-z0-9])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'([^a-z0-9]|$)','i');
+});
+function geoKeyAt(q,k){
+  const m=GEO_RX[k].exec(q);
+  return m?m.index+(m[1]?m[1].length:0):-1;
+}
 
 const SECTOR_MAP={
   'mobile money':'Fintech / Mobile money','fintech':'Fintech / Mobile money',
@@ -776,7 +788,7 @@ function extractGeo(query){
   const q=String(query||'').toLowerCase();
   let best=null,bestAt=Infinity,bestLen=0;
   for(const k of GEO_KEYS){
-    const at=q.indexOf(k);
+    const at=geoKeyAt(q,k);
     if(at===-1)continue;
     if(at<bestAt||(at===bestAt&&k.length>bestLen)){best=GEO_MAP[k];bestAt=at;bestLen=k.length;}
   }
@@ -818,12 +830,12 @@ function resolveCoverage(query){
     const ql=raw.toLowerCase();
     GEO_KEYS.forEach(k=>{
       const v=GEO_MAP[k];
-      if(v!==geo&&ql.indexOf(k)!==-1&&alsoNamed.indexOf(v)===-1){
+      if(v!==geo&&geoKeyAt(ql,k)!==-1&&alsoNamed.indexOf(v)===-1){
         // A key that is only present because it sits inside the one we matched is
         // not a second market. "Nigeria" contains no other key, but "Guinea" sits
         // inside "Equatorial Guinea".
         const stripped=ql.split(String(Object.keys(GEO_MAP).find(x=>GEO_MAP[x]===geo)||'')).join(' ');
-        if(stripped.indexOf(k)!==-1)alsoNamed.push(v);
+        if(geoKeyAt(stripped,k)!==-1)alsoNamed.push(v);
       }
     });
   }
@@ -834,7 +846,7 @@ function resolveCoverage(query){
   // the reader asked about something the tool did not understand, which is a different
   // state from having asked about nothing.
   let rest=raw.toLowerCase();
-  GEO_KEYS.forEach(k=>{if(rest.indexOf(k)!==-1)rest=rest.split(k).join(' ');});
+  GEO_KEYS.forEach(k=>{if(geoKeyAt(rest,k)!==-1)rest=rest.split(k).join(' ');});
   SECTOR_KEYS.forEach(k=>{if(rest.indexOf(k)!==-1)rest=rest.split(k).join(' ');});
   UNCOVERED_KEYS.forEach(k=>{if(rest.indexOf(k)!==-1)rest=rest.split(k).join(' ');});
   const residual=rest.replace(/[^a-z\s]/g,' ').split(/\s+/)
@@ -1052,7 +1064,21 @@ async function fetchScoped(token,geo,sector,query){
   // market, because conflict detection that only sees the ranked top ten can only
   // find a conflict when both sides of it happen to rank. That is why the detector
   // had never fired: the DRC minimum wage figures were never in the same ten.
-  const records=await airtableFetch(token,formula,100);
+  let records=await airtableFetch(token,formula,100);
+  // SEARCH() is a substring match on the server, so a Niger query came back holding
+  // Nigeria's records and reported 26 curated entries for a market that has two.
+  // Market is a comma-separated list, so membership has to be checked per value.
+  if(geo){
+    const want=String(geo).toLowerCase();
+    records=records.filter(r=>{
+      const raw=(r.fields||{})['Market'];
+      const vals=(Array.isArray(raw)?raw:String(raw||'').split(','))
+        .map(v=>String(v).trim().toLowerCase()).filter(Boolean);
+      // "WAEMU (use when applies to full zone" is a real stored value; a zone name
+      // followed by a parenthetical is still that zone.
+      return vals.some(v=>v===want||v.indexOf(want+' (')===0);
+    });
+  }
   const ranked=rankByRelevanceThenQuality(records,query);
   return{display:ranked.slice(0,10),all:records};
 }
@@ -1900,7 +1926,7 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
       realityText=`There is no verified research on this sector in ${geo}. That is a statement about the evidence, not about the opportunity. `
         // Naming the comparables without saying what makes them comparable leaves the
         // reader to guess, and the same market appeared three times in the old list.
-        +(comps.length?`The closest the corpus comes is the same sector in ${comps.join(', ')}, which shares the regulatory or distribution structure but is not evidence about ${geo}.`:'');
+        +(comps.length?`The nearest verified work is the same sector in ${comps.join(', ')}, which shares the regulatory or distribution structure but is not evidence about ${geo}.`:'');
     }else if(cov==='sector_uncovered'){
       // A sector the base does not cover at all, named rather than quietly swapped
       // for whatever else the market holds.
@@ -2020,7 +2046,7 @@ function calibrationStrip(R,directCount){
     // using the same words. Adjacent, they are simply two facts.
     items.push(directCount===held
       ? `<span class="brief-cal-item"><strong>${held}</strong> finding${held===1?'':'s'} on ${geo}</span>`
-      : `<span class="brief-cal-item"><strong>${directCount}</strong> of <strong>${held}</strong> findings on ${geo} in view</span>`);
+      : `<span class="brief-cal-item"><strong>${directCount}</strong> of <strong>${held}</strong> finding${held===1?'':'s'} on ${geo} in view</span>`);
   }else if(directCount){
     items.push(`<span class="brief-cal-item"><strong>${directCount}</strong> finding${directCount===1?'':'s'}</span>`);
   }
