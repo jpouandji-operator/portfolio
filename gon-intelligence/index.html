@@ -647,24 +647,64 @@ function goBack(){
   document.getElementById('mainInput').focus();
 }
 
+// The markets where GON's depth is operator experience rather than published sources.
+// Stated once, here, so the coverage panel is generated from it instead of four
+// hand-written cases that left Egypt reading exactly like Cameroun.
+const OPERATOR_DEPTH=new Set(['Cameroun','Senegal','Ivory Coast','WAEMU','CEMAC',
+  'Mali','Burkina Faso','Benin','Togo','Niger','Guinea','Gabon','Chad','Congo']);
+
 // ------ GEO / SECTOR EXTRACTION ------
+// Every market held in the base, plus the spellings a reader will actually type.
+// The previous map covered 30 of 62 market values, so Tunisia, Algeria, Burundi,
+// Eswatini, Equatorial Guinea and the rest resolved to null and the brief answered
+// from whatever else the corpus held.
 const GEO_MAP={
   'senegal':'Senegal','nigeria':'Nigeria','kenya':'Kenya','ghana':'Ghana',
-  'cameroun':'Cameroun','cameroon':'Cameroun','ivory coast':'Ivory Coast',
-  'ivoire':'Ivory Coast','cote d\'ivoire':'Ivory Coast',
+  'cameroun':'Cameroun','cameroon':'Cameroun',
+  'ivory coast':'Ivory Coast','ivoire':'Ivory Coast','cote d\'ivoire':'Ivory Coast',
   'south africa':'South Africa','egypt':'Egypt','tanzania':'Tanzania',
   'rwanda':'Rwanda','uganda':'Uganda','ethiopia':'Ethiopia','mali':'Mali',
   'angola':'Angola','mozambique':'Mozambique','zambia':'Zambia',
-  'chad':'Chad','gabon':'Gabon','morocco':'Morocco','benin':'Benin',
-  'togo':'Togo','drc':'DRC','congo':'Congo','waemu':'WAEMU','cemac':'CEMAC',
-  'uemoa':'WAEMU','east africa':'East Africa','west africa':'West Africa',
+  'chad':'Chad','tchad':'Chad','gabon':'Gabon','morocco':'Morocco','maroc':'Morocco',
+  'benin':'Benin','togo':'Togo','waemu':'WAEMU','uemoa':'WAEMU','cemac':'CEMAC',
+  'east africa':'East Africa','west africa':'West Africa',
+  'sub saharan africa':'Sub Saharan Africa','sub-saharan africa':'Sub Saharan Africa',
+  'pan african':'Pan African','pan-african':'Pan African',
+  'tunisia':'Tunisia','tunisie':'Tunisia','algeria':'Algeria','algerie':'Algeria',
+  'libya':'Libya','sudan':'Sudan','south sudan':'South Sudan','somalia':'Somalia',
+  'burundi':'Burundi','liberia':'Liberia','eswatini':'Eswatini','swaziland':'Eswatini',
+  'lesotho':'Lesotho','botswana':'Botswana','namibia':'Namibia','zimbabwe':'Zimbabwe',
+  'malawi':'Malawi','madagascar':'Madagascar','mauritius':'Mauritius','maurice':'Mauritius',
+  'comoros':'Comoros','seychelles':'Seychelles','djibouti':'Djibouti',
+  'mauritania':'Mauritania','mauritanie':'Mauritania',
+  'sierra leone':'Sierra Leone','cabo verde':'Cabo Verde','cape verde':'Cabo Verde',
+  'sao tome':'Sao Tome and Principe',
+  'burkina faso':'Burkina Faso','burkina':'Burkina Faso',
+  // Ordered matching handles the traps below. Left short, they collide:
+  // "niger" inside "nigeria", "guinea" inside "equatorial guinea" and
+  // "guinea-bissau", "congo" inside "democratic republic of congo".
+  'niger':'Niger',
+  'equatorial guinea':'Equatorial Guinea','guinee equatoriale':'Equatorial Guinea',
+  'guinea-bissau':'Guinea-Bissau','guinea bissau':'Guinea-Bissau',
+  'guinea':'Guinea','guinee':'Guinea',
+  'democratic republic of congo':'DRC','dr congo':'DRC','drc':'DRC','rdc':'DRC','kinshasa':'DRC',
+  'republic of congo':'Congo','congo-brazzaville':'Congo','brazzaville':'Congo','congo':'Congo',
+  'central african republic':'CAR','centrafrique':'CAR','car':'CAR',
 };
+
+// Longest key first, so a specific name always beats a substring of itself.
+const GEO_KEYS=Object.keys(GEO_MAP).sort((a,b)=>b.length-a.length);
 
 const SECTOR_MAP={
   'mobile money':'Fintech / Mobile money','fintech':'Fintech / Mobile money',
-  'payment':'Fintech / Mobile money','energy':'Energy / Cleantech',
-  'solar':'Energy / Cleantech','cleantech':'Energy / Cleantech',
-  'agritech':'Agritech','agriculture':'Agritech',
+  'payment':'Fintech / Mobile money','payments':'Fintech / Mobile money',
+  'banking':'Fintech / Mobile money','bank':'Fintech / Mobile money',
+  'lending':'Fintech / Mobile money','credit':'Fintech / Mobile money',
+  'insurance':'Fintech / Mobile money','remittance':'Fintech / Mobile money',
+  'wallet':'Fintech / Mobile money','agent banking':'Fintech / Mobile money',
+  'energy':'Energy / Cleantech','solar':'Energy / Cleantech','cleantech':'Energy / Cleantech',
+  'power':'Energy / Cleantech','electricity':'Energy / Cleantech','grid':'Energy / Cleantech',
+  'agritech':'Agritech','agriculture':'Agritech','agri':'Agritech','farming':'Agritech',
   'health':'Healthtech','pharmaceutical':'Healthtech','pharma':'Healthtech',
   'medical':'Healthtech','clinic':'Healthtech','hospital':'Healthtech',
   'telemedicine':'Healthtech','diagnostics':'Healthtech','vaccine':'Healthtech',
@@ -672,20 +712,95 @@ const SECTOR_MAP={
   'manufacturing':'FMCG / Manufacturing','fmcg':'FMCG / Manufacturing',
   'packaging':'FMCG / Manufacturing','consumer goods':'FMCG / Manufacturing',
   'bottling':'FMCG / Manufacturing','food':'FMCG / Manufacturing',
-  'ecommerce':'E-commerce / Logistics','logistics':'E-commerce / Logistics',
+  'beverage':'FMCG / Manufacturing','industrial':'FMCG / Manufacturing',
+  'ecommerce':'E-commerce / Logistics','e-commerce':'E-commerce / Logistics',
+  'logistics':'E-commerce / Logistics','freight':'E-commerce / Logistics',
+  'last mile':'E-commerce / Logistics','distribution':'E-commerce / Logistics',
   'media':'Entertainment / Media','entertainment':'Entertainment / Media',
-  'telecom':'Telecoms','telco':'Telecoms',
+  'streaming':'Entertainment / Media','pay tv':'Entertainment / Media',
+  'broadcast':'Entertainment / Media','music':'Entertainment / Media',
+  'telecom':'Telecoms','telco':'Telecoms','tower':'Telecoms','spectrum':'Telecoms',
+  'mobile network':'Telecoms','operator':'Telecoms',
 };
+const SECTOR_KEYS=Object.keys(SECTOR_MAP).sort((a,b)=>b.length-a.length);
+
+// Domains a reader will reasonably ask about and the base does not cover. Naming them
+// is the difference between "we have nothing on mining" and quietly answering a mining
+// question with mobile money findings.
+const UNCOVERED_SECTORS={
+  'mining':'mining and extractives','extractive':'mining and extractives',
+  'oil':'oil and gas','gas':'oil and gas','petroleum':'oil and gas',
+  'edtech':'education','education':'education','school':'education','university':'education',
+  'training':'education','vocational':'education',
+  'real estate':'real estate','property':'real estate','housing':'real estate',
+  'construction':'construction','cement':'construction',
+  'tourism':'tourism and hospitality','hotel':'tourism and hospitality',
+  'hospitality':'tourism and hospitality','travel':'tourism and hospitality',
+  'mobility':'mobility and transport','ride hailing':'mobility and transport',
+  'transport':'mobility and transport','aviation':'mobility and transport',
+  'airline':'mobility and transport','rail':'mobility and transport',
+  'water':'water and sanitation','sanitation':'water and sanitation',
+  'defence':'defence','security':'defence',
+};
+const UNCOVERED_KEYS=Object.keys(UNCOVERED_SECTORS).sort((a,b)=>b.length-a.length);
 
 function extractGeo(query){
-  const q=query.toLowerCase();
-  for(const[k,v] of Object.entries(GEO_MAP)){if(q.includes(k))return v;}
+  const q=String(query||'').toLowerCase();
+  for(const k of GEO_KEYS){if(q.indexOf(k)!==-1)return GEO_MAP[k];}
   return null;
 }
 function extractSector(query){
-  const q=query.toLowerCase();
-  for(const[k,v] of Object.entries(SECTOR_MAP)){if(q.includes(k))return v;}
+  const q=String(query||'').toLowerCase();
+  for(const k of SECTOR_KEYS){if(q.indexOf(k)!==-1)return SECTOR_MAP[k];}
   return null;
+}
+function extractUncoveredSector(query){
+  const q=String(query||'').toLowerCase();
+  for(const k of UNCOVERED_KEYS){if(q.indexOf(k)!==-1)return UNCOVERED_SECTORS[k];}
+  return null;
+}
+
+// ------ COVERAGE RESOLVER ------
+// Established before anything is written, because the tool was narrating first and
+// never asking how well it covered the question. Every failure in the stress test was
+// a version of that: an unresolved market or sector was dropped from the filter and
+// the remaining corpus was returned as the answer. A Tunisia query came back with ten
+// findings from Nigeria, Egypt, Rwanda, Ghana and Senegal, and the footer said ten
+// verified findings.
+const GENERIC_QUERY_WORDS=new Set(['deal','deals','market','markets','investment','invest',
+  'investing','opportunity','opportunities','analysis','read','brief','sector','sectors',
+  'africa','african','business','doing','climate','entry','startup','startups','company',
+  'companies','infrastructure','strategy','strategic','what','which','where','how','why',
+  'best','worst','good','bad','real','with','from','into','about','that','this','they',
+  'kills','killing','margins','scale','scaling','risk','risks','growth','landscape']);
+
+function resolveCoverage(query){
+  const raw=String(query||'').trim();
+  const geo=extractGeo(raw);
+  const sector=extractSector(raw);
+  const uncovered=extractUncoveredSector(raw);
+
+  // What is left once the parts we did recognise are removed. If content words remain,
+  // the reader asked about something the tool did not understand, which is a different
+  // state from having asked about nothing.
+  let rest=raw.toLowerCase();
+  GEO_KEYS.forEach(k=>{if(rest.indexOf(k)!==-1)rest=rest.split(k).join(' ');});
+  SECTOR_KEYS.forEach(k=>{if(rest.indexOf(k)!==-1)rest=rest.split(k).join(' ');});
+  UNCOVERED_KEYS.forEach(k=>{if(rest.indexOf(k)!==-1)rest=rest.split(k).join(' ');});
+  const residual=rest.replace(/[^a-z\s]/g,' ').split(/\s+/)
+    .filter(w=>w.length>3&&!GENERIC_QUERY_WORDS.has(w));
+
+  let status;
+  if(geo&&(sector||uncovered))status='resolved';
+  else if(geo&&residual.length)status='sector_unrecognised';
+  else if(geo)status='market_wide';
+  else if(residual.length||sector||uncovered)status='market_unrecognised';
+  else status='underspecified';
+
+  return{geo,sector,uncovered,residual,status,
+    // A market read requires a market. Everything downstream keys off this rather
+    // than off whether the fetch happened to return rows.
+    canAnswerAsMarket:!!geo};
 }
 
 // ------ MAIN SEARCH ------
@@ -752,8 +867,9 @@ async function runSearch(){
 
 // ------ AIRTABLE FETCH ------
 async function fetchAll(token,query){
-  const geo=extractGeo(query);
-  const sector=extractSector(query);
+  const CV=resolveCoverage(query);
+  const geo=CV.geo;
+  const sector=CV.sector;
 
   // Diagnose coverage honestly before assembling anything. The failure this replaces:
   // when a sector had no entries in a market, the tool silently returned whatever else
@@ -778,12 +894,35 @@ async function fetchAll(token,query){
     const r=await fetchScoped(token,geo,null,query);
     direct=r.display;comparisonSet=r.all;
     coverage=direct.length?'market_only_no_sector':'no_market_data';
-  }else if(sector){
-    const r=await fetchScoped(token,null,sector,query);
-    direct=r.display;comparisonSet=r.all;
-    coverage=direct.length?'sector_only_no_market':'no_sector_data';
   }else{
+    // No market, no market read. Findings from six other countries are not an answer
+    // to a question about a seventh, and presenting them as one was the single worst
+    // behaviour in the tool. The sector slice is still fetched, but it is labelled as
+    // what it is and never counted as verified findings for a market.
     coverage='underspecified';
+    if(sector){
+      sectorElsewhere=(await fetchScoped(token,null,sector,query)).display;
+      coverage='market_unrecognised';
+    }
+  }
+
+  // A recognised sector the base does not cover is a different answer from a sector
+  // the parser failed to read. Both were previously silent.
+  if(CV.uncovered&&!sector){
+    coverage=geo?'sector_uncovered':'market_unrecognised';
+    direct=[];comparisonSet=[];
+  }else if(CV.status==='sector_unrecognised'&&coverage==='market_only_no_sector'){
+    coverage='sector_unrecognised';
+  }
+
+  // Same market twice in a comparables list is not two comparables.
+  if(sectorElsewhere.length){
+    const seenMk=new Set();
+    sectorElsewhere=sectorElsewhere.filter(r=>{
+      const mk=String((r.fields||{})['Market']||'').split(',')[0].trim();
+      if(!mk||seenMk.has(mk))return false;
+      seenMk.add(mk);return true;
+    });
   }
 
   let adjacent=[];
@@ -809,6 +948,24 @@ async function fetchAll(token,query){
   // directAll is what we actually know about this market. direct is what the reader
   // has chosen to look at. Gaps are computed against the former, so narrowing the
   // lens cannot manufacture a gap in data that exists.
+  // How well the base covers this market, established from the records rather than
+  // asserted in copy. Curated entries carry a reading; World Bank entries carry a
+  // figure. A market with forty institutional rows and no curated ones should not
+  // read with the same authority as one built from primary regulatory work.
+  const depthSet=(comparisonSet&&comparisonSet.length)?comparisonSet:direct;
+  const curatedCount=depthSet.filter(r=>!String((r.fields||{})['Entry ID']||'').startsWith('GON-WB')).length;
+  const institutionalCount=depthSet.length-curatedCount;
+  const operatorValidated=OPERATOR_DEPTH.has(geo);
+  // Membership of the operator region is not the same as coverage of the country.
+  // Gabon sits inside CEMAC and holds two curated entries; claiming operator depth
+  // there on the strength of Cameroun's work is the exact overclaim the stress test
+  // was built to catch.
+  const depth=!depthSet.length?'none'
+    :(operatorValidated&&curatedCount>=8)?'operator'
+    :operatorValidated?'operator_region_thin'
+    :curatedCount>=8?'institutional_deep'
+    :curatedCount>=1?'institutional_thin':'survey_only';
+
   const directAll=direct;
   let lensEmpty=false;
   if(currentFilter){
@@ -817,7 +974,8 @@ async function fetchAll(token,query){
     direct=lensed;
     adjacent=adjacent.filter(r=>String(r.fields['IC Dimension']||'')===currentFilter);
   }
-  return{direct,directAll,comparisonSet,adjacent,theses,marketRead,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector};
+  return{direct,directAll,comparisonSet,adjacent,theses,marketRead,coverage,lensEmpty,marketOnly,sectorElsewhere,geo,sector,
+    resolution:CV,depth,curatedCount,institutionalCount,operatorValidated};
 }
 
 async function fetchScoped(token,geo,sector,query){
@@ -1333,10 +1491,14 @@ async function fetchMarketRead(token,geo,sector){
   const parts=[];
   if(geo)parts.push(`SEARCH("${geo}",{Markets})`);
   if(sector)parts.push(`SEARCH("${sector}",{Sectors})`);
-  let formula=parts.length?`OR(${parts.join(',')})`:'';
+  // Unfiltered, this returned six rows for any query it could not scope, which is why
+  // operator views surfaced on exactly the briefs where the tool did not know what
+  // market it was answering about.
+  if(!parts.length)return[];
+  let formula=`OR(${parts.join(',')})`;
   try{
     const url=`https://api.airtable.com/v0/${BASE_ID}/Market%20Read`
-      +(formula?`?filterByFormula=${encodeURIComponent(formula)}&maxRecords=6`:'?maxRecords=6');
+      +`?filterByFormula=${encodeURIComponent(formula)}&maxRecords=6`;
     const res=await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
     // The table may not exist yet. That is a normal state, not an error worth
     // showing a reader, so absence is silent.
@@ -1667,7 +1829,28 @@ Write a short operator brief for a VC doing diligence on a deal in this market.`
           ? `The ${adjHere.length} comparable-market signal${adjHere.length===1?'':'s'} below ${adjHere.length===1?'is':'are'} in this dimension, but ${adjHere.length===1?'it is':'they are'} from other markets and ${adjHere.length===1?'is':'are'} an analogy rather than evidence about ${geo}.`
           : `Widen to all signals to see them.`);
     }else if(cov==='sector_absent_in_market'){
-      realityText=`There is no verified research on this sector in ${geo}. That is a statement about the evidence, not about the opportunity. ${(R.sectorElsewhere&&R.sectorElsewhere.length)?`The nearest comparable is the same sector in ${R.sectorElsewhere.slice(0,3).map(r=>r.fields['Market']).join(', ')}, which is worth reading for structure but is not evidence for ${geo}.`:''}`;
+      const comps=(R.sectorElsewhere||[]).slice(0,3).map(r=>String(r.fields['Market']||'').split(',')[0].trim()).filter(Boolean);
+      realityText=`There is no verified research on this sector in ${geo}. That is a statement about the evidence, not about the opportunity. `
+        // Naming the comparables without saying what makes them comparable leaves the
+        // reader to guess, and the same market appeared three times in the old list.
+        +(comps.length?`The closest the corpus comes is the same sector in ${comps.join(', ')}, which shares the regulatory or distribution structure but is not evidence about ${geo}.`:'');
+    }else if(cov==='sector_uncovered'){
+      // A sector the base does not cover at all, named rather than quietly swapped
+      // for whatever else the market holds.
+      realityText=`GON does not currently cover ${R.resolution.uncovered} in ${geo}, or anywhere else. `
+        +`Nothing below is an answer to that question. The verified work here is concentrated in `
+        +`fintech, energy and consumer manufacturing, and stretching it to a different sector would be inventing coverage.`;
+    }else if(cov==='sector_unrecognised'){
+      realityText=`The sector in that question did not resolve against anything the base holds, so what follows is `
+        +`everything known about ${geo} rather than an answer about ${R.resolution.residual.slice(0,2).join(' ')}. `
+        +`Read it as market context, and narrow the sector if you want a real read.`;
+    }else if(cov==='market_unrecognised'){
+      const comps=(R.sectorElsewhere||[]).slice(0,4).map(r=>String(r.fields['Market']||'').split(',')[0].trim()).filter(Boolean);
+      // The failure this replaces: a Tunisia query returned ten findings from Nigeria,
+      // Egypt, Rwanda, Ghana and Senegal, and the footer counted them as verified.
+      realityText=`No market resolved from that question, so there is nothing here that is evidence about one. `
+        +(comps.length?`The base holds work on this sector in ${comps.join(', ')}. Name a market and this becomes a read rather than a list.`
+          :`Name a market and this becomes a read rather than a list.`);
     }else if(cov==='no_market_data'){
       realityText=`There is no verified research on ${geo} at all. Nothing below should be read as evidence about this market.`;
     }else if(cov==='underspecified'){
@@ -2533,7 +2716,7 @@ function renderEvidence(direct,adjacent,marketRead,geoName){
 
   // Gap card
   const geo=currentGeo||'this market';
-  html+=renderGapCard(geo,extractSector(currentQuery));
+  html+=renderGapCard(geo,extractSector(currentQuery),R);
 
   container.innerHTML=html;
 
@@ -2544,8 +2727,16 @@ function renderEvidence(direct,adjacent,marketRead,geoName){
   });
 }
 
-function renderGapCard(geo,sector){
+// The coverage panel. Four markets used to have a hand-written one and everywhere else
+// got the same generic line, so Egypt with ten institutional findings read exactly like
+// Cameroun, and Kenya's forty-four entries carried the authority of operator work they
+// are not built on. The named cases below are real, specific findings and stay. What is
+// new is that every other market now gets a panel derived from its actual depth.
+function renderGapCard(geo,sector,R){
   let title,why,impl;
+  const depth=(R&&R.depth)||'none';
+  const curated=(R&&R.curatedCount)||0;
+  const institutional=(R&&R.institutionalCount)||0;
   if(geo==='Senegal'||geo==='WAEMU'){
     title='Post-Wave acquisition economics in WAEMU are not reliably benchmarked yet';
     why="Wave restructured the market from 2020 onward. Pre-Wave CAC data doesn't transfer cleanly to where things stand today.";
@@ -2562,8 +2753,28 @@ function renderGapCard(geo,sector){
     title='Egypt consumer finance appears closed to new entrants as of early 2026';
     why='FRA Decree No 43 (February 2026) suspended new consumer finance applications under the FinTech Law. Earlier freezes in 2024 and 2025 compound this.';
     impl='Any Egypt consumer lending deal needs to verify that licensing status predates October 2024. If unlicensed, this is not a compliance gap - it is a market access problem.';
+  }else if(depth==='operator'){
+    title='Not everything that matters here is written down';
+    why=`This is one of the markets where GON's depth is operator experience rather than published sources. What is above is the part that can be verified from primary documents; the part that decided outcomes usually was not written down.`;
+    impl='Where a number matters to your decision and is not above, treat it as an open question to put to the founder or an operator on the ground, not as an assumption you can carry.';
+  }else if(depth==='operator_region_thin'){
+    title=`${geo} sits in GON's operator region but is thinly covered on its own terms`;
+    why=`GON's operator depth is Francophone West Africa and CEMAC, and ${geo} is inside that. The base holds ${curated} curated ${curated===1?'entry':'entries'} on ${geo} specifically, so most of what appears here is regional or institutional rather than country-level work.`;
+    impl=`Regional findings tagged to the zone are structure, not evidence about ${geo}. Ask which of them a ${geo} operator would actually recognise, and treat the answer as the finding.`;
+  }else if(depth==='survey_only'){
+    title=`${geo} coverage here is a single institutional source`;
+    why=`All ${institutional} findings on ${geo} in this view come from the World Bank Enterprise Surveys. That is one methodology, one fieldwork round, and no primary regulatory or operator work behind it.`;
+    impl=`Treat this as a baseline, not a market read. Before anything here enters a model, confirm the survey year and pair it with the relevant regulator's own published position.`;
+  }else if(depth==='institutional_thin'){
+    title=`${geo} has thin primary coverage in GON at this stage`;
+    why=`${curated} curated ${curated===1?'entry':'entries'} against ${institutional} institutional ${institutional===1?'record':'records'}. GON's operator validation is in Francophone West Africa and CEMAC; ${geo} is outside it, and this brief is assembled from published sources rather than from having operated here.`;
+    impl=`Supplement with the market's own primary sources before relying on any figure above, and read the comparable-market signals as structural analogies rather than evidence.`;
+  }else if(depth==='institutional_deep'){
+    title=`${geo} coverage is broad but institutional, not operator-validated`;
+    why=`${curated} curated entries here, which is real depth, and none of it rests on having operated in ${geo}. The distinction matters most where a published timeline and the operational one diverge, which is precisely what GON exists to surface and cannot claim to have surfaced here.`;
+    impl=`Use this to frame the questions rather than to settle them. Where a figure is decision-relevant, get it confirmed by someone who has run the process in ${geo} rather than read about it.`;
   }else{
-    title=`Not everything that matters here is written down`;
+    title='Not everything that matters here is written down';
     why='The strongest signals in this market are usually operational and unpublished. What follows above is what can be verified from primary sources; it is not the whole picture.';
     impl='Where a number matters to your decision and is not above, treat it as an open question to put to the founder or an operator on the ground, not as an assumption you can carry.';
   }
