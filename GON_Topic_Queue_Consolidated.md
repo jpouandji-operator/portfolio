@@ -37,8 +37,8 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** — ⚠ appears already live, see Reconciliation Flags | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. Repo/sitemap show `bceao-pi-spi-wave-regulatory-navigation-africa/` published 2026-07-13 — routine skipped this item for the 2026-08-17 run on that basis. JP to confirm whether status should be updated to Published or whether this is a distinct follow-up angle. |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | [DRAFTED — pending JP review — 2026-08-17] | Published as "Egypt Closed the Consumer Finance Door. The Incumbents Didn't Need It Open." — see PR. |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
@@ -102,6 +102,27 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-08-17 | (all) | — | — | — | GA4 unavailable this run — no GA4 MCP connector present in session (only Gmail connected). See GON_Performance_Log.md. |
+
+---
+
+## RECONCILIATION FLAGS (Step 1, 2026-08-17 run — not resolved, JP to review)
+
+**Queue entries whose status text contradicts repo/sitemap evidence:**
+- A01 (BCEAO/Wave) — queue said `NEXT` (not started); `bceao-pi-spi-wave-regulatory-navigation-africa/` is live in repo and sitemap, dated 2026-07-13. Likely published and never marked. Routine skipped A01 for topic selection this run on that basis and selected A02 instead.
+- A23 (IFC "Four Doors") — queue said `[HOLD — confirm published]`; `ifc-africa-investment-access/` is live in repo and sitemap, dated 2026-07-22. Appears confirmed published — hold likely stale.
+- A26 (Lipa Later War Games) — queue said `[HOLD — sources pending]`; `gon-wargames-lipalater/` is live in repo and sitemap, dated 2026-07-22. Contradicts "sources pending."
+- B02 (Payplug teardown) — queue said `Queued — start here`; `teardowns/payplug-acquisition-gap/` is live in repo and sitemap, dated 2026-07-09. Already published.
+- B03 (Pluxee teardown) — queue said `Queued`; `teardowns/pluxee-world-of-opportunities/` is live in repo and sitemap, dated 2026-07-14. Already published.
+
+**Repo folders live (confirmed via sitemap) with no matching queue entry at all:**
+- ai-africa-platform-economics/, canal-multichoice-platform-economics-africa/, stablecoins-africa-fintech-infrastructure/, world-bank-tenders-africa-distribution/, jumia-pudo-ecommerce-africa/, airtel-infrastructure-pivot/, vas-telcos-investment-delegation/, gon-wargames-sendy/, gon-wargames-wave/, teardowns/lumapps-enterprise-selling/, teardowns/sociabble-feature-portfolio/
+- mtn-ihs-towers-energy-africa/ is live — this likely corresponds to queue item A21 ("Energy article", `[HOLD — verification pending]`), which appears to already be resolved and published under a status that still says held.
+
+**Queue entries not found as repo folders (registered, not confirmed live — consistent with their stated status, no action needed):**
+- A24 (Agentforce/Africa gap), A25 (AI agents — database layer) — both `[HOLD — confirm published]`, no matching folder found this run.
+
+None of the above were changed by the routine beyond A01's and A02's notes — JP reviews and resolves per protocol.
 
 ---
 
@@ -110,5 +131,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 2026-08-17 | Routine run: A02 marked DRAFTED (Egypt consumer-finance license freeze article). A01 flagged as likely already-published and skipped for selection. Reconciliation flags section added — see above. GA4 unavailable (no connector). Airtable Benchmarks/Theses query and write both blocked by session network policy (403 at proxy for api.airtable.com) — not an auth error; flagged in PR/email for manual push. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
