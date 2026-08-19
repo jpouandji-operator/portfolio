@@ -37,7 +37,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | [DRAFTED — pending JP review — 2026-08-10] | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Drafted as "Wave Didn't Miss the PI-SPI Deadline. It Built a Way Around It." — reframed around Wave Bank Africa S.A.'s Aug 2025 banking-license filing rather than the Sept 30 PI-SPI roster question, to avoid duplicating the July 13 published piece. See PR for overlap flag. |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
@@ -102,6 +102,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-08-10 | — | — | — | — | GA4 MCP still not connected this run. See GON_Performance_Log.md. |
 
 ---
 
@@ -110,5 +111,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 10 Aug 2026 | Routine run: A01 marked DRAFTED (PR opened, awaiting JP review). Reconciliation flags from Step 1 — B02 Payplug and B03 Pluxee are already live in `/teardowns/` despite "Queued" status; A23 IFC piece confirmed live at `/ifc-africa-investment-access/` despite HOLD status; lumapps-enterprise-selling and sociabble-feature-portfolio teardowns are live but untracked in Track B — see PR for full detail. Not resolved here; JP to reconcile. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.

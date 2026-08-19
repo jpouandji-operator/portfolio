@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wave Didn't Miss the PI-SPI Deadline. It Built a Way Around It. | Growth Operator Notes</title>
+  <meta name="description" content="Wave filed for a banking license a year before BCEAO's PI-SPI interoperability deadline forced the question. An operator read of regulatory sequencing, capital thresholds, and what the compliance story everyone is tracking actually misses." />
+  <meta name="keywords" content="Wave Bank Africa, BCEAO PI-SPI, Wave banking license, WAEMU fintech regulation, Wave Mobile Money Cote d'Ivoire, regulatory risk Africa VC, mobile money go-to-market" />
+  <meta name="author" content="Jean-Philippe Ouandji" />
+  <link rel="canonical" href="https://jpouandji.com/wave-bank-charter-regulatory-strategy-africa/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Wave Didn't Miss the PI-SPI Deadline. It Built a Way Around It." />
+  <meta property="og:description" content="The market is watching whether Wave connects to BCEAO's instant payment platform by September 30. That question was answered a year ago - just not on the roster anyone is checking." />
+  <meta property="og:image" content="https://jpouandji.com/og-image.jpg" />
+  <meta property="og:url" content="https://jpouandji.com/wave-bank-charter-regulatory-strategy-africa/" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Wave Didn't Miss the PI-SPI Deadline. It Built a Way Around It.","author":{"@type":"Person","name":"Jean-Philippe Ouandji","url":"https://jpouandji.com/"},"datePublished":"2026-08-10","description":"Wave filed for a banking license a year before BCEAO's PI-SPI interoperability deadline forced the question. An operator read of regulatory sequencing, capital thresholds, and what the compliance story everyone is tracking actually misses.","mainEntityOfPage":"https://jpouandji.com/wave-bank-charter-regulatory-strategy-africa/"}
+  </script>
+  <script src="https://www.googletagmanager.com/gtag/js?id=G-CWB7VQ56XE"></script>
+  <script>
+    window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CWB7VQ56XE');
+    window.addEventListener('load',function(){var d=[25,50,75,100],f=[];window.addEventListener('scroll',function(){var p=(window.scrollY+window.innerHeight)/document.documentElement.scrollHeight*100;d.forEach(function(x){if(p>=x&&!f.includes(x)){gtag('event','scroll',{'event_category':'Engagement','event_label':x+'% scrolled'});f.push(x);}});});});
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--paper:#f5f0e8;--ink:#0f0e0c;--accent:#c8320a;--muted:#7a7060;--rule:#d4cfc4;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{background:var(--paper);}
+    body{font-family:'Georgia',serif;font-size:16px;line-height:1.7;color:var(--ink);-webkit-font-smoothing:antialiased;}
+    a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);}
+    a:hover{opacity:0.7;}
+    img{max-width:100%;height:auto;display:block;}
+    .site-header{padding:1rem;border-bottom:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;}
+    .site-header .logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--ink);border:none;}
+    .site-header .logo:hover{color:var(--accent);opacity:1;}
+    .back-link{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;}
+    .article-full{padding:1.5rem 1rem;max-width:700px;margin:0 auto;}
+    .article-full-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
+    .article-meta{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:0.75rem;}
+    .article-full h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;line-height:1.3;margin-bottom:0.75rem;}
+    .article-deck{font-size:1rem;font-style:italic;color:var(--muted);}
+    .article-image{width:calc(100% + 2rem);margin-left:-1rem;margin-right:-1rem;margin-bottom:1.5rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+    .article-full h2{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin:1.5rem 0 0.75rem 0;}
+    .article-full p{margin-bottom:1rem;font-size:0.95rem;line-height:1.7;}
+    .article-full strong{font-weight:700;}
+    .insight-box{background:var(--ink);color:var(--paper);padding:1rem;margin:1.5rem -1rem;border-left:3px solid var(--accent);}
+    .insight-box::before{content:"OPERATOR INSIGHT";font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--accent);display:block;margin-bottom:0.5rem;}
+    .insight-box p{font-size:0.9rem;line-height:1.6;margin-bottom:0;color:var(--paper);}
+    .insight-box strong{color:var(--paper);}
+    .sources{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--rule);font-size:0.85rem;}
+    .sources p{margin-bottom:0.35rem;}
+    .contact{padding:2rem 1rem;text-align:center;border-top:2px solid var(--ink);margin-top:2rem;}
+    .contact h2{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem;}
+    .contact-buttons{display:flex;flex-direction:column;gap:0.75rem;max-width:400px;margin:0 auto;}
+    .btn{display:block;padding:0.75rem 1.5rem;background:var(--ink);color:var(--paper);border:2px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.2s;}
+    .btn:hover{background:var(--paper);color:var(--ink);opacity:1;}
+    .btn-primary{background:var(--accent);border-color:var(--accent);}
+    .btn-primary:hover{background:var(--paper);color:var(--accent);}
+    footer{padding:1rem;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted);border-top:1px solid var(--rule);}
+    @media(min-width:768px){
+      .site-header{padding:1rem 2rem;}
+      .article-full{padding:3rem 2rem;}
+      .article-full h1{font-size:2rem;}
+      .article-image{width:100%;margin-left:0;margin-right:0;}
+      .insight-box{margin-left:0;margin-right:0;}
+      .contact-buttons{flex-direction:row;justify-content:center;}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="../" class="logo">Growth Operator Notes</a>
+    <a href="../" class="back-link">← All Articles</a>
+  </header>
+
+  <article class="article-full">
+    <div class="article-full-header">
+      <div class="article-meta">Fintech · Regulatory Intelligence · WAEMU · 10 August 2026</div>
+      <h1>Wave Didn't Miss the PI-SPI Deadline. It Built a Way Around It.</h1>
+      <p class="article-deck">The market is watching whether Wave connects to BCEAO's instant payment platform by September 30. That question was answered a year ago - just not on the roster anyone is checking.</p>
+    </div>
+
+    <img src="wave-bank-charter-header.jpg" alt="Wave Bank Africa banking license and BCEAO PI-SPI regulatory strategy in WAEMU" class="article-image" />
+
+    <p>On September 30, 2026, every WAEMU bank, e-money issuer, and payment institution must be connected to PI-SPI, the BCEAO's instant payment platform - the second deadline in three months after the central bank pushed the original June 30 date. Wave, the region's dominant mobile money operator, is still not on the published roster. Most of the coverage watching that date is asking the wrong question.</p>
+
+    <h2>The Deadline Story, Again</h2>
+
+    <p>I wrote in July about the first deadline extension and what it revealed about negotiating leverage in WAEMU fintech: <a href="../bceao-pi-spi-wave-regulatory-navigation-africa/">Orange complied, Wave didn't, and the central bank blinked rather than force the issue</a>. That read holds. September 30 is the next test of the same dynamic - extend again, sanction, or hold the line. But treating September 30 as the whole story misses something that happened thirteen months before this particular deadline existed.</p>
+
+    <h2>The Bank Nobody Priced In</h2>
+
+    <p>On August 4, 2025, Wave constituted Wave Bank Africa S.A. as a public limited company in Abidjan. It registered the entity on August 22, 2025, with starting capital of 20 billion CFA francs - roughly $35 million. <a href="https://launchbaseafrica.com/2025/10/24/fintech-unicorn-wave-investing-35m-to-become-a-bank-amid-growing-competition/" target="_blank" rel="noopener">Launch Base Africa's reporting at the time put that registration nine days ahead of the BCEAO's own September 1, 2025 deadline for payment institution licenses</a> - one month before <a href="https://launchbaseafrica.com/2025/09/29/wave-and-mtn-locked-out-of-bceaos-new-payment-network/" target="_blank" rel="noopener">PI-SPI itself launched on September 30, 2025 with an initial roster of 31 institutions that excluded both Wave and MTN</a>.</p>
+
+    <p>A mobile money operator about to be locked out of the region's new interoperability platform used that same month to file paperwork for a full banking license. That is not a coincidence of timing. It is a second regulatory track, opened before the first one closed.</p>
+
+    <div class="insight-box">
+      <p><strong>Wave's response to exclusion from PI-SPI was not to wait for the next deadline.</strong> It was to build an institution the deadline doesn't govern.</p>
+    </div>
+
+    <h2>Why a Charter Changes What the Deadline Means</h2>
+
+    <p>A payment institution license and a banking license are not the same instrument with a different name. A bank charter authorizes deposit-taking and credit issuance - revenue that does not depend on transaction volume the way Wave's fee-based mobile money business does. It also carries a more direct relationship to central bank infrastructure than an e-money license does.</p>
+
+    <p>If the BCEAO grants Wave Bank Africa its agrement at or before September 30, the PI-SPI compliance question most coverage is tracking becomes close to irrelevant for the one operator everyone has been watching it for. Wave would be negotiating interoperability as a licensed bank with its own regulatory relationship to the central bank, not as a mobile money holdout waiting to be forced onto someone else's rails.</p>
+
+    <h2>The Governance Signal, Not the Compliance One</h2>
+
+    <p>The regulatory risk dimension in <a href="../africa-ic-checklist/">the Africa IC Checklist</a> asks what happens when a deadline actually lands - not whether the current draft of a regulation applies to a portfolio company today. Most models of Wave's PI-SPI position treat it as a single-track bet: comply or don't, and the downside is a sanction or a forced connection. That model is now incomplete. Running a payment-institution compliance posture and a full banking license application in parallel, on a $35 million capital base, is not something most fintech challengers in the region have the balance sheet or the governance maturity to do at the same time - a pattern I traced through a different lens in <a href="../gon-wargames-wave/">the Wave war games retrospective</a>, where the checklist would have flagged the regulatory bet as a strength, not a risk.</p>
+
+    <p>For anyone underwriting a WAEMU fintech deal against Wave as a competitive reference point, the operator edge here is not "will Wave comply with PI-SPI." It is whether the target company has, or could raise, the balance sheet to open a second regulatory track the way Wave just did - or whether its entire competitive position depends on staying inside a single license category that a larger regulatory shift could obsolete. The same exclusivity-versus-leverage pattern shows up in <a href="../stablecoins-africa-fintech-infrastructure/">BCEAO Instruction 001-01-2024's telco-fintech provisions</a>: the operators who move first on a parallel track are the ones who stop needing the regulator's permission on the original one.</p>
+
+    <h2>What I Am Actually Watching</h2>
+
+    <p>Whether the Commission Bancaire de l'UMOA grants Wave Bank Africa its agrement before, at, or after September 30, 2026. As of the most recent public reporting I could locate, that license had not yet been confirmed granted. If it lands before the deadline, the "will Wave comply" framing that has carried this story since last September stops being the interesting question. If it doesn't, Wave heads into a second missed deadline holding a bank charter application as a hedge nobody else on the roster has.</p>
+
+    <div class="sources">
+      <p><strong>Sources</strong></p>
+      <p><a href="https://launchbaseafrica.com/2025/10/24/fintech-unicorn-wave-investing-35m-to-become-a-bank-amid-growing-competition/" target="_blank" rel="noopener">Launch Base Africa</a> - "Battered by Rivals, Fintech Unicorn Wave Bets $35M on a Banking Licence," October 24, 2025</p>
+      <p><a href="https://launchbaseafrica.com/2025/09/29/wave-and-mtn-locked-out-of-bceaos-new-payment-network/" target="_blank" rel="noopener">Launch Base Africa</a> - "Wave and MTN Locked Out of BCEAO's New Payment Network," September 29, 2025</p>
+      <p><a href="https://www.agenceecofin.com/actualites-finance/2510-132656-wave-mobile-money-creee-sa-banque-en-cote-d-ivoire-avec-un-capital-de-depart-de-20-milliards-fcfa" target="_blank" rel="noopener">Agence Ecofin</a> - on Wave Bank Africa's incorporation and 20 billion CFA franc starting capital, October 2025</p>
+      <p><a href="https://www.techinafrica.com/wave-mobile-becomes-a-bank-with-launch-of-wave-bank-africa-s-a/" target="_blank" rel="noopener">Tech In Africa</a> - "Wave Mobile Becomes a Bank with Launch of WAVE BANK AFRICA S.A"</p>
+      <p>BCEAO - communique on the PI-SPI connection deadline extension to September 30, 2026, June 25, 2026</p>
+      <p><a href="https://www.ecofinagency.com/news-finances/2506-56829-bceao-extends-pi-spi-instant-payment-platform-connection-deadline-to-september-30" target="_blank" rel="noopener">Ecofin Agency</a> - "BCEAO Extends PI-SPI Instant Payment Platform Connection Deadline to September 30"</p>
+      <p>Operational experience: 12+ years scaling digital products across African fintech and telecom markets</p>
+    </div>
+  </article>
+
+  <section class="contact">
+    <h2>Let's Connect</h2>
+    <div class="contact-buttons">
+      <a href="#" class="btn btn-primary" id="email-btn">✉ Email</a>
+      <a href="https://linkedin.com/in/jean-philippe-ouandji" class="btn" target="_blank" rel="noopener" onclick="gtag('event','linkedin_click');">LinkedIn Profile</a>
+      <a href="https://www.linkedin.com/company/growth-operator-notes/" class="btn" target="_blank" rel="noopener" onclick="gtag('event','gon_click');">Growth Operator Notes</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Jean-Philippe Ouandji · Growth Operator · Paris, France · 2026</p>
+  </footer>
+
+  <script>
+    (function(){var btn=document.getElementById('email-btn');if(btn){btn.onclick=function(e){e.preventDefault();window.location.href='mailto:'+'jpouandji'+'@'+'gmail.com';if(typeof gtag!=='undefined')gtag('event','email_click');};}})();
+  </script>
+
+  <!-- IMAGE PENDING — DALL-E PROMPT:
+  A minimalist, editorial-style illustration for a fintech regulatory analysis article. Visual metaphor: two parallel paths or doors on a West African-inspired geometric background - one path labeled with a clock/deadline motif (representing the PI-SPI interoperability deadline), the other path opening onto a classical bank facade silhouette (representing the banking charter route). Muted earth-tone palette (terracotta, cream, deep charcoal) matching an editorial finance publication. Abstract, no readable text, no logos, no real institutional branding. Subtle West African geometric pattern motifs in the background, used tastefully, not stereotypically.
+  Suggested filename: wave-bank-charter-header.jpg
+  Alt text: Wave Bank Africa banking license and BCEAO PI-SPI regulatory strategy in WAEMU
+  Style: Clean, data-driven, Africa-focused, professional. 16:9. No text overlay.
+  Instructions: Paste into ChatGPT/DALL-E → download → add to repo at wave-bank-charter-regulatory-strategy-africa/wave-bank-charter-header.jpg →
+  the <img> tag above already points to this filename, no further edit needed once the file is added.
+  -->
+
+  <!-- MANUAL SOURCING FLAG — items below need direct primary-source verification before merge:
+
+  1. CLAIM: "As of the most recent public reporting I could locate, that license had not yet been
+     confirmed granted" (Wave Bank Africa's agrement bancaire status).
+     WHERE TO VERIFY: BCEAO / Commission Bancaire de l'UMOA official communiques (bceao.int),
+     or Cote d'Ivoire's Journal Officiel company filings for Wave Bank Africa S.A.
+     STATUS IN DRAFT: [UNVERIFIED — PENDING SOURCE]. Phrased conservatively ("not yet confirmed
+     granted") rather than asserting a definitive pending/rejected status.
+
+  2. CLAIM: Wave Bank Africa's registration (Aug 22, 2025) landed "nine days ahead of the BCEAO's
+     own September 1, 2025 deadline for payment institution licenses."
+     WHERE TO VERIFY: BCEAO's own September 2025 communique on payment institution license
+     deadlines, or the Cote d'Ivoire Journal Officiel entry for Wave Bank Africa S.A.
+     STATUS IN DRAFT: Included as reported by a single secondary outlet (Launch Base Africa);
+     not independently corroborated against a primary regulator source this run.
+
+  3. ENVIRONMENT-LEVEL CONSTRAINT — applies to every source above: this session's network egress
+     policy blocked WebFetch/curl to all external domains (bceao.int, launchbaseafrica.com,
+     agenceecofin.com, techinafrica.com, ecofinagency.com, jeuneafrique.com, and others attempted).
+     Every fact in this draft is sourced from WebSearch result snippets (which do carry attributed
+     titles/URLs/dates) rather than a direct read of the full source page. This is a broader
+     limitation than a single paywalled or login-gated source — recommend JP directly open and
+     confirm each linked URL before merge, not just the two claims flagged above.
+  -->
+
+</body>
+</html>
