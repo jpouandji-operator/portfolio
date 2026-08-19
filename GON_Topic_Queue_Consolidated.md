@@ -37,7 +37,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **[DRAFTED — pending JP review — 2026-07-06]** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. NOTE: routine research (6 Jul 2026) found the original premise inaccurate — BCEAO extended the PI-SPI deadline to 30 Sept 2026 rather than enforcing it on 30 June 2026. Draft published under revised title "BCEAO Set the Deadline That Was Supposed to End Wave's Moat. It Just Blinked." — see PR for full reconciliation. Also flagged: the "Article 18 exclusivity ban" and "Instruction n°001/05/2021" citations elsewhere in this repo could not be verified this run — see manual sourcing block in the draft HTML. |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
@@ -102,6 +102,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-07-06 | all | — | — | — | No GA4 connector available in this session — see GON_Performance_Log.md |
 
 ---
 
@@ -110,5 +111,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 6 Jul 2026 | Weekly routine run. A01 marked DRAFTED pending JP review — PR opens with revised title reflecting corrected research (see A01 notes). GA4 not accessible this run. Airtable not accessible this run (network policy blocked api.airtable.com). |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
