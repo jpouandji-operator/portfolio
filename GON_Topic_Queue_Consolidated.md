@@ -38,7 +38,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
 | A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | [DRAFTED — pending JP review — 2026-08-24] | Draft at `egypt-fra-consumer-finance-licensing-freeze/`. Thesis: FRA Decree 43 (Feb 2026) closed the FinTech Law carve-out that had survived the 2024/2025 traditional-channel freeze — the licensing door is now fully shut, not just partially, until Feb 2027. |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
