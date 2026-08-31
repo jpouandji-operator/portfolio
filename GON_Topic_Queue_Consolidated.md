@@ -38,7 +38,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
 | A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | [DRAFTED — pending JP review — 2026-08-31] | Shipped as "Egypt Froze New Lenders. Then Froze the Fintechs Too." at egypt-consumer-finance-license-freeze/. Broader than the original framing: traditional-channel freeze (Oct 2024, extended Oct 2025) plus a reported-but-primary-source-unconfirmed fintech-channel freeze (early 2026) — see manual sourcing flag in PR/article. |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
@@ -110,5 +110,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 31 Aug 2026 | Routine run: A02 marked DRAFTED (see row). Reconciliation flags found (not resolved — see PR description / weekly email): A01 status says Queued/NEXT but a live article at bceao-pi-spi-wave-regulatory-navigation-africa/ already covers that exact thesis; A11 (Copia) status "Published" confirmed correct; A23/A24/A25 (IFC, Agentforce, AI-agents-database-layer) marked HOLD pending confirm-published — IFC confirmed published at ifc-africa-investment-access/, the other two not found as folders; B02 (Payplug) and B03 (Pluxee) marked Queued but are already live in /teardowns/; two folders live and unregistered in this file entirely — gon-wargames-sendy/ and gon-wargames-wave/ (Track A has no corresponding rows); teardowns/lumapps-enterprise-selling/ and teardowns/sociabble-feature-portfolio/ are live but Track B lists no B-number for either. JP should reconcile statuses; routine did not overwrite them per Step 1 instruction to report, not resolve. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
+Airtable access note (31 Aug 2026): api.airtable.com is blocked by this session's network egress policy (403 on CONNECT, confirmed via proxy status check) — not a credential/auth issue. Steps 4 and 10 were skipped this run; see weekly email/PR for records that should be pushed manually.
