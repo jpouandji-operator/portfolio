@@ -37,8 +37,8 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT — FLAGGED, see Reconciliation 2026-09-07** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Routine's 2026-09-07 run found this topic appears already live under a different headline — see Reconciliation Flags section below. JP to confirm before this is selected again. |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | **[DRAFTED — pending JP review — 2026-09-07]** | Drafted as "Egypt Closed the Consumer Finance Door. The Central Bank Opened a Different One." — see PR opened 2026-09-07. |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
@@ -88,8 +88,8 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | # | Company | Status | Notes |
 |---|---|---|---|
 | B01 | Lucca | [PUBLISHED] | Live at /teardowns/lucca-pricing-promises/ as of June 24, 2026 |
-| B02 | Payplug | Queued | Start here for next Teardown run |
-| B03 | Pluxee | Queued | |
+| B02 | Payplug | **FLAGGED, see Reconciliation 2026-09-07** | Routine's 2026-09-07 run found /teardowns/payplug-acquisition-gap/ already live per sitemap.xml (lastmod 2026-07-09). Queue still shows "Queued" — JP to confirm and update. |
+| B03 | Pluxee | **FLAGGED, see Reconciliation 2026-09-07** | Routine's 2026-09-07 run found /teardowns/pluxee-world-of-opportunities/ already live per sitemap.xml (lastmod 2026-07-14). Queue still shows "Queued" — JP to confirm and update. |
 | B04 | Spendesk or Pennylane | Queued | Choose one — decision pending |
 | B05 | Aircall | Queued | |
 
@@ -102,6 +102,28 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Article | Pageviews | Scroll depth | Time on page | Notes |
 |---|---|---|---|---|---|
 | — | — | — | — | — | GA4 MCP not yet connected — log starts once connected |
+| 2026-09-07 | (all) | — | — | — | GA4 unavailable this run — no GA4 MCP connector present in session (only Google Calendar and Google Drive connectors available). See GON_Performance_Log.md. |
+
+---
+
+## RECONCILIATION FLAGS — 2026-09-07 routine run
+
+*Step 1 of the routine cross-checked repo folders, sitemap.xml, and this queue. Per protocol, discrepancies are reported, not resolved — JP reviews and updates statuses.*
+
+**Queue entries whose topic appears to already be live in the repo, but whose status here was not updated:**
+- **A01** ("BCEAO Just Ended Wave's Moat...", marked NEXT, 17/18) — repo folder `bceao-pi-spi-wave-regulatory-navigation-africa/` is live (sitemap lastmod 2026-07-13) with headline "The BCEAO Blinked. Wave Didn't Move." — same subject (BCEAO PI-SPI / Wave), different published headline. This routine did NOT select A01 as this week's topic because of this. Recommend JP confirm and mark A01 `[PUBLISHED]` if it is the same article, or clarify how it differs if a genuinely separate angle is still intended.
+- **B02** (Payplug) and **B03** (Pluxee) — both appear live per sitemap.xml (`/teardowns/payplug-acquisition-gap/`, lastmod 2026-07-09; `/teardowns/pluxee-world-of-opportunities/`, lastmod 2026-07-14) despite queue showing "Queued." Recommend JP confirm and update Track B status, and sync with the Applications project's SaaS_Gap_Tracking_Log.md per this file's own note.
+
+**Repo folders/teardowns live but not tracked anywhere in this queue ("unregistered, live"):**
+- `teardowns/lumapps-enterprise-selling/` — live per sitemap (lastmod 2026-07-07), no queue entry.
+- `teardowns/sociabble-feature-portfolio/` — live per sitemap (lastmod 2026-07-16), no queue entry.
+- `door2-partner-checklist/` — present in repo, but sitemap.xml carries an explicit comment that it is intentionally NOT live yet (private preview). Folder content reads "MOCKUP v2." No corresponding queue entry under this name. Flagging only — not treated as live given the sitemap's own comment overrides folder presence.
+
+**Held items possibly already resolved (repo evidence, not confirmative):**
+- **A23** (IFC "Four Doors", HOLD — confirm published) — repo folder `ifc-africa-investment-access/` is live (sitemap lastmod 2026-07-22), title "IFC Africa Investment: The Four Doors Most Founders Never Find." This matches A23's description closely. Recommend JP confirm and mark `[PUBLISHED]`.
+- **A24/A25** (Agentforce/Africa gap; AI agents database layer, both HOLD — confirm published) — no folder matching "Agentforce" was found. `ai-africa-platform-economics/` is live (title: "AI in Africa: Beyond the Hype, Who is Actually Figuring It Out?") but this reads as a distinct, broader AI-in-Africa piece, not clearly either A24 or A25. Left as HOLD — could not confirm either way.
+
+No action was taken on any of the above beyond this flag. Queue entries for A01, B02, B03 were left with their existing Status text (only annotated) rather than changed, since resolving requires JP's confirmation that the repo article is in fact the same piece.
 
 ---
 
@@ -109,6 +131,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | Date | Change |
 |---|---|
+| 2026-09-07 | Routine run: selected A02 (Egypt consumer finance / FRA-CBE regulatory piece), drafted, PR opened. GA4 unavailable (no MCP connector). Airtable unreachable (network egress policy blocks api.airtable.com — see PR for detail). Added Reconciliation Flags section above per Step 1 findings. |
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
