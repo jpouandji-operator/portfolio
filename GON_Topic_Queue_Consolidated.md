@@ -37,8 +37,8 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
-| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | [PUBLISHED — reconciliation flag, 2026-09-14] | Repo folder `bceao-pi-spi-wave-regulatory-navigation-africa/` already live in sitemap.xml (lastmod 2026-07-13) as "The BCEAO Blinked. Wave Didn't Move." — this appears to be the same story already shipped. Queue was stale; status was still "NEXT." JP to confirm and adjust status/title as needed. |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 17/18 | [DRAFTED — pending JP review — 2026-09-14] | Rescored 17/18 on drafting (was 16/18 placeholder). Published as "Egypt Shut Both Doors on Consumer Finance. One Lender Was Already Inside." — see PR. Score sheet in PR description. |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
@@ -74,10 +74,10 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 |---|---|---|---|
 | A21 | Energy article | [HOLD — verification pending] | Backend verification still needed — held across multiple sessions |
 | A22 | Ayoba / Feature-First Fallacy | [HOLD — COI] | Employer conflict of interest |
-| A23 | IFC: "The Four Doors Into IFC" | [HOLD — confirm published] | Brief complete as of May 25; may already be live — routine to verify in Step 1 before treating as queued |
-| A24 | Agentforce/Africa gap article | [HOLD — confirm published] | Same — brief complete May 25, check live status |
-| A25 | AI agents for Africa - database layer | [HOLD — confirm published] | Same |
-| A26 | Lipa Later War Games Retrospective | [HOLD — sources pending] | Blocked on Isaac Hunja + 3 sources |
+| A23 | IFC: "The Four Doors Into IFC" | [PUBLISHED — reconciliation flag, 2026-09-14] | CONFIRMED: `ifc-africa-investment-access/` live in sitemap.xml (lastmod 2026-07-22) as "IFC Africa Investment: The Four Doors Most Founders Never Find." JP to update status. |
+| A24 | Agentforce/Africa gap article | [HOLD — confirm published] | Same — brief complete May 25, check live status. No matching repo folder found in Step 1 reconciliation this run — still not confirmed live. |
+| A25 | AI agents for Africa - database layer | [HOLD — confirm published] | Same. No matching repo folder found in Step 1 reconciliation this run — still not confirmed live. |
+| A26 | Lipa Later War Games Retrospective | [HOLD — sources pending] | Blocked on Isaac Hunja + 3 sources. RECONCILIATION FLAG: `gon-wargames-lipalater/` folder already exists and is live in sitemap.xml (lastmod 2026-07-22). JP to confirm whether this HOLD is stale or whether the live version is a different draft than the one still blocked on sourcing. |
 
 ---
 
@@ -110,5 +110,6 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | Date | Change |
 |---|---|
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
+| 14 Sep 2026 | Weekly routine run. Selected A02 (Egypt consumer finance licensing freeze), drafted and opened PR — see PR for full detail. Reconciliation flags found in Step 1: A01 and A23 repo folders are already live but queue still showed them as NEXT/HOLD; A26 (`gon-wargames-lipalater/`) is live despite HOLD status; several repo folders (ai-africa-platform-economics, airtel-infrastructure-pivot, canal-multichoice-platform-economics-africa, jumia-pudo-ecommerce-africa, mtn-ihs-towers-energy-africa, stablecoins-africa-fintech-infrastructure, vas-telcos-investment-delegation, world-bank-tenders-africa-distribution, gon-wargames-sendy, gon-wargames-wave) are live in sitemap but have no corresponding queue entry at all. None of these were resolved automatically per protocol — JP to review. GA4 MCP connector not available this run. Airtable API blocked by this session's network egress policy (org-level denial on api.airtable.com) — ran without database context. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
