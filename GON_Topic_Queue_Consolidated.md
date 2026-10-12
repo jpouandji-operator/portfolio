@@ -38,7 +38,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | # | Title | Score | Status | Notes |
 |---|---|---|---|---|
 | A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
-| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
+| A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | [DRAFTED — pending JP review — 2026-10-12] | Draft at /egypt-consumer-finance-licence-freeze-africa/ (routine re-score 15/18) |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
