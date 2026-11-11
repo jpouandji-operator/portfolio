@@ -26,7 +26,7 @@
   <!-- Teardowns index -->
   <url>
     <loc>https://jpouandji.com/teardowns/</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -75,6 +75,14 @@
   <url>
     <loc>https://jpouandji.com/teardowns/sociabble-feature-portfolio/</loc>
     <lastmod>2026-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Teardown 06 - DiliTrust -->
+  <url>
+    <loc>https://jpouandji.com/teardowns/dilitrust-proof-further-down/</loc>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
