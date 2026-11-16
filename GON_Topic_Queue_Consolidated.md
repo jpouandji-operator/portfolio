@@ -39,7 +39,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 |---|---|---|---|---|
 | A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
-| A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
+| A03 | "The 41% Number That Changes Everything About African VC" | 15/18 (re-scored 2026-11-16) | [DRAFTED — pending JP review — 2026-11-16] | Drafted as "41% of African Tech Capital Is Now Debt. Your Equity Sits Behind It." — slug africa-tech-debt-41-percent-capital-stack. 41% is Partech (tech VC), not AVCA — see Benchmark E-001 correction flag. |
 | A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
 | A06 | "Ivory Coast Has 23 Deals. Senegal Has Wave." | 15/18 | Queued | |
@@ -109,6 +109,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | Date | Change |
 |---|---|
+| 16 Nov 2026 | Routine: A03 marked DRAFTED. Flag: A02 (Egypt) has ~11 duplicate open draft PRs (#5,#6,#8–#12,#14–#17) because DRAFTED status only lives on unmerged branches; A01 has 5 open draft PRs (#1–#3,#7,#13) though bceao-pi-spi-wave-regulatory-navigation-africa/ is live since 13 Jul 2026. JP to reconcile on main. |
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
