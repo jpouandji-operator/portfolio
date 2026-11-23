@@ -40,7 +40,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 | A01 | "BCEAO Just Ended Wave's Moat. Nobody Has Priced This Yet." | 17/18 | **NEXT** | PI-SPI deadline hook; supersedes earlier Wave/Cameroon version (14/18). Timeliness is urgent — write this week. |
 | A02 | "Egypt Just Closed the Consumer Finance Door" | 16/18 | Queued | |
 | A03 | "The 41% Number That Changes Everything About African VC" | 16/18 | Queued | |
-| A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 | Queued | |
+| A04 | "Kenya Didn't Beat Nigeria. The Naira Did." | 15/18 → 14/18 (rescored 2026-11-23) | [DRAFTED — pending JP review — 2026-11-23] | Draft at `kenya-nigeria-naira-tech-funding/index.html`. Sector range scored 1: shares Partech 2025 dataset with A03 draft (PR #18). |
 | A05 | "Rwanda Is the Regulatory Hub Nobody Noticed" | 15/18 | Queued | |
 | A06 | "Ivory Coast Has 23 Deals. Senegal Has Wave." | 15/18 | Queued | |
 | A07 | Pressure Test #1: The Database Architecture | 15/18 | Queued | Different format — operator stress-test piece |
@@ -109,6 +109,7 @@ Score each item 1–3 on six criteria. Max: 18. Minimum to develop: 12.
 
 | Date | Change |
 |---|---|
+| 23 Nov 2026 | Routine: A04 drafted (A01 treated as live; A02 and A03 treated as drafted in open PRs #5–#18, not on main). |
 | 30 Jun 2026 | File created. Consolidated from GON_Scan_and_Article_Pipeline_v2.md, GON_Master_Session_State_May18.md, GON_Master_Session_State_May25.md. Previous files retired from active use. |
 
 Airtable token rotated — date unknown, confirmed by JP 1 Jul 2026. New token stored in Routine environment.
